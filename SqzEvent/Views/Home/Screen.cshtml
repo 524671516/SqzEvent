@@ -1,0 +1,34 @@
+﻿
+@{
+    ViewBag.Title = "Screen";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Screen</h2>
+<div>总金额:<span id="total_amount">0.00</span></div>
+<div>
+    <div>最新订单：</div>
+    <div id="news_order"></div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            setInterval(function () {
+                $.ajax({
+                    url: "/Home/RefreshScreen",
+                    method: "post",
+                    success: function (data) {
+                        if (data.result) {
+                            $("#total_amount").text(data.totalamount/100);
+                            $("#news_order").text("");
+                            var contentlist = data.neworders
+                            for (var i = 0; i < contentlist.length; i++) {
+                                $("#news_order").append("<div>" + contentlist[i].UserName + ":" + contentlist[i].PurchaseAmount/100 + "</div>");
+                            }
+                        }
+                    }
+                });
+            }, 3e3);
+        });
+    </script>
+}
