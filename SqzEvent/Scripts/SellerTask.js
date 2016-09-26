@@ -477,10 +477,16 @@ $$(document).on('pageInit', '.page[data-page="SellerTaskDetails"]', function (e)
             for (var i = 0; i < photolist.length; i++) {
                 photolist[i] = "https://cdn2.shouquanzhai.cn/checkin-img/" + photolist[i];
             }
-            wx.previewImage({
-                current: photolist[0], // 当前显示图片的http链接
-                urls: photolist // 需要预览的图片http链接列表
+            var myPhotoBrowser = myApp.photoBrowser({
+                zoom: 400,
+                photos: photolist,
+                theme: 'dark',
+                type: 'popup',
+                backLinkText: '关闭',
+                toolbar: false,
+                ofText: '/'
             });
+            myPhotoBrowser.open();
         }
         else {
             myApp.alert("找不到图片");

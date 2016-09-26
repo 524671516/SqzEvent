@@ -1982,11 +1982,16 @@ function PhotoBrowser(pagename) {
             for (var i = 0; i < images.length; i++) {
                 images[i] = "https://cdn2.shouquanzhai.cn/checkin-img/" + images[i];
             }
-            wx.previewImage({
-                current: images[0],
-                // 当前显示图片的http链接
-                urls: images
+            var myPhotoBrowser = myApp.photoBrowser({
+                zoom: 400,
+                photos: images,
+                theme: 'dark',
+                type:'popup',
+                backLinkText: '关闭',
+                toolbar: false,
+                ofText: '/'
             });
+            myPhotoBrowser.open();
         } else {
             myApp.alert("没有找到图片");
         }

@@ -921,10 +921,16 @@ function newPrompt(text, urlList) {
                                 onClick: function () {
                                     var urls = urlList;
                                     var image = urls.split(',');
-                                    wx.previewImage({
-                                        current: image[0], // 当前显示图片的http链接
-                                        urls: image // 需要预览的图片http链接列表
+                                    var myPhotoBrowser = myApp.photoBrowser({
+                                        zoom: 400,
+                                        photos: image,
+                                        theme: 'dark',
+                                        type: 'popup',
+                                        backLinkText: '关闭',
+                                        toolbar: false,
+                                        ofText: '/'
                                     });
+                                    myPhotoBrowser.open();
                                 }
                             },
                             {
