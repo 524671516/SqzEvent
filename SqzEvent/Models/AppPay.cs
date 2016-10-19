@@ -18,6 +18,8 @@ namespace SqzEvent.Models
         public virtual DbSet<WxPaymentOrder> WxPaymentOrder { get; set; }
         public virtual DbSet<WxRedPackOrder> WxRedPackOrder { get; set; }
         public virtual DbSet<WxPaymentProduct> WxPaymentProduct { get; set; }
+        public virtual DbSet<WxPressConferenceUser> WxPressConferenceUser { get; set; }
+        public virtual DbSet<WxPressConferenceOrder> WxPressConferenceOrder { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -156,5 +158,63 @@ namespace SqzEvent.Models
         public string ProductDetails { get; set; }
 
         public decimal? Total_Fee { get; set; }
+    }
+
+    public partial class WxPressConferenceUser
+    {
+        public int Id { get; set; }
+
+        [Required]
+        [StringLength(11)]
+        [RegularExpression("1[3|5|7|8|][0-9]{9}", ErrorMessage = "手机号码格式错误")]
+        [Display(Name = "手机号码")]
+        public string Mobile { get; set; }
+
+        [Required(ErrorMessage = "姓名不能为空")]
+        [StringLength(6, ErrorMessage = ("姓名长度不得超过6个字符"))]
+        [Display(Name = "姓名")]
+        public string Name { get; set; }
+
+        [Required(ErrorMessage = "企业全称不能为空")]
+        [StringLength(30, ErrorMessage = ("姓名长度不得超过30个字符"))]
+        [Display(Name = "企业全称")]
+        public string CompanyName { get; set; }
+
+        [Display(AutoGenerateField = false)]
+        public string Open_Id { get; set; }
+
+        [Display(AutoGenerateField = false)]
+        public string AccessToken { get; set; }
+
+        [Display(AutoGenerateField = false)]
+        public string HeadImgUrl { get; set; }
+
+        [Display(AutoGenerateField = false)]
+        public string NickName { get; set; }
+
+        [Display(AutoGenerateField = false)]
+        public bool Sex { get; set; }
+    }
+
+    public partial class WxPressConferenceOrder
+    {
+        public int Id { get; set; }
+
+        public string Open_Id { get; set; }
+
+        public string Name { get; set; }
+
+        public decimal? Amount { get; set; }
+
+        public DateTime ApplyTime { get; set; }
+
+        public string ImgUrl { get; set; }
+
+        public string OrderNo { get; set; }
+
+        public int Status { get; set; }
+
+        public int OrderType { get; set; }
+
     }
 }

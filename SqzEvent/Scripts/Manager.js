@@ -1921,7 +1921,7 @@ function uploadLocationWithDetails(btn_id, location_id, lbs_details_id) {
                 myApp.hideIndicator();
                 myApp.alert("获取位置失败");
             }
-        }, 4e3);
+        }, 1e4);
         var loc_success = false;
         wx.getLocation({
             type: "wgs84",

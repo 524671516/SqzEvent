@@ -1,0 +1,85 @@
+﻿@model IEnumerable<SqzEvent.Models.WxPressConferenceOrder>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>寿全斋1024盛典-订单列表</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <style type="text/css">
+        body {
+            background: #eee;
+            margin: 50px 0 20px 0px;
+        }
+
+        .container-body {
+            margin: auto;
+        }
+
+        .primary {
+            color: #ff4361;
+        }
+
+        .login-logo {
+            width: 200px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container container-body">
+        <div class="row">
+            <div class="col-xs-4"></div>
+            <div class="text-center col-xs-4">
+                <div class="login-logo img-responsive">
+                    <img src="@Html.Encode((ViewBag.headimgurl as string).Replace("http://","https://"))" class="img-responsive img-circle" />
+                </div>
+            </div>
+            <div class="col-xs-4"></div>
+        </div>
+        <div class="row">
+            <div class="col-xs-1">
+
+            </div>
+            <div class="col-xs-10 text-center">
+                <h4 class="primary">@Html.Encode(ViewBag.company)</h4>
+            </div>
+            <div class="col-xs-1">
+
+            </div>
+        </div>
+        <br /><br />
+        <div class="row">
+            <div class="col-xs-1"></div>
+            <div class="col-xs-10" style="margin:5px 0"><b>订单列表</b></div>
+            <div class="col-xs-1"></div>
+        </div>
+        @foreach (var item in Model)
+        {
+            <div class="row">
+                <div class="col-xs-1"></div>
+                <div class="col-xs-6 text-left">
+                    @Html.Encode(item.ApplyTime.ToString("MM-dd HH:mm:ss"))
+                </div>
+                <div class="col-xs-4 text-right">
+                    @Html.Encode(item.Amount / 10000) 万元
+                </div>
+                <div class="col-xs-1"></div>
+            </div>
+        }
+        <br /><br />
+        <div class="row">
+            <div class="col-xs-12 text-center">
+                <a href="/Pay/PressConferenceHome?openid=@ViewBag.openid" id="submit-btn" class="btn btn-default btn-default btn-lg">&nbsp;&nbsp;&nbsp;&nbsp;返&nbsp;&nbsp;回&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                </div>
+        </div>
+    </div>
+</body>
+</html>

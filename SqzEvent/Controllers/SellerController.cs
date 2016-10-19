@@ -623,13 +623,13 @@ namespace SqzEvent.Controllers
             if (manager != null)
             {
                 ViewBag.NickName = user.NickName;
-                ViewBag.ImgUrl = user.ImgUrl.Replace("http://", "//");
+                ViewBag.ImgUrl = user.ImgUrl == null ? null : user.ImgUrl.Replace("http://", "//");
                 return PartialView(manager);
             }
             else
             {
                 ViewBag.NickName = user.NickName;
-                ViewBag.ImgUrl = user.ImgUrl.Replace("http://", "//");
+                ViewBag.ImgUrl = user.ImgUrl == null ? null : user.ImgUrl.Replace("http://", "//");
                 return PartialView();
             }
         }
@@ -2261,13 +2261,19 @@ namespace SqzEvent.Controllers
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
             var manager = offlineDB.Off_StoreManager.SingleOrDefault(m => m.UserName == user.UserName && m.Off_System_Id == user.DefaultSystemId);
-            var storelist = string.Join(",", manager.Off_Store.Select(m => m.Id));
-            // 使用SQL查询
-            string sql = "SELECT t.Id,t.ApplyDate, Min(t3.StorageCount) as MinStorage, T4.StoreName FROM[dbo].[Off_SellerTask] as t left join dbo.Off_SellerTaskProduct as t3 on t.Id= t3.SellerTaskId left join" +
-                " dbo.Off_Store as T4 on t.StoreId = T4.Id where t.Id = (select top 1 t2.Id from [dbo].[Off_SellerTask] t2 where t2.StoreId in (" + storelist + ") and t2.StoreId = t.StoreId order by T2.ApplyDate desc) and t3.StorageCount>0" +
-                " group by t.Id, T4.StoreName, t.ApplyDate having MIN(t3.StorageCount)<50";
-            var tasklist = offlineDB.Database.SqlQuery<Wx_SellerTaskAlert>(sql);
-            ViewBag.AlertCount = tasklist.Count();
+            if (manager.Off_Store.Count == 0) {
+                ViewBag.AlertCount = 0;
+            }
+            else
+            {
+                var storelist = string.Join(",", manager.Off_Store.Select(m => m.Id));
+                // 使用SQL查询
+                string sql = "SELECT t.Id,t.ApplyDate, Min(t3.StorageCount) as MinStorage, T4.StoreName FROM[dbo].[Off_SellerTask] as t left join dbo.Off_SellerTaskProduct as t3 on t.Id= t3.SellerTaskId left join" +
+                    " dbo.Off_Store as T4 on t.StoreId = T4.Id where t.Id = (select top 1 t2.Id from [dbo].[Off_SellerTask] t2 where t2.StoreId in (" + storelist + ") and t2.StoreId = t.StoreId order by T2.ApplyDate desc) and t3.StorageCount>0" +
+                    " group by t.Id, T4.StoreName, t.ApplyDate having MIN(t3.StorageCount)<50";
+                var tasklist = offlineDB.Database.SqlQuery<Wx_SellerTaskAlert>(sql);
+                ViewBag.AlertCount = tasklist.Count();
+            }
             return PartialView();
         }
 
@@ -2358,13 +2364,20 @@ namespace SqzEvent.Controllers
             // 获取督导的店铺列表
             var user = UserManager.FindById(User.Identity.GetUserId());
             var manager = offlineDB.Off_StoreManager.SingleOrDefault(m => m.UserName == user.UserName && m.Off_System_Id == user.DefaultSystemId);
-            var storelist = string.Join(",", manager.Off_Store.Select(m => m.Id));
-            // 使用SQL查询
-            string sql = "SELECT t.Id,t.ApplyDate, Min(t3.StorageCount) as MinStorage, T4.StoreName FROM[dbo].[Off_SellerTask] as t left join dbo.Off_SellerTaskProduct as t3 on t.Id= t3.SellerTaskId left join" +
-                " dbo.Off_Store as T4 on t.StoreId = T4.Id where t.Id = (select top 1 t2.Id from [dbo].[Off_SellerTask] t2 where t2.StoreId in (" + storelist + ") and t2.StoreId = t.StoreId order by T2.ApplyDate desc) and t3.StorageCount>0" +
-                " group by t.Id, T4.StoreName, t.ApplyDate having MIN(t3.StorageCount)<50";
-            var tasklist = offlineDB.Database.SqlQuery<Wx_SellerTaskAlert>(sql);
-            return PartialView(tasklist);
+            if (manager.Off_Store.Count == 0)
+            {
+                return PartialView(new List<Wx_SellerTaskAlert>());
+            }
+            else
+            {
+                var storelist = string.Join(",", manager.Off_Store.Select(m => m.Id));
+                // 使用SQL查询
+                string sql = "SELECT t.Id,t.ApplyDate, Min(t3.StorageCount) as MinStorage, T4.StoreName FROM[dbo].[Off_SellerTask] as t left join dbo.Off_SellerTaskProduct as t3 on t.Id= t3.SellerTaskId left join" +
+                    " dbo.Off_Store as T4 on t.StoreId = T4.Id where t.Id = (select top 1 t2.Id from [dbo].[Off_SellerTask] t2 where t2.StoreId in (" + storelist + ") and t2.StoreId = t.StoreId order by T2.ApplyDate desc) and t3.StorageCount>0" +
+                    " group by t.Id, T4.StoreName, t.ApplyDate having MIN(t3.StorageCount)<50";
+                var tasklist = offlineDB.Database.SqlQuery<Wx_SellerTaskAlert>(sql);
+                return PartialView(tasklist);
+            }
         }
 
         // 暗促信息查询
@@ -2485,7 +2498,7 @@ namespace SqzEvent.Controllers
         public PartialViewResult Seller_Panel()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
-            ViewBag.ImgUrl = user.ImgUrl.Replace("http://", "//");
+            ViewBag.ImgUrl = user.ImgUrl == null ? null : user.ImgUrl.Replace("http://", "//");
             ViewBag.NickName = user.NickName;
             var binduser = offlineDB.Off_Membership_Bind.SingleOrDefault(m => m.Id == user.DefaultSellerId);
             if (binduser != null)
@@ -3369,13 +3382,13 @@ namespace SqzEvent.Controllers
             var binduser = offlineDB.Off_Membership_Bind.SingleOrDefault(m => m.UserName == user.UserName && m.Type == 2 && m.Off_System_Id == user.DefaultSystemId);
             if (binduser != null)
             {
-                ViewBag.ImgUrl = user.ImgUrl.Replace("http://", "//");
+                ViewBag.ImgUrl = user.ImgUrl == null ? null : user.ImgUrl.Replace("http://", "//");
                 ViewBag.NickName = user.NickName;
                 return PartialView(binduser);
             }
             else
             {
-                ViewBag.ImgUrl = user.ImgUrl.Replace("http://", "//");
+                ViewBag.ImgUrl = user.ImgUrl == null ? null : user.ImgUrl.Replace("http://", "//");
                 ViewBag.NickName = user.NickName;
                 return PartialView();
             }

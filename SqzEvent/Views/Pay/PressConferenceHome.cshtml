@@ -1,0 +1,74 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>寿全斋1024盛典-主页</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <style type="text/css">
+        body {
+            background: #eee;
+            margin: 50px 0 20px 0px;
+        }
+
+        .container-body {
+            margin: auto;
+        }
+
+        .primary {
+            color: #ff4361;
+        }
+
+        .login-logo {
+            width: 200px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container container-body">
+        <div class="row">
+            <div class="col-xs-4"></div>
+            <div class="text-center col-xs-4">
+                <div class="login-logo img-responsive">
+                    <img src="@Html.Encode((ViewBag.headimgurl as string).Replace("http://","https://"))" class="img-responsive img-circle" />
+                </div>
+            </div>
+            <div class="col-xs-4"></div>
+        </div>
+        <div class="row">
+            <div class="col-xs-1">
+
+            </div>
+            <div class="col-xs-10 text-center">
+                <h4 class="primary">@Html.Encode(ViewBag.companyName)</h4>
+            </div>
+            <div class="col-xs-1">
+
+            </div>
+        </div>
+        <div class="row">
+            <br />
+            <div class="col-xs-2"></div>
+            <div class="col-xs-8">
+                <div>
+                    累计金额：@Html.Encode(ViewBag.totalamount/10000) 万元<br />
+                    订单数量：@Html.Encode(ViewBag.ordercount)<br />
+                    <br />
+                </div>
+                <div class="text-center">
+                    <a href="/Pay/PressConferenceOrder?openid=@ViewBag.openid" id="submit-btn" class="btn btn-default btn-danger btn-pr btn-lg">&nbsp;&nbsp;&nbsp;&nbsp;立&nbsp;即&nbsp;下&nbsp;单&nbsp;&nbsp;&nbsp;&nbsp;</a><br /><br /><a href="/Pay/PressConferenceOrderList?openid=@ViewBag.openid" id="submited" class="btn btn-default">&nbsp;&nbsp;&nbsp;&nbsp;查看订单列表&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                </div>
+            </div>
+            <div class="col-xs-2"></div>
+        </div>
+    </div>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+</body>
+</html>

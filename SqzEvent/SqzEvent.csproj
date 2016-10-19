@@ -471,6 +471,10 @@
     <Content Include="Views\Seller\Manager_SellerTaskQuery.cshtml" />
     <Content Include="Views\Seller\Manager_SellerTaskStorageAlert.cshtml" />
     <Content Include="Views\Shared\_PeriodAidLayout.cshtml" />
+    <Content Include="Views\Pay\PressConferenceRegister.cshtml" />
+    <Content Include="Views\Pay\PressConferenceHome.cshtml" />
+    <Content Include="Views\Pay\PressConferenceOrder.cshtml" />
+    <Content Include="Views\Pay\PressConferenceOrderList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

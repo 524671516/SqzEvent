@@ -12,6 +12,8 @@ using SqzEvent.Models;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.Identity;
+using System.Web.Script.Serialization;
+using Newtonsoft.Json;
 
 namespace SqzEvent.Controllers
 {
@@ -633,7 +635,7 @@ namespace SqzEvent.Controllers
             return xml;
         }
 
-        public async Task<ActionResult> PressConferenceMain(string code, string state)
+        /*public async Task<ActionResult> PressConferenceMain(string code, string state)
         {
             try
             {
@@ -716,46 +718,258 @@ namespace SqzEvent.Controllers
                 ModelState.AddModelError("", "注册失败");
                 return View(model);
             }
+        }*/
+
+        public ActionResult Wechat_ScopeRedirect(string url, string state)
+        {
+            string redirectUri = Url.Encode(url);
+            string appId = WeChatUtilities.getConfigValue(WeChatUtilities.APP_ID);
+            string return_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=" + redirectUri + "&response_type=code&scope=snsapi_userinfo&state=" + state + "#wechat_redirect";
+            return Redirect(return_url);
         }
 
-        [Authorize]
-        public ActionResult PressConferenceHome()
+        public ActionResult PressConferenceAuthorize(string code, string state)
         {
-            return View();
+            WeChatUtilities wechat = new WeChatUtilities();
+            var jat = wechat.getWebOauthAccessToken(code);
+            var userinfo = wechat.getWebOauthUserInfo(jat.access_token, jat.openid);
+            var existuser = payDB.WxPressConferenceUser.SingleOrDefault(m => m.Open_Id == userinfo.openid);
+            if (existuser == null)
+            {
+                string nickname = userinfo.nickname;
+                string headimgurl = userinfo.headimgurl;
+                bool sex = userinfo.sex == "1" ? true : false;
+                //return RedirectToAction("PressConferenceHome", new { openid = jat.openid });
+                return RedirectToAction("PressConferenceRegister", new { nickname = nickname, headimgurl = headimgurl, sex = sex, openid = userinfo.openid, accesstoken = jat.access_token });
+            }
+            else
+            {
+                return RedirectToAction("PressConferenceHome", new { openid = jat.openid });
+            }
         }
-        /*[Authorize, HttpPost, ValidateAntiForgeryToken]
-        public JsonResult PayMoney()
+
+        public ActionResult PressConferenceRegister(string nickname, string headimgurl, bool sex, string openid, string accesstoken)
         {
-            //随机数字，并且生成Prepay
-            string appid = WeChatUtilities.getConfigValue(WeChatUtilities.APP_ID);
-            string mch_id = WeChatUtilities.getConfigValue(WeChatUtilities.MCH_ID);
-            //先确认，之后做随机数
-            string nonce_str = CommonUtilities.generateNonce();
-            string out_trade_no = "WXJSAPI_" + DateTime.Now.Ticks;
-            var user = UserManager.FindById(User.Identity.GetUserId());
-            try
+            Wx_PressConferenceRegisterViewModel model = new Wx_PressConferenceRegisterViewModel();
+            model.NickName = nickname;
+            model.Sex = sex;
+            model.HeadImgUrl = headimgurl;
+            model.Open_Id = openid;
+            model.AccessToken = accesstoken;
+            return View(model);
+        }
+
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<ActionResult> PressConferenceRegister(Wx_PressConferenceRegisterViewModel model)
+        {
+            if (ModelState.IsValid)
             {
-                Wx_OrderResult result = createUnifiedOrder(user.OpenId, "测试", out_trade_no, 10, WeChatUtilities.TRADE_TYPE_JSAPI, "");
-                if (result.Result == "SUCCESS")
+                WxPressConferenceUser user = new WxPressConferenceUser();
+                user.Open_Id = model.Open_Id;
+                user.HeadImgUrl = model.HeadImgUrl;
+                user.CompanyName = model.CompanyName;
+                user.NickName = model.NickName;
+                user.Name = model.Name;
+                user.Sex = model.Sex;
+                user.Mobile = model.Mobile;
+                user.AccessToken = model.AccessToken;
+                var existuser = payDB.WxPressConferenceUser.SingleOrDefault(m => m.Open_Id == model.Open_Id);
+                if (existuser == null)
                 {
-                    PC_Order order = new PC_Order()
-                    {
-                        ApplicationTime = DateTime.Now,
-                        OrderAmount = 100000,
-                        PurchaseAmount = 10,
-                        Status = 0,
-                        UserName = user.UserName
-                    };
-                    pcdb.PC_Order.Add(order);
-                    pcdb.SaveChanges();
-                    return Json(new { result = "SUCCESS", prepay_id = result.PrepayId });
+                    payDB.WxPressConferenceUser.Add(user);
+                    await payDB.SaveChangesAsync();
                 }
-                return Json(new { result = "FAIL", msg = result.Message }, JsonRequestBehavior.AllowGet);
+                return RedirectToAction("PressConferenceHome", new { openid = model.Open_Id });
             }
-            catch (Exception e)
+            else
             {
-                return Json(new { result = "FAIL", msg = e.ToString() }, JsonRequestBehavior.AllowGet);
+                ModelState.AddModelError("","发生错误");
+                return View(model);
             }
-        }*/
+        }
+
+        public ActionResult PressConferenceHome(string openid)
+        {
+            var existuser = payDB.WxPressConferenceUser.SingleOrDefault(m => m.Open_Id == openid);
+            if (existuser != null)
+            {
+                ViewBag.headimgurl = existuser.HeadImgUrl;
+                ViewBag.companyname = existuser.CompanyName;
+                var total_order = from m in payDB.WxPressConferenceOrder
+                                   where m.Open_Id == openid
+                                   select m;
+                ViewBag.ordercount = total_order.Count();
+                ViewBag.totalamount = total_order.Sum(m => m.Amount) ?? 0;
+                ViewBag.openid = openid;
+                return View();
+            }
+            else
+            {
+                return Content("PressConferenceError");
+            }
+        }
+
+        public ActionResult PressConferenceOrder(string openid)
+        {
+            var existuser = payDB.WxPressConferenceUser.SingleOrDefault(m => m.Open_Id == openid);
+            if (existuser != null)
+            {
+                Wx_PressConferenceOrderViewModel model = new Wx_PressConferenceOrderViewModel();
+                model.Open_Id = openid;
+                model.ImgUrl = existuser.HeadImgUrl;
+                model.Name = existuser.NickName;
+                model.Amount = null;
+                return View(model);
+            }
+            else
+            {
+                return Content("PressConferenceError");
+            }
+            // 添加条件
+
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<ActionResult> PressConferenceOrder(Wx_PressConferenceOrderViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var existuser = payDB.WxPressConferenceUser.SingleOrDefault(m => m.Open_Id == model.Open_Id);
+                if (existuser != null)
+                {
+                    Random random = new Random();
+                    WxPressConferenceOrder order = new WxPressConferenceOrder();
+                    order.Open_Id = model.Open_Id;
+                    order.ImgUrl = model.ImgUrl;
+                    order.Amount = model.Amount * 10000;
+                    order.Name = model.Name;
+                    order.OrderType = 1;
+                    order.Status = 0;
+                    order.ApplyTime = DateTime.Now;
+                    order.OrderNo = "PR" + CommonUtilities.generateTimeStamp() + random.Next(1000, 9999);
+                    payDB.WxPressConferenceOrder.Add(order);
+                    await payDB.SaveChangesAsync();
+                    // 推送流程
+                    TimeSpan ts = order.ApplyTime - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+                    long paytime  = Convert.ToInt64(ts.TotalSeconds);
+                    await PressConferencePushAsync(order.OrderNo, model.Open_Id, existuser.Id, model.Name, paytime, order.Amount ?? 0);
+                    return RedirectToAction("PressConferenceHome", new { openid = model.Open_Id });
+                }
+                else
+                {
+                    return Content("PressConferenceError");
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("", "发生错误");
+                return View(model);
+            }
+        }
+
+        public ActionResult PressConferenceOrderList(string openid)
+        {
+            var existuser = payDB.WxPressConferenceUser.SingleOrDefault(m => m.Open_Id == openid);
+            if (existuser != null)
+            {
+                ViewBag.headimgurl = existuser.HeadImgUrl;
+                ViewBag.company = existuser.CompanyName;
+                ViewBag.openid = existuser.Open_Id;
+                var list = from m in payDB.WxPressConferenceOrder
+                           where m.Open_Id == existuser.Open_Id
+                           orderby m.ApplyTime descending
+                           select m;
+                return View(list);
+            }
+            else
+            {
+                return Content("PressConferenceError");
+            }
+        }
+
+        public async Task<int> PressConferencePushAsync(string orderno, string openid, int uid, string name, long paytime, decimal amount)
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                StringBuilder enValue = new StringBuilder();
+                //前后加上secret
+                var timestamp = CommonUtilities.generateTimeStamp();
+                string json = "[{" +
+                    "\"order_sn\":\"" + orderno + "\"," +
+                    "\"open_id\":\"" + openid + "\"," +
+                    "\"uid\":" + uid + "," +
+                    "\"nick_name\":\"" + name + "\"," +
+                    "\"order_amount\":" + amount + "," +
+                    "\"pay_time\":" + timestamp.ToString() +
+                    "}]";
+
+                enValue.Append("sqzklm");
+                enValue.Append(timestamp.ToString());
+                //使用MD5加密(32位大写)
+                string token = CommonUtilities.encrypt_MD5(enValue.ToString()).ToUpper();
+
+                List<QueryParameter> parameters = new List<QueryParameter>();
+                parameters.Add(new QueryParameter("timestamp", timestamp.ToString()));
+                parameters.Add(new QueryParameter("sales_data", Url.Encode(json)));
+                parameters.Add(new QueryParameter("token", token));
+                string post_url = "http://fission-test.kalemao.com/api/real-time-sales";
+                var request = WebRequest.Create(post_url) as HttpWebRequest;
+                try
+                {
+                    request.ContentType = "application/x-www-form-urlencoded";
+                    request.Method = "post";
+                    using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                    {
+                        var conent = QueryParameter.NormalizeRequestParameters(parameters);
+                        streamWriter.Write(conent);
+                        streamWriter.Flush();
+                        streamWriter.Close();
+                        var response = await request.GetResponseAsync() as HttpWebResponse;
+                        using (var reader = new StreamReader(response.GetResponseStream()))
+                        {
+                            var result = reader.ReadToEnd();
+                            if (result.Contains("\"code\":200") && result.Contains("\"msg\":\"success\""))
+                            {
+                                var e_order = payDB.WxPressConferenceOrder.SingleOrDefault(m => m.OrderNo == orderno);
+                                if (e_order != null)
+                                {
+                                    e_order.Status = 1;
+                                    payDB.Entry(e_order).State = System.Data.Entity.EntityState.Modified;
+                                    await payDB.SaveChangesAsync();
+                                    return 0;
+                                }
+                            }
+                            else
+                            {
+                                var e_order = payDB.WxPressConferenceOrder.SingleOrDefault(m => m.OrderNo == orderno);
+                                if (e_order != null)
+                                {
+                                    e_order.Status = -1;
+                                    payDB.Entry(e_order).State = System.Data.Entity.EntityState.Modified;
+                                    await payDB.SaveChangesAsync();
+                                    return 0;
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+            // 推送失败
+            var existorder = payDB.WxPressConferenceOrder.SingleOrDefault(m => m.OrderNo == orderno);
+            if (existorder != null)
+            {
+                existorder.Status = -1;
+                payDB.Entry(existorder).State = System.Data.Entity.EntityState.Modified;
+                await payDB.SaveChangesAsync();
+                return 0;
+            }
+            return -1;
+        }
+        
     }
 }
