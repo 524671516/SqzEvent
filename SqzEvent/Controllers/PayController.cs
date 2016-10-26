@@ -93,7 +93,7 @@ namespace SqzEvent.Controllers
             {
                 if (return_code == "SUCCESS")
                 {
-                    string appid = doc.GetElementsByTagName("appid")[0]== null ? "" : doc.GetElementsByTagName("appid")[0].InnerText;
+                    string appid = doc.GetElementsByTagName("appid")[0] == null ? "" : doc.GetElementsByTagName("appid")[0].InnerText;
                     string mch_id = doc.GetElementsByTagName("mch_id")[0] == null ? "" : doc.GetElementsByTagName("mch_id")[0].InnerText;
                     string is_subscribe = doc.GetElementsByTagName("is_subscribe")[0] == null ? "" : doc.GetElementsByTagName("is_subscribe")[0].InnerText;
                     string nonce_str = doc.GetElementsByTagName("nonce_str")[0] == null ? "" : doc.GetElementsByTagName("nonce_str")[0].InnerText;
@@ -129,7 +129,7 @@ namespace SqzEvent.Controllers
                             order.Trade_Status = WeChatUtilities.TRADE_STATUS_SUCCESS;
                             order.Trade_Type = trade_type;
                             //CommonUtilities.writeLog("修改订单");
-                            
+
                             order.Time_Expire = DateTime.ParseExact(time_end, "yyyyMMddHHmmss", System.Globalization.CultureInfo.CurrentCulture);
                             payDB.SaveChanges();
                             //判断是否需要打印小票
@@ -173,7 +173,7 @@ namespace SqzEvent.Controllers
                             order.Error_Msg_Des = err_code_des;
                             order.Trade_Status = WeChatUtilities.TRADE_STATUS_CLOSE;
                             payDB.SaveChanges();
-                            
+
                             string xmldoc = "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
                             return Content(xmldoc, "text/plain");
 
@@ -181,9 +181,9 @@ namespace SqzEvent.Controllers
                     }
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                CommonUtilities.writeLog(e.Message + "," + e.StackTrace + "," + e.Source + ","  + e.InnerException);
+                CommonUtilities.writeLog(e.Message + "," + e.StackTrace + "," + e.Source + "," + e.InnerException);
             }
             string xml = "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[未知错误]]></return_msg></xml>";
             return Content(xml, "text/plain");
@@ -229,7 +229,7 @@ namespace SqzEvent.Controllers
             var request = WebRequest.Create(post_url) as HttpWebRequest;
             try
             {
-                
+
                 request.Method = "post";
                 StreamWriter streamWriter = new StreamWriter(request.GetRequestStream());
                 streamWriter.Write(xml_content);
@@ -246,7 +246,7 @@ namespace SqzEvent.Controllers
                 return new Wx_OrderResult("SUCCESS", prepay_id, "OK");
 
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return new Wx_OrderResult("FAIL", "", e.ToString());
             }
@@ -385,7 +385,7 @@ namespace SqzEvent.Controllers
                     total_fee = Convert.ToInt32(product.Total_Fee * 100);
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 CommonUtilities.writeLog(e.ToString());
                 total_fee = 10;
@@ -394,7 +394,7 @@ namespace SqzEvent.Controllers
             }
 
             Wx_OrderResult result = createUnifiedOrder(openid, _body, trade_no, total_fee, WeChatUtilities.TRADE_TYPE_NATIVE, "");
-            if(result.Result == "SUCCESS")
+            if (result.Result == "SUCCESS")
             {
                 WxPaymentOrder order = new WxPaymentOrder()
                 {
@@ -434,7 +434,7 @@ namespace SqzEvent.Controllers
                 string xmlcontent = parseXml(parameters, response_sign);
                 return Content(xmlcontent, "text/plain");
             }
-            
+
         }
         #endregion
 
@@ -493,7 +493,7 @@ namespace SqzEvent.Controllers
             WeChatUtilities utilites = new WeChatUtilities();
             Wx_WebOauthAccessToken webToken = utilites.getWebOauthAccessToken(code);
             ViewBag.openId = webToken.openid;
-            
+
             return View();
         }
         public ActionResult Gambling_Success(string prepay_id)
@@ -520,14 +520,14 @@ namespace SqzEvent.Controllers
             int baseRandom = r.Next(0, 99);
             if (baseRandom < 3)
             {
-                total_fee = r.Next(40, 158)*10;
+                total_fee = r.Next(40, 158) * 10;
             }
             else
                 total_fee = r.Next(108, 158) * 10;
             try
             {
-                Wx_OrderResult result = createUnifiedOrder(_openId, body, out_trade_no, total_fee, WeChatUtilities.TRADE_TYPE_JSAPI,"");
-                if(result.Result == "SUCCESS")
+                Wx_OrderResult result = createUnifiedOrder(_openId, body, out_trade_no, total_fee, WeChatUtilities.TRADE_TYPE_JSAPI, "");
+                if (result.Result == "SUCCESS")
                 {
                     WxPaymentOrder order = new WxPaymentOrder()
                     {
@@ -577,7 +577,7 @@ namespace SqzEvent.Controllers
                 return View("Error");
             }
         }
-        [HttpPost,ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken]
         public JsonResult SetFixMoney(string _openId, string body, int amount)
         {
             //随机数字，并且生成Prepay
@@ -784,7 +784,7 @@ namespace SqzEvent.Controllers
             }
             else
             {
-                ModelState.AddModelError("","发生错误");
+                ModelState.AddModelError("", "发生错误");
                 return View(model);
             }
         }
@@ -797,8 +797,8 @@ namespace SqzEvent.Controllers
                 ViewBag.headimgurl = existuser.HeadImgUrl;
                 ViewBag.companyname = existuser.CompanyName;
                 var total_order = from m in payDB.WxPressConferenceOrder
-                                   where m.Open_Id == openid
-                                   select m;
+                                  where m.Open_Id == openid
+                                  select m;
                 ViewBag.ordercount = total_order.Count();
                 ViewBag.totalamount = total_order.Sum(m => m.Amount) ?? 0;
                 ViewBag.openid = openid;
@@ -815,6 +815,9 @@ namespace SqzEvent.Controllers
             var existuser = payDB.WxPressConferenceUser.SingleOrDefault(m => m.Open_Id == openid);
             if (existuser != null)
             {
+                ViewBag.headimgurl = existuser.HeadImgUrl;
+                ViewBag.company = existuser.CompanyName;
+                ViewBag.openid = existuser.Open_Id;
                 Wx_PressConferenceOrderViewModel model = new Wx_PressConferenceOrderViewModel();
                 model.Open_Id = openid;
                 model.ImgUrl = existuser.HeadImgUrl;
@@ -851,9 +854,9 @@ namespace SqzEvent.Controllers
                     payDB.WxPressConferenceOrder.Add(order);
                     await payDB.SaveChangesAsync();
                     // 推送流程
-                    TimeSpan ts = order.ApplyTime - new DateTime(1970, 1, 1, 0, 0, 0, 0);
-                    long paytime  = Convert.ToInt64(ts.TotalSeconds);
-                    await PressConferencePushAsync(order.OrderNo, model.Open_Id, existuser.Id, model.Name, paytime, order.Amount ?? 0);
+                    //TimeSpan ts = order.ApplyTime - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+                    //long paytime  = Convert.ToInt64(ts.TotalSeconds);
+                    //await PressConferencePushAsync(order.OrderNo, model.Open_Id, existuser.Id, model.Name, paytime, order.Amount ?? 0);
                     return RedirectToAction("PressConferenceHome", new { openid = model.Open_Id });
                 }
                 else
@@ -864,6 +867,10 @@ namespace SqzEvent.Controllers
             else
             {
                 ModelState.AddModelError("", "发生错误");
+                var existuser = payDB.WxPressConferenceUser.SingleOrDefault(m => m.Open_Id == model.Open_Id);
+                ViewBag.headimgurl = existuser.HeadImgUrl;
+                ViewBag.company = existuser.CompanyName;
+                ViewBag.openid = existuser.Open_Id;
                 return View(model);
             }
         }
@@ -886,6 +893,16 @@ namespace SqzEvent.Controllers
             {
                 return Content("PressConferenceError");
             }
+        }
+
+        // 下单数
+        public ActionResult PressConferenceResult()
+        {
+            string sql = "select T2.Amount, T2.OrderCount, T3.Name, T3.HeadImgUrl, T3.CompanyName from " +
+                "(SELECT T1.Open_Id, sum(T1.Amount) as Amount, COUNT(T1.Open_Id) as OrderCount from WxPressConferenceOrders as T1 " +
+                "group by T1.Open_Id) as T2 left join WxPressConferenceUsers as T3 on T2.Open_Id = T3.Open_Id order by Amount desc";
+            var list = payDB.Database.SqlQuery<Wx_PressConferenceOrderDetails>(sql);
+            return View(list);
         }
 
         public async Task<int> PressConferencePushAsync(string orderno, string openid, int uid, string name, long paytime, decimal amount)
@@ -970,6 +987,11 @@ namespace SqzEvent.Controllers
             }
             return -1;
         }
-        
+
+        public ActionResult StartOrder()
+        {
+            return View();
+        }
+
     }
 }

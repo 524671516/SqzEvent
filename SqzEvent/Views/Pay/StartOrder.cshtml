@@ -1,4 +1,5 @@
-﻿@{
+﻿
+@{
     Layout = null;
 }
 
@@ -29,29 +30,27 @@
             width: 200px;
             margin: auto;
         }
-        .event-title{
-            font-size:30px; color:#FFF;
-        }
-        .white-font{
-            color:#fff;
+
+        .white-font {
+            color: #fff;
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container container-body">
         <div class="row">
             <div class="col-xs-1"></div>
             <div class="col-xs-10">
                 <img src="~/Content/images/title_bc.png" class="img-responsive" />
             </div>
             <div class="col-xs-1"></div>
-            </div>
+        </div>
         <br />
         <div class="row">
             <div class="col-xs-4"></div>
             <div class="text-center col-xs-4">
                 <div class="login-logo img-responsive">
-                    <img src="@Html.Encode((ViewBag.headimgurl as string).Replace("http://","https://"))" class="img-responsive img-circle" />
+                    <img src="/Content/images/logo-white.png" class="img-responsive img-circle" />
                 </div>
             </div>
             <div class="col-xs-4"></div>
@@ -61,7 +60,7 @@
 
             </div>
             <div class="col-xs-10 text-center">
-                <h4 class="white-font">@Html.Encode(ViewBag.companyName)</h4>
+                <h4 class="white-font">寿全斋</h4>
             </div>
             <div class="col-xs-1">
 
@@ -70,19 +69,29 @@
         <div class="row">
             <br />
             <div class="col-xs-2"></div>
-            <div class="col-xs-8 white-font">
-                <div>
-                    累计金额：@Html.Encode(ViewBag.totalamount/10000) 万元<br />
-                    订单数量：@Html.Encode(ViewBag.ordercount)<br />
-                    <br />
-                </div>
+            <div class="col-xs-8">
                 <div class="text-center">
-                    <a href="/Pay/PressConferenceOrder?openid=@ViewBag.openid" id="submit-btn" class="btn btn-default btn-success btn-pr btn-lg">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;立&nbsp;即&nbsp;下&nbsp;单&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a><br /><br /><a href="/Pay/PressConferenceOrderList?openid=@ViewBag.openid" id="submited" class="btn btn-default">&nbsp;&nbsp;&nbsp;&nbsp;查看订单列表&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                    <input type="button" value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;立&nbsp;即&nbsp;下&nbsp;单&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" id="submit-btn" class="btn btn-success btn-pr btn-lg" />
+                    <input type="button" value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下&nbsp;单&nbsp;成&nbsp;功&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" id="submited" class="btn btn-success btn-pr btn-lg disabled" style="display:none;" />
+
                 </div>
             </div>
             <div class="col-xs-2"></div>
         </div>
     </div>
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script>
+        var clicked = false;
+        if (!clicked) {
+            $("#submit-btn").click(function () {
+                $(this).hide();
+                $("#submited").show();
+                setTimeout(function () {
+                    
+                }, 500);
+                return false;
+            });
+        }
+    </script>
 </body>
 </html>

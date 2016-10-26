@@ -65,7 +65,6 @@ namespace SqzEvent.Models
 
     public class Wx_PressConferenceRegisterViewModel
     {
-
         [Required]
         [StringLength(11)]
         [RegularExpression("1[3|5|7|8|][0-9]{9}", ErrorMessage = "手机号码格式错误")]
@@ -104,11 +103,25 @@ namespace SqzEvent.Models
 
         public string Name { get; set; }
 
-        [Required(ErrorMessage ="订单金额不能为空")]
+        [Required(ErrorMessage ="订单金额格式错误")]
         [Range(1, 1000, ErrorMessage ="订单金额应介于1-1000万元")]
+        [RegularExpression(@"^\d+$", ErrorMessage ="数字错误")]
         public decimal? Amount { get; set; }
 
         public string ImgUrl { get; set; }
+    }
+
+    public class Wx_PressConferenceOrderDetails
+    {
+        public string Name { get; set; }
+
+        public string CompanyName { get; set; }
+
+        public decimal Amount { get; set; }
+
+        public int OrderCount { get; set; }
+
+        public string HeadImgUrl { get; set; }
     }
 
     

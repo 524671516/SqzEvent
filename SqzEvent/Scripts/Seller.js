@@ -1,7 +1,9 @@
 ﻿var $$ = Dom7;
 
 // Initialize app
-var myApp = new Framework7();
+var myApp = new Framework7({
+    pushState: true
+});
 
 // If we need to use custom DOM library, let's save it to $$ variable:
 // Add view

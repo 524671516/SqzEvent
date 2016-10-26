@@ -242,6 +242,8 @@
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\framework7.ios.colors.min.css" />
     <Content Include="Content\framework7.ios.min.css" />
+    <Content Include="Content\images\background_pc.png" />
+    <Content Include="Content\images\logo-white.png" />
     <Content Include="Content\images\logo.png" />
     <Content Include="Content\images\logo_new.png" />
     <Content Include="Content\images\Manager_app_01.jpg" />
@@ -274,6 +276,7 @@
     <Content Include="Content\images\sellertask-guide-07.jpg" />
     <Content Include="Content\images\sellertask-guide-08.jpg" />
     <Content Include="Content\images\share-pic.png" />
+    <Content Include="Content\images\title_bc.png" />
     <Content Include="Content\Manager.css" />
     <Content Include="Content\SellerTask.css" />
     <Content Include="Content\PeriodAid.css" />
@@ -302,10 +305,12 @@
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.woff2" />
     <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="Scripts\animateBackground-plugin.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\framework7.min.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\jquery-1.7.2.min.js" />
     <Content Include="Scripts\PeriodAid.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -475,6 +480,9 @@
     <Content Include="Views\Pay\PressConferenceHome.cshtml" />
     <Content Include="Views\Pay\PressConferenceOrder.cshtml" />
     <Content Include="Views\Pay\PressConferenceOrderList.cshtml" />
+    <Content Include="Views\Pay\RealTime.cshtml" />
+    <Content Include="Views\Pay\PressConferenceResult.cshtml" />
+    <Content Include="Views\Pay\StartOrder.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -11,12 +11,12 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>寿全斋1024盛典-注册</title>
+    <title>2016寿全斋品牌发布会</title>
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
     <style type="text/css">
         body {
-            background: #eee;
-            margin: 50px 0 20px 0px;
+            background: url(/Content/images/background_pc.png);
+            margin: 30px 0 20px 0px;
         }
 
         .container-body {
@@ -31,19 +31,40 @@
             width: 200px;
             margin: auto;
         }
+        .white-font{
+            color:#fff;
+        }
     </style>
 </head>
 <body>
     <div class="container container-body">
         <div class="row">
-            <div class="col-xs-3"></div>
-            <div class="text-center col-xs-6">
+            <div class="col-xs-1"></div>
+            <div class="col-xs-10">
+                <img src="~/Content/images/title_bc.png" class="img-responsive" />
+            </div>
+            <div class="col-xs-1"></div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-xs-4"></div>
+            <div class="text-center col-xs-4">
                 <div class="login-logo img-responsive">
-                    <img src="~/Content/images/period-aid-logo.png" class="img-responsive img-circle" />
-                    <h4 class="primary">寿全斋1024活动盛典注册</h4>
+                    <img src="/Content/images/logo-white.png" class="img-responsive img-circle" />
                 </div>
             </div>
-            <div class="col-xs-3"></div>
+            <div class="col-xs-4"></div>
+        </div>
+        <div class="row">
+            <div class="col-xs-1">
+
+            </div>
+            <div class="col-xs-10 text-center">
+                <h4 class="white-font">寿全斋</h4>
+            </div>
+            <div class="col-xs-1">
+
+            </div>
         </div>
         <div class="row">
             <br />
@@ -72,8 +93,8 @@
                         @Html.HiddenFor(model=>model.Sex)
                         <br />
                         <div class="form-group text-center">
-                            <input type="submit" value="&nbsp;&nbsp;&nbsp;&nbsp;注&nbsp;&nbsp;册&nbsp;&nbsp;&nbsp;&nbsp;" id="submit-btn" class="btn btn-default btn-danger btn-pr btn-lg" />
-                            <input type="button" value="&nbsp;&nbsp;&nbsp;&nbsp;提交中...&nbsp;&nbsp;&nbsp;&nbsp;" id="submited" class="btn btn-danger btn-pr btn-lg disabled" style="display:none;" />
+                            <input type="submit" value="&nbsp;&nbsp;&nbsp;&nbsp;注&nbsp;&nbsp;册&nbsp;&nbsp;&nbsp;&nbsp;" id="submit-btn" class="btn btn-success btn-pr btn-lg" />
+                            <input type="button" value="&nbsp;&nbsp;&nbsp;&nbsp;提交中...&nbsp;&nbsp;&nbsp;&nbsp;" id="submited" class="btn btn-success btn-pr btn-lg disabled" style="display:none;" />
                         </div>
                     </div>
                 }

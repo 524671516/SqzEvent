@@ -4,6 +4,7 @@
 var myApp = new Framework7({
     //cacheIgnore: ["/SellerTask/UpdateAccountInfo","/SellerTask/CreateSellerReport", "/SellerTask/EditSellerTask", "/SellerTask/SellerTaskList"],
     //cacheIgnoreGetParameters: false
+    pushState: true,
     cache: false,
     onPageInit: function (app, page) {
         if(page.name=="index"){

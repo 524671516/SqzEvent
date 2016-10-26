@@ -1,0 +1,56 @@
+﻿@model IEnumerable<SqzEvent.Models.Wx_PressConferenceOrderDetails>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>结果</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        table{
+            font-size:10px;
+        }
+    </style>
+</head>
+<body>
+    <table class="table">
+        <tr>
+            <th>
+                姓名
+            </th>
+            <th>
+                公司
+            </th>
+            <th>
+                金额
+            </th>
+            <th>
+                订单数
+            </th>
+        </tr>
+    
+    @foreach (var item in Model) {
+        <tr>
+            <td class="col-xs-2">
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td class="col-xs-5">
+                @Html.DisplayFor(modelItem => item.CompanyName)
+            </td>
+            <td class="col-xs-3">
+                @Html.Encode(item.Amount/10000) 万元
+            </td>
+            <td colass="col-xs-2">
+                @Html.DisplayFor(modelItem => item.OrderCount)
+            </td>
+            
+        </tr>
+    }
+    </table>
+</body>
+</html>
