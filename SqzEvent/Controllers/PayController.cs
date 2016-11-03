@@ -634,91 +634,7 @@ namespace SqzEvent.Controllers
             xml += "</xml>";
             return xml;
         }
-
-        /*public async Task<ActionResult> PressConferenceMain(string code, string state)
-        {
-            try
-            {
-                WeChatUtilities utilites = new WeChatUtilities();
-                Wx_WebOauthAccessToken jat = utilites.getWebOauthAccessToken(code);
-                var user = UserManager.FindByEmail(jat.openid);
-                if (user != null)
-                {
-                    //var user = UserManager.FindByName("13636314852");
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                    return RedirectToAction("PressConferenceHome");
-                }
-                //return Content(jat.openid + "," + jat.access_token);
-                return RedirectToAction("PressConferenceRegister", new { open_id = jat.openid, accessToken = jat.access_token });
-            }
-            catch
-            {
-                return View("Error");
-            }
-        }
-        public ActionResult PressConferenceRegister(string open_id, string accessToken)
-        {
-            var model = new Wx_OffRegisterViewModel();
-            model.Open_Id = open_id;
-            model.AccessToken = accessToken;
-
-            return View();
-        }
-        [HttpPost, ValidateAntiForgeryToken]
-        public async Task<ActionResult> PressConferenceRegister(Wx_OffRegisterViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                // 手机号校验
-                var exist_user = UserManager.FindByName(model.Mobile);
-                if (exist_user != null)
-                {
-                    ModelState.AddModelError("Mobile", "手机号已注册");
-                    return View(model);
-                }
-                // 验证手机码
-                PeriodAidDataContext smsDB = new PeriodAidDataContext();
-                var smsRecord = (from m in smsDB.SMSRecord
-                                 where m.Mobile == model.Mobile && m.SMS_Type == 0 && m.Status == false
-                                 orderby m.SendDate descending
-                                 select m).FirstOrDefault();
-                if (smsRecord == null)
-                {
-                    ModelState.AddModelError("CheckCode", "手机验证码错误");
-                    return View(model);
-                }
-                else if (smsRecord.ValidateCode != model.CheckCode)
-                {
-                    ModelState.AddModelError("CheckCode", "手机验证码错误");
-                    return View(model);
-                }
-                else if (smsRecord.SendDate.AddSeconds(1800) <= DateTime.Now)
-                {
-                    ModelState.AddModelError("CheckCode", "手机验证码超时");
-                    return View(model);
-                }
-                else
-                {
-                    var user = new ApplicationUser { UserName = model.Mobile, Email = model.Open_Id, PhoneNumber = model.Mobile, AccessToken = model.AccessToken, OpenId = model.Open_Id };
-                    var result = await UserManager.CreateAsync(user, model.Open_Id);
-                    if (result.Succeeded)
-                    {
-                        smsRecord.Status = true;
-                        smsDB.SaveChanges();
-
-                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                        return RedirectToAction("PressConferenceHome");
-                    }
-                    else
-                        return Content("Failure");
-                }
-            }
-            else
-            {
-                ModelState.AddModelError("", "注册失败");
-                return View(model);
-            }
-        }*/
+        
 
         public ActionResult Wechat_ScopeRedirect(string url, string state)
         {
@@ -853,10 +769,7 @@ namespace SqzEvent.Controllers
                     order.OrderNo = "PR" + CommonUtilities.generateTimeStamp() + random.Next(1000, 9999);
                     payDB.WxPressConferenceOrder.Add(order);
                     await payDB.SaveChangesAsync();
-                    // 推送流程
-                    //TimeSpan ts = order.ApplyTime - new DateTime(1970, 1, 1, 0, 0, 0, 0);
-                    //long paytime  = Convert.ToInt64(ts.TotalSeconds);
-                    //await PressConferencePushAsync(order.OrderNo, model.Open_Id, existuser.Id, model.Name, paytime, order.Amount ?? 0);
+                    
                     return RedirectToAction("PressConferenceHome", new { openid = model.Open_Id });
                 }
                 else
@@ -905,93 +818,6 @@ namespace SqzEvent.Controllers
             return View(list);
         }
 
-        public async Task<int> PressConferencePushAsync(string orderno, string openid, int uid, string name, long paytime, decimal amount)
-        {
-            for (int i = 0; i < 5; i++)
-            {
-                StringBuilder enValue = new StringBuilder();
-                //前后加上secret
-                var timestamp = CommonUtilities.generateTimeStamp();
-                string json = "[{" +
-                    "\"order_sn\":\"" + orderno + "\"," +
-                    "\"open_id\":\"" + openid + "\"," +
-                    "\"uid\":" + uid + "," +
-                    "\"nick_name\":\"" + name + "\"," +
-                    "\"order_amount\":" + amount + "," +
-                    "\"pay_time\":" + timestamp.ToString() +
-                    "}]";
-
-                enValue.Append("sqzklm");
-                enValue.Append(timestamp.ToString());
-                //使用MD5加密(32位大写)
-                string token = CommonUtilities.encrypt_MD5(enValue.ToString()).ToUpper();
-
-                List<QueryParameter> parameters = new List<QueryParameter>();
-                parameters.Add(new QueryParameter("timestamp", timestamp.ToString()));
-                parameters.Add(new QueryParameter("sales_data", Url.Encode(json)));
-                parameters.Add(new QueryParameter("token", token));
-                string post_url = "http://fission-test.kalemao.com/api/real-time-sales";
-                var request = WebRequest.Create(post_url) as HttpWebRequest;
-                try
-                {
-                    request.ContentType = "application/x-www-form-urlencoded";
-                    request.Method = "post";
-                    using (var streamWriter = new StreamWriter(request.GetRequestStream()))
-                    {
-                        var conent = QueryParameter.NormalizeRequestParameters(parameters);
-                        streamWriter.Write(conent);
-                        streamWriter.Flush();
-                        streamWriter.Close();
-                        var response = await request.GetResponseAsync() as HttpWebResponse;
-                        using (var reader = new StreamReader(response.GetResponseStream()))
-                        {
-                            var result = reader.ReadToEnd();
-                            if (result.Contains("\"code\":200") && result.Contains("\"msg\":\"success\""))
-                            {
-                                var e_order = payDB.WxPressConferenceOrder.SingleOrDefault(m => m.OrderNo == orderno);
-                                if (e_order != null)
-                                {
-                                    e_order.Status = 1;
-                                    payDB.Entry(e_order).State = System.Data.Entity.EntityState.Modified;
-                                    await payDB.SaveChangesAsync();
-                                    return 0;
-                                }
-                            }
-                            else
-                            {
-                                var e_order = payDB.WxPressConferenceOrder.SingleOrDefault(m => m.OrderNo == orderno);
-                                if (e_order != null)
-                                {
-                                    e_order.Status = -1;
-                                    payDB.Entry(e_order).State = System.Data.Entity.EntityState.Modified;
-                                    await payDB.SaveChangesAsync();
-                                    return 0;
-                                }
-                            }
-                        }
-                    }
-                }
-                catch (Exception)
-                {
-
-                }
-            }
-            // 推送失败
-            var existorder = payDB.WxPressConferenceOrder.SingleOrDefault(m => m.OrderNo == orderno);
-            if (existorder != null)
-            {
-                existorder.Status = -1;
-                payDB.Entry(existorder).State = System.Data.Entity.EntityState.Modified;
-                await payDB.SaveChangesAsync();
-                return 0;
-            }
-            return -1;
-        }
-
-        public ActionResult StartOrder()
-        {
-            return View();
-        }
 
     }
 }
