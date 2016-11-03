@@ -2007,7 +2007,7 @@ function LocationBrowser(pagename) {
         var translbs = lbs[1] + "," + lbs[0];
         var loc_details = $$(this).attr("data-desc");
         $.ajax({
-            url: "http://apis.map.qq.com/ws/coord/v1/translate",
+            url: "https://apis.map.qq.com/ws/coord/v1/translate",
             type: "get",
             dataType: "jsonp",
             data: {

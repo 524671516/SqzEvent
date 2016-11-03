@@ -264,20 +264,22 @@ $$(document).on("pageInit", ".page[data-page='seller-checkout']", function () {
 //Seller_Report 销量报表
 $$(document).on("pageInit", ".page[data-page='seller-report']", function () {
     var submit_count = 0;
-    $$.ajax({
-        url: "/Seller/Seller_ReportPartial",
-        data: {
-            id: $$("#reportlist").val()
-        },
-        success: function (data) {
-            $$("#report-content").html(data);
-            var text = "请上传证明门店真实销量的系统截图照片";
-            var urls = "https://cdn2.shouquanzhai.cn/checkin-img/131046821453176088.jpg,https://cdn2.shouquanzhai.cn/checkin-img/IMG_0931.JPG,https://cdn2.shouquanzhai.cn/checkin-img/IMG_0932.JPG,https://cdn2.shouquanzhai.cn/checkin-img/IMG_0933.JPG,https://cdn2.shouquanzhai.cn/checkin-img/IMG_0934.JPG";
-            newPrompt(text, urls)
-            currentTextAreaLength("report-content", "Remark", 500, "report-curracount");
-            uploadCheckinFile("report-content", "report-imglist", "Rep_Image", "report-imgaccount", 7);
-        }
-    });
+    if ($$("#reportlist").val() != undefined) {
+        $$.ajax({
+            url: "/Seller/Seller_ReportPartial",
+            data: {
+                id: $$("#reportlist").val()
+            },
+            success: function (data) {
+                $$("#report-content").html(data);
+                var text = "请上传证明门店真实销量的系统截图照片";
+                var urls = "https://cdn2.shouquanzhai.cn/checkin-img/131046821453176088.jpg,https://cdn2.shouquanzhai.cn/checkin-img/IMG_0931.JPG,https://cdn2.shouquanzhai.cn/checkin-img/IMG_0932.JPG,https://cdn2.shouquanzhai.cn/checkin-img/IMG_0933.JPG,https://cdn2.shouquanzhai.cn/checkin-img/IMG_0934.JPG";
+                newPrompt(text, urls)
+                currentTextAreaLength("report-content", "Remark", 500, "report-curracount");
+                uploadCheckinFile("report-content", "report-imglist", "Rep_Image", "report-imgaccount", 7);
+            }
+        });
+    }
     $$("#reportlist").on("change", function () {
         $$.ajax({
             url: "/Seller/Seller_ReportPartial",

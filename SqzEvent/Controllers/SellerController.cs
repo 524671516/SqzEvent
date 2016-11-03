@@ -3191,6 +3191,7 @@ namespace SqzEvent.Controllers
                             exist_user.OffSalesSystem = string.Join(",", SystemList.ToArray());
                             exist_user.DefaultSystemId = model.SystemId;
                             UserManager.Update(exist_user);
+                            await UserManager.AddToRoleAsync(exist_user.Id, "Staff");
                             Off_Membership_Bind ofb = offlineDB.Off_Membership_Bind.SingleOrDefault(m => m.UserName == exist_user.UserName && m.Off_System_Id == model.SystemId && m.Type == 2);
                             if (ofb == null)
                             {
@@ -3287,7 +3288,7 @@ namespace SqzEvent.Controllers
                 };
                 offlineDB.Off_Membership_Bind.Add(ofb);
                 await offlineDB.SaveChangesAsync();
-                return RedirectToAction("Home");
+                return RedirectToAction("SellerTask_Home");
             }
             else
             {
