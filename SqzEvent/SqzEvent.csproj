@@ -283,6 +283,7 @@
     <Content Include="Content\images\share-pic.png" />
     <Content Include="Content\images\title_bc.png" />
     <Content Include="Content\Manager.css" />
+    <Content Include="Content\QualityControl.css" />
     <Content Include="Content\SellerTask.css" />
     <Content Include="Content\PeriodAid.css" />
     <Content Include="Content\Seller.css" />
@@ -294,9 +295,6 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\ai.0.22.9-build00167.js" />
     <Content Include="Scripts\ai.0.22.9-build00167.min.js" />
-    <Content Include="ApplicationInsights.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
@@ -328,6 +326,7 @@
     <Content Include="Scripts\Manager.js" />
     <Content Include="Scripts\manager.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\qualitycontrol.js" />
     <Content Include="Scripts\SellerTask.js" />
     <Content Include="Scripts\my-validate.js" />
     <Content Include="Scripts\respond.js" />
@@ -489,6 +488,7 @@
     <Content Include="Views\QualityControl\UserInfoPartial.cshtml" />
     <Content Include="Views\QualityControl\ForceRegister.cshtml" />
     <Content Include="Views\QualityControl\Register.cshtml" />
+    <Content Include="Views\Shared\_QualityControl.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

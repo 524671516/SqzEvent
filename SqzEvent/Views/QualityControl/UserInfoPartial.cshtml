@@ -1,1 +1,44 @@
-﻿
+﻿<style>
+    .left-info{
+        text-align:center;
+        padding:0;
+    }
+    .simple-info{
+        padding-left:10px;
+        position:relative;
+        top:-20px;
+    }
+    .simple-info span{
+        display:block;
+    }
+    .left-info li{
+        list-style:none;
+        display:inline-block;
+    }
+    .left-info .photo{
+        width:80px;
+        height:80px;
+        border-radius:50px;
+        background-color:#ccc;
+    }
+</style>
+<ul class="left-info">
+    <li class="photo"></li>
+    <li class="simple-info">
+        <span>User.Identity.Name</span>
+        <span><button>xiugai</button></span>
+    </li>
+</ul>
+<div class="content-block-title">个人信息</div>
+<div class="list-block">
+    <div class="item-inner">
+        <div class="item-title">姓名：</div>
+        <div class="item-after">User.Identity.Name</div>
+    </div>
+    <div class="item-inner">
+        <div class="item-title">门店地址：</div>
+        <div class="item-after">
+            <span class="tabbar-label">User.Identity.Name</span>
+        </div>
+    </div>
+</div>

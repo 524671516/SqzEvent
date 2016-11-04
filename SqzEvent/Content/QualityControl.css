@@ -1,0 +1,11 @@
+﻿.item-input {
+    text-align: right;
+}
+/*所有页按钮样式*/
+button{
+    border:0;
+    outline:none;
+    color: #007aff;
+    font-size: 17px;
+    background-color:rgb(247,247,248);
+}

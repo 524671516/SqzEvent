@@ -1,17 +1,88 @@
-﻿
-@{
-    Layout = null;
+﻿@{
+    ViewBag.Title = "主页";
+    Layout = "~/Views/Shared/_QualityControl.cshtml";
 }
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Home</title>
-</head>
-<body>
-    <div> 
+<!-- Status bar overlay for fullscreen mode-->
+<div class="statusbar-overlay"></div>
+<!-- Panels overlay-->
+<div class="panel-overlay"></div>
+<!-- Left panel with reveal effect-->
+<div class="panel panel-left panel-reveal">
+    <div class="content-block" id="userinfo">
+       
     </div>
-</body>
-</html>
+</div>
+<!-- Views-->
+<div class="views">
+    <!-- Your main view, should have "view-main" class-->
+    <div class="view view-main">
+        <!-- Top Navbar-->
+        <div class="navbar">
+            <div class="navbar-inner">
+                <!-- We have home navbar without left link-->
+                <div class="center sliding">主页</div>
+                <div class="right">
+                    <a href="#" class="link icon-only open-panel"><i class="icon icon-bars"></i></a>
+                </div>
+            </div>
+        </div>
+        <!-- Pages, because we need fixed-through navbar and toolbar, it has additional appropriate classes-->
+        <div class="pages navbar-through toolbar-through">
+            <!-- Page, data-page contains page name-->
+            <div data-page="Home" class="page">
+                <!-- Scrollable page content-->
+                <div id="signin_content" class="page-content pull-to-refresh-content">
+                    <div class="pull-to-refresh-layer">
+                        <div class="preloader"></div>
+                        <div class="pull-to-refresh-arrow"></div>
+                    </div>
+                    <div class="content-block-title">Welcome To My Awesome App</div>
+                    <div class="list-block">
+                        <ul>
+                            <li>
+                                <a href="Signin" class="item-link item-content">
+                                    <div class="item-inner">
+                                        <div class="item-title">上班签到</div>
+                                        <div class="item-after">
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="Productinspection" class="item-link item-content">
+                                    <div class="item-inner">
+                                        <div class="item-title">产品检验</div>
+                                        <div class="item-after">
+                                            <span class="badge bg-red" id="chenck-num">1</span>
+                                            <span class="tabbar-label">12.20</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="Troublereport" class="item-link item-content">
+                                    <div class="item-inner">
+                                        <div class="item-title">故障报告</div>
+                                        <div class="item-after">
+                                            <span class="badge bg-red" id="-num">99</span>
+                                            <span class="tabbar-label">12.20</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="Dailyworksummary" class="item-link item-content">
+                                    <div class="item-inner">
+                                        <div class="item-title">每日工作总结</div>
+                                        <div class="item-after"></div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+

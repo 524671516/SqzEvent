@@ -12,6 +12,7 @@
 /// <reference path="modernizr-2.6.2.js" />
 /// <reference path="my-validate.js" />
 /// <reference path="periodaid.js" />
+/// <reference path="qualitycontrol.js" />
 /// <reference path="respond.js" />
 /// <reference path="seller.js" />
 /// <reference path="sellertask.js" />

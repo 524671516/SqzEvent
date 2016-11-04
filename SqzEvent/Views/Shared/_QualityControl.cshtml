@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <!-- Required meta tags-->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <!-- Your app title -->
+    <title>@ViewBag.Title</title>
+    <!-- Path to Framework7 iOS CSS theme styles-->
+    <link href="@Url.Content("~/Content/framework7.ios.min.css")" rel="stylesheet" />
+    <!-- Path to Framework7 iOS related color styles -->
+    <link href="@Url.Content("~/Content/framework7.ios.colors.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/QualityControl.css")" rel="stylesheet" />
+</head>
+<body>
+    @RenderBody()
+    <!-- Path to Framework7 Library JS-->
+    @Scripts.Render("~/Scripts/framework7.min.js")
+    @Scripts.Render("~/Scripts/qualitycontrol.js")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
