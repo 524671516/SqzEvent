@@ -769,7 +769,6 @@ namespace SqzEvent.Controllers
                     order.OrderNo = "PR" + CommonUtilities.generateTimeStamp() + random.Next(1000, 9999);
                     payDB.WxPressConferenceOrder.Add(order);
                     await payDB.SaveChangesAsync();
-                    
                     return RedirectToAction("PressConferenceHome", new { openid = model.Open_Id });
                 }
                 else

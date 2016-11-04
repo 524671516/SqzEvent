@@ -207,6 +207,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\PayController.cs" />
     <Compile Include="Controllers\PeriodAidController.cs" />
+    <Compile Include="Controllers\QualityControlController.cs" />
     <Compile Include="Controllers\SellerController.cs" />
     <Compile Include="Controllers\WxAccountController.cs" />
     <Compile Include="DAL\AliOSSUtilities.cs" />
@@ -232,6 +233,7 @@
     <Compile Include="Models\PeriodAidDataContext.cs" />
     <Compile Include="Models\PeriodAidViewModels.cs" />
     <Compile Include="Models\QualityControlModels.cs" />
+    <Compile Include="Models\QualityControlViewModels.cs" />
     <Compile Include="Models\WxAcountViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -483,6 +485,10 @@
     <Content Include="Views\Pay\PressConferenceOrder.cshtml" />
     <Content Include="Views\Pay\PressConferenceOrderList.cshtml" />
     <Content Include="Views\Pay\PressConferenceResult.cshtml" />
+    <Content Include="Views\QualityControl\Home.cshtml" />
+    <Content Include="Views\QualityControl\UserInfoPartial.cshtml" />
+    <Content Include="Views\QualityControl\ForceRegister.cshtml" />
+    <Content Include="Views\QualityControl\Register.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
