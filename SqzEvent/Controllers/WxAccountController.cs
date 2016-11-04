@@ -312,6 +312,14 @@ namespace SqzEvent.Controllers
             await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
             return Content("Success");
         }
+        public async Task<ActionResult> QualityControlLogin(string username)
+        {
+            string _username = username ?? "13636314852";
+            var user = UserManager.FindByName(_username);
+            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+            return Content("Success");
+        }
+
         public ActionResult TestAudio()
         {
             return View();

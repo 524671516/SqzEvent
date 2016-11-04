@@ -38,4 +38,19 @@ namespace SqzEvent.Models
 
         public int Systemid { get; set; }
     }
+
+    public class QC_StaffViewModel
+    {
+        public string OpenId { get; set; }
+
+        public string Name { get; set; }
+
+        public string Mobile { get; set; }
+
+        public string ImgUrl { get; set; }
+
+        public string NickName { get; set; }
+
+
+    }
 }

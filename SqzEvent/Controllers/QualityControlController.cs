@@ -89,16 +89,15 @@ namespace SqzEvent.Controllers
                     if (UserManager.IsInRole(user.Id, "QC"))
                     {
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                        return RedirectToAction("QC_Home");
+                        return RedirectToAction("Home");
                     }
                     else
                     {
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                        return RedirectToAction("QC_ForceRegister");
+                        return RedirectToAction("ForceRegister", "QualityControl");
                     }
                 }
-                //return Content(jat.openid + "," + jat.access_token);
-                return RedirectToAction("QC_Register", "QualityControl", new { open_id = jat.openid, accessToken = jat.access_token });
+                return RedirectToAction("Register", "QualityControl", new { open_id = jat.openid, accessToken = jat.access_token });
             }
             catch (Exception ex)
             {
@@ -281,6 +280,7 @@ namespace SqzEvent.Controllers
         // 个人信息主页
         public PartialViewResult UserInfoPartial()
         {
+            var user = UserManager.FindById(User.Identity.GetUserId());
             return PartialView();
         }
 
@@ -293,6 +293,12 @@ namespace SqzEvent.Controllers
 
 
         // 辅助类
+        public QCStaff getUser(string openid)
+        {
+            QCStaff user = _qcdb.QCStaff.SingleOrDefault(m => m.UserId == openid);
+            return user;
+        }
+
         [HttpPost]
         public JsonResult SaveOrignalImage(string serverId)
         {
