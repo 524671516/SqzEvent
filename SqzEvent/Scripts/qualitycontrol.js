@@ -79,19 +79,20 @@ myApp.onPageInit('Newproductinspection', function (page) {
 
 })
 //故障报告页
-myApp.onPageInit('Troublereport', function (page) {
-    console.log('故障报告');
+myApp.onPageInit('addbreakdown', function (page) {
+    /*console.log('故障报告');
     var tContent = $$('#troublereport_content');
     tContent.on('refresh', function () {
         setTimeout(function () {
             console.log('故障报告已刷新');
             myApp.pullToRefreshDone();
         }, 2000);
-    })
+    })*/
+    
 })
 //新增故障报个页
-myApp.onPageInit('Newtroublereport', function (page) {
-    console.log('新增故障报告页');
+myApp.onPageInit('addbreakdown', function (page) {
+    /*console.log('新增故障报告页');
     $$('.btn').on('click', function () {
         myApp.confirm('确认提交?', function (value) {
             myApp.showPreloader('正在提交')
@@ -100,7 +101,9 @@ myApp.onPageInit('Newtroublereport', function (page) {
                 $$('textarea').val('');
             }, 2000);
         });
-    });
+    });*/
+    uploadCheckinFile("addbreakdown-form", "addbreakdown-photos", "Photos", "addbreakdown-imgcount", 7);
+    currentTextAreaLength("addbreakdown-form", "ReportContent", 200, "addbreakdown-currentlen");
 
 })
 //确认修复页
