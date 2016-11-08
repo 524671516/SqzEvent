@@ -229,6 +229,8 @@
     {
         public int Id { get; set; }
 
+        public int Status { get; set; }
+
         public int QCEquipmentId { get; set; }
 
         public int BreakDownTypeId { get; set; }
@@ -289,6 +291,8 @@
         public int OfficalWorkers { get; set; }
 
         public int TemporaryWorkers { get; set; }
+
+        public DateTime? SummaryTime { get; set; }
 
         // 对应关系
         public virtual Factory Factory { get; set; }

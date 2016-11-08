@@ -490,6 +490,7 @@
     <Content Include="Views\QualityControl\Register.cshtml" />
     <Content Include="Views\Shared\_QualityControl.cshtml" />
     <Content Include="Views\QualityControl\QCCheckin.cshtml" />
+    <Content Include="Views\QualityControl\AddBreakdown.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

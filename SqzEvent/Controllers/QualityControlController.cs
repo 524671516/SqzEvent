@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -281,7 +280,7 @@ namespace SqzEvent.Controllers
             ViewBag.Nonce = _nonce;
             string _timeStamp = CommonUtilities.generateTimeStamp().ToString();
             ViewBag.TimeStamp = _timeStamp;
-            ViewBag.Signature = utilities.generateWxJsApiSignature(_nonce, utilities.getJsApiTicket(), _timeStamp, _url);
+            ViewBag.Signature = utilities.generateWxJsApiSignature(_nonce, utilities.getJsApiTicket(), _timeStamp, _url); 
             return View();
         }
 
@@ -290,7 +289,7 @@ namespace SqzEvent.Controllers
         public PartialViewResult UserInfoPartial()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
-            QCStaff staff = getUser(User.Identity.Name);
+            QCStaff staff = getStaff(User.Identity.Name);
             QC_StaffViewModel model = new QC_StaffViewModel()
             {
                 ImgUrl = user.ImgUrl,
@@ -305,7 +304,7 @@ namespace SqzEvent.Controllers
         // 签到页面
         public PartialViewResult QCCheckin()
         {
-            QCStaff staff = getUser(User.Identity.Name);
+            QCStaff staff = getStaff(User.Identity.Name);
             ViewBag.FactoryList = new SelectList(staff.Factory, "Id", "SimpleName");
             QCAgenda model = new QCAgenda();
             model.QCStaffId = staff.Id;
@@ -322,6 +321,7 @@ namespace SqzEvent.Controllers
                 if (TryUpdateModel(agenda))
                 {
                     agenda.CheckinTime = DateTime.Now;
+                    agenda.Subscribe = DateTime.Now.Date;
                     agenda.Status = 1; // 已签到
                     _qcdb.QCAgenda.Add(agenda);
                     await _qcdb.SaveChangesAsync();
@@ -347,7 +347,7 @@ namespace SqzEvent.Controllers
             {
                 var _start = Convert.ToDateTime(date);
                 var _end = _start.AddDays(1);
-                QCStaff staff = getUser(User.Identity.Name);
+                QCStaff staff = getStaff(User.Identity.Name);
                 var list = from m in _qcdb.BreadkdownReport
                            where m.QCStaffId == staff.Id && m.ReportTime >= _start && m.ReportTime < _end
                            select m;
@@ -359,22 +359,38 @@ namespace SqzEvent.Controllers
             }
         }
 
-        // 添加故障类型
+        // 添加故障
         public PartialViewResult AddBreakdown()
         {
             BreakdownReport model = new BreakdownReport();
-            QCStaff staff = getUser(User.Identity.Name);
+            QCStaff staff = getStaff(User.Identity.Name);
             var factorylist = from m in _qcdb.Factory
                               where m.QCStaff.Contains(staff)
                               select m;
             ViewBag.FactoryDropDown = new SelectList(factorylist, "Id", "SimpleName");
+            model.QCStaffId = staff.Id;
+            model.Status = 0;
             return PartialView(model);
         }
         
         [HttpPost, ValidateAntiForgeryToken]
-        public ContentResult AddBreakdown(FormCollection form)
+        public async Task<ContentResult> AddBreakdown(BreakdownReport model)
         {
-            return Content("SUCCESS");
+            if (ModelState.IsValid)
+            {
+                BreakdownReport report = new BreakdownReport();
+                if(TryUpdateModel(report)){
+                    report.ReportTime = DateTime.Now;
+                    _qcdb.BreadkdownReport.Add(report);
+                    await _qcdb.SaveChangesAsync();
+                    return Content("SUCCESS");
+                }
+                else
+                {
+                    return Content("FAIL");
+                }
+            }
+            return Content("FAIL");
         }
 
         // 设备列表更新ajax
@@ -397,13 +413,131 @@ namespace SqzEvent.Controllers
             return Json(new { result = "SUCCESS", content = list });
         }
 
-        public ActionResult Index()
+        // 确认故障修复
+        public PartialViewResult RecoveryBreakdown(int bdId)
         {
-            return View();
+            var report = _qcdb.BreadkdownReport.SingleOrDefault(m => m.Id == bdId);
+            if (report != null)
+            {
+                return PartialView(report);
+            }
+            else
+            {
+                return PartialView("Error");
+            }
         }
 
+        public async Task<ContentResult> RecoveryBreakdown(BreakdownReport model)
+        {
+            if (ModelState.IsValid)
+            {
+                BreakdownReport report = new BreakdownReport();
+                QCStaff staff = getStaff(User.Identity.Name);
+                if (model.QCStaffId == staff.Id)
+                {
+                    if (TryUpdateModel(report))
+                    {
+                        report.Status = 1;
+                        report.ConfirmTime = DateTime.Now;
+                        _qcdb.Entry(report).State = System.Data.Entity.EntityState.Modified;
+                        await _qcdb.SaveChangesAsync();
+                        return Content("SUCCESS");
+                    }
+                }
+                return Content("FAIL");
+            }
+            return Content("FAIL");
+        }
+
+        // 每日质检员签退
+        public PartialViewResult AddQCCheckout()
+        {
+            QCStaff staff = getStaff(User.Identity.Name);
+            var agendalist = from m in _qcdb.QCAgenda
+                             where m.QCStaffId == staff.Id && m.Status == 1
+                             orderby m.Subscribe descending
+                             select new { Key = m.Id, Value = m.Subscribe };
+            ViewBag.AgendaList = new SelectList(agendalist, "Key", "Value");
+            return PartialView();
+        }
+
+        public PartialViewResult AddQCCheckoutPartial(int agendaId)
+        {
+            var agenda = _qcdb.QCAgenda.SingleOrDefault(m => m.Id == agendaId);
+            if (agenda != null)
+            {
+                return PartialView(agenda);
+            }
+            else
+                return PartialView("NotFound");
+
+        }
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<ContentResult> AddQCCheckoutPartial(QCAgenda model)
+        {
+            if (ModelState.IsValid)
+            {
+                QCAgenda agenda = new QCAgenda();
+                if (TryUpdateModel(agenda))
+                {
+                    agenda.CheckoutTime = DateTime.Now;
+                    agenda.Status = 2; // 已签退
+                    _qcdb.Entry(agenda).State = System.Data.Entity.EntityState.Modified;
+                    await _qcdb.SaveChangesAsync();
+                    return Content("SUCCESS");
+                }
+                else
+                    return Content("FAIL");
+            }
+            else
+                return Content("FAIL");
+        }
+
+        // 每日工作总结
+        public PartialViewResult QCDailySummary()
+        {
+            QCStaff staff = getStaff(User.Identity.Name);
+            var agendalist = from m in _qcdb.QCAgenda
+                             where m.QCStaffId == staff.Id && m.Status == 2
+                             orderby m.Subscribe descending
+                             select new { Key = m.Id, Value = m.Subscribe };
+            ViewBag.AgendaList = new SelectList(agendalist, "Key", "Value");
+            return PartialView();
+        }
+        public PartialViewResult QCDailySummaryPartial(int agendaId)
+        {
+            var agenda = _qcdb.QCAgenda.SingleOrDefault(m => m.Id == agendaId);
+            if (agenda != null)
+            {
+                return PartialView(agenda);
+            }
+            else
+                return PartialView("NotFound");
+        }
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<ContentResult> QCDailySummaryPartial(FormCollection form)
+        {
+            if (ModelState.IsValid)
+            {
+                QCAgenda agenda = new QCAgenda();
+                if (TryUpdateModel(agenda))
+                {
+                    agenda.SummaryTime = DateTime.Now;
+                    agenda.Status = 3; // 已提报数据
+                    _qcdb.Entry(agenda).State = System.Data.Entity.EntityState.Modified;
+                    await _qcdb.SaveChangesAsync();
+                    return Content("SUCCESS");
+                }
+                else
+                    return Content("FAIL");
+            }
+            else
+                return Content("FAIL");
+        }
+        
+
         // 辅助类
-        public QCStaff getUser(string username)
+        public QCStaff getStaff(string username)
         {
             QCStaff user = _qcdb.QCStaff.SingleOrDefault(m => m.UserId == username);
             return user;
