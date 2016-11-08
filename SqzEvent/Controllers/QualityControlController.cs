@@ -240,7 +240,7 @@ namespace SqzEvent.Controllers
             return result;
         }
 
-        // 注册方式(2)
+        // 注册方式2
         public ActionResult ForceRegister()
         {
             QC_ForceRegisterViewModel model = new QC_ForceRegisterViewModel();
@@ -274,28 +274,138 @@ namespace SqzEvent.Controllers
         // 主页
         public ActionResult Home()
         {
+            WeChatUtilities utilities = new WeChatUtilities();
+            string _url = ViewBag.Url = Request.Url.ToString();
+            ViewBag.AppId = utilities.getAppId();
+            string _nonce = CommonUtilities.generateNonce();
+            ViewBag.Nonce = _nonce;
+            string _timeStamp = CommonUtilities.generateTimeStamp().ToString();
+            ViewBag.TimeStamp = _timeStamp;
+            ViewBag.Signature = utilities.generateWxJsApiSignature(_nonce, utilities.getJsApiTicket(), _timeStamp, _url);
             return View();
         }
 
         // 个人信息主页
+        [HttpPost]
         public PartialViewResult UserInfoPartial()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
+            QCStaff staff = getUser(User.Identity.Name);
+            QC_StaffViewModel model = new QC_StaffViewModel()
+            {
+                ImgUrl = user.ImgUrl,
+                NickName = user.NickName,
+                Name = staff.Name,
+                Mobile = staff.Mobile,
+                OpenId = user.OpenId
+            };
+            return PartialView(model);
+        }
+
+        // 签到页面
+        public PartialViewResult QCCheckin()
+        {
+            QCStaff staff = getUser(User.Identity.Name);
+            ViewBag.FactoryList = new SelectList(staff.Factory, "Id", "SimpleName");
+            QCAgenda model = new QCAgenda();
+            model.QCStaffId = staff.Id;
+            model.Status = 0; // 默认状态
+            return PartialView(model);
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<ActionResult> QCCheckin(QCAgenda model)
+        {
+            if (ModelState.IsValid)
+            {
+                QCAgenda agenda = new QCAgenda();
+                if (TryUpdateModel(agenda))
+                {
+                    agenda.CheckinTime = DateTime.Now;
+                    agenda.Status = 1; // 已签到
+                    _qcdb.QCAgenda.Add(agenda);
+                    await _qcdb.SaveChangesAsync();
+                    return Content("SUCCESS");
+                }
+                else
+                    return Content("FAIL");
+            }
+            else
+                return Content("FAIL");
+        }
+
+        // 故障列表
+        public PartialViewResult BreakdownList()
+        {
             return PartialView();
         }
 
+        // 故障列表ajax
+        public PartialViewResult BreakdownListPartial(string date)
+        {
+            try
+            {
+                var _start = Convert.ToDateTime(date);
+                var _end = _start.AddDays(1);
+                QCStaff staff = getUser(User.Identity.Name);
+                var list = from m in _qcdb.BreadkdownReport
+                           where m.QCStaffId == staff.Id && m.ReportTime >= _start && m.ReportTime < _end
+                           select m;
+                return PartialView(list);
+            }
+            catch
+            {
+                return PartialView();
+            }
+        }
+
+        // 添加故障类型
+        public PartialViewResult AddBreakdown()
+        {
+            BreakdownReport model = new BreakdownReport();
+            QCStaff staff = getUser(User.Identity.Name);
+            var factorylist = from m in _qcdb.Factory
+                              where m.QCStaff.Contains(staff)
+                              select m;
+            ViewBag.FactoryDropDown = new SelectList(factorylist, "Id", "SimpleName");
+            return PartialView(model);
+        }
+        
+        [HttpPost, ValidateAntiForgeryToken]
+        public ContentResult AddBreakdown(FormCollection form)
+        {
+            return Content("SUCCESS");
+        }
+
+        // 设备列表更新ajax
+        [HttpPost]
+        public JsonResult RefreshEquipmentListAjax(int factoryId)
+        {
+            var list = from m in _qcdb.QCEquipment
+                       where m.FactoryId == factoryId
+                       select new { Id = m.Id, Name = m.SimpleName };
+            return Json(new { result = "SUCCESS", content = list });
+        }
+
+        // 故障类型列表更新ajax
+        [HttpPost]
+        public JsonResult RefreshBreakdownTypeListAjax(int equipmentId)
+        {
+            var list = from m in _qcdb.BreakdownType
+                       where m.EquipmentId == equipmentId
+                       select new { Id = m.Id, Name = m.SimpleDescribe };
+            return Json(new { result = "SUCCESS", content = list });
+        }
 
         public ActionResult Index()
         {
             return View();
         }
 
-
-
         // 辅助类
-        public QCStaff getUser(string openid)
+        public QCStaff getUser(string username)
         {
-            QCStaff user = _qcdb.QCStaff.SingleOrDefault(m => m.UserId == openid);
+            QCStaff user = _qcdb.QCStaff.SingleOrDefault(m => m.UserId == username);
             return user;
         }
 
@@ -326,7 +436,6 @@ namespace SqzEvent.Controllers
                     ms.Write(buffer, 0, sz);
                 }
                 ms.Position = 0;
-
                 util.PutObject(ms.ToArray(), "qc-img/" + filename);
                 return Json(new { result = "SUCCESS", filename = filename });
             }

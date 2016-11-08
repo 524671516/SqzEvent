@@ -7,10 +7,7 @@
 <!-- Panels overlay-->
 <div class="panel-overlay"></div>
 <!-- Left panel with reveal effect-->
-<div class="panel panel-left panel-reveal">
-    <div class="content-block" id="userinfo">
-       
-    </div>
+<div class="panel panel-left panel-reveal left-nav" id="userinfo">
 </div>
 <!-- Views-->
 <div class="views">
@@ -40,7 +37,7 @@
                     <div class="list-block">
                         <ul>
                             <li>
-                                <a href="Signin" class="item-link item-content">
+                                <a href="/QualityControl/QCCheckin" class="item-link item-content">
                                     <div class="item-inner">
                                         <div class="item-title">上班签到</div>
                                         <div class="item-after">
@@ -84,5 +81,12 @@
             </div>
         </div>
     </div>
-    </div>
+</div>
+<div class="hidden">
+    <span id="appId">@ViewBag.AppId</span>
+    <span id="timeStamp">@ViewBag.TimeStamp</span>
+    <span id="nonce">@ViewBag.Nonce</span>
+    <span id="url">@ViewBag.Url</span>
+    <span id="signature">@ViewBag.Signature</span>
+</div>
 

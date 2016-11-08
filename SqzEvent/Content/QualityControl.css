@@ -1,4 +1,4 @@
-﻿.item-input {
+﻿.item-input-right {
     text-align: right;
 }
 /*所有页按钮样式*/
@@ -8,4 +8,80 @@ button{
     color: #007aff;
     font-size: 17px;
     background-color:rgb(247,247,248);
+}
+.hidden {
+    display: none;
+}
+
+.img-center {
+    margin: auto auto;
+    padding: 20px;
+    font-size: 16px;
+    color: lightgray;
+}
+
+.img-responsive {
+    display: block;
+    height: auto;
+    max-width: 100%;
+}
+.img-circle {
+    border-radius: 50%;
+}
+
+
+.leftnav-margin-10 {
+    margin: 10px 0;
+}
+
+.left-nav ul {
+    background-color: #111;
+    color: lightgrey;
+}
+
+.list-block ul.rep-imglist {
+    padding: 0;
+}
+.list-block ul.rep-imglist li{
+    float:left;
+}
+.rep-imgitem{
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width:60px; height:60px; 
+    border:solid #ccc 1px; 
+    margin:10px;
+    font-size:48px; line-height:60px; text-align:center;
+    color:#ccc;
+    display:block;
+}
+.rep-imgitem-selected{
+    opacity:0.5;
+    color:#fff;
+    background-color:#000;
+}
+.rep-imgitem-btn {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 60px;
+    height: 60px;
+    border: solid #ccc 1px;
+    margin: 10px;
+    font-size: 48px;
+    line-height: 60px;
+    text-align: center;
+    color: #ccc;
+    display: block;
+}
+.sellertasklist-photo{
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width:44px; height:44px; 
+    border-radius:5px;
+}
+.list-block ul.rep-imglist {
+    padding: 0;
 }

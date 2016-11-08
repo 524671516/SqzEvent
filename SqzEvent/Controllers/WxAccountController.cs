@@ -325,12 +325,6 @@ namespace SqzEvent.Controllers
             return View();
         }
 
-        /*public ContentResult TestPrint()
-        {
-            
-            //return Content("SUCCESS");
-        }*/
-
         public ContentResult TestSendMessage(string mobile)
         {
             string url = "http://121.40.60.163:8081/message/balance?loginname=180&password=sqz180sqz";

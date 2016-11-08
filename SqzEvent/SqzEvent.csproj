@@ -489,6 +489,7 @@
     <Content Include="Views\QualityControl\ForceRegister.cshtml" />
     <Content Include="Views\QualityControl\Register.cshtml" />
     <Content Include="Views\Shared\_QualityControl.cshtml" />
+    <Content Include="Views\QualityControl\QCCheckin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

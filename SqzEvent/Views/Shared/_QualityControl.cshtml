@@ -13,10 +13,14 @@
     <!-- Path to Framework7 iOS related color styles -->
     <link href="@Url.Content("~/Content/framework7.ios.colors.min.css")" rel="stylesheet" />
     <link href="@Url.Content("~/Content/QualityControl.css")" rel="stylesheet" />
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome-ie7.min.css" rel="stylesheet" />
+
 </head>
 <body>
     @RenderBody()
     <!-- Path to Framework7 Library JS-->
+    <script src="//res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript"></script>
     @Scripts.Render("~/Scripts/framework7.min.js")
     @Scripts.Render("~/Scripts/qualitycontrol.js")
     @RenderSection("scripts", required: false)
