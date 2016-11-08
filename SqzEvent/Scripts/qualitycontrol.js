@@ -6,6 +6,19 @@ var $$ = Dom7;
 var mainView = myApp.addView('.view-main', {
     dynamicNavbar: true,
 });
+wx.config({
+    debug: false,
+    // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+    appId: $("#appId").text(),
+    // 必填，公众号的唯一标识
+    timestamp: $("#timeStamp").text(),
+    // 必填，生成签名的时间戳
+    nonceStr: $("#nonce").text(),
+    // 必填，生成签名的随机串
+    signature: $("#signature").text(),
+    // 必填，签名，见附录1
+    jsApiList: ["uploadImage", "downloadImage", "chooseImage", "getLocation", "previewImage", "openLocation"]
+});
 //主页
 var sContent = $$('#signin_content');
 sContent.on('refresh', function () {
@@ -19,7 +32,7 @@ sContent.on('refresh', function () {
 });
 $$.ajax({
     url: "/QualityControl/UserInfoPartial",
-    type:"post",
+    type: "post",
     data: {},
     success: function (data) {
         $$("#userinfo").html(data);
@@ -49,6 +62,49 @@ myApp.onPageInit('qccheckin', function (page) {
             }, 2000);
         });
     });*/
+    $(function () {
+        var $submitlink = $("#submit-link");
+        var $qccheckinform = $('#qccheckin-form');
+        $qccheckinform.validate({
+            rules: {
+                FactoryId: {
+                    required: true
+                },
+                Remark:{
+                    required: true,
+                    maxlength: 200
+                },
+                OfficalWorkers: {
+                    min: 0,
+                    digits: true,
+                    max: 100,
+                    required: true
+                },
+                TemporaryWorkers: {
+                    min: 0,
+                    digits: true,
+                    max: 100,
+                    required: true
+                }
+            },
+            errorPlacement: function (error, element) {
+                //console.log(element);
+                //element.parent().addClass("error");
+            },
+            errorClass: "invalid-input",
+            submitHandler: function (form) {
+                form.submit();
+                alert("Submitted!")
+            }
+
+        });
+        $submitlink.on("click", function () {
+            
+                $qccheckinform.submit();
+        })
+
+    })
+
     uploadCheckinFile("qccheckin-form", "qccheckin-photos", "Photos", "qccheckin-imgcount", 7);
     currentTextAreaLength("qccheckin-form", "Remark", 200, "qccheckin-currentlen");
 })

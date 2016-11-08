@@ -8,9 +8,9 @@
                 <span>返回</span>
             </a>
         </div>
-        <div class="center sliding"><strong>活动门店列表</strong></div>
+        <div class="center sliding"><strong>上班签到</strong></div>
         <div class="right">
-            <a href="javascript:;" class="link" id="qccheckin-submit">提交</a>
+            <a href="javascript:;" class="link" id="submit-link">提交</a>
         </div>
     </div>
 </div>
@@ -22,10 +22,7 @@
                 @Html.AntiForgeryToken()
                 @Html.HiddenFor(m=>m.Status)
                 @Html.HiddenFor(m=>m.Id)
-                @Html.HiddenFor(m=>m.CheckinTime)
-                @Html.HiddenFor(m=>m.CheckoutTime)
                 @Html.HiddenFor(m=>m.QCStaffId)
-                @Html.HiddenFor(m=>m.Subscribe)
                 <div class="content-block-title">@DateTime.Now.ToString("yyyy-MM-dd")</div>
                 <div class="list-block">
                     <ul>
@@ -50,7 +47,7 @@
                                 <div class="item-inner">
                                     <div class="item-title label">正式员工</div>
                                     <div class="item-input">
-                                        @Html.TextBoxFor(m => m.OfficalWorkers, new { placeholder = "正式员工", @class = "item-input-right" })
+                                        @Html.TextBoxFor(m => m.OfficalWorkers, new { placeholder = "正式员工", @class = "item-input-right"  })
                                     </div>
                                 </div>
                             </div>
@@ -60,7 +57,7 @@
                                 <div class="item-inner">
                                     <div class="item-title label">临时员工</div>
                                     <div class="item-input">
-                                        @Html.TextBoxFor(m => m.TemporaryWorkers, new { placeholder = "临时员工", @class = "item-input-right" })
+                                        @Html.TextBoxFor(m => m.TemporaryWorkers, new { placeholder = "临时员工", @class = "item-input-right"})
                                     </div>
                                 </div>
                             </div>
@@ -87,7 +84,7 @@
                         </li>
                         <li>
                             <div class="item-content">
-                                @Html.TextAreaFor(m => m.Remark, new { placeholder = "请输入签到备注", @class = "required" })
+                                @Html.TextAreaFor(m => m.Remark, new { placeholder = "请输入签到备注", @class = "required", name="text-area"})
                             </div>
                             <div class="item-content">
                                 <div class="item-inner">
