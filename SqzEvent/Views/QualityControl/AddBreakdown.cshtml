@@ -27,7 +27,7 @@
                 <div class="list-block">
                     <ul>
                         <li>
-                            <a href="#" class="item-link smart-select" data-back-text="返回" data-back-on-select="true" data-searchbar="true" data-searchbar-placeholder="选择工厂" data-searchbar-cancel="取消">
+                            <a href="#" class="item-link smart-select" data-back-text="返回" data-back-on-select="true" data-searchbar="true" data-searchbar-placeholder="选择工厂" data-searchbar-cancel="取消" id="factory-select">
                                 @Html.DropDownList("FactoryId", ViewBag.FactoryDropDown as SelectList)
                                 <div class="item-content">
                                     <div class="item-inner">
@@ -55,7 +55,7 @@
                                     <div class="item-after"><abbr id="addbreakdown-imgcount">0</abbr>/7</div>
                                 </div>
                             </div>
-                            <div class="item-content">
+                            <div class="item-content middle-content">
                                 <div class="item-inner">
                                     <div class="hidden">
                                         @Html.EditorFor(m => m.Photos)
@@ -65,7 +65,7 @@
                             </div>
                         </li>
                         <li>
-                            <div class="item-content">
+                            <div class="item-content middle-content">
                                 @Html.TextAreaFor(m => m.ReportContent, new { placeholder = "请输入故障备注", @class = "required" })
                             </div>
                             <div class="item-content">

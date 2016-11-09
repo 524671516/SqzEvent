@@ -10,7 +10,7 @@
         </div>
         <div class="center sliding"><strong>上班签到</strong></div>
         <div class="right">
-            <a href="javascript:;" class="link" id="submit-link">提交</a>
+            <a href="javascript:;" class="link" id="qccheckin-submit">提交</a>
         </div>
     </div>
 </div>
@@ -23,11 +23,14 @@
                 @Html.HiddenFor(m=>m.Status)
                 @Html.HiddenFor(m=>m.Id)
                 @Html.HiddenFor(m=>m.QCStaffId)
+                @Html.HiddenFor(m=>m.CheckinTime)
+                @Html.HiddenFor(m=>m.CheckoutTime)
+                @Html.HiddenFor(m=>m.Subscribe)
                 <div class="content-block-title">@DateTime.Now.ToString("yyyy-MM-dd")</div>
                 <div class="list-block">
                     <ul>
                         <li>
-                            <a href="#" class="item-link smart-select" data-back-text="返回" data-back-on-select="true" data-searchbar="true" data-searchbar-placeholder="选择工厂" data-searchbar-cancel="取消">
+                            <a href="#" class="item-link smart-select" id="factory-select" data-back-text="返回" data-back-on-select="true" data-searchbar="true" data-searchbar-placeholder="选择工厂" data-searchbar-cancel="取消">
                                 @Html.DropDownListFor(m => m.FactoryId, ViewBag.FactoryList as SelectList)
                                 <div class="item-content">
                                     <div class="item-inner">
@@ -73,18 +76,19 @@
                                     <div class="item-after"><abbr id="qccheckin-imgcount">0</abbr>/7</div>
                                 </div>
                             </div>
-                            <div class="item-content">
+                            <div class="item-content middle-content">
                                 <div class="item-inner">
                                     <div class="hidden">
                                         @Html.EditorFor(m => m.Photos)
                                     </div>
-                                    <ul class="rep-imglist" id="qccheckin-photos"></ul>
+                                    <ul class="rep-imglist" id="qccheckin-photos">
+                                    </ul>
                                 </div>
                             </div>
                         </li>
                         <li>
-                            <div class="item-content">
-                                @Html.TextAreaFor(m => m.Remark, new { placeholder = "请输入签到备注", @class = "required", name="text-area"})
+                            <div class="item-content middle-content">
+                                @Html.TextAreaFor(m => m.Remark, new { placeholder = "请输入签到备注", @class = "required"})
                             </div>
                             <div class="item-content">
                                 <div class="item-inner">

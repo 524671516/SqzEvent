@@ -1,13 +1,16 @@
 ﻿.item-input-right {
     text-align: right;
 }
-/*所有页按钮样式*/
+/*按钮样式*/
 button{
     border:0;
     outline:none;
     color: #007aff;
     font-size: 17px;
     background-color:rgb(247,247,248);
+}
+.color-gray{
+    background-color:
 }
 input[type="text"].invalid-input{
     border:solid 2px rgb(211, 31, 31);
@@ -18,6 +21,15 @@ textarea.invalid-input{
     border:solid 2px rgb(211, 31, 31);
     box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
     border-radius:4px;
+}
+.invalid-photo{
+    border:solid 2px rgb(211, 31, 31);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    border-radius:4px;
+}
+/*内容区域居中*/
+.middle-content{
+    padding:0 10px 0 10px;
 }
 /*个人信息展示页样式*/
 .hidden {
