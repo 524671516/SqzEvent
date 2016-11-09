@@ -320,12 +320,30 @@ namespace SqzEvent.Controllers
                 QCAgenda agenda = new QCAgenda();
                 if (TryUpdateModel(agenda))
                 {
-                    agenda.CheckinTime = DateTime.Now;
-                    agenda.Subscribe = DateTime.Now.Date;
-                    agenda.Status = 1; // 已签到
-                    _qcdb.QCAgenda.Add(agenda);
-                    await _qcdb.SaveChangesAsync();
-                    return Content("SUCCESS");
+                    var exist_agenda = from m in _qcdb.QCAgenda
+                                       where m.FactoryId == agenda.FactoryId && m.Subscribe == agenda.Subscribe && m.Status == 1
+                                       select m;
+                    // 判断是否存在同一天，同一个工厂的日程
+                    if (exist_agenda.Count() == 0)
+                    {
+                        // 没有 则添加日程
+                        agenda.CheckinTime = DateTime.Now;
+                        agenda.Subscribe = DateTime.Now.Date;
+                        agenda.Status = 1; // 已签到
+                        _qcdb.QCAgenda.Add(agenda);
+                        await _qcdb.SaveChangesAsync();
+                        return Content("SUCCESS");
+                    }
+                    else
+                    {
+                        // 如果有的话 修改日程记录
+                        agenda.CheckinTime = DateTime.Now;
+                        agenda.Subscribe = DateTime.Now.Date;
+                        agenda.Status = 1; // 已签到
+                        _qcdb.Entry(agenda).State = System.Data.Entity.EntityState.Modified;
+                        await _qcdb.SaveChangesAsync();
+                        return Content("MODIFIED");
+                    }
                 }
                 else
                     return Content("FAIL");
