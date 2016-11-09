@@ -49,13 +49,10 @@ myApp.onPageInit('qccheckin', function (page) {
         var $factoryselect = $("#factory-select")
         var $qccheckinsubmit = $("#qccheckin-submit");
         var $qccheckinform = $('#qccheckin-form');
-        //数字转换
-        $("#qccheckin-photos-upload-btn").on("click", function () {
-            $qccheckinsubmit.prop("disabled", false).removeClass("color-gray");
-        })
         $(".item-content").keyup(function () {
             $qccheckinsubmit.prop("disabled", false).removeClass("color-gray");
         })
+        //数字转换
         $("#OfficalWorkers").keyup(function () {
             var a = Number($("#OfficalWorkers").val())
             if (a > 0 || a == 0) {
@@ -262,23 +259,8 @@ myApp.onPageInit('addbreakdown', function (page) {
         var $factoryselect = $("#factory-select")
         var $addbreakdownsubmit = $("#addbreakdown-submit");
         var $addbreakdownform = $('#addbreakdown-form');
-        $("#qccheckin-photos-upload-btn").on("click", function () {
-            $addbreakdownsubmit.prop("disabled", false).removeClass("color-gray");
-        })
         $(".item-content").keyup(function () {
             $addbreakdownsubmit.prop("disabled", false).removeClass("color-gray");
-        })
-        $("#OfficalWorkers").keyup(function () {
-            var a = Number($("#OfficalWorkers").val())
-            if (a > 0 || a == 0) {
-                $("#OfficalWorkers").val(a);
-            }
-        })
-        $("#TemporaryWorkers").keyup(function () {
-            var b = Number($("#TemporaryWorkers").val())
-            if (b > 0 || b == 0) {
-                $("#TemporaryWorkers").val(b);
-            }
         })
         //效验规则
         $addbreakdownform.validate({
