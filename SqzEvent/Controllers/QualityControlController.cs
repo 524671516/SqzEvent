@@ -383,7 +383,6 @@ namespace SqzEvent.Controllers
             BreakdownReport model = new BreakdownReport();
             QCStaff staff = getStaff(User.Identity.Name);
             var factorylist = from m in _qcdb.Factory
-                              where m.QCStaff.Contains(staff)
                               select m;
             ViewBag.FactoryDropDown = new SelectList(factorylist, "Id", "SimpleName");
             model.QCStaffId = staff.Id;
