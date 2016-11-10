@@ -1,0 +1,37 @@
+﻿<div class="navbar">
+    <div class="navbar-inner">
+        <div class="left">
+            <a href="#" class="back link">
+                <i class="icon icon-back" aria-hidden="true"></i>
+                <span>返回</span>
+            </a>
+        </div>
+        <div class="center sliding">查看故障列表</div>
+        <div class="right">
+            <a href="/QualityControl/AddBreakdown" class="link">新增</a>
+        </div>
+    </div>
+</div>
+<div class="pages">
+    <div class="page" data-page="breakdownlist">
+        <div class="page-content">
+            <div class="content-block-title">选择/编辑数据</div>
+            <div class="list-block">
+                <ul>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-title label">日期</div>
+                            <div class="item-input">
+                                <input id="breakdownlist-date" type="text" placeholder="日期" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div id="breakdownlist-content" class="list-content">
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>

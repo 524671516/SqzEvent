@@ -391,12 +391,13 @@ namespace SqzEvent.Controllers
         }
         
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<ContentResult> AddBreakdown(BreakdownReport model)
+        public async Task<ContentResult> AddBreakdown(BreakdownReport model, FormCollection form)
         {
             if (ModelState.IsValid)
             {
                 BreakdownReport report = new BreakdownReport();
                 if(TryUpdateModel(report)){
+                    report.BreakDownTime = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd") + " " + form["BreakDownTimeTiny"].ToString() + ":00");
                     report.ReportTime = DateTime.Now;
                     _qcdb.BreadkdownReport.Add(report);
                     await _qcdb.SaveChangesAsync();

@@ -491,6 +491,8 @@
     <Content Include="Views\Shared\_QualityControl.cshtml" />
     <Content Include="Views\QualityControl\QCCheckin.cshtml" />
     <Content Include="Views\QualityControl\AddBreakdown.cshtml" />
+    <Content Include="Views\QualityControl\BreakdownList.cshtml" />
+    <Content Include="Views\QualityControl\BreakdownListPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
