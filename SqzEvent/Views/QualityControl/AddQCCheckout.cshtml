@@ -1,0 +1,56 @@
+﻿@model SqzEvent.Models.QCAgenda
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="left">
+            <a href="#" class="back link">
+                <i class="icon icon-back" aria-hidden="true"></i>
+                <span>返回</span>
+            </a>
+        </div>
+        <div class="center sliding"><strong>质检员签退</strong></div>
+        <div class="right">
+            <a href="javascript:;" class="link" id="qccheckout-submit"></a>
+        </div>
+    </div>
+</div>
+<div class="pages">
+    <div class="page" data-page="qccheckout">
+        <div class="page-content">
+            @using (Html.BeginForm("QCCheckout", "QualityControl", FormMethod.Post, new { @id = "QCCheckout_form", @class = "validate-form" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(m => m.Id)
+                @Html.HiddenFor(m => m.QCStaffId)
+                @Html.HiddenFor(m => m.Status)
+                @Html.HiddenFor(m => m.Subscribe)
+                @Html.HiddenFor(m => m.CheckinTime)
+                @Html.HiddenFor(m => m.CheckoutTime)
+                <div class="content-block-title">操作</div>
+                <div class="list-block">
+                    <ul>
+                        <li>
+                            <div class="item-content" id="location-btn">
+                                <div class="item-inner">
+                                    <div class="item-title"><i class="fa fa-exclamation-circle color-blue" aria-hidden="true"></i>&nbsp;&nbsp;上传位置信息</div>
+                                    <div class="item-after">未上传</div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content" id="img-btn">
+                                <div class="item-inner">
+                                    <div class="item-title"><i class="fa fa-exclamation-circle color-blue" aria-hidden="true"></i>&nbsp;&nbsp;上传图片</div>
+                                    <div class="item-after">未上传</div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="content-block">
+                    <a href="javascript:;" class="button button-big button-fill" id="checkout-btn">提交</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
