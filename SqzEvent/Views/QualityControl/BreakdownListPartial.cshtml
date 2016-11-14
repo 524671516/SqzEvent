@@ -1,84 +1,19 @@
 ﻿@model IEnumerable<SqzEvent.Models.BreakdownReport>
-
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Status)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.QCEquipmentId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.BreakDownTypeId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.QCStaffId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.BreakDownTime)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ReportTime)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.RecoveryTime)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ConfirmTime)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Photos)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ReportContent)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.RecoveryRemark)
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Status)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.QCEquipmentId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.BreakDownTypeId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.QCStaffId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.BreakDownTime)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ReportTime)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.RecoveryTime)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ConfirmTime)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Photos)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ReportContent)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.RecoveryRemark)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
-
-</table>
+<div class="list-block">
+    <ul>
+        @foreach (var item in Model)
+        {
+            <li class="swipeout">
+                <div class="swipeout-content item-content">
+                    <div class="item-inner">
+                        <div class="item-title">@Html.Encode(item.QCEquipment.SimpleName)</div>
+                        <div class="item-after">@Html.Encode(item.BreakDownTime.ToString("HH:mm"))</div>
+                    </div>
+                </div>
+                <div class="swipeout-actions-right">
+                    <a href="#" class="action1">删除</a>
+                </div>
+            </li>
+        }
+    </ul>
+</div>

@@ -6,6 +6,9 @@ var $$ = Dom7;
 var mainView = myApp.addView('.view-main', {
     dynamicNavbar: true,
 });
+$$("#qccheckout-link").on("click", function () {
+
+})
 $$(document).on("ajaxStart", function (e) {
     if (e.detail.xhr.requestUrl.indexOf("autocomplete-languages.json") >= 0) {
         return;
@@ -209,7 +212,7 @@ myApp.onPageInit("breakdownlist", function(page){
 });
 
 
-//故障报告页
+//新增故障报告页
 myApp.onPageInit("addbreakdown", function (page) {
     uploadCheckinFile("addbreakdown-form", "addbreakdown-photos", "Photos", "addbreakdown-imgcount", 7);
     currentTextAreaLength("addbreakdown-form", "ReportContent", 200, "addbreakdown-currentlen");
@@ -227,8 +230,6 @@ myApp.onPageInit("addbreakdown", function (page) {
     var $factoryselect = $("#factory-select")
     var $addbreakdownsubmit = $("#addbreakdown-submit");
     var $addbreakdownform = $('#addbreakdown-form');
-    
-
     $$("#factory-select").on("change", function () {
         $$("#QCEquipmentId").html("");
         $$("#QCEquipmentId").append("<option>- 请选择 -</option>");
@@ -281,11 +282,11 @@ myApp.onPageInit("addbreakdown", function (page) {
     });
     //效验规则
     $addbreakdownform.validate({
-        BreakDownTime: {
-            required: true,
-            date: true
-        },
         rules: {
+            BreakDownTime: {
+                required: true,
+                date: true
+            },
             FactoryId: {
                 required: true,
             },
