@@ -8,7 +8,7 @@
             {
                 <li class="swipeout" data-url="@item.Id">
                     <div class="swipeout-content">
-                        <a href="/QualityControl/BreakdownDetails?id=@item.Id" class="item-link item-content random-param">
+                        <a href="/QualityControl/BreakdownDetails?bdId=@item.Id" class="item-link item-content random-param">
                             <div class="item-inner">
                                 <div class="item-title-row">
                                     <div class="item-title">@Html.Encode(item.QCEquipment.SimpleName) (@Html.BreakdownStatus(item.Status))</div>
