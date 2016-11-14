@@ -255,6 +255,15 @@ myApp.onPageInit("breakdownlist", function (page) {
         dayNamesShort: dayNamesShort,
         closeOnSelect: true
     });
+    $$.ajax({
+        url: "/QualityControl/BreakdownListPartial",
+        data: {
+            date: $$("#breakdownlist-date").val()
+        },
+        success: function (data) {
+            $$("#breakdownlist-content").html(data);
+        }
+    });
     $$("#breakdownlist-date").on("change", function () {
         $$.ajax({
             url: "/QualityControl/BreakdownListPartial",
@@ -264,7 +273,7 @@ myApp.onPageInit("breakdownlist", function (page) {
             success: function (data) {
                 $$("#breakdownlist-content").html(data);
             }
-        })
+        });
     });
 });
 //新增故障报告页

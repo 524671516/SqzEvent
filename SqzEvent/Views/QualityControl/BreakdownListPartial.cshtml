@@ -1,19 +1,32 @@
 ﻿@model IEnumerable<SqzEvent.Models.BreakdownReport>
-<div class="list-block">
-    <ul>
-        @foreach (var item in Model)
-        {
-            <li class="swipeout">
-                <div class="swipeout-content item-content">
-                    <div class="item-inner">
-                        <div class="item-title">@Html.Encode(item.QCEquipment.SimpleName)</div>
-                        <div class="item-after">@Html.Encode(item.BreakDownTime.ToString("HH:mm"))</div>
+@if (Model.Count() != 0)
+{
+    <div class="content-block-title">设备故障列表</div>
+    <div class="list-block media-list">
+        <ul>
+            @foreach (var item in Model)
+            {
+                <li class="swipeout" data-url="@item.Id">
+                    <div class="swipeout-content">
+                        <a href="/QualityControl/BreakdownDetails?id=@item.Id" class="item-link item-content random-param">
+                            <div class="item-inner">
+                                <div class="item-title-row">
+                                    <div class="item-title">@Html.Encode(item.QCEquipment.SimpleName) (@Html.BreakdownStatus(item.Status))</div>
+                                    <div class="item-after">@Html.Encode(item.BreakDownTime.ToString("HH:mm"))</div>
+                                </div>
+                                <div class="item-subtitle color-gray">@Html.Encode(item.QCEquipment.Factory.SimpleName)</div>
+                            </div>
+                        </a>
                     </div>
-                </div>
-                <div class="swipeout-actions-right">
-                    <a href="#" class="action1">删除</a>
-                </div>
-            </li>
-        }
-    </ul>
-</div>
+                    <div class="swipeout-actions-right">
+                        <a href="/QualityControl/RecoveryBreakdown?bdId=@item.Id" class="bg-green">确认修复</a>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+}
+else
+{
+    <div class="content-block-title">未找到设备故障记录</div>
+}

@@ -377,6 +377,20 @@ namespace SqzEvent.Controllers
             }
         }
 
+        // 故障明细
+        public PartialViewResult BreakdownDetails(int bdId)
+        {
+            var report = _qcdb.BreadkdownReport.SingleOrDefault(m => m.Id == bdId);
+            if (report != null)
+            {
+                return PartialView(report);
+            }
+            else
+            {
+                return PartialView("Error");
+            }
+        }
+
         // 添加故障
         public PartialViewResult AddBreakdown()
         {
@@ -445,6 +459,7 @@ namespace SqzEvent.Controllers
             }
         }
 
+        [HttpPost, ValidateAntiForgeryToken]
         public async Task<ContentResult> RecoveryBreakdown(BreakdownReport model)
         {
             if (ModelState.IsValid)
