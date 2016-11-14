@@ -276,6 +276,7 @@ myApp.onPageInit("breakdownlist", function (page) {
         });
     });
 });
+
 //新增故障报告页
 myApp.onPageInit("addbreakdown", function (page) {
     uploadCheckinFile("addbreakdown-form", "addbreakdown-photos", "Photos", "addbreakdown-imgcount", 7);
@@ -416,16 +417,96 @@ myApp.onPageInit("addbreakdown", function (page) {
     });
 });
 //确认修复页
-myApp.onPageInit('Confirmrepair', function (page) {
-    $$('.btn').on('click', function () {
-        myApp.confirm('确认提交?', function (value) {
-            myApp.showPreloader('正在提交')
-            setTimeout(function () {
-                myApp.hidePreloader();
-                $$('textarea').val('');
-            }, 2000);
-        });
+myApp.onPageInit('recoverybreakdown', function (page) {
+    $$("#RecoveryRemark").html("");
+    uploadCheckinFile("recoveybreakdown-form", "recoverybreakdown-photos", "Photos", "recoverybreakdown-imgcount", 7);
+    currentTextAreaLength("recoveybreakdown-form", "RecoveryRemark", 200, "recoverybreakdown-currentlen");
+    //创建picker
+    var pickerInline = myApp.picker({
+        input: '#BreakDownTimeTiny',
+        //文本框显示格式
+        formatValue: function (p, values, displayValues) {
+            return values[0] + ':' + values[1];
+        },
+        toolbarCloseText: "关闭",
+        value: ["10", "00"],
+        cols: time_col
     });
+    $(function () {
+        var $recoverybreakdownsubmit = $("#recoverybreakdown-submit");
+        var $recoveybreakdownform = $('#recoveybreakdown-form');
+        //效验规则
+        $recoveybreakdownform.validate({
+            rules: {
+                RecoveryRemark: {
+                    maxlength: 200,
+                    required: true
+                }
+            },
+            //错误处理
+            errorPlacement: function (error, element) {
+                myApp.hideIndicator();
+                $recoverybreakdownsubmit.prop("disabled", false).removeClass("color-gray");
+            },
+            errorClass: "invalid-input",
+            //提交成功后处理函数
+            submitHandler: function (form) {
+                var photoList = splitArray($("#Photos").val());
+                if (photoList.length == 0) {
+                    myApp.hideIndicator();
+                    myApp.alert("至少上传一张照片");
+                    $recoverybreakdownsubmit.prop("disabled", false).removeClass("color-gray");
+
+                } else {
+                    $recoveybreakdownform.ajaxSubmit(function (data) {
+                        if (data == "SUCCESS") {
+                            myApp.hideIndicator();
+                            mainView.router.back();
+                            myApp.addNotification({
+                                title: "通知",
+                                message: "表单提交成功"
+                            });
+                            setTimeout(function () {
+                                myApp.closeNotification(".notifications");
+                            }, 2e3);
+                        }
+                        else if (data == "MODIFIED") {
+                            myApp.hideIndicator();
+                            mainView.router.back();
+                            myApp.addNotification({
+                                title: "通知",
+                                message: "表单修改成功"
+                            });
+                            setTimeout(function () {
+                                myApp.closeNotification(".notifications");
+                            }, 2e3);
+                        }
+                        else {
+                            myApp.hideIndicator();
+                            myApp.addNotification({
+                                title: "通知",
+                                message: "表单提交失败"
+                            });
+                            $recoverybreakdownsubmit.prop("disabled", false).removeClass("color-gray");
+                            setTimeout(function () {
+                                myApp.closeNotification(".notifications");
+                            }, 2e3);
+                        }
+                    });
+                }
+            }
+        });
+        //按钮点击事件
+        $recoverybreakdownsubmit.on("click", function () {
+            if (!$recoverybreakdownsubmit.prop("disabled")) {
+                myApp.showIndicator();
+                $recoverybreakdownsubmit.prop("disabled", true).addClass("color-gray");
+                setTimeout(function () {
+                    $recoveybreakdownform.submit();
+                }, 500);
+            }
+        });
+    })
 });
 
 //每日工作总结页

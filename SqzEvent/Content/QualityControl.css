@@ -110,19 +110,5 @@ textarea.invalid-input{
 .list-block ul.rep-imglist {
     padding: 0;
 }
-/*表格样式*/
-.table {
-	color:#333333;
-	border-collapse: collapse;
-}
-.table th {
-    display:block;
-    border:1px solid red;
-	padding: 8px;
-}
-.table td {
-    display:block;
-	border:1px solid red;
-	padding: 8px;
-}
+
 
