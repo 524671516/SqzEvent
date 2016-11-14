@@ -49,19 +49,6 @@ myApp.onPageInit('qccheckin', function (page) {
         var $factoryselect = $("#factory-select")
         var $qccheckinsubmit = $("#qccheckin-submit");
         var $qccheckinform = $('#qccheckin-form');
-        //数字转换
-        /*$("#OfficalWorkers").keyup(function () {
-            var a = Number($("#OfficalWorkers").val())
-            if (a > 0 || a == 0) {
-                $("#OfficalWorkers").val(a);
-            }
-        })
-        $("#TemporaryWorkers").keyup(function () {
-            var b = Number($("#TemporaryWorkers").val())
-            if (b > 0 || b == 0) {
-                $("#TemporaryWorkers").val(b);
-            }
-        })*/
         $("input[type='number']").val("");
         //效验规则
         $qccheckinform.validate({
@@ -92,7 +79,7 @@ myApp.onPageInit('qccheckin', function (page) {
             //提交成功后处理函数
             submitHandler: function (form) {
                 var photoList = splitArray($("#Photos").val());
-                
+
                 if ($("#FactoryId").val() == "") {
                     myApp.hideIndicator();
                     myApp.alert("请选择签到工厂");
@@ -158,6 +145,79 @@ myApp.onPageInit('qccheckin', function (page) {
     //textarea字数计算
     currentTextAreaLength("qccheckin-form", "CheckinRemark", 200, "qccheckin-currentlen");
 })
+//签退页
+myApp.onPageInit("addcheckout", function (page) {
+    $$("#AgendaId").on("change", function () {
+        $$.ajax({
+            url: "/QualityControl/AddQCCheckoutPartial",
+            data: {
+                agendaId: $$("#AgendaId").val()
+            },
+            success: function (data) {
+                $$('#addcheckout-content').html(data);
+                var $addqccheckoutpartialform = $('#addqccheckoutpartial-form');
+                var $addqccheckoutsubmit = $("#addqccheckout-submit");
+                //效验规则
+                $addqccheckoutpartialform.validate({
+                    rules: {
+                        CheckinRemark: {
+                            maxlength: 200,
+                            required: true
+                        }
+                    },
+                    //错误处理
+                    errorPlacement: function (error, element) {
+                        myApp.hideIndicator();
+                        $addqccheckoutsubmit.prop("disabled", false).removeClass("color-gray");
+                    },
+                    errorClass: "invalid-input",
+                    //提交成功后处理函数
+                    submitHandler: function (form) {
+                        console.log("3");
+                        $addqccheckoutpartialform.ajaxSubmit(function (data) {
+                            if (data == "SUCCESS") {
+                                myApp.hideIndicator();
+                                mainView.router.back();
+                                myApp.addNotification({
+                                    title: "通知",
+                                    message: "签退成功"
+                                });
+                                setTimeout(function () {
+                                    myApp.closeNotification(".notifications");
+                                }, 2e3);
+                            }
+                            else {
+                                myApp.hideIndicator();
+                                myApp.addNotification({
+                                    title: "通知",
+                                    message: "签退失败"
+                                });
+                                $addqccheckoutsubmit.prop("disabled", false).removeClass("color-gray");
+                                setTimeout(function () {
+                                    myApp.closeNotification(".notifications");
+                                }, 2e3);
+                            }
+                        });
+                    }
+                });
+                //按钮点击事件
+                $addqccheckoutsubmit.on("click", function () {
+                    if (!$addqccheckoutsubmit.prop("disabled")) {
+                        myApp.showIndicator();
+                        $addqccheckoutsubmit.prop("disabled", true).addClass("color-gray");
+                        setTimeout(function () {
+                            console.log("submited");
+                            $addqccheckoutpartialform.submit();
+                            console.log("done");
+                        }, 500);
+                    }
+                });
+
+            }
+        })
+
+    });
+});
 //产品检验页
 myApp.onPageInit('Productinspection', function (page) {
     console.log('产品检验');
@@ -185,7 +245,7 @@ myApp.onPageInit("Newproductinspection", function (page) {
 });
 
 //故障报告列表
-myApp.onPageInit("breakdownlist", function(page){
+myApp.onPageInit("breakdownlist", function (page) {
     var calendarMultiple = myApp.calendar({
         input: "#breakdownlist-date",
         dateFormat: "yyyy-mm-dd",
@@ -199,7 +259,7 @@ myApp.onPageInit("breakdownlist", function(page){
         $$.ajax({
             url: "/QualityControl/BreakdownListPartial",
             data: {
-                date:$$("#breakdownlist-date").val()
+                date: $$("#breakdownlist-date").val()
             },
             success: function (data) {
                 $$("#breakdownlist-content").html(data);
@@ -207,8 +267,6 @@ myApp.onPageInit("breakdownlist", function(page){
         })
     });
 });
-
-
 //新增故障报告页
 myApp.onPageInit("addbreakdown", function (page) {
     uploadCheckinFile("addbreakdown-form", "addbreakdown-photos", "Photos", "addbreakdown-imgcount", 7);
@@ -550,7 +608,7 @@ function currentTextAreaLength(pagename, id_name, max_length, result_id) {
         }
     });
 }
-var time_col=[
+var time_col = [
     {
         values: (function () {
             var arr = [];
@@ -581,8 +639,3 @@ var dayNames = ["星期日", "星期一", "星期二", "星期三", "星期四",
 var dayNames = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
 
 var dayNamesShort = ["日", "一", "二", "三", "四", "五", "六"];
-
-
-
-
-

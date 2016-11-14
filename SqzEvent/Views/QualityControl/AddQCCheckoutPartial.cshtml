@@ -1,34 +1,37 @@
 ﻿@model SqzEvent.Models.QCAgenda
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("AddQCCheckoutPartial", "QualityControl", FormMethod.Post, new { @id = "addqccheckoutpartial-form", @class = "validate-form" }))
 {
     @Html.AntiForgeryToken()
-    <div class="form-horizontal">
-        <h4>QCAgenda</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.Id)
-        @Html.HiddenFor(model => model.FactoryId)
-        @Html.HiddenFor(model => model.QCStaffId)
-        @Html.HiddenFor(model => model.Status)
-        @Html.HiddenFor(m => m.CheckinTime)
-        @Html.HiddenFor(m => m.CheckoutTime)
-        @Html.HiddenFor(m => m.Subscribe)
-        @Html.HiddenFor(m => m.Photos)
-        @Html.HiddenFor(m => m.Remark)
-        @Html.HiddenFor(model => model.CheckinRemark)
-        @Html.HiddenFor(model => model.CheckoutRemark)
-        @Html.HiddenFor(model => model.OfficalWorkers)
-        @Html.HiddenFor(model => model.TemporaryWorkers)
-        @Html.HiddenFor(model => model.SummaryTime)
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Remark, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Remark, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
-            </div>
-        </div>
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.FactoryId)
+    @Html.HiddenFor(model => model.QCStaffId)
+    @Html.HiddenFor(model => model.Status)
+    @Html.HiddenFor(m => m.CheckinTime)
+    @Html.HiddenFor(m => m.CheckoutTime)
+    @Html.HiddenFor(m => m.Subscribe)
+    @Html.HiddenFor(m => m.Photos)
+    @Html.HiddenFor(m => m.Remark)
+    @Html.HiddenFor(model => model.CheckinRemark)
+    @Html.HiddenFor(model => model.CheckoutRemark)
+    @Html.HiddenFor(model => model.OfficalWorkers)
+    @Html.HiddenFor(model => model.TemporaryWorkers)
+    @Html.HiddenFor(model => model.SummaryTime)
+    <div class="content-block-title">数据列表</div>
+    <div class="list-block">
+        <ul>
+            <li>
+                <div class="item-content middle-content">
+                    @Html.TextAreaFor(m => m.CheckinRemark, new { placeholder = "请输入签到备注", @class = "required input-textarea" })
+                </div>
+                <div class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title"></div>
+                        <div class="item-after"><span id="qccheckin-currentlen">0</span>/<span>200</span></div>
+                    </div>
+                </div>
+            </li>
+        </ul>
     </div>
-
 }

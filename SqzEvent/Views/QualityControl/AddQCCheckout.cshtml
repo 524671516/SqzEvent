@@ -1,1 +1,40 @@
 ﻿
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="left">
+            <a href="#" class="back link">
+                <i class="icon icon-back" aria-hidden="true"></i>
+                <span>返回</span>
+            </a>
+        </div>
+        <div class="center sliding">签退</div>
+        <div class="right">
+            <a href="javascript:;" class="link" id="addqccheckout-submit">提交</a>
+        </div>
+    </div>
+</div>
+<div class="pages">
+    <div class="page" data-page="addcheckout">
+        <div class="page-content">
+            <div class="content-block-title">选择/编辑数据</div>
+            <div class="list-block">
+                <ul>
+                    <li>
+                        <a href="#" class="item-link smart-select" id="factory-select" data-back-text="返回" data-back-on-select="true" data-searchbar="true" data-searchbar-placeholder="选择工厂" data-searchbar-cancel="取消">
+                            @Html.DropDownList("AgendaId", ViewBag.AgendaList as SelectList, "- 请选择 -")
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title">签到工厂</div>
+                                    <div class="item-after">- 请选择 -</div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div id="addcheckout-content" class="list-content">
+            </div>
+        </div>
+    </div>
+</div>
+
