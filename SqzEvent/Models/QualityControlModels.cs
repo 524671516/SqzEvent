@@ -286,6 +286,12 @@
         public string Photos { get; set; }
 
         [StringLength(256)]
+        public string CheckinRemark { get; set; }
+
+        [StringLength(256)]
+        public string CheckoutRemark { get; set; }
+        
+        [StringLength(256)]
         public string Remark { get; set; }
 
         public int OfficalWorkers { get; set; }

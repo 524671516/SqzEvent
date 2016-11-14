@@ -222,6 +222,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201611140315006_201611141114.cs" />
+    <Compile Include="Migrations\201611140315006_201611141114.Designer.cs">
+      <DependentUpon>201611140315006_201611141114.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AppPay.cs" />
@@ -494,6 +498,7 @@
     <Content Include="Views\QualityControl\BreakdownList.cshtml" />
     <Content Include="Views\QualityControl\BreakdownListPartial.cshtml" />
     <Content Include="Views\QualityControl\AddQCCheckout.cshtml" />
+    <Content Include="Views\QualityControl\AddQCCheckoutPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -501,6 +506,11 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201611140315006_201611141114.resx">
+      <DependentUpon>201611140315006_201611141114.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -3104,7 +3104,7 @@ namespace SqzEvent.Controllers
                 int systemid = Convert.ToInt32(state);
                 if (user != null)
                 {
-                    if (User.IsInRole("Staff"))
+                    if (await UserManager.IsInRoleAsync(user.Id, "Staff"))
                     {
                         if (user.OffSalesSystem != null)
                         {

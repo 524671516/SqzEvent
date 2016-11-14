@@ -66,7 +66,7 @@ myApp.onPageInit('qccheckin', function (page) {
         //效验规则
         $qccheckinform.validate({
             rules: {
-                Remark: {
+                CheckinRemark: {
                     maxlength: 200,
                     required: true
                 },
@@ -156,7 +156,7 @@ myApp.onPageInit('qccheckin', function (page) {
     //图片上传数量计算
     uploadCheckinFile("qccheckin-form", "qccheckin-photos", "Photos", "qccheckin-imgcount", 7);
     //textarea字数计算
-    currentTextAreaLength("qccheckin-form", "Remark", 200, "qccheckin-currentlen");
+    currentTextAreaLength("qccheckin-form", "CheckinRemark", 200, "qccheckin-currentlen");
 })
 //产品检验页
 myApp.onPageInit('Productinspection', function (page) {
