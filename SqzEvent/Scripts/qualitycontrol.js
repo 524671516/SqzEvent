@@ -52,19 +52,6 @@ myApp.onPageInit('qccheckin', function (page) {
         var $factoryselect = $("#factory-select")
         var $qccheckinsubmit = $("#qccheckin-submit");
         var $qccheckinform = $('#qccheckin-form');
-        //数字转换
-        /*$("#OfficalWorkers").keyup(function () {
-            var a = Number($("#OfficalWorkers").val())
-            if (a > 0 || a == 0) {
-                $("#OfficalWorkers").val(a);
-            }
-        })
-        $("#TemporaryWorkers").keyup(function () {
-            var b = Number($("#TemporaryWorkers").val())
-            if (b > 0 || b == 0) {
-                $("#TemporaryWorkers").val(b);
-            }
-        })*/
         $("input[type='number']").val("");
         //效验规则
         $qccheckinform.validate({
@@ -198,16 +185,25 @@ myApp.onPageInit("breakdownlist", function(page){
         dayNamesShort: dayNamesShort,
         closeOnSelect: true
     });
+    $$.ajax({
+        url: "/QualityControl/BreakdownListPartial",
+        data: {
+            date: $$("#breakdownlist-date").val()
+        },
+        success: function (data) {
+            $$("#breakdownlist-content").html(data);
+        }
+    });
     $$("#breakdownlist-date").on("change", function () {
         $$.ajax({
             url: "/QualityControl/BreakdownListPartial",
             data: {
-                date:$$("#breakdownlist-date").val()
+                date: $$("#breakdownlist-date").val()
             },
             success: function (data) {
                 $$("#breakdownlist-content").html(data);
             }
-        })
+        });
     });
 });
 

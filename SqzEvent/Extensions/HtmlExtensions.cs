@@ -167,6 +167,20 @@ namespace System.Web.Mvc
                     return "未知";
             }
         }
+        public static string BreakdownStatus(this HtmlHelper helper, int status)
+        {
+            switch (status)
+            {
+                case -1:
+                    return "已作废";
+                case 0:
+                    return "未恢复";
+                case 1:
+                    return "已恢复";
+                default:
+                    return "未知";
+            }
+        }
 
         public static string ManagerNickName(this HtmlHelper helper, string username, int systemid)
         {

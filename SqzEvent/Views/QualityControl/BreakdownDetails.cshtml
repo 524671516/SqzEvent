@@ -1,0 +1,92 @@
+﻿@model SqzEvent.Models.BreakdownReport
+
+<div>
+    <h4>BreakdownReport</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            状态
+        </dt>
+
+        <dd>
+            @Html.BreakdownStatus(Model.Status)
+        </dd>
+
+        <dt>
+            设备名称
+        </dt>
+
+        <dd>
+            @Html.Encode(Model.QCEquipment.SimpleName)
+        </dd>
+
+        <dt>
+            故障类型
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BreakDownTypeId)
+        </dd>
+
+        <dt>
+            故障时间
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BreakDownTime)
+        </dd>
+
+        <dt>
+            故障提报时间
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ReportTime)
+        </dd>
+
+        <dt>
+            故障修复时间
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RecoveryTime)
+        </dd>
+
+        <dt>
+            确认修复时间
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ConfirmTime)
+        </dd>
+
+        <dt>
+            故障图片
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Photos)
+        </dd>
+
+        <dt>
+            故障描述
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ReportContent)
+        </dd>
+
+        <dt>
+            恢复信息
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RecoveryRemark)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
