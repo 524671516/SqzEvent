@@ -7,97 +7,140 @@
                 <span>返回</span>
             </a>
         </div>
-        <div class="center sliding"><strong>新增故障报告</strong></div>
+        <div class="center sliding"><strong>故障详情</strong></div>
     </div>
 </div>
 <div class="pages">
     <div class="page" data-page="breakdowndetails">
         <div class="page-content">
-            <div>
-                <h4>BreakdownReport</h4>
-                <hr />
-                <dl class="dl-horizontal">
-                    <dt>
-                        状态
-                    </dt>
+            <div class="content-block-title">故障报告</div>
+            <div class="list-block">
+                <ul>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">状态</div>
+                                <div class="item-after">@Html.BreakdownStatus(Model.Status)</div>
+                            </div>
+                        </div>
 
-                    <dd>
-                        @Html.BreakdownStatus(Model.Status)
-                    </dd>
+                    </li>
+                    <li>
 
-                    <dt>
-                        设备名称
-                    </dt>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">设备名称</div>
+                                <div class="item-after">@Html.Encode(Model.QCEquipment.SimpleName)</div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
 
-                    <dd>
-                        @Html.Encode(Model.QCEquipment.SimpleName)
-                    </dd>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">故障类型</div>
+                                <div class="item-after">@Html.DisplayFor(model => model.BreakDownTypeId)</div>
+                            </div>
+                        </div>
 
-                    <dt>
-                        故障类型
-                    </dt>
+                    </li>
+                    <li>
 
-                    <dd>
-                        @Html.DisplayFor(model => model.BreakDownTypeId)
-                    </dd>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">故障时间</div>
+                                <div class="item-after">@Html.DisplayFor(model => model.BreakDownTime)</div>
+                            </div>
+                        </div>
 
-                    <dt>
-                        故障时间
-                    </dt>
+                    </li>
+                    <li>
 
-                    <dd>
-                        @Html.DisplayFor(model => model.BreakDownTime)
-                    </dd>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">故障提报时间</div>
+                                <div class="item-after">@Html.DisplayFor(model => model.ReportTime)</div>
+                            </div>
+                        </div>
 
-                    <dt>
-                        故障提报时间
-                    </dt>
+                    </li>
+                    <li>
 
-                    <dd>
-                        @Html.DisplayFor(model => model.ReportTime)
-                    </dd>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">故障修复时间</div>
+                                <div class="item-after">@Html.DisplayFor(model => model.RecoveryTime)</div>
+                            </div>
+                        </div>
 
-                    <dt>
-                        故障修复时间
-                    </dt>
+                    </li>
+                    <li>
 
-                    <dd>
-                        @Html.DisplayFor(model => model.RecoveryTime)
-                    </dd>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">确认修复时间</div>
+                                <div class="item-after">@Html.DisplayFor(model => model.ConfirmTime)</div>
+                            </div>
+                        </div>
 
-                    <dt>
-                        确认修复时间
-                    </dt>
-
-                    <dd>
-                        @Html.DisplayFor(model => model.ConfirmTime)
-                    </dd>
-
-                    <dt>
-                        故障图片
-                    </dt>
-
-                    <dd>
-                        @Html.DisplayFor(model => model.Photos)
-                    </dd>
-
-                    <dt>
-                        故障描述
-                    </dt>
-
-                    <dd>
-                        @Html.DisplayFor(model => model.ReportContent)
-                    </dd>
-
-                    <dt>
-                        恢复信息
-                    </dt>
-
-                    <dd>
-                        @Html.DisplayFor(model => model.RecoveryRemark)
-                    </dd>
-
-                </dl>
+                    </li>
+                </ul>
+            </div>
+            <div class="content-block-title">
+                <div class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title">故障图片</div>
+                        <div class="item-after"><abbr id="addbreakdown-imgcount">0</abbr>/7</div>
+                    </div>
+                </div>
+            </div>
+            <div class="list-block">
+                <ul>
+                    <li>
+                        <div class="item-content middle-content">
+                            <div class="item-inner">
+                                <div class="hidden">
+                                    @Html.DisplayFor(model => model.Photos)
+                                </div>
+                                <ul class="rep-imglist" id="addbreakdown-photos"></ul>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="content-block-title">
+                <div class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title">故障描述</div>
+                        <div class="item-after"><span id="addbreakdown-currentlen">0</span>/<span>200</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="list-block">
+                <ul>
+                    <li>
+                        <div class="item-content middle-content">
+                            @Html.DisplayFor(model => model.ReportContent)
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="content-block-title">
+                <div class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title">修复信息</div>
+                        <div class="item-after"><span id="addbreakdown-currentlen">0</span>/<span>200</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="list-block">
+                <ul>
+                    <li>
+                        <div class="item-content middle-content">
+                            @Html.DisplayFor(model => model.RecoveryRemark)
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
