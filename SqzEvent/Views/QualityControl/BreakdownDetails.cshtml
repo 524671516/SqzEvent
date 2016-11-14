@@ -11,7 +11,7 @@
     </div>
 </div>
 <div class="pages">
-    <div class="page" data-page="breakdowndetails">
+    <div class="page" data-page="breakdowndetails" id="breakdowndetails">
         <div class="page-content">
             <div class="content-block-title">故障报告</div>
             <div class="list-block">
@@ -21,6 +21,15 @@
                             <div class="item-inner">
                                 <div class="item-title">状态</div>
                                 <div class="item-after">@Html.BreakdownStatus(Model.Status)</div>
+                            </div>
+                        </div>
+
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">工厂名称</div>
+                                <div class="item-after">@Html.Encode(Model.QCEquipment.Factory.SimpleName)</div>
                             </div>
                         </div>
 
@@ -39,105 +48,45 @@
                         <div class="item-content">
                             <div class="item-inner">
                                 <div class="item-title">故障类型</div>
-                                <div class="item-after">@Html.DisplayFor(model => model.BreakDownTypeId)</div>
+                                <div class="item-after">@Html.Encode(Model.BreakdownType.SimpleDescribe)</div>
                             </div>
                         </div>
 
                     </li>
                     <li>
-
-                        <div class="item-content">
+                        <a href="javascript:;" class="item-content item-link qc-photos" data-photos="@Model.Photos">
                             <div class="item-inner">
                                 <div class="item-title">故障时间</div>
-                                <div class="item-after">@Html.DisplayFor(model => model.BreakDownTime)</div>
+                                <div class="item-after">@Html.Encode(Model.BreakDownTime.ToString("HH:mm"))</div>
                             </div>
-                        </div>
-
+                        </a>
                     </li>
                     <li>
-
                         <div class="item-content">
                             <div class="item-inner">
-                                <div class="item-title">故障提报时间</div>
-                                <div class="item-after">@Html.DisplayFor(model => model.ReportTime)</div>
-                            </div>
-                        </div>
-
-                    </li>
-                    <li>
-
-                        <div class="item-content">
-                            <div class="item-inner">
-                                <div class="item-title">故障修复时间</div>
-                                <div class="item-after">@Html.DisplayFor(model => model.RecoveryTime)</div>
-                            </div>
-                        </div>
-
-                    </li>
-                    <li>
-
-                        <div class="item-content">
-                            <div class="item-inner">
-                                <div class="item-title">确认修复时间</div>
-                                <div class="item-after">@Html.DisplayFor(model => model.ConfirmTime)</div>
-                            </div>
-                        </div>
-
-                    </li>
-                </ul>
-            </div>
-            <div class="content-block-title">
-                <div class="item-content">
-                    <div class="item-inner">
-                        <div class="item-title">故障图片</div>
-                        <div class="item-after"><abbr id="addbreakdown-imgcount">0</abbr>/7</div>
-                    </div>
-                </div>
-            </div>
-            <div class="list-block">
-                <ul>
-                    <li>
-                        <div class="item-content middle-content">
-                            <div class="item-inner">
-                                <div class="hidden">
-                                    @Html.DisplayFor(model => model.Photos)
-                                </div>
-                                <ul class="rep-imglist" id="addbreakdown-photos"></ul>
+                                <div class="item-title">修复时间</div>
+                                <div class="item-after">@Html.Encode(Model.RecoveryTime != null ? Convert.ToDateTime(Model.RecoveryTime).ToString("HH:mm") : "")</div>
                             </div>
                         </div>
                     </li>
                 </ul>
             </div>
-            <div class="content-block-title">
-                <div class="item-content">
-                    <div class="item-inner">
-                        <div class="item-title">故障描述</div>
-                        <div class="item-after"><span id="addbreakdown-currentlen">0</span>/<span>200</span></div>
-                    </div>
-                </div>
-            </div>
+            <div class="content-block-title">故障备注</div>
             <div class="list-block">
                 <ul>
                     <li>
                         <div class="item-content middle-content">
-                            @Html.DisplayFor(model => model.ReportContent)
+                            @Html.TextAreaFor(m => m.ReportContent, new { placeholder = "请输入签到备注", @class = "required input-textarea", @readonly = "readonly" })
                         </div>
                     </li>
                 </ul>
             </div>
-            <div class="content-block-title">
-                <div class="item-content">
-                    <div class="item-inner">
-                        <div class="item-title">修复信息</div>
-                        <div class="item-after"><span id="addbreakdown-currentlen">0</span>/<span>200</span></div>
-                    </div>
-                </div>
-            </div>
+            <div class="content-block-title">故障备注</div>
             <div class="list-block">
                 <ul>
                     <li>
                         <div class="item-content middle-content">
-                            @Html.DisplayFor(model => model.RecoveryRemark)
+                            @Html.TextAreaFor(m => m.RecoveryRemark, new { placeholder = "请输入签到备注", @class = "required input-textarea", @readonly = "readonly" })
                         </div>
                     </li>
                 </ul>

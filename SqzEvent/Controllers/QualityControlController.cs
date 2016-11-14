@@ -461,7 +461,7 @@ namespace SqzEvent.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<ContentResult> RecoveryBreakdown(BreakdownReport model)
+        public async Task<ContentResult> RecoveryBreakdown(BreakdownReport model, FormCollection form)
         {
             if (ModelState.IsValid)
             {
@@ -471,6 +471,7 @@ namespace SqzEvent.Controllers
                 {
                     if (TryUpdateModel(report))
                     {
+                        report.RecoveryTime = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd") + " " + form["RecoveryTimeTiny"].ToString() + ":00");
                         report.Status = 1;
                         report.ConfirmTime = DateTime.Now;
                         _qcdb.Entry(report).State = System.Data.Entity.EntityState.Modified;

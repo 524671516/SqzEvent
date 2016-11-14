@@ -431,14 +431,14 @@ myApp.onPageInit("addbreakdown", function (page) {
         }
     });
 });
+
 //确认修复页
 myApp.onPageInit('recoverybreakdown', function (page) {
-    $$("#RecoveryRemark").html("");
-    uploadCheckinFile("recoveybreakdown-form", "recoverybreakdown-photos", "Photos", "recoverybreakdown-imgcount", 7);
-    currentTextAreaLength("recoveybreakdown-form", "RecoveryRemark", 200, "recoverybreakdown-currentlen");
+    uploadCheckinFile("recoverybreakdown-form", "recoverybreakdown-photos", "Photos", "recoverybreakdown-imgcount", 7);
+    currentTextAreaLength("recoverybreakdown-form", "RecoveryRemark", 200, "recoverybreakdown-currentlen");
     //创建picker
     var pickerInline = myApp.picker({
-        input: '#BreakDownTimeTiny',
+        input: '#RecoveryTimeTiny',
         //文本框显示格式
         formatValue: function (p, values, displayValues) {
             return values[0] + ':' + values[1];
@@ -449,7 +449,7 @@ myApp.onPageInit('recoverybreakdown', function (page) {
     });
     $(function () {
         var $recoverybreakdownsubmit = $("#recoverybreakdown-submit");
-        var $recoveybreakdownform = $('#recoveybreakdown-form');
+        var $recoveybreakdownform = $('#recoverybreakdown-form');
         //效验规则
         $recoveybreakdownform.validate({
             rules: {
@@ -467,7 +467,7 @@ myApp.onPageInit('recoverybreakdown', function (page) {
             //提交成功后处理函数
             submitHandler: function (form) {
                 var photoList = splitArray($("#Photos").val());
-                if (photoList.length == 0) {
+                if (photoList.length != 0) {
                     myApp.hideIndicator();
                     myApp.alert("至少上传一张照片");
                     $recoverybreakdownsubmit.prop("disabled", false).removeClass("color-gray");
@@ -480,17 +480,6 @@ myApp.onPageInit('recoverybreakdown', function (page) {
                             myApp.addNotification({
                                 title: "通知",
                                 message: "表单提交成功"
-                            });
-                            setTimeout(function () {
-                                myApp.closeNotification(".notifications");
-                            }, 2e3);
-                        }
-                        else if (data == "MODIFIED") {
-                            myApp.hideIndicator();
-                            mainView.router.back();
-                            myApp.addNotification({
-                                title: "通知",
-                                message: "表单修改成功"
                             });
                             setTimeout(function () {
                                 myApp.closeNotification(".notifications");
@@ -524,6 +513,10 @@ myApp.onPageInit('recoverybreakdown', function (page) {
     })
 });
 
+myApp.onPageInit("breakdowndetails", function (page) {
+    PhotoBrowser("breakdowndetails")
+});
+
 //每日工作总结页
 myApp.onPageInit('Dailyworksummary', function (page) {
     $$('.btn').on('click', function () {
@@ -535,7 +528,32 @@ myApp.onPageInit('Dailyworksummary', function (page) {
         });
     });
 
-})
+});
+
+// 图片浏览模块
+function PhotoBrowser(pagename) {
+    $$("#" + pagename).on("click", ".qc-photos", function () {
+        var photos = $(this).attr("data-photos");
+        if (photos.trim() != "") {
+            var images = photos.split(",");
+            for (var i = 0; i < images.length; i++) {
+                images[i] = "https://cdn2.shouquanzhai.cn/qc-img/" + images[i];
+            }
+            var myPhotoBrowser = myApp.photoBrowser({
+                zoom: 400,
+                photos: images,
+                theme: 'dark',
+                type:'popup',
+                backLinkText: '关闭',
+                toolbar: false,
+                ofText: '/'
+            });
+            myPhotoBrowser.open();
+        } else {
+            myApp.alert("没有找到图片");
+        }
+    });
+}
 
 //上传图片信息
 function uploadImage(img_id, img_filename) {
@@ -561,7 +579,7 @@ function uploadImage(img_id, img_filename) {
                         var serverId = res.serverId; // 返回图片的服务器端ID
                         var img_success = false;
                         $.ajax({
-                            url: "/Seller/SaveOrignalImage",
+                            url: "/QualityControl/SaveOrignalImage",
                             type: "post",
                             data: {
                                 serverId: serverId
@@ -628,7 +646,7 @@ function uploadCheckinFile(pagename, imglist, photolist_id, current_count, max_c
                 success: function (res) {
                     var serverId = res.serverId; // 返回图片的服务器端ID
                     $$.ajax({
-                        url: "/Seller/SaveOrignalImage",
+                        url: "/QualityControl/SaveOrignalImage",
                         type: "post",
                         data: {
                             serverId: serverId
