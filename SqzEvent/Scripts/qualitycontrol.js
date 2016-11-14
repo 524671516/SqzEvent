@@ -6,9 +6,6 @@ var $$ = Dom7;
 var mainView = myApp.addView('.view-main', {
     dynamicNavbar: true,
 });
-$$("#qccheckout-link").on("click", function () {
-
-})
 $$(document).on("ajaxStart", function (e) {
     if (e.detail.xhr.requestUrl.indexOf("autocomplete-languages.json") >= 0) {
         return;
