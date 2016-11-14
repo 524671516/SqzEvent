@@ -1,6 +1,6 @@
 ﻿@model SqzEvent.Models.QCAgenda
 
-@using (Html.BeginForm("AddQCCheckoutPartial", "QualityControl", FormMethod.Post, new { @id = "addqccheckoutpartial-form", @class = "validate-form" }))
+@using (Html.BeginForm("AddQCCheckoutPartial", "QualityControl", FormMethod.Post, new { @id = "addqccheckout-form", @class = "validate-form" }))
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
@@ -14,7 +14,6 @@
     @Html.HiddenFor(m => m.Photos)
     @Html.HiddenFor(m => m.Remark)
     @Html.HiddenFor(model => model.CheckinRemark)
-    @Html.HiddenFor(model => model.CheckoutRemark)
     @Html.HiddenFor(model => model.OfficalWorkers)
     @Html.HiddenFor(model => model.TemporaryWorkers)
     @Html.HiddenFor(model => model.SummaryTime)
@@ -23,12 +22,12 @@
         <ul>
             <li>
                 <div class="item-content middle-content">
-                    @Html.TextAreaFor(m => m.CheckinRemark, new { placeholder = "请输入签到备注", @class = "required input-textarea" })
+                    @Html.TextAreaFor(m => m.CheckoutRemark, new { placeholder = "请输入签到备注" })
                 </div>
                 <div class="item-content">
                     <div class="item-inner">
                         <div class="item-title"></div>
-                        <div class="item-after"><span id="qccheckin-currentlen">0</span>/<span>200</span></div>
+                        <div class="item-after"><span id="qccheckout-currentlen">0</span>/<span>200</span></div>
                     </div>
                 </div>
             </li>

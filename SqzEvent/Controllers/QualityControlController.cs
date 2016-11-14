@@ -12,6 +12,7 @@ using System.IO;
 using System.Text;
 using System.Drawing.Imaging;
 using System.Drawing;
+using System.Collections;
 
 namespace SqzEvent.Controllers
 {
@@ -489,8 +490,13 @@ namespace SqzEvent.Controllers
             var agendalist = from m in _qcdb.QCAgenda
                              where m.QCStaffId == staff.Id && m.Status == 1
                              orderby m.Subscribe descending
-                             select new { Key = m.Id, Value = m.Subscribe };
-            ViewBag.AgendaList = new SelectList(agendalist, "Key", "Value");
+                             select new { Key = m.Id, Value = m.Subscribe, Factory = m.Factory.SimpleName };
+            var _agendalist = new ArrayList();
+            foreach(var item in agendalist)
+            {
+                _agendalist.Add(new { Key = item.Key, Value = item.Factory + " - " + item.Value.ToString("MM月dd日") });
+            }
+            ViewBag.AgendaList = new SelectList(_agendalist, "Key", "Value");
             return PartialView();
         }
 

@@ -52,6 +52,11 @@ myApp.onPageInit('qccheckin', function (page) {
         $("input[type='number']").val("");
         //效验规则
         $qccheckinform.validate({
+            debug: false,
+            //调试模式取消submit的默认提交功能
+            focusInvalid: false,
+            //当为false时，验证无效时，没有焦点响应
+            onkeyup: false,
             rules: {
                 CheckinRemark: {
                     maxlength: 200,
@@ -144,7 +149,8 @@ myApp.onPageInit('qccheckin', function (page) {
     uploadCheckinFile("qccheckin-form", "qccheckin-photos", "Photos", "qccheckin-imgcount", 7);
     //textarea字数计算
     currentTextAreaLength("qccheckin-form", "CheckinRemark", 200, "qccheckin-currentlen");
-})
+});
+
 //签退页
 myApp.onPageInit("addcheckout", function (page) {
     $$("#AgendaId").on("change", function () {
@@ -155,67 +161,76 @@ myApp.onPageInit("addcheckout", function (page) {
             },
             success: function (data) {
                 $$('#addcheckout-content').html(data);
-                var $addqccheckoutpartialform = $('#addqccheckoutpartial-form');
-                var $addqccheckoutsubmit = $("#addqccheckout-submit");
-                //效验规则
-                $addqccheckoutpartialform.validate({
-                    rules: {
-                        CheckinRemark: {
-                            maxlength: 200,
-                            required: true
-                        }
-                    },
-                    //错误处理
-                    errorPlacement: function (error, element) {
-                        myApp.hideIndicator();
-                        $addqccheckoutsubmit.prop("disabled", false).removeClass("color-gray");
-                    },
-                    errorClass: "invalid-input",
-                    //提交成功后处理函数
-                    submitHandler: function (form) {
-                        console.log("3");
-                        $addqccheckoutpartialform.ajaxSubmit(function (data) {
-                            if (data == "SUCCESS") {
-                                myApp.hideIndicator();
-                                mainView.router.back();
-                                myApp.addNotification({
-                                    title: "通知",
-                                    message: "签退成功"
-                                });
-                                setTimeout(function () {
-                                    myApp.closeNotification(".notifications");
-                                }, 2e3);
-                            }
-                            else {
-                                myApp.hideIndicator();
-                                myApp.addNotification({
-                                    title: "通知",
-                                    message: "签退失败"
-                                });
-                                $addqccheckoutsubmit.prop("disabled", false).removeClass("color-gray");
-                                setTimeout(function () {
-                                    myApp.closeNotification(".notifications");
-                                }, 2e3);
-                            }
-                        });
+                currentTextAreaLength("addqccheckout-form", "CheckoutRemark", 200, "qccheckout-currentlen");
+                $$("#CheckoutRemark").on("keyup", function () {
+                    if ($$(this).val().length != 0) {
+                        $$(this).removeClass("invalid-input");
                     }
                 });
-                //按钮点击事件
-                $addqccheckoutsubmit.on("click", function () {
-                    if (!$addqccheckoutsubmit.prop("disabled")) {
-                        myApp.showIndicator();
-                        $addqccheckoutsubmit.prop("disabled", true).addClass("color-gray");
-                        setTimeout(function () {
-                            console.log("submited");
-                            $addqccheckoutpartialform.submit();
-                            console.log("done");
-                        }, 500);
-                    }
-                });
-
             }
-        })
-
+        });
+    });
+    $$.ajax({
+        url: "/QualityControl/AddQCCheckoutPartial",
+        data: {
+            agendaId: $$("#AgendaId").val()
+        },
+        success: function (data) {
+            $$('#addcheckout-content').html(data);
+            currentTextAreaLength("addqccheckout-form", "CheckoutRemark", 200, "qccheckout-currentlen");
+            $$("#CheckoutRemark").on("keyup", function () {
+                if ($$(this).val().length != 0) {
+                    $$(this).removeClass("invalid-input");
+                }
+            });
+        }
+    });
+    //按钮点击事件
+    $$("#addqccheckout-submit").on("click", function () {
+        if (!$$("#addqccheckout-submit").prop("disabled")) {
+            myApp.showIndicator();
+            $$("#addqccheckout-submit").prop("disabled", true).addClass("color-gray");
+            setTimeout(function () {
+                var remark = $("#CheckoutRemark").val();
+                if (remark == "") {
+                    console.log($$("#CheckoutRemark"));
+                    $$("#CheckoutRemark").attr("placeholder", "请输入备注信息").addClass("invalid-input");
+                    myApp.hideIndicator();
+                    $$("#addqccheckout-submit").prop("disabled", false).removeClass("color-gray");
+                }
+                else if (remark.length > 200) {
+                    $$("#CheckoutRemark").attr("placeholder", "超过字数").addClass("invalid-input");
+                    myApp.hideIndicator();
+                    $$("#addqccheckout-submit").prop("disabled", false).removeClass("color-gray");
+                }
+                else {
+                    $("#addqccheckout-form").ajaxSubmit(function (data) {
+                        if (data == "SUCCESS") {
+                            myApp.hideIndicator();
+                            mainView.router.back();
+                            myApp.addNotification({
+                                title: "通知",
+                                message: "签退成功"
+                            });
+                            setTimeout(function () {
+                                myApp.closeNotification(".notifications");
+                            }, 2e3);
+                        }
+                        else {
+                            myApp.hideIndicator();
+                            myApp.addNotification({
+                                title: "通知",
+                                message: "签退失败"
+                            });
+                            $$("#addqccheckout-submit").prop("disabled", false).removeClass("color-gray");
+                            setTimeout(function () {
+                                myApp.closeNotification(".notifications");
+                            }, 2e3);
+                        }
+                    });
+                }
+            }, 500);
+        }
     });
 });
 //产品检验页
