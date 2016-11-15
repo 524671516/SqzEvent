@@ -522,7 +522,7 @@ myApp.onPageInit('dailysummary', function (page) {
                 }
             }
         }
-    
+
     );
 });
 /*==========
@@ -611,6 +611,91 @@ myApp.onPageInit('recoverybreakdown', function (page) {
 myApp.onPageInit("breakdowndetails", function (page) {
     PhotoBrowser("breakdowndetails")
 });
+
+//每日工作总结页
+myApp.onPageInit("dailysummary", function (page) {
+    $$.ajax({
+        url: "/QualityControl/QCDailySummaryPartial",
+        data: {
+            agendaId: $$("#AgendaId").val()
+        },
+        success: function (data) {
+            $$('#dailysummary-content').html(data);
+        }
+    });
+});
+
+// 新增产品检验
+myApp.onPageInit("addqualitytest", function (page) {
+    uploadCheckinFile("addqualitytest-form", "addqualitytest-photos", "Photos", "addqualitytest-imgcount", 7);
+    currentTextAreaLength("addqualitytest-form", "Remark", 200, "addqualitytest-currentlen");
+    $$("#factory-select").on("change", function () {
+        $$("#ProductId").html("");
+        $$("#ProductId").append("<option>- 请选择 -</option>");
+        $$("#product-select .item-after").text("- 请选择 -");
+        if ($$("#FactoryId").val() != "") {
+            $$.ajax({
+                url: "/QualityControl/RefreshQualityTestProductListAjax",
+                data: {
+                    factoryId: $("#FactoryId").val()
+                },
+                type: "post",
+                success: function (data) {
+                    data = JSON.parse(data);
+                    if (data.result == "SUCCESS") {
+                        for (var i = 0; i < data.content.length; i++) {
+                            $$("#ProductId").append("<option value=\"" + data.content[i].Id + "\">" + data.content[i].Name + "</option>");
+                        }
+                    }
+                }
+            });
+        }
+    });
+    $$("#product-select").on("change", function () {
+        if ($$("#ProductId").val() != "") {
+            $$.ajax({
+                url: "/QualityControl/AddQualityTestPartial",
+                data: {
+                    pid: $$("#ProductId").val()
+                },
+                success: function (data) {
+                    $$("#template-content").html(data);
+                }
+            });
+        }
+    });
+
+    $$("#addqualitytest-submit").on("click", function () {
+        $$(this).prop("disabled", true).addClass("color-gray");
+        setTimeout(function () {
+            $("#addqualitytest-form").ajaxSubmit(function (data) {
+                if (data == "SUCCESS") {
+                    myApp.hideIndicator();
+                    mainView.router.back();
+                    myApp.addNotification({
+                        title: "通知",
+                        message: "表单提交成功"
+                    });
+                    setTimeout(function () {
+                        myApp.closeNotification(".notifications");
+                    }, 2e3);
+                }
+                else {
+                    myApp.hideIndicator();
+                    myApp.addNotification({
+                        title: "通知",
+                        message: "表单提交失败"
+                    });
+                    $recoverybreakdownsubmit.prop("disabled", false).removeClass("color-gray");
+                    setTimeout(function () {
+                        myApp.closeNotification(".notifications");
+                    }, 2e3);
+                }
+            });
+        }, 500);
+    });
+});
+
 // 图片浏览模块
 function PhotoBrowser(pagename) {
     $$("#" + pagename).on("click", ".qc-photos", function () {

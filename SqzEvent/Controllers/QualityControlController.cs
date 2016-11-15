@@ -637,7 +637,9 @@ namespace SqzEvent.Controllers
             var _factorylist= from m in staff.Factory
                            select m;
             ViewBag.FactoryDropDown = new SelectList(_factorylist, "Id", "SimpleName");
-            return PartialView();
+            QualityTest model = new QualityTest();
+            model.QCStaffId = staff.Id;
+            return PartialView(model);
         }
 
         // 质检产品列表更新ajax
@@ -650,11 +652,48 @@ namespace SqzEvent.Controllers
                        select new { Id = m.Id, Name = m.SimpleName };
             return Json(new { result = "SUCCESS", content = list });
         }
+        public PartialViewResult AddQualityTestPartial(int pid)
+        {
+            Product p = _qcdb.Product.SingleOrDefault(m => m.Id == pid);
+            if (p != null)
+            {
+                var _templatelist = p.QualityTestTemplate;
+                return PartialView(_templatelist);
+            }
+            return PartialView("NotFound");
+        }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public PartialViewResult AddQualityTest(QualityTest model, FormCollection form)
+        public async Task<ContentResult> AddQualityTest(QualityTest model, FormCollection form)
         {
-            return PartialView();
+            if (ModelState.IsValid)
+            {
+                QualityTest item = new QualityTest();
+                if (TryUpdateModel(item))
+                {
+                    item.ApplyTime = DateTime.Now;
+                    Product p = _qcdb.Product.SingleOrDefault(m => m.Id == item.ProductId);
+                    if (p != null)
+                    {
+                        ArrayList Keys = new ArrayList();
+                        ArrayList Values = new ArrayList();
+                        foreach(var template in p.QualityTestTemplate)
+                        {
+                            Keys.Add(template.KeyName.ToString());
+                            var x = form[template.KeyName];
+                            var y = form[template.KeyName].ToString();
+                            //Values.Add(form[template.KeyName].ToString());
+                        }
+                        item.Keys = String.Join(",", Keys.ToArray());
+                        item.Values = String.Join(",", Values.ToArray());
+                    }
+                    _qcdb.QualityTest.Add(item);
+                    await _qcdb.SaveChangesAsync();
+                    return Content("SUCCESS");
+                }
+                return Content("FAIL");
+            }
+            return Content("FAIL");
         }
 
         // 辅助类
