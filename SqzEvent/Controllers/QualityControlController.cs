@@ -321,15 +321,14 @@ namespace SqzEvent.Controllers
                 QCAgenda agenda = new QCAgenda();
                 if (TryUpdateModel(agenda))
                 {
-                    var exist_agenda = from m in _qcdb.QCAgenda
-                                       where m.FactoryId == agenda.FactoryId && m.Subscribe == agenda.Subscribe && m.Status == 1
-                                       select m;
+                    DateTime _subscribe = DateTime.Now.Date;
+                    var exist_agenda = _qcdb.QCAgenda.SingleOrDefault(m => m.FactoryId == agenda.FactoryId && m.Subscribe == _subscribe && m.Status >= 1);
                     // 判断是否存在同一天，同一个工厂的日程
-                    if (exist_agenda.Count() == 0)
+                    if (exist_agenda==null)
                     {
                         // 没有 则添加日程
                         agenda.CheckinTime = DateTime.Now;
-                        agenda.Subscribe = DateTime.Now.Date;
+                        agenda.Subscribe = _subscribe;
                         agenda.Status = 1; // 已签到
                         _qcdb.QCAgenda.Add(agenda);
                         await _qcdb.SaveChangesAsync();
@@ -338,10 +337,10 @@ namespace SqzEvent.Controllers
                     else
                     {
                         // 如果有的话 修改日程记录
-                        agenda.CheckinTime = DateTime.Now;
-                        agenda.Subscribe = DateTime.Now.Date;
-                        agenda.Status = 1; // 已签到
-                        _qcdb.Entry(agenda).State = System.Data.Entity.EntityState.Modified;
+                        exist_agenda.CheckinTime = DateTime.Now;
+                        exist_agenda.Subscribe = _subscribe;
+                        exist_agenda.Status = 1; // 已签到
+                        _qcdb.Entry(exist_agenda).State = System.Data.Entity.EntityState.Modified;
                         await _qcdb.SaveChangesAsync();
                         return Content("MODIFIED");
                     }
@@ -574,6 +573,28 @@ namespace SqzEvent.Controllers
                     agenda.SummaryTime = DateTime.Now;
                     agenda.Status = 3; // 已提报数据
                     _qcdb.Entry(agenda).State = System.Data.Entity.EntityState.Modified;
+                    // 添加生产信息详情
+                    foreach (Product p in agenda.Factory.Product)
+                    {
+                        try
+                        {
+                            int qty = Convert.ToInt32(form[p.ProductCode].ToString());
+                            if (qty > 0)
+                            {
+                                ProductionDetails details = new ProductionDetails()
+                                {
+                                    ProductId = p.Id,
+                                    ProductionQty = qty,
+                                    QCAgendaId = agenda.Id
+                                };
+                                _qcdb.ProductionDetails.Add(details);
+                            }
+                        }
+                        catch
+                        {
+                            return Content("FAIL");
+                        }
+                    }
                     await _qcdb.SaveChangesAsync();
                     return Content("SUCCESS");
                 }
