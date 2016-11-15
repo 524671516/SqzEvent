@@ -300,6 +300,8 @@
 
         public DateTime? SummaryTime { get; set; }
 
+        public decimal? WorkHours { get; set; }
+
         // 对应关系
         public virtual Factory Factory { get; set; }
 

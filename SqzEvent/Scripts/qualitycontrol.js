@@ -525,21 +525,22 @@ myApp.onPageInit('recoverybreakdown', function (page) {
         currentTextAreaLength("recoverybreakdown-form", "RecoveryRemark", 200, "recoverybreakdown-currentlen");
 });
 
+// 显示故障明细
 myApp.onPageInit("breakdowndetails", function (page) {
     PhotoBrowser("breakdowndetails")
 });
 
 //每日工作总结页
-myApp.onPageInit('Dailyworksummary', function (page) {
-    $$('.btn').on('click', function () {
-        myApp.confirm('确认提交?', function (value) {
-            myApp.showPreloader('正在提交')
-            setTimeout(function () {
-                myApp.hidePreloader();
-            }, 2000);
-        });
+myApp.onPageInit('dailysummary', function (page) {
+    $$.ajax({
+        url: "/QualityControl/QCDailySummaryPartial",
+        data: {
+            agendaId: $$("#AgendaId").val()
+        },
+        success: function (data) {
+            $$('#dailysummary-content').html(data);
+        }
     });
-
 });
 
 // 图片浏览模块
