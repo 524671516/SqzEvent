@@ -40,7 +40,9 @@ $$.ajax({
         $$("#userinfo").html(data);
     }
 });
-//主页
+/*==========
+主页
+=========*/
 myApp.onPageInit('Home', function (page) {
 })
 /*==========
@@ -200,7 +202,6 @@ myApp.onPageInit("addcheckout", function (page) {
                 setTimeout(function () {
                     var remark = $("#CheckoutRemark").val();
                     if (remark == "") {
-                        console.log($$("#CheckoutRemark"));
                         $$("#CheckoutRemark").attr("placeholder", "请输入备注信息").addClass("invalid-input");
                         myApp.hideIndicator();
                         $$("#addqccheckout-submit").prop("disabled", false).removeClass("color-gray");
@@ -254,7 +255,9 @@ myApp.onPageInit('Productinspection', function (page) {
     })
 
 })
-//新增产品页
+/*==========
+新增产品页
+=========*/
 myApp.onPageInit("Newproductinspection", function (page) {
     console.log('新增产品页');
     $$('.btn').on('click', function () {
@@ -445,8 +448,86 @@ myApp.onPageInit("addbreakdown", function (page) {
     //textarea字数计算
     currentTextAreaLength("addbreakdown-form", "ReportContent", 200, "addbreakdown-currentlen");
 });
-
-//确认修复页
+/*==========
+每日工作总结页
+=========*/
+myApp.onPageInit('dailysummary', function (page) {
+    if ($$("#AgendaId")=="") {
+        myApp.alert("无记录");
+    } else {
+        $$.ajax({
+            url: "/QualityControl/QCDailySummaryPartial",
+            data: {
+                agendaId: $$("#AgendaId").val()
+            },
+            success: function (data) {
+                $$('#dailysummary-content').html(data);
+            }
+        });
+    }
+    var $dailysummarysubmit = $("#dailysummary-submit");
+    var $qcdailysummarypartialform = $('#qcdailysummarypartial-form');
+    //按钮点击事件
+    $dailysummarysubmit.on("click", function () {
+            var inputnum = $('#qcdailysummarypartial-form').find($(".keyup-input"));
+            for (i = 0; i < inputnum.length; i++) {
+                var $item = $(inputnum[i]);
+                if (isPInt($item.val()) == false ||$item.val()>100) {
+                    $item.attr("placeholder", "请输入合法数字").addClass("invalid-input");
+                } else {    
+                    if (!$dailysummarysubmit.prop("disabled")) {
+                        myApp.showIndicator();
+                        $dailysummarysubmit.prop("disabled", true).addClass("color-gray");
+                        setTimeout(function () {
+                            var remark = $("#Remark").val();
+                            if (remark == "") {
+                                $$("#Remark").attr("placeholder", "请输入备注信息").addClass("invalid-input");
+                                myApp.hideIndicator();
+                                $dailysummarysubmit.prop("disabled", false).removeClass("color-gray");
+                            }
+                            else if (remark.length > 200) {
+                                $$("#Remark").attr("placeholder", "超过字数").addClass("invalid-input");
+                                myApp.hideIndicator();
+                                $dailysummarysubmit.prop("disabled", false).removeClass("color-gray");
+                            }
+                            else {
+                                console.log("9");
+                                $('#qcdailysummarypartial-form').ajaxSubmit(function (data) {
+                                    if (data == "SUCCESS") {
+                                        myApp.hideIndicator();
+                                        mainView.router.back();
+                                        myApp.addNotification({
+                                            title: "通知",
+                                            message: "签退成功"
+                                        });
+                                        setTimeout(function () {
+                                            myApp.closeNotification(".notifications");
+                                        }, 2e3);
+                                    }
+                                    else {
+                                        myApp.hideIndicator();
+                                        myApp.addNotification({
+                                            title: "通知",
+                                            message: "签退失败"
+                                        });
+                                        $dailysummarysubmit.prop("disabled", false).removeClass("color-gray");
+                                        setTimeout(function () {
+                                            myApp.closeNotification(".notifications");
+                                        }, 2e3);
+                                    }
+                                });
+                            }
+                        }, 500);
+                    }
+                }
+            }
+        }
+    
+    );
+});
+/*==========
+确认修复页
+=========*/
 myApp.onPageInit('recoverybreakdown', function (page) {
     //创建picker
     var pickerInline = myApp.picker({
@@ -524,25 +605,12 @@ myApp.onPageInit('recoverybreakdown', function (page) {
         uploadCheckinFile("recoverybreakdown-form", "recoverybreakdown-photos", "Photos", "recoverybreakdown-imgcount", 7);
         currentTextAreaLength("recoverybreakdown-form", "RecoveryRemark", 200, "recoverybreakdown-currentlen");
 });
-
-// 显示故障明细
+/*==========
+显示故障明细
+=========*/
 myApp.onPageInit("breakdowndetails", function (page) {
     PhotoBrowser("breakdowndetails")
 });
-
-//每日工作总结页
-myApp.onPageInit('dailysummary', function (page) {
-    $$.ajax({
-        url: "/QualityControl/QCDailySummaryPartial",
-        data: {
-            agendaId: $$("#AgendaId").val()
-        },
-        success: function (data) {
-            $$('#dailysummary-content').html(data);
-        }
-    });
-});
-
 // 图片浏览模块
 function PhotoBrowser(pagename) {
     $$("#" + pagename).on("click", ".qc-photos", function () {
@@ -716,7 +784,11 @@ function uploadCheckinFile(pagename, imglist, photolist_id, current_count, max_c
         });
     });
 }
-
+//判断是否是正整数
+function isPInt(str) {
+    var g = /^[1-9]*[1-9][0-9]*$/;
+    return g.test(str);
+}
 // 图片数组转化
 function splitArray(value) {
     var list = new Array();
