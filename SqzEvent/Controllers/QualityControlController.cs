@@ -576,7 +576,8 @@ namespace SqzEvent.Controllers
                     agenda.Status = 3; // 已提报数据
                     _qcdb.Entry(agenda).State = System.Data.Entity.EntityState.Modified;
                     // 添加生产信息详情
-                    foreach (Product p in agenda.Factory.Product)
+                    var _factory = _qcdb.Factory.SingleOrDefault(m => m.Id == agenda.FactoryId);
+                    foreach (Product p in _factory.Product.Where(m=>m.QCProduct))
                     {
                         try
                         {
