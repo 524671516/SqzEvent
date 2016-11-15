@@ -43,115 +43,116 @@ $$.ajax({
 //主页
 myApp.onPageInit('Home', function (page) {
 })
-//签到页
+/*==========
+签到页
+=========*/
 myApp.onPageInit('qccheckin', function (page) {
-    $(function () {
-        var $factoryselect = $("#factory-select")
-        var $qccheckinsubmit = $("#qccheckin-submit");
-        var $qccheckinform = $('#qccheckin-form');
-        $("input[type='number']").val("");
-        //效验规则
-        $qccheckinform.validate({
-            debug: false,
-            //调试模式取消submit的默认提交功能
-            focusInvalid: false,
-            //当为false时，验证无效时，没有焦点响应
-            onkeyup: false,
-            rules: {
-                CheckinRemark: {
-                    maxlength: 200,
-                    required: true
-                },
-                OfficalWorkers: {
-                    min: 0,
-                    digits: true,
-                    max: 100,
-                    required: true
-                },
-                TemporaryWorkers: {
-                    min: 0,
-                    digits: true,
-                    max: 100,
-                    required: true
-                }
+    var $factoryselect = $("#factory-select")
+    var $qccheckinsubmit = $("#qccheckin-submit");
+    var $qccheckinform = $('#qccheckin-form');
+    $("input[type='number']").val("");
+    //效验规则
+    $qccheckinform.validate({
+        debug: false,
+        //调试模式取消submit的默认提交功能
+        focusInvalid: false,
+        //当为false时，验证无效时，没有焦点响应
+        onkeyup: false,
+        rules: {
+            CheckinRemark: {
+                maxlength: 200,
+                required: true
             },
-            //错误处理
-            errorPlacement: function (error, element) {
+            OfficalWorkers: {
+                min: 0,
+                digits: true,
+                max: 100,
+                required: true
+            },
+            TemporaryWorkers: {
+                min: 0,
+                digits: true,
+                max: 100,
+                required: true
+            }
+        },
+        //错误处理
+        errorPlacement: function (error, element) {
+            myApp.hideIndicator();
+            $qccheckinsubmit.prop("disabled", false).removeClass("color-gray");
+        },
+        errorClass: "invalid-input",
+        //提交成功后处理函数
+        submitHandler: function (form) {
+            var photoList = splitArray($("#Photos").val());
+            if ($("#FactoryId").val() == "") {
                 myApp.hideIndicator();
+                myApp.alert("请选择签到工厂");
                 $qccheckinsubmit.prop("disabled", false).removeClass("color-gray");
-            },
-            errorClass: "invalid-input",
-            //提交成功后处理函数
-            submitHandler: function (form) {
-                var photoList = splitArray($("#Photos").val());
-
-                if ($("#FactoryId").val() == "") {
-                    myApp.hideIndicator();
-                    myApp.alert("请选择签到工厂");
-                    $qccheckinsubmit.prop("disabled", false).removeClass("color-gray");
-                }
-                else if (photoList.length == 0) {
-                    myApp.hideIndicator();
-                    myApp.alert("至少上传一张照片");
-                    $qccheckinsubmit.prop("disabled", false).removeClass("color-gray");
-                }
-                else {
-                    $qccheckinform.ajaxSubmit(function (data) {
-                        if (data == "SUCCESS") {
-                            myApp.hideIndicator();
-                            mainView.router.back();
-                            myApp.addNotification({
-                                title: "通知",
-                                message: "表单提交成功"
-                            });
-                            setTimeout(function () {
-                                myApp.closeNotification(".notifications");
-                            }, 2e3);
-                        }
-                        else if (data == "MODIFIED") {
-                            myApp.hideIndicator();
-                            mainView.router.back();
-                            myApp.addNotification({
-                                title: "通知",
-                                message: "表单修改成功"
-                            });
-                            setTimeout(function () {
-                                myApp.closeNotification(".notifications");
-                            }, 2e3);
-                        }
-                        else {
-                            myApp.hideIndicator();
-                            myApp.addNotification({
-                                title: "通知",
-                                message: "表单提交失败"
-                            });
-                            $qccheckinsubmit.prop("disabled", false).removeClass("color-gray");
-                            setTimeout(function () {
-                                myApp.closeNotification(".notifications");
-                            }, 2e3);
-                        }
-                    });
-                }
             }
-        });
-        //按钮点击事件
-        $qccheckinsubmit.on("click", function () {
-            if (!$qccheckinsubmit.prop("disabled")) {
-                myApp.showIndicator();
-                $qccheckinsubmit.prop("disabled", true).addClass("color-gray");
-                setTimeout(function () {
-                    $qccheckinform.submit();
-                }, 500);
+            else if (photoList.length == 0) {
+                myApp.hideIndicator();
+                myApp.alert("至少上传一张照片");
+                $qccheckinsubmit.prop("disabled", false).removeClass("color-gray");
             }
-        });
-    })
+            else {
+                $qccheckinform.ajaxSubmit(function (data) {
+                    if (data == "SUCCESS") {
+                        myApp.hideIndicator();
+                        mainView.router.back();
+                        myApp.addNotification({
+                            title: "通知",
+                            message: "表单提交成功"
+                        });
+                        setTimeout(function () {
+                            myApp.closeNotification(".notifications");
+                        }, 2e3);
+                    }
+                    else if (data == "MODIFIED") {
+                        myApp.hideIndicator();
+                        mainView.router.back();
+                        myApp.addNotification({
+                            title: "通知",
+                            message: "表单修改成功"
+                        });
+                        setTimeout(function () {
+                            myApp.closeNotification(".notifications");
+                        }, 2e3);
+                    }
+                    else {
+                        myApp.hideIndicator();
+                        myApp.addNotification({
+                            title: "通知",
+                            message: "表单提交失败"
+                        });
+                        $qccheckinsubmit.prop("disabled", false).removeClass("color-gray");
+                        setTimeout(function () {
+                            myApp.closeNotification(".notifications");
+                        }, 2e3);
+                    }
+                });
+            }
+        }
+    });
+    //按钮点击事件
+    $qccheckinsubmit.on("click", function () {
+        if (!$qccheckinsubmit.prop("disabled")) {
+            myApp.showIndicator();
+            $qccheckinsubmit.prop("disabled", true).addClass("color-gray");
+            setTimeout(function () {
+                $qccheckinform.submit();
+            }, 500);
+        }
+    });
     //图片上传数量计算
+    $("#Photos").val("1.jpg,2.jpg,3.jpg");
     uploadCheckinFile("qccheckin-form", "qccheckin-photos", "Photos", "qccheckin-imgcount", 7);
     //textarea字数计算
     currentTextAreaLength("qccheckin-form", "CheckinRemark", 200, "qccheckin-currentlen");
 });
-
-//签退页
+/*==========
+签退页
+=========*/
 myApp.onPageInit("addcheckout", function (page) {
     $$("#AgendaId").on("change", function () {
         $$.ajax({
@@ -170,70 +171,78 @@ myApp.onPageInit("addcheckout", function (page) {
             }
         });
     });
-    $$.ajax({
-        url: "/QualityControl/AddQCCheckoutPartial",
-        data: {
-            agendaId: $$("#AgendaId").val()
-        },
-        success: function (data) {
-            $$('#addcheckout-content').html(data);
-            currentTextAreaLength("addqccheckout-form", "CheckoutRemark", 200, "qccheckout-currentlen");
-            $$("#CheckoutRemark").on("keyup", function () {
-                if ($$(this).val().length != 0) {
-                    $$(this).removeClass("invalid-input");
-                }
-            });
-        }
-    });
+    //判断数据是否为空
+    if ($$("#AgendaId").val()=="") {
+        $$("#addqccheckout-submit").prop("disabled", true).addClass("color-gray");
+        $$("#checkout-noinfo").append("<div  class=\"content-block-title\">无可签退项</div>");
+    } else {
+        $$.ajax({
+            url: "/QualityControl/AddQCCheckoutPartial",
+            data: {
+                agendaId: $$("#AgendaId").val()
+            },
+            success: function (data) {
+                $$('#addcheckout-content').html(data);
+                currentTextAreaLength("addqccheckout-form", "CheckoutRemark", 200, "qccheckout-currentlen");
+                $$("#CheckoutRemark").on("keyup", function () {
+                    if ($$(this).val().length != 0) {
+                        $$(this).removeClass("invalid-input");
+                    }
+                });
+            }
+        });
+    }
     //按钮点击事件
     $$("#addqccheckout-submit").on("click", function () {
-        if (!$$("#addqccheckout-submit").prop("disabled")) {
-            myApp.showIndicator();
-            $$("#addqccheckout-submit").prop("disabled", true).addClass("color-gray");
-            setTimeout(function () {
-                var remark = $("#CheckoutRemark").val();
-                if (remark == "") {
-                    console.log($$("#CheckoutRemark"));
-                    $$("#CheckoutRemark").attr("placeholder", "请输入备注信息").addClass("invalid-input");
-                    myApp.hideIndicator();
-                    $$("#addqccheckout-submit").prop("disabled", false).removeClass("color-gray");
-                }
-                else if (remark.length > 200) {
-                    $$("#CheckoutRemark").attr("placeholder", "超过字数").addClass("invalid-input");
-                    myApp.hideIndicator();
-                    $$("#addqccheckout-submit").prop("disabled", false).removeClass("color-gray");
-                }
-                else {
-                    $("#addqccheckout-form").ajaxSubmit(function (data) {
-                        if (data == "SUCCESS") {
-                            myApp.hideIndicator();
-                            mainView.router.back();
-                            myApp.addNotification({
-                                title: "通知",
-                                message: "签退成功"
-                            });
-                            setTimeout(function () {
-                                myApp.closeNotification(".notifications");
-                            }, 2e3);
-                        }
-                        else {
-                            myApp.hideIndicator();
-                            myApp.addNotification({
-                                title: "通知",
-                                message: "签退失败"
-                            });
-                            $$("#addqccheckout-submit").prop("disabled", false).removeClass("color-gray");
-                            setTimeout(function () {
-                                myApp.closeNotification(".notifications");
-                            }, 2e3);
-                        }
-                    });
-                }
-            }, 500);
-        }
-    });
+            if (!$$("#addqccheckout-submit").prop("disabled")) {
+                myApp.showIndicator();
+                $$("#addqccheckout-submit").prop("disabled", true).addClass("color-gray");
+                setTimeout(function () {
+                    var remark = $("#CheckoutRemark").val();
+                    if (remark == "") {
+                        console.log($$("#CheckoutRemark"));
+                        $$("#CheckoutRemark").attr("placeholder", "请输入备注信息").addClass("invalid-input");
+                        myApp.hideIndicator();
+                        $$("#addqccheckout-submit").prop("disabled", false).removeClass("color-gray");
+                    }
+                    else if (remark.length > 200) {
+                        $$("#CheckoutRemark").attr("placeholder", "超过字数").addClass("invalid-input");
+                        myApp.hideIndicator();
+                        $$("#addqccheckout-submit").prop("disabled", false).removeClass("color-gray");
+                    }
+                    else {
+                        $("#addqccheckout-form").ajaxSubmit(function (data) {
+                            if (data == "SUCCESS") {
+                                myApp.hideIndicator();
+                                mainView.router.back();
+                                myApp.addNotification({
+                                    title: "通知",
+                                    message: "签退成功"
+                                });
+                                setTimeout(function () {
+                                    myApp.closeNotification(".notifications");
+                                }, 2e3);
+                            }
+                            else {
+                                myApp.hideIndicator();
+                                myApp.addNotification({
+                                    title: "通知",
+                                    message: "签退失败"
+                                });
+                                $$("#addqccheckout-submit").prop("disabled", false).removeClass("color-gray");
+                                setTimeout(function () {
+                                    myApp.closeNotification(".notifications");
+                                }, 2e3);
+                            }
+                        });
+                    }
+                }, 500);
+            }
+        });
 });
-//产品检验页
+/*==========
+产品检验页
+=========*/
 myApp.onPageInit('Productinspection', function (page) {
     console.log('产品检验');
     var pContent = $$('#productinspection_content');
@@ -258,9 +267,11 @@ myApp.onPageInit("Newproductinspection", function (page) {
         });
     });
 });
-
-//故障报告列表
+/*==========
+故障报告列表
+=========*/
 myApp.onPageInit("breakdownlist", function (page) {
+    //添加日历
     var calendarMultiple = myApp.calendar({
         input: "#breakdownlist-date",
         dateFormat: "yyyy-mm-dd",
@@ -291,11 +302,10 @@ myApp.onPageInit("breakdownlist", function (page) {
         });
     });
 });
-
-//新增故障报告页
+/*==========
+新增故障报告
+=========*/
 myApp.onPageInit("addbreakdown", function (page) {
-    uploadCheckinFile("addbreakdown-form", "addbreakdown-photos", "Photos", "addbreakdown-imgcount", 7);
-    currentTextAreaLength("addbreakdown-form", "ReportContent", 200, "addbreakdown-currentlen");
     //创建picker
     var pickerInline = myApp.picker({
         input: '#BreakDownTimeTiny',
@@ -430,12 +440,14 @@ myApp.onPageInit("addbreakdown", function (page) {
             }, 500);
         }
     });
+    //图片上传数量计算
+    uploadCheckinFile("addbreakdown-form", "addbreakdown-photos", "Photos", "addbreakdown-imgcount", 7);
+    //textarea字数计算
+    currentTextAreaLength("addbreakdown-form", "ReportContent", 200, "addbreakdown-currentlen");
 });
 
 //确认修复页
 myApp.onPageInit('recoverybreakdown', function (page) {
-    uploadCheckinFile("recoverybreakdown-form", "recoverybreakdown-photos", "Photos", "recoverybreakdown-imgcount", 7);
-    currentTextAreaLength("recoverybreakdown-form", "RecoveryRemark", 200, "recoverybreakdown-currentlen");
     //创建picker
     var pickerInline = myApp.picker({
         input: '#RecoveryTimeTiny',
@@ -447,7 +459,6 @@ myApp.onPageInit('recoverybreakdown', function (page) {
         value: ["10", "00"],
         cols: time_col
     });
-    $(function () {
         var $recoverybreakdownsubmit = $("#recoverybreakdown-submit");
         var $recoveybreakdownform = $('#recoverybreakdown-form');
         //效验规则
@@ -467,7 +478,7 @@ myApp.onPageInit('recoverybreakdown', function (page) {
             //提交成功后处理函数
             submitHandler: function (form) {
                 var photoList = splitArray($("#Photos").val());
-                if (photoList.length != 0) {
+                if (photoList.length == 0) {
                     myApp.hideIndicator();
                     myApp.alert("至少上传一张照片");
                     $recoverybreakdownsubmit.prop("disabled", false).removeClass("color-gray");
@@ -510,7 +521,8 @@ myApp.onPageInit('recoverybreakdown', function (page) {
                 }, 500);
             }
         });
-    })
+        uploadCheckinFile("recoverybreakdown-form", "recoverybreakdown-photos", "Photos", "recoverybreakdown-imgcount", 7);
+        currentTextAreaLength("recoverybreakdown-form", "RecoveryRemark", 200, "recoverybreakdown-currentlen");
 });
 
 myApp.onPageInit("breakdowndetails", function (page) {
