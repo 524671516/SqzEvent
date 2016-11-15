@@ -27,7 +27,7 @@
 
         public virtual DbSet<QCStaff> QCStaff { get; set; }
         public virtual DbSet<Factory> Factory { get; set; }
-        public virtual DbSet<Product> QCProduct { get; set; }
+        public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<QCEquipment> QCEquipment { get; set; }
         public virtual DbSet<BreakdownType> BreakdownType { get; set; }
         public virtual DbSet<BreakdownReport> BreadkdownReport { get; set; }

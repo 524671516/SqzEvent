@@ -501,6 +501,8 @@
     <Content Include="Views\QualityControl\QCDailySummaryPartial.cshtml" />
     <Content Include="Views\QualityControl\QualityTestList.cshtml" />
     <Content Include="Views\QualityControl\QualityTestListPartial.cshtml" />
+    <Content Include="Views\QualityControl\AddQualityTest.cshtml" />
+    <Content Include="Views\QualityControl\AddQualityTestPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

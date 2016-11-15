@@ -1,0 +1,92 @@
+﻿@model SqzEvent.Models.QualityTest
+
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="left">
+            <a href="#" class="back link">
+                <i class="icon icon-back" aria-hidden="true"></i>
+                <span>返回</span>
+            </a>
+        </div>
+        <div class="center sliding">新增产品检验</div>
+        <div class="right">
+            <a href="javascript:;" class="link" id="addqualitytest-submit">提交</a>
+        </div>
+    </div>
+</div>
+<div class="pages">
+    <div class="page" data-page="addqualitytest">
+        <div class="page-content">
+            @using (Html.BeginForm("AddQualityTest", "QualityControl", FormMethod.Post, new { @id="addqualitytest-form", @class="validate-form"}))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.Id)
+                @Html.HiddenFor(model => model.QCStaffId)
+                @Html.HiddenFor(model => model.EvalScore)
+                @Html.HiddenFor(model => model.EvalResult)
+                <div class="list-block">
+                    <ul>
+                        <li>
+                            <a href="#" class="item-link smart-select" data-back-text="返回" data-back-on-select="true" data-searchbar-placeholder="选择工厂" data-searchbar-cancel="取消" id="factory-select">
+                                @Html.DropDownList("FactoryId", ViewBag.FactoryDropDown as SelectList, "- 请选择 -")
+                                <div class="item-content">
+                                    <div class="item-inner">
+                                        <div class="item-title">选择工厂</div>
+                                        <div class="item-after">- 请选择 -</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="item-link smart-select" data-back-text="返回" data-back-on-select="true" data-searchbar-placeholder="选择产品" data-searchbar-cancel="取消" id="product-select">
+                                <select id="ProductId" name="ProductId">
+                                    <option>- 请选择 -</option>
+                                </select>
+                                <div class="item-content">
+                                    <div class="item-inner">
+                                        <div class="item-title">选择设备</div>
+                                        <div class="item-after">- 请选择 -</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="content-block-title">检验项目</div>
+                <div class="list-block" id="template-content"></div>
+                <div class="content-block-title">其他信息</div>
+                <div class="list-block">
+                    <ul>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title">上传照片</div>
+                                    <div class="item-after"><abbr id="addqualitytest-imgcount">0</abbr>/7</div>
+                                </div>
+                            </div>
+                            <div class="item-content middle-content">
+                                <div class="item-inner">
+                                    <div class="hidden">
+                                        @Html.EditorFor(m => m.Photos)
+                                    </div>
+                                    <ul class="rep-imglist" id="addqualitytest-photos"></ul>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content middle-content">
+                                @Html.TextAreaFor(m => m.Remark, new { placeholder = "请输入签到备注", @class = "required input-textarea" })
+                            </div>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title"></div>
+                                    <div class="item-after"><span id="addqualitytest-currentlen">0</span>/<span>200</span></div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            }
+        </div>
+    </div>
+</div>
