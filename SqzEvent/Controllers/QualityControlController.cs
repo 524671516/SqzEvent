@@ -540,8 +540,13 @@ namespace SqzEvent.Controllers
             var agendalist = from m in _qcdb.QCAgenda
                              where m.QCStaffId == staff.Id && m.Status == 2
                              orderby m.Subscribe descending
-                             select new { Key = m.Id, Value = m.Subscribe };
-            ViewBag.AgendaList = new SelectList(agendalist, "Key", "Value");
+                             select new { Key = m.Id, Value = m.Subscribe, Factory = m.Factory.SimpleName };
+            var _agendalist = new ArrayList();
+            foreach (var item in agendalist)
+            {
+                _agendalist.Add(new { Key = item.Key, Value = item.Factory + " - " + item.Value.ToString("MM月dd日") });
+            }
+            ViewBag.AgendaList = new SelectList(_agendalist, "Key", "Value");
             return PartialView();
         }
         public PartialViewResult QCDailySummaryPartial(int agendaId)
@@ -549,13 +554,17 @@ namespace SqzEvent.Controllers
             var agenda = _qcdb.QCAgenda.SingleOrDefault(m => m.Id == agendaId);
             if (agenda != null)
             {
+                var _productlist = from m in agenda.Factory.Product
+                                   where m.QAProduct
+                                   select m;
+                ViewBag.ProductList = _productlist;
                 return PartialView(agenda);
             }
             else
                 return PartialView("NotFound");
         }
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<ContentResult> QCDailySummaryPartial(FormCollection form)
+        public async Task<ContentResult> QCDailySummaryPartial(QCAgenda model, FormCollection form)
         {
             if (ModelState.IsValid)
             {

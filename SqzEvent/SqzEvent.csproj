@@ -498,6 +498,8 @@
     <Content Include="Views\QualityControl\AddQCCheckoutPartial.cshtml" />
     <Content Include="Views\QualityControl\RecoveryBreakdown.cshtml" />
     <Content Include="Views\QualityControl\BreakdownDetails.cshtml" />
+    <Content Include="Views\QualityControl\QCDailySummary.cshtml" />
+    <Content Include="Views\QualityControl\QCDailySummaryPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
