@@ -1,0 +1,81 @@
+﻿@model IEnumerable<SqzEvent.Models.QualityTest>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ProductId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.QCStaffId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Keys)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Values)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EvalScore)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EvalTotal)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EvalResult)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ApplyTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Photos)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Remark)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProductId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.QCStaffId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Keys)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Values)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EvalScore)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EvalTotal)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EvalResult)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ApplyTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Photos)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Remark)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

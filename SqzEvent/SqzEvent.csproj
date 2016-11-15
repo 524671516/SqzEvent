@@ -499,6 +499,8 @@
     <Content Include="Views\QualityControl\BreakdownDetails.cshtml" />
     <Content Include="Views\QualityControl\QCDailySummary.cshtml" />
     <Content Include="Views\QualityControl\QCDailySummaryPartial.cshtml" />
+    <Content Include="Views\QualityControl\QualityTestList.cshtml" />
+    <Content Include="Views\QualityControl\QualityTestListPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

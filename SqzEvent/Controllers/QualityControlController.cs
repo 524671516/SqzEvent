@@ -548,13 +548,14 @@ namespace SqzEvent.Controllers
             ViewBag.AgendaList = new SelectList(_agendalist, "Key", "Value");
             return PartialView();
         }
+
         public PartialViewResult QCDailySummaryPartial(int agendaId)
         {
             var agenda = _qcdb.QCAgenda.SingleOrDefault(m => m.Id == agendaId);
             if (agenda != null)
             {
                 var _productlist = from m in agenda.Factory.Product
-                                   where m.QAProduct
+                                   where m.QCProduct
                                    select m;
                 ViewBag.ProductList = _productlist;
                 return PartialView(agenda);
@@ -562,6 +563,7 @@ namespace SqzEvent.Controllers
             else
                 return PartialView("NotFound");
         }
+
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<ContentResult> QCDailySummaryPartial(QCAgenda model, FormCollection form)
         {
@@ -605,6 +607,55 @@ namespace SqzEvent.Controllers
                 return Content("FAIL");
         }
         
+        // 产品检验列表
+        public PartialViewResult QualityTestList()
+        {
+            return PartialView();
+        }
+        public PartialViewResult QualityTestListPartial(string date)
+        {
+            try
+            {
+                var _start = Convert.ToDateTime(date);
+                var _end = _start.AddDays(1);
+                QCStaff staff = getStaff(User.Identity.Name);
+                var list = from m in _qcdb.QualityTest
+                           where m.QCStaffId == staff.Id && m.ApplyTime >= _start && m.ApplyTime < _end
+                           select m;
+                return PartialView(list);
+            }
+            catch
+            {
+                return PartialView();
+            }
+        }
+
+        // 新增产品检验列表
+        public PartialViewResult AddQualityTest()
+        {
+            QCStaff staff = getStaff(User.Identity.Name);
+            var _factorylist= from m in staff.Factory
+                           select m;
+            ViewBag.FactoryDropDown = new SelectList(_factorylist, "Id", "SimpleName");
+            return PartialView();
+        }
+
+        // 质检产品列表更新ajax
+        [HttpPost]
+        public JsonResult RefreshQualityTestProductListAjax(int factoryId)
+        {
+            var _factory = _qcdb.Factory.SingleOrDefault(m => m.Id == factoryId);
+            var list = from m in _factory.Product
+                       where m.QCProduct
+                       select new { Id = m.Id, Name = m.SimpleName };
+            return Json(new { result = "SUCCESS", content = list });
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public PartialViewResult AddQualityTest(QualityTest model, FormCollection form)
+        {
+            return PartialView();
+        }
 
         // 辅助类
         public QCStaff getStaff(string username)
@@ -613,6 +664,7 @@ namespace SqzEvent.Controllers
             return user;
         }
 
+        // 保存图片
         [HttpPost]
         public JsonResult SaveOrignalImage(string serverId)
         {
@@ -650,6 +702,7 @@ namespace SqzEvent.Controllers
             }
             return Json(new { result = "FAIL" });
         }
+
         // 缩略图(等比缩小，宽或高100px)
         public FileResult ThumbnailImage(string filename)
         {
