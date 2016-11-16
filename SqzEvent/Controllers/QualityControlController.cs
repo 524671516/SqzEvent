@@ -681,9 +681,13 @@ namespace SqzEvent.Controllers
                         foreach(var template in p.QualityTestTemplate)
                         {
                             Keys.Add(template.KeyName.ToString());
-                            var x = form[template.KeyName];
-                            var y = form[template.KeyName].ToString();
-                            //Values.Add(form[template.KeyName].ToString());
+                            if (template.ValueTypeId == 1)
+                            {
+                                Values.Add(form[template.KeyName] == null ? "0" : "1");
+                            }else
+                            {
+                                Values.Add(form[template.KeyName].ToString());
+                            }
                         }
                         item.Keys = String.Join(",", Keys.ToArray());
                         item.Values = String.Join(",", Values.ToArray());
