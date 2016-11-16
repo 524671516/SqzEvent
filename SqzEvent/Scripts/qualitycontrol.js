@@ -634,10 +634,23 @@ myApp.onPageInit("qualitytestlist", function (page) {
 新增产品检验
 =========*/
 myApp.onPageInit("addqualitytest", function (page) {
-    $$("info-content").addClass("hidden")
+    $$("#Remark").on("keyup", function () {
+        if (($(this).val()) == "") {
+            $(this).attr("placeholder", "请输入备注信息").addClass("invalid-input");
+        } else {
+            $(this).attr("placeholder", "").removeClass("invalid-input");
+        }
+    });
+    var checked = false;
+    $$("#addqualitytest-submit").prop("disabled", true).addClass("color-gray");
+    $$("#info-content").addClass("hidden");
     uploadCheckinFile("addqualitytest-form", "addqualitytest-photos", "Photos", "addqualitytest-imgcount", 7);
     currentTextAreaLength("addqualitytest-form", "Remark", 200, "addqualitytest-currentlen");
     $$("#factory-select").on("change", function () {
+        checked = false;
+        $$("#template-content").html("");
+        $$("#info-content").addClass("hidden");
+        $$("#addqualitytest-submit").prop("disabled", true).addClass("color-gray");
         $$("#ProductId").html("");
         $$("#ProductId").append("<option>- 请选择 -</option>");
         $$("#product-select .item-after").text("- 请选择 -");
@@ -660,6 +673,10 @@ myApp.onPageInit("addqualitytest", function (page) {
         }
     });
     $$("#product-select").on("change", function () {
+        checked = false;
+        $$("#template-content").html("");
+        $$("#info-content").addClass("hidden");
+        $$("#addqualitytest-submit").prop("disabled", true).addClass("color-gray");
         if ($$("#ProductId").val() != "") {
             $$.ajax({
                 url: "/QualityControl/AddQualityTestPartial",
@@ -668,11 +685,14 @@ myApp.onPageInit("addqualitytest", function (page) {
                 },
                 success: function (data) {
                     $$("#template-content").html(data);
+                    $$("#info-content").removeClass("hidden");
+                    $$("#addqualitytest-submit").prop("disabled", false).removeClass("color-gray");
+                    checked = true;
                 }
             });
         }
     });
-    $$("#addqualitytest-form").on("click", ".scan-input", function () {
+    $("#addqualitytest-form").on("click", ".scan-input", function () {
         var $input = $$(this);
         wx.scanQRCode({
             needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
@@ -683,34 +703,49 @@ myApp.onPageInit("addqualitytest", function (page) {
             }
         });
     });
-    $$("#addqualitytest-submit").on("click", function () {
-        $$(this).prop("disabled", true).addClass("color-gray");
-        setTimeout(function () {
-            $("#addqualitytest-form").ajaxSubmit(function (data) {
-                if (data == "SUCCESS") {
-                    myApp.hideIndicator();
-                    mainView.router.back();
-                    myApp.addNotification({
-                        title: "通知",
-                        message: "表单提交成功"
+    $("#addqualitytest-submit").on("click", function () {
+        if (checked) {
+            $(this).prop("disabled", true).addClass("color-gray");
+            var remark = $$("#Remark").val();
+            var photoList = splitArray($("#Photos").val());
+            if (photoList.length == 0) {
+                myApp.hideIndicator();
+                myApp.alert("至少上传一张照片");
+                $("#addqualitytest-submit").prop("disabled", false).removeClass("color-gray"); 
+            } else if (remark == "") {
+                $("#Remark").attr("placeholder", "请输入备注信息").addClass("invalid-input");
+                $("#addqualitytest-submit").prop("disabled", false).removeClass("color-gray");
+            }
+            else {
+                myApp.showIndicator();
+                setTimeout(function () {
+                    $("#addqualitytest-form").ajaxSubmit(function (data) {
+                        if (data == "SUCCESS") {
+                            myApp.hideIndicator();
+                            mainView.router.back();
+                            myApp.addNotification({
+                                title: "通知",
+                                message: "表单提交成功"
+                            });
+                            setTimeout(function () {
+                                myApp.closeNotification(".notifications");
+                            }, 2e3);
+                        }
+                        else {
+                            myApp.hideIndicator();
+                            myApp.addNotification({
+                                title: "通知",
+                                message: "表单提交失败"
+                            });
+                            $$("#addqualitytest-submit").prop("disabled", false).removeClass("color-gray");
+                            setTimeout(function () {
+                                myApp.closeNotification(".notifications");
+                            }, 2e3);
+                        }
                     });
-                    setTimeout(function () {
-                        myApp.closeNotification(".notifications");
-                    }, 2e3);
-                }
-                else {
-                    myApp.hideIndicator();
-                    myApp.addNotification({
-                        title: "通知",
-                        message: "表单提交失败"
-                    });
-                    $recoverybreakdownsubmit.prop("disabled", false).removeClass("color-gray");
-                    setTimeout(function () {
-                        myApp.closeNotification(".notifications");
-                    }, 2e3);
-                }
-            });
-        }, 500);
+                }, 500);
+            }
+        }   
     });
 });
 // 图片浏览模块
