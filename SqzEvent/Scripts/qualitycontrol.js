@@ -31,7 +31,6 @@ wx.config({
     // 必填，签名，见附录1
     jsApiList: ["uploadImage", "downloadImage", "chooseImage", "getLocation", "previewImage", "openLocation", "scanQRCode"]
 });
-
 //获取个人信息
 $$.ajax({
     url: "/QualityControl/UserInfoPartial",
@@ -148,7 +147,6 @@ myApp.onPageInit('qccheckin', function (page) {
         }
     });
     //图片上传数量计算
-    $("#Photos").val("1.jpg,2.jpg,3.jpg");
     uploadCheckinFile("qccheckin-form", "qccheckin-photos", "Photos", "qccheckin-imgcount", 7);
     //textarea字数计算
     currentTextAreaLength("qccheckin-form", "CheckinRemark", 200, "qccheckin-currentlen");
@@ -166,13 +164,15 @@ myApp.onPageInit("addcheckout", function (page) {
             success: function (data) {
                 $$('#addcheckout-content').html(data);
                 currentTextAreaLength("addqccheckout-form", "CheckoutRemark", 200, "qccheckout-currentlen");
-                $$("#CheckoutRemark").on("keyup", function () {
-                    if ($$(this).val().length != 0) {
-                        $$(this).removeClass("invalid-input");
-                    }
-                });
             }
         });
+    });
+    $("#checkout").on("keyup", "#CheckoutRemark", function () {
+        if ($(this).val() !="") {
+            $(this).attr("placeholder", "").removeClass("invalid-input");
+        } else {
+            $(this).attr("placeholder", "请输入备注信息").addClass("invalid-input");
+        }
     });
     //判断数据是否为空
     if ($$("#AgendaId").val()=="") {
@@ -187,11 +187,6 @@ myApp.onPageInit("addcheckout", function (page) {
             success: function (data) {
                 $$('#addcheckout-content').html(data);
                 currentTextAreaLength("addqccheckout-form", "CheckoutRemark", 200, "qccheckout-currentlen");
-                $$("#CheckoutRemark").on("keyup", function () {
-                    if ($$(this).val().length != 0) {
-                        $$(this).removeClass("invalid-input");
-                    }
-                });
             }
         });
     }
@@ -439,6 +434,7 @@ myApp.onPageInit('dailysummary', function (page) {
             }
         });
     }
+    //输入框验证
     $$("#dailysummary").on("keyup", ".keyup-input", function () {
         if (isPInt($(this).val()) == true) {
             $(this).attr("placeholder", "").removeClass("invalid-input");
@@ -595,12 +591,6 @@ myApp.onPageInit('recoverybreakdown', function (page) {
         uploadCheckinFile("recoverybreakdown-form", "recoverybreakdown-photos", "Photos", "recoverybreakdown-imgcount", 7);
         currentTextAreaLength("recoverybreakdown-form", "RecoveryRemark", 200, "recoverybreakdown-currentlen");
 });
-
-myApp.onPageInit("breakdowndetails", function (page) {
-    PhotoBrowser("breakdowndetails")
-});
-
-
 /*==========
 产品检测列表
 =========*/
@@ -655,6 +645,7 @@ myApp.onPageInit("qualitytestlist", function (page) {
 新增产品检验
 =========*/
 myApp.onPageInit("addqualitytest", function (page) {
+    //备注框验证
     $$("#Remark").on("keyup", function () {
         if (($(this).val()) == "") {
             $(this).attr("placeholder", "请输入备注信息").addClass("invalid-input");
@@ -724,6 +715,7 @@ myApp.onPageInit("addqualitytest", function (page) {
             }
         });
     });
+    //提交按钮事件
     $("#addqualitytest-submit").on("click", function () {
         if (checked) {
             $(this).prop("disabled", true).addClass("color-gray");
@@ -769,13 +761,6 @@ myApp.onPageInit("addqualitytest", function (page) {
         }   
     });
 });
-/*==========
-查看质检信息
-=========*/
-myApp.onPageInit("qualitytestdetails", function (page) {
-    PhotoBrowser("qualitytestdetails");
-});
-
 // 图片浏览模块
 function PhotoBrowser(pagename) {
     $$("#" + pagename).on("click", ".qc-photos", function () {
