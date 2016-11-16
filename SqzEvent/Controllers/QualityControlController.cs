@@ -707,6 +707,33 @@ namespace SqzEvent.Controllers
             return Content("FAIL");
         }
 
+        // 质检信息详情
+        public PartialViewResult QualityTestDetails(int qtId)
+        {
+            var model = _qcdb.QualityTest.SingleOrDefault(m => m.Id == qtId);
+            if (model != null)
+            {
+                return PartialView(model);
+            }
+            else
+                return PartialView("NotFound");
+        }
+
+        // 删除质检信息
+        [HttpPost]
+        public async Task<JsonResult> DeleteQualityTest(int qtId)
+        {
+            var model = _qcdb.QualityTest.SingleOrDefault(m => m.Id == qtId);
+            if (model != null)
+            {
+                _qcdb.QualityTest.Remove(model);
+                await _qcdb.SaveChangesAsync();
+                return Json(new { result = "SUCCESS" });
+            }
+            else
+                return Json(new { result="FAIL"});
+        }
+
         // 辅助类
         public QCStaff getStaff(string username)
         {

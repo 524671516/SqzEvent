@@ -595,6 +595,12 @@ myApp.onPageInit('recoverybreakdown', function (page) {
         uploadCheckinFile("recoverybreakdown-form", "recoverybreakdown-photos", "Photos", "recoverybreakdown-imgcount", 7);
         currentTextAreaLength("recoverybreakdown-form", "RecoveryRemark", 200, "recoverybreakdown-currentlen");
 });
+
+myApp.onPageInit("breakdowndetails", function (page) {
+    PhotoBrowser("breakdowndetails")
+});
+
+
 /*==========
 产品检测列表
 =========*/
@@ -626,6 +632,21 @@ myApp.onPageInit("qualitytestlist", function (page) {
             },
             success: function (data) {
                 $$("#qualitytestlist-content").html(data);
+            }
+        });
+    });
+    $$("#qualitytestlist-content").on("deleted", ".swipeout", function (e) {
+        $$.ajax({
+            url: "Manager_CancelRequestJson",
+            data: {
+                id: $$(e.target).attr("data-url")
+            },
+            method: "post",
+            success: function (data) {
+                data = JSON.parse(data);
+                if (data.result != "SUCCESS") {
+                    myApp.alert("删除失败");
+                }
             }
         });
     });
