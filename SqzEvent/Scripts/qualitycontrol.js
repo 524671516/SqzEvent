@@ -52,7 +52,7 @@ myApp.onPageInit('qccheckin', function (page) {
     var $factoryselect = $("#factory-select")
     var $qccheckinsubmit = $("#qccheckin-submit");
     var $qccheckinform = $('#qccheckin-form');
-    $("input[type='number']").val("");
+    $$("input[type='number']").val("");
     //效验规则
     $qccheckinform.validate({
         debug: false,
@@ -242,35 +242,6 @@ myApp.onPageInit("addcheckout", function (page) {
         });
 });
 /*==========
-产品检验页
-=========*/
-myApp.onPageInit('Productinspection', function (page) {
-    console.log('产品检验');
-    var pContent = $$('#productinspection_content');
-    pContent.on('refresh', function () {
-        setTimeout(function () {
-            console.log('产品检验已刷新');
-            myApp.pullToRefreshDone();
-        }, 2000);
-    })
-
-})
-/*==========
-新增产品页
-=========*/
-myApp.onPageInit("Newproductinspection", function (page) {
-    console.log('新增产品页');
-    $$('.btn').on('click', function () {
-        myApp.confirm('确认提交?', function (value) {
-            myApp.showPreloader('正在提交')
-            setTimeout(function () {
-                myApp.hidePreloader();
-                $$('input').attr('checked', 'checked');
-            }, 2000);
-        });
-    });
-});
-/*==========
 故障报告列表
 =========*/
 myApp.onPageInit("breakdownlist", function (page) {
@@ -452,28 +423,29 @@ myApp.onPageInit("addbreakdown", function (page) {
 每日工作总结页
 =========*/
 myApp.onPageInit('dailysummary', function (page) {
-    if ($("#AgendaId").val()==null) {
-        $("#dailysummary-submit").prop("disabled", true).addClass("color-gray");
-        $("#checkout-noinfo").append("<div  class=\"content-block-title\">无可选项</div>");
+    if ($$("#AgendaId").val()=="") {
+        $$("#dailysummary-submit").prop("disabled", true).addClass("color-gray");
+        $$("#checkout-noinfo").append("<div  class=\"content-block-title\">无可选项</div>");
     } else {
         $$.ajax({
             url: "/QualityControl/QCDailySummaryPartial",
             data: {
-                agendaId: $$("#AgendaId").val()
+                agendaId: $("#AgendaId").val()
             },
-            success: function (data) {
+            success: function (data) {      
                 $$('#dailysummary-content').html(data);
+                currentTextAreaLength("qcdailysummarypartial-form", "Remark", 200, "qccheckin-currentlen");
             }
         });
     }
-    $("#dailysummary").on("keyup", ".keyup-input", function () {
+    $$("#dailysummary").on("keyup", ".keyup-input", function () {
         if (isPInt($(this).val()) == true) {
             $(this).attr("placeholder", "").removeClass("invalid-input");
         } else {
             $(this).attr("placeholder", "请输入合法数字").addClass("invalid-input");
         }
     });
-    $("#dailysummary").on("keyup", "#Remark", function () {
+    $$("#dailysummary").on("keyup", "#Remark", function () {
         if (($(this).val()) == "") {
             $(this).attr("placeholder", "请输入备注信息").addClass("invalid-input");
         } else {
@@ -492,20 +464,20 @@ myApp.onPageInit('dailysummary', function (page) {
                     $dailysummarysubmit.prop("disabled", true).addClass("color-gray");
                         var remark = $("#Remark").val();
                         if (remark == "") {
-                            $$("#Remark").attr("placeholder", "请输入备注信息").addClass("invalid-input");
+                            $("#Remark").attr("placeholder", "请输入备注信息").addClass("invalid-input");
                             $dailysummarysubmit.prop("disabled", false).removeClass("color-gray");
                         }
                         else if (remark.length > 200) {
-                            $$("#Remark").attr("placeholder", "超过字数").addClass("invalid-input");
+                            $("#Remark").attr("placeholder", "超过字数").addClass("invalid-input");
                             $dailysummarysubmit.prop("disabled", false).removeClass("color-gray");
                         }
-                        else if ($$(".invalid-input").length > 0) {
+                        else if ($(".invalid-input").length > 0) {
                             $dailysummarysubmit.prop("disabled", false).removeClass("color-gray");
                         }
                         else {
                             myApp.showIndicator();
                             setTimeout(function () {
-                                $qcdailysummarypartialform.ajaxSubmit(function (data) {
+                                $('#qcdailysummarypartial-form').ajaxSubmit(function (data) {
                                     if (data == "SUCCESS") {
                                         myApp.hideIndicator();
                                         mainView.router.back();
@@ -535,6 +507,7 @@ myApp.onPageInit('dailysummary', function (page) {
             }
         })
     });
+    
 });
 /*==========
 确认修复页
@@ -555,6 +528,11 @@ myApp.onPageInit('recoverybreakdown', function (page) {
         var $recoveybreakdownform = $('#recoverybreakdown-form');
         //效验规则
         $recoveybreakdownform.validate({
+            debug: false,
+            //调试模式取消submit的默认提交功能
+            focusInvalid: false,
+            //当为false时，验证无效时，没有焦点响应
+            onkeyup: false,
             rules: {
                 RecoveryRemark: {
                     maxlength: 200,
@@ -617,25 +595,8 @@ myApp.onPageInit('recoverybreakdown', function (page) {
         currentTextAreaLength("recoverybreakdown-form", "RecoveryRemark", 200, "recoverybreakdown-currentlen");
 });
 /*==========
-显示故障明细
+产品检测列表
 =========*/
-myApp.onPageInit("breakdowndetails", function (page) {
-    PhotoBrowser("breakdowndetails")
-});
-
-//每日工作总结页
-myApp.onPageInit("dailysummary", function (page) {
-    $$.ajax({
-        url: "/QualityControl/QCDailySummaryPartial",
-        data: {
-            agendaId: $$("#AgendaId").val()
-        },
-        success: function (data) {
-            $$('#dailysummary-content').html(data);
-        }
-    });
-});
-
 myApp.onPageInit("qualitytestlist", function (page) {
     //添加日历
     var calendarMultiple = myApp.calendar({
@@ -654,6 +615,14 @@ myApp.onPageInit("qualitytestlist", function (page) {
         },
         success: function (data) {
             $$("#qualitytestlist-content").html(data);
+            $(".add-border").each(function () {
+                var spanlength = $(this).children(".item-inner").find("span").html().split("").length
+                if (spanlength > 5) {
+                    $(this).addClass("fail-border");
+                } else {
+                    $(this).addClass("pass-border");
+                }
+            })
         }
     });
     $$("#qualitytestlist-date").on("change", function () {
@@ -668,8 +637,9 @@ myApp.onPageInit("qualitytestlist", function (page) {
         });
     });
 });
-
-// 新增产品检验
+/*==========
+新增产品检验
+=========*/
 myApp.onPageInit("addqualitytest", function (page) {
     uploadCheckinFile("addqualitytest-form", "addqualitytest-photos", "Photos", "addqualitytest-imgcount", 7);
     currentTextAreaLength("addqualitytest-form", "Remark", 200, "addqualitytest-currentlen");
@@ -739,7 +709,6 @@ myApp.onPageInit("addqualitytest", function (page) {
         }, 500);
     });
 });
-
 // 图片浏览模块
 function PhotoBrowser(pagename) {
     $$("#" + pagename).on("click", ".qc-photos", function () {
@@ -764,7 +733,6 @@ function PhotoBrowser(pagename) {
         }
     });
 }
-
 //上传图片信息
 function uploadImage(img_id, img_filename) {
     $$("#" + img_id).on("click", function () {
