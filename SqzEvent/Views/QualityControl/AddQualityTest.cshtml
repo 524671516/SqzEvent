@@ -17,7 +17,7 @@
 <div class="pages">
     <div class="page" data-page="addqualitytest">
         <div class="page-content">
-            @using (Html.BeginForm("AddQualityTest", "QualityControl", FormMethod.Post, new { @id="addqualitytest-form", @class="validate-form"}))
+            @using (Html.BeginForm("AddQualityTest", "QualityControl", FormMethod.Post, new { @id = "addqualitytest-form", @class = "validate-form" }))
             {
                 @Html.AntiForgeryToken()
                 @Html.HiddenFor(model => model.Id)
@@ -52,10 +52,9 @@
                         </li>
                     </ul>
                 </div>
-                <div class="content-block-title">检验项目</div>
                 <div class="list-block" id="template-content"></div>
-                <div class="content-block-title">其他信息</div>
-                <div class="list-block">
+                <div class="list-block" id="info-content">
+                    <div class="content-block-title">其他信息</div>
                     <ul>
                         <li>
                             <div class="item-content">

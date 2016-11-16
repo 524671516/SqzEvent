@@ -9,15 +9,30 @@
             {
                 <li class="swipeout" data-url="@item.Id">
                     <div class="swipeout-content">
-                        <a href="/QualityControl/QualityTestDetails?qtId=@item.Id" class="item-link item-content random-param add-border">
-                            <div class="item-inner">
-                                <div class="item-title-row">
-                                    <div class="item-title">@Html.Encode(item.Product.SimpleName)<span>(@Html.Encode(item.EvalResult))</span></div>
-                                    <div class="item-after">@Html.Encode(item.ApplyTime.ToString("HH:mm"))</div>
+                        @if (item.EvalResult)
+                        {
+                            <a href="/QualityControl/QualityTestDetails?qtId=@item.Id" class="item-link item-content random-param pass-border">
+                                <div class="item-inner">
+                                    <div class="item-title-row">
+                                        <div class="item-title">@Html.Encode(item.Product.SimpleName)<span>(@Html.Encode(item.EvalResult))</span></div>
+                                        <div class="item-after">@Html.Encode(item.ApplyTime.ToString("HH:mm"))</div>
+                                    </div>
+                                    <div class="item-subtitle color-gray">@Html.Encode("工厂名称")</div>
                                 </div>
-                                <div class="item-subtitle color-gray">@Html.Encode("工厂名称")</div>
-                            </div>
-                        </a>
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="/QualityControl/QualityTestDetails?qtId=@item.Id" class="item-link item-content random-param fail-border">
+                                <div class="item-inner">
+                                    <div class="item-title-row">
+                                        <div class="item-title">@Html.Encode(item.Product.SimpleName)<span>(@Html.Encode(item.EvalResult))</span></div>
+                                        <div class="item-after">@Html.Encode(item.ApplyTime.ToString("HH:mm"))</div>
+                                    </div>
+                                    <div class="item-subtitle color-gray">@Html.Encode("工厂名称")</div>
+                                </div>
+                            </a>
+                        }
                     </div>
                     <div class="swipeout-actions-right">
                         <a href="javascript:;" class="bg-red">删除</a>
