@@ -1,2 +1,118 @@
 ﻿@model SqzEvent.Models.QualityTest
+@using SqzEvent.Models;
 
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="left">
+            <a href="#" class="back link">
+                <i class="icon icon-back" aria-hidden="true"></i>
+                <span>返回</span>
+            </a>
+        </div>
+        <div class="center sliding"><strong>质检信息详情</strong></div>
+    </div>
+</div>
+<div class="pages">
+    <div class="page" data-page="qualitytestdetails" id="qualitytestdetails">
+        <div class="page-content">
+            <div class="content-block-title">基本信息</div>
+            <div class="list-block">
+                <ul>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">工厂名称</div>
+                                <div class="item-after">@Html.Encode(Model.Factory.SimpleName)</div>
+                            </div>
+                        </div>
+
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">产品名称</div>
+                                <div class="item-after">@Html.Encode(Model.Product.SimpleName)</div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">质检时间</div>
+                                <div class="item-after">@Html.Encode(Model.ApplyTime.ToString("yyyy-MM-dd HH:mm"))</div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">质检结果</div>
+                                <div class="item-after">@Html.Encode(Model.EvalResult ? "通过" : "不合格")</div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="javascript:;" class="item-content item-link qc-photos" data-photos="@Model.Photos">
+                            <div class="item-inner">
+                                <div class="item-title">质检图片</div>
+                                <div class="item-after">点击查看</div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="content-block-title">质检明细</div>
+            <div class="list-block">
+                <ul>
+                    @foreach (TestTemplateItem item in ViewBag.Details)
+                    {
+                        switch (item.type)
+                        {
+                            case 1:
+                                {
+                                    <li>
+                                        <div class="item-content">
+                                            <div class="item-inner">
+                                                <div class="item-title">@Html.Encode(item.title)</div>
+                                                @if (item.value == "0")
+                                                {
+                                                    <div class="item-after"><i class="fa fa-times color-red" aria-hidden="true"></i></div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="item-after"><i class="fa fa-check color-green" aria-hidden="true"></i></div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </li>
+                                }
+                                break;
+                            default:
+                                {
+                                    <li>
+                                        <div class="item-content">
+                                            <div class="item-inner">
+                                                <div class="item-title label">@Html.Encode(item.title)</div>
+                                                <div class="item-after">@Html.Encode(item.value)</div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                }
+                                break;
+                        }
+                    }
+                </ul>
+            </div>
+            <div class="content-block-title">故障备注</div>
+            <div class="list-block">
+                <ul>
+                    <li>
+                        <div class="item-content middle-content">
+                            @Html.TextAreaFor(m => m.Remark, new { placeholder = "请输入签到备注", @class = "required input-textarea", @readonly = "readonly" })
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

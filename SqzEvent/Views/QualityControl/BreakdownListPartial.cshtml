@@ -8,7 +8,9 @@
             {
                 <li class="swipeout" data-url="@item.Id">
                     <div class="swipeout-content">
-                        <a href="/QualityControl/BreakdownDetails?bdId=@item.Id" class="item-link item-content random-param">
+                        @if (item.Status == 1)
+                        {
+                        <a href="/QualityControl/BreakdownDetails?bdId=@item.Id" class="item-link item-content random-param pass-border">
                             <div class="item-inner">
                                 <div class="item-title-row">
                                     <div class="item-title">@Html.Encode(item.QCEquipment.SimpleName) (@Html.BreakdownStatus(item.Status))</div>
@@ -17,6 +19,19 @@
                                 <div class="item-subtitle color-gray">@Html.Encode(item.QCEquipment.Factory.SimpleName)</div>
                             </div>
                         </a>
+                        }
+                        else
+                        {
+                            <a href="/QualityControl/BreakdownDetails?bdId=@item.Id" class="item-link item-content random-param fail-border">
+                                <div class="item-inner">
+                                    <div class="item-title-row">
+                                        <div class="item-title">@Html.Encode(item.QCEquipment.SimpleName) (@Html.BreakdownStatus(item.Status))</div>
+                                        <div class="item-after">@Html.Encode(item.BreakDownTime.ToString("HH:mm"))</div>
+                                    </div>
+                                    <div class="item-subtitle color-gray">@Html.Encode(item.QCEquipment.Factory.SimpleName)</div>
+                                </div>
+                            </a>
+                        }
                     </div>
                     <div class="swipeout-actions-right">
                         <a href="/QualityControl/RecoveryBreakdown?bdId=@item.Id" class="bg-green">确认修复</a>

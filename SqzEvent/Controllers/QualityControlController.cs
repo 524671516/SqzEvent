@@ -713,6 +713,8 @@ namespace SqzEvent.Controllers
             var model = _qcdb.QualityTest.SingleOrDefault(m => m.Id == qtId);
             if (model != null)
             {
+                List<TestTemplateItem> list = Newtonsoft.Json.JsonConvert.DeserializeObject<List<TestTemplateItem>>(model.Values);
+                ViewBag.Details = list;
                 return PartialView(model);
             }
             else

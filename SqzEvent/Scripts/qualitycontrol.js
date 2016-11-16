@@ -637,9 +637,9 @@ myApp.onPageInit("qualitytestlist", function (page) {
     });
     $$("#qualitytestlist-content").on("deleted", ".swipeout", function (e) {
         $$.ajax({
-            url: "Manager_CancelRequestJson",
+            url: "/QualityControl/DeleteQualityTest",
             data: {
-                id: $$(e.target).attr("data-url")
+                qtId: $$(e.target).attr("data-url")
             },
             method: "post",
             success: function (data) {
@@ -734,6 +734,13 @@ myApp.onPageInit("addqualitytest", function (page) {
         }, 500);
     });
 });
+/*==========
+查看质检信息
+=========*/
+myApp.onPageInit("qualitytestdetails", function (page) {
+    PhotoBrowser("qualitytestdetails");
+});
+
 // 图片浏览模块
 function PhotoBrowser(pagename) {
     $$("#" + pagename).on("click", ".qc-photos", function () {
@@ -747,7 +754,6 @@ function PhotoBrowser(pagename) {
                 zoom: 400,
                 photos: images,
                 theme: 'dark',
-                type:'popup',
                 backLinkText: '关闭',
                 toolbar: false,
                 ofText: '/'
