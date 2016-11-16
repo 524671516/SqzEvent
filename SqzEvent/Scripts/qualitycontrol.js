@@ -31,7 +31,6 @@ wx.config({
     // 必填，签名，见附录1
     jsApiList: ["uploadImage", "downloadImage", "chooseImage", "getLocation", "previewImage", "openLocation", "scanQRCode"]
 });
-
 //获取个人信息
 $$.ajax({
     url: "/QualityControl/UserInfoPartial",
@@ -180,13 +179,15 @@ myApp.onPageInit("addcheckout", function (page) {
             success: function (data) {
                 $$('#addcheckout-content').html(data);
                 currentTextAreaLength("addqccheckout-form", "CheckoutRemark", 200, "qccheckout-currentlen");
-                $$("#CheckoutRemark").on("keyup", function () {
-                    if ($$(this).val().length != 0) {
-                        $$(this).removeClass("invalid-input");
-                    }
-                });
             }
         });
+    });
+    $("#checkout").on("keyup", "#CheckoutRemark", function () {
+        if ($(this).val() !="") {
+            $(this).attr("placeholder", "").removeClass("invalid-input");
+        } else {
+            $(this).attr("placeholder", "请输入备注信息").addClass("invalid-input");
+        }
     });
     //判断数据是否为空
     if ($$("#AgendaId").val() == "") {
@@ -201,11 +202,6 @@ myApp.onPageInit("addcheckout", function (page) {
             success: function (data) {
                 $$('#addcheckout-content').html(data);
                 currentTextAreaLength("addqccheckout-form", "CheckoutRemark", 200, "qccheckout-currentlen");
-                $$("#CheckoutRemark").on("keyup", function () {
-                    if ($$(this).val().length != 0) {
-                        $$(this).removeClass("invalid-input");
-                    }
-                });
             }
         });
     }
@@ -453,6 +449,7 @@ myApp.onPageInit('dailysummary', function (page) {
             }
         });
     }
+    //输入框验证
     $$("#dailysummary").on("keyup", ".keyup-input", function () {
         if (isPInt($(this).val()) == true) {
             $(this).attr("placeholder", "").removeClass("invalid-input");
@@ -664,6 +661,7 @@ myApp.onPageInit("qualitytestlist", function (page) {
 新增产品检验
 =========*/
 myApp.onPageInit("addqualitytest", function (page) {
+    //备注框验证
     $$("#Remark").on("keyup", function () {
         if (($(this).val()) == "") {
             $(this).attr("placeholder", "请输入备注信息").addClass("invalid-input");
@@ -734,6 +732,7 @@ myApp.onPageInit("addqualitytest", function (page) {
             }
         });
     });
+    //提交按钮事件
     $("#addqualitytest-submit").on("click", function () {
         if (checked) {
             $(this).prop("disabled", true).addClass("color-gray");
@@ -779,13 +778,6 @@ myApp.onPageInit("addqualitytest", function (page) {
         }
     });
 });
-/*==========
-查看质检信息
-=========*/
-myApp.onPageInit("qualitytestdetails", function (page) {
-    PhotoBrowser("qualitytestdetails");
-});
-
 // 图片浏览模块
 function PhotoBrowser(pagename) {
     $$("#" + pagename).on("click", ".qc-photos", function () {
