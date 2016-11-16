@@ -12,10 +12,10 @@
                         <a href="/QualityControl/QualityTestDetails?qtId=@item.Id" class="item-link item-content random-param">
                             <div class="item-inner">
                                 <div class="item-title-row">
-                                    <div class="item-title">@Html.Encode(item.Product.SimpleName) (@Html.Encode(item.EvalResult))</div>
+                                    <div class="item-title">@Html.Encode(item.Product.SimpleName) (@Html.Encode(item.EvalResult?"通过":"不合格"))</div>
                                     <div class="item-after">@Html.Encode(item.ApplyTime.ToString("HH:mm"))</div>
                                 </div>
-                                <div class="item-subtitle color-gray">@Html.Encode("工厂名称")</div>
+                                <div class="item-subtitle color-gray">@Html.Encode(item.Factory.SimpleName)</div>
                             </div>
                         </a>
                     </div>

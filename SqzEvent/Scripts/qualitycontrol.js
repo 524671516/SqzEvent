@@ -29,8 +29,9 @@ wx.config({
     // 必填，生成签名的随机串
     signature: $("#signature").text(),
     // 必填，签名，见附录1
-    jsApiList: ["uploadImage", "downloadImage", "chooseImage", "getLocation", "previewImage", "openLocation"]
+    jsApiList: ["uploadImage", "downloadImage", "chooseImage", "getLocation", "previewImage", "openLocation", "scanQRCode"]
 });
+
 //获取个人信息
 $$.ajax({
     url: "/QualityControl/UserInfoPartial",
@@ -708,7 +709,17 @@ myApp.onPageInit("addqualitytest", function (page) {
             });
         }
     });
-
+    $$("#addqualitytest-form").on("click", ".scan-input", function () {
+        var $input = $$(this);
+        wx.scanQRCode({
+            needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+            scanType: ["barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+            success: function (res) {
+                var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+                $input.val(result);
+            }
+        });
+    });
     $$("#addqualitytest-submit").on("click", function () {
         $$(this).prop("disabled", true).addClass("color-gray");
         setTimeout(function () {
@@ -823,7 +834,7 @@ function uploadCheckinFile(pagename, imglist, photolist_id, current_count, max_c
     var photolist = splitArray($$("#" + photolist_id).val());
     $$("#" + current_count).text(photolist.length);
     for (var i = 0; i < photolist.length; i++) {
-        $$("#" + imglist).append("<li><div class=\"rep-imgitem\" data-rel=\"" + photolist[i] + "\" style=\"background-image:url(/Seller/ThumbnailImage?filename=" + photolist[i] + "); background-size:cover\"></div></li>");
+        $$("#" + imglist).append("<li><div class=\"rep-imgitem\" data-rel=\"" + photolist[i] + "\" style=\"background-image:url(/QualityControl/ThumbnailImage?filename=" + photolist[i] + "); background-size:cover\"></div></li>");
     }
     $$("#" + imglist).append('<li><a href="javascript:;" class="rep-imgitem-btn" id="' + imglist + '-upload-btn"><i class="fa fa-plus"></i></a></li>');
     $$("#" + imglist).on("click", "#" + imglist + "-upload-btn", function (e) {
@@ -881,7 +892,7 @@ function uploadCheckinFile(pagename, imglist, photolist_id, current_count, max_c
             $$("#" + current_count).text(pl.length);
             $$("#" + photolist_id).val(pl.toString());
             for (var i = 0; i < pl.length; i++) {
-                $$("#" + imglist).append('<li><div class="rep-imgitem" data-rel=\'' + pl[i] + "' style=\"background-image:url(/Seller/ThumbnailImage?filename=" + pl[i] + '); background-size:cover"></div></li>');
+                $$("#" + imglist).append('<li><div class="rep-imgitem" data-rel=\'' + pl[i] + "' style=\"background-image:url(/QualityControl/ThumbnailImage?filename=" + pl[i] + '); background-size:cover"></div></li>');
             }
             $$("#" + imglist).append('<li><a href="javascript:;" class="rep-imgitem-btn" id="' + imglist + '-upload-btn"><i class="fa fa-plus"></i></a></li>');
             myApp.hideIndicator();
@@ -907,7 +918,7 @@ function uploadCheckinFile(pagename, imglist, photolist_id, current_count, max_c
             $$("#" + current_count).text(arraylist.length);
             $$("#" + imglist).html("");
             for (var i = 0; i < arraylist.length; i++) {
-                $("#" + imglist).append('<li><div class="rep-imgitem" data-rel=\'' + arraylist[i] + "' style=\"background-image:url(/Seller/ThumbnailImage?filename=" + arraylist[i] + '); background-size:cover"></div></li>');
+                $("#" + imglist).append('<li><div class="rep-imgitem" data-rel=\'' + arraylist[i] + "' style=\"background-image:url(/QualityControl/ThumbnailImage?filename=" + arraylist[i] + '); background-size:cover"></div></li>');
             }
             $$("#" + imglist).append('<li><a href="javascript:;" class="rep-imgitem-btn" id="' + imglist + '-upload-btn"><i class="fa fa-plus"></i></a></li>');
         });

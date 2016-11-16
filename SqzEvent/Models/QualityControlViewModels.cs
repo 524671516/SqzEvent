@@ -50,7 +50,18 @@ namespace SqzEvent.Models
         public string ImgUrl { get; set; }
 
         public string NickName { get; set; }
+    }
 
+    public class TestTemplateItem
+    {
+        public int tid { get; set; }
 
+        public int type { get; set; }
+
+        public string key { get; set; }
+
+        public string value { get; set; }
+
+        public string title { get; set; }
     }
 }

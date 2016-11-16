@@ -13,6 +13,8 @@ using System.Text;
 using System.Drawing.Imaging;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
+
 
 namespace SqzEvent.Controllers
 {
@@ -676,21 +678,25 @@ namespace SqzEvent.Controllers
                     Product p = _qcdb.Product.SingleOrDefault(m => m.Id == item.ProductId);
                     if (p != null)
                     {
-                        ArrayList Keys = new ArrayList();
-                        ArrayList Values = new ArrayList();
+                        List<TestTemplateItem> templatelist = new List<TestTemplateItem>(); 
                         foreach(var template in p.QualityTestTemplate)
                         {
-                            Keys.Add(template.KeyName.ToString());
+                            string _value;
                             if (template.ValueTypeId == 1)
+                                _value = form[template.KeyName] == null ? "0" : "1";
+                            else
+                                _value = form[template.KeyName].ToString();
+                            TestTemplateItem tt_item = new TestTemplateItem()
                             {
-                                Values.Add(form[template.KeyName] == null ? "0" : "1");
-                            }else
-                            {
-                                Values.Add(form[template.KeyName].ToString());
-                            }
+                                tid = template.Id,
+                                type = template.ValueTypeId,
+                                key = template.KeyName,
+                                value = _value,
+                                title = template.KeyTitle
+                            };
+                            templatelist.Add(tt_item);
                         }
-                        item.Keys = String.Join(",", Keys.ToArray());
-                        item.Values = String.Join(",", Values.ToArray());
+                        item.Values = Newtonsoft.Json.JsonConvert.SerializeObject(templatelist);
                     }
                     _qcdb.QualityTest.Add(item);
                     await _qcdb.SaveChangesAsync();
