@@ -503,6 +503,7 @@
     <Content Include="Views\QualityControl\QualityTestListPartial.cshtml" />
     <Content Include="Views\QualityControl\AddQualityTest.cshtml" />
     <Content Include="Views\QualityControl\AddQualityTestPartial.cshtml" />
+    <Content Include="Views\QualityControl\QualityTestDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -637,6 +637,8 @@ myApp.onPageInit("dailysummary", function (page) {
     });
 });
 
+
+// 质检列表
 myApp.onPageInit("qualitytestlist", function (page) {
     //添加日历
     var calendarMultiple = myApp.calendar({
@@ -665,6 +667,21 @@ myApp.onPageInit("qualitytestlist", function (page) {
             },
             success: function (data) {
                 $$("#qualitytestlist-content").html(data);
+            }
+        });
+    });
+    $$("#qualitytestlist-content").on("deleted", ".swipeout", function (e) {
+        $$.ajax({
+            url: "Manager_CancelRequestJson",
+            data: {
+                id: $$(e.target).attr("data-url")
+            },
+            method: "post",
+            success: function (data) {
+                data = JSON.parse(data);
+                if (data.result != "SUCCESS") {
+                    myApp.alert("删除失败");
+                }
             }
         });
     });
