@@ -622,14 +622,6 @@ myApp.onPageInit("qualitytestlist", function (page) {
         },
         success: function (data) {
             $$("#qualitytestlist-content").html(data);
-            $(".add-border").each(function () {
-                var spanlength = $(this).children(".item-inner").find("span").html().split("").length
-                if (spanlength > 5) {
-                    $(this).addClass("fail-border");
-                } else {
-                    $(this).addClass("pass-border");
-                }
-            })
         }
     });
     $$("#qualitytestlist-date").on("change", function () {
@@ -663,6 +655,7 @@ myApp.onPageInit("qualitytestlist", function (page) {
 新增产品检验
 =========*/
 myApp.onPageInit("addqualitytest", function (page) {
+    $$("info-content").addClass("hidden")
     uploadCheckinFile("addqualitytest-form", "addqualitytest-photos", "Photos", "addqualitytest-imgcount", 7);
     currentTextAreaLength("addqualitytest-form", "Remark", 200, "addqualitytest-currentlen");
     $$("#factory-select").on("change", function () {
