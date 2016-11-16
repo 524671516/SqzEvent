@@ -452,8 +452,9 @@ myApp.onPageInit("addbreakdown", function (page) {
 每日工作总结页
 =========*/
 myApp.onPageInit('dailysummary', function (page) {
-    if ($$("#AgendaId")=="") {
-        myApp.alert("无记录");
+    if ($("#AgendaId").val()==null) {
+        $("#dailysummary-submit").prop("disabled", true).addClass("color-gray");
+        $("#checkout-noinfo").append("<div  class=\"content-block-title\">无可选项</div>");
     } else {
         $$.ajax({
             url: "/QualityControl/QCDailySummaryPartial",
@@ -465,34 +466,46 @@ myApp.onPageInit('dailysummary', function (page) {
             }
         });
     }
+    $("#dailysummary").on("keyup", ".keyup-input", function () {
+        if (isPInt($(this).val()) == true) {
+            $(this).attr("placeholder", "").removeClass("invalid-input");
+        } else {
+            $(this).attr("placeholder", "请输入合法数字").addClass("invalid-input");
+        }
+    });
+    $("#dailysummary").on("keyup", "#Remark", function () {
+        if (($(this).val()) == "") {
+            $(this).attr("placeholder", "请输入备注信息").addClass("invalid-input");
+        } else {
+            $(this).attr("placeholder", "").removeClass("invalid-input");
+        }
+    });
     var $dailysummarysubmit = $("#dailysummary-submit");
     var $qcdailysummarypartialform = $('#qcdailysummarypartial-form');
     //按钮点击事件
     $dailysummarysubmit.on("click", function () {
-            var inputnum = $('#qcdailysummarypartial-form').find($(".keyup-input"));
-            for (i = 0; i < inputnum.length; i++) {
-                var $item = $(inputnum[i]);
-                if (isPInt($item.val()) == false ||$item.val()>100) {
-                    $item.attr("placeholder", "请输入合法数字").addClass("invalid-input");
-                } else {    
-                    if (!$dailysummarysubmit.prop("disabled")) {
-                        myApp.showIndicator();
-                        $dailysummarysubmit.prop("disabled", true).addClass("color-gray");
-                        setTimeout(function () {
-                            var remark = $("#Remark").val();
-                            if (remark == "") {
-                                $$("#Remark").attr("placeholder", "请输入备注信息").addClass("invalid-input");
-                                myApp.hideIndicator();
-                                $dailysummarysubmit.prop("disabled", false).removeClass("color-gray");
-                            }
-                            else if (remark.length > 200) {
-                                $$("#Remark").attr("placeholder", "超过字数").addClass("invalid-input");
-                                myApp.hideIndicator();
-                                $dailysummarysubmit.prop("disabled", false).removeClass("color-gray");
-                            }
-                            else {
-                                console.log("9");
-                                $('#qcdailysummarypartial-form').ajaxSubmit(function (data) {
+        $(".keyup-input").each(function () {
+            if (isPInt($(this).val()) == false) {
+                $(this).attr("placeholder", "请输入合法数字").addClass("invalid-input");
+            } else {
+                if (!$dailysummarysubmit.prop("disabled")) {
+                    $dailysummarysubmit.prop("disabled", true).addClass("color-gray");
+                        var remark = $("#Remark").val();
+                        if (remark == "") {
+                            $$("#Remark").attr("placeholder", "请输入备注信息").addClass("invalid-input");
+                            $dailysummarysubmit.prop("disabled", false).removeClass("color-gray");
+                        }
+                        else if (remark.length > 200) {
+                            $$("#Remark").attr("placeholder", "超过字数").addClass("invalid-input");
+                            $dailysummarysubmit.prop("disabled", false).removeClass("color-gray");
+                        }
+                        else if ($$(".invalid-input").length > 0) {
+                            $dailysummarysubmit.prop("disabled", false).removeClass("color-gray");
+                        }
+                        else {
+                            myApp.showIndicator();
+                            setTimeout(function () {
+                                $qcdailysummarypartialform.ajaxSubmit(function (data) {
                                     if (data == "SUCCESS") {
                                         myApp.hideIndicator();
                                         mainView.router.back();
@@ -516,14 +529,12 @@ myApp.onPageInit('dailysummary', function (page) {
                                         }, 2e3);
                                     }
                                 });
-                            }
-                        }, 500);
-                    }
+                            }, 500)
+                        }
                 }
             }
-        }
-
-    );
+        })
+    });
 });
 /*==========
 确认修复页
@@ -871,7 +882,7 @@ function uploadCheckinFile(pagename, imglist, photolist_id, current_count, max_c
 }
 //判断是否是正整数
 function isPInt(str) {
-    var g = /^[1-9]*[1-9][0-9]*$/;
+    var g = /^(?:0|[0-9][0-9]?|100)$/;
     return g.test(str);
 }
 // 图片数组转化
