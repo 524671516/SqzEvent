@@ -147,8 +147,22 @@ myApp.onPageInit('qccheckin', function (page) {
             }, 500);
         }
     });
+    $$("#factory-select").on("change", function () {
+        $$.ajax({
+            url: "/QualityControl/CheckCheckinAjax",
+            type:"post",
+            data: {
+                fid:$$("#FactoryId").val()
+            },
+            success: function (data) {
+                var data = JSON.parse(data);
+                if (data.result) {
+                    myApp.alert("该工厂当天已有签到，重新签到将覆盖之前的记录");
+                }
+            }
+        });
+    });
     //图片上传数量计算
-    $("#Photos").val("1.jpg,2.jpg,3.jpg");
     uploadCheckinFile("qccheckin-form", "qccheckin-photos", "Photos", "qccheckin-imgcount", 7);
     //textarea字数计算
     currentTextAreaLength("qccheckin-form", "CheckinRemark", 200, "qccheckin-currentlen");
@@ -175,7 +189,7 @@ myApp.onPageInit("addcheckout", function (page) {
         });
     });
     //判断数据是否为空
-    if ($$("#AgendaId").val()=="") {
+    if ($$("#AgendaId").val() == "") {
         $$("#addqccheckout-submit").prop("disabled", true).addClass("color-gray");
         $$("#checkout-noinfo").append("<div  class=\"content-block-title\">无可签退项</div>");
     } else {
@@ -197,50 +211,50 @@ myApp.onPageInit("addcheckout", function (page) {
     }
     //按钮点击事件
     $$("#addqccheckout-submit").on("click", function () {
-            if (!$$("#addqccheckout-submit").prop("disabled")) {
-                myApp.showIndicator();
-                $$("#addqccheckout-submit").prop("disabled", true).addClass("color-gray");
-                setTimeout(function () {
-                    var remark = $("#CheckoutRemark").val();
-                    if (remark == "") {
-                        $$("#CheckoutRemark").attr("placeholder", "请输入备注信息").addClass("invalid-input");
-                        myApp.hideIndicator();
-                        $$("#addqccheckout-submit").prop("disabled", false).removeClass("color-gray");
-                    }
-                    else if (remark.length > 200) {
-                        $$("#CheckoutRemark").attr("placeholder", "超过字数").addClass("invalid-input");
-                        myApp.hideIndicator();
-                        $$("#addqccheckout-submit").prop("disabled", false).removeClass("color-gray");
-                    }
-                    else {
-                        $("#addqccheckout-form").ajaxSubmit(function (data) {
-                            if (data == "SUCCESS") {
-                                myApp.hideIndicator();
-                                mainView.router.back();
-                                myApp.addNotification({
-                                    title: "通知",
-                                    message: "签退成功"
-                                });
-                                setTimeout(function () {
-                                    myApp.closeNotification(".notifications");
-                                }, 2e3);
-                            }
-                            else {
-                                myApp.hideIndicator();
-                                myApp.addNotification({
-                                    title: "通知",
-                                    message: "签退失败"
-                                });
-                                $$("#addqccheckout-submit").prop("disabled", false).removeClass("color-gray");
-                                setTimeout(function () {
-                                    myApp.closeNotification(".notifications");
-                                }, 2e3);
-                            }
-                        });
-                    }
-                }, 500);
-            }
-        });
+        if (!$$("#addqccheckout-submit").prop("disabled")) {
+            myApp.showIndicator();
+            $$("#addqccheckout-submit").prop("disabled", true).addClass("color-gray");
+            setTimeout(function () {
+                var remark = $("#CheckoutRemark").val();
+                if (remark == "") {
+                    $$("#CheckoutRemark").attr("placeholder", "请输入备注信息").addClass("invalid-input");
+                    myApp.hideIndicator();
+                    $$("#addqccheckout-submit").prop("disabled", false).removeClass("color-gray");
+                }
+                else if (remark.length > 200) {
+                    $$("#CheckoutRemark").attr("placeholder", "超过字数").addClass("invalid-input");
+                    myApp.hideIndicator();
+                    $$("#addqccheckout-submit").prop("disabled", false).removeClass("color-gray");
+                }
+                else {
+                    $("#addqccheckout-form").ajaxSubmit(function (data) {
+                        if (data == "SUCCESS") {
+                            myApp.hideIndicator();
+                            mainView.router.back();
+                            myApp.addNotification({
+                                title: "通知",
+                                message: "签退成功"
+                            });
+                            setTimeout(function () {
+                                myApp.closeNotification(".notifications");
+                            }, 2e3);
+                        }
+                        else {
+                            myApp.hideIndicator();
+                            myApp.addNotification({
+                                title: "通知",
+                                message: "签退失败"
+                            });
+                            $$("#addqccheckout-submit").prop("disabled", false).removeClass("color-gray");
+                            setTimeout(function () {
+                                myApp.closeNotification(".notifications");
+                            }, 2e3);
+                        }
+                    });
+                }
+            }, 500);
+        }
+    });
 });
 /*==========
 故障报告列表
@@ -424,7 +438,7 @@ myApp.onPageInit("addbreakdown", function (page) {
 每日工作总结页
 =========*/
 myApp.onPageInit('dailysummary', function (page) {
-    if ($$("#AgendaId").val()=="") {
+    if ($$("#AgendaId").val() == "") {
         $$("#dailysummary-submit").prop("disabled", true).addClass("color-gray");
         $$("#checkout-noinfo").append("<div  class=\"content-block-title\">无可选项</div>");
     } else {
@@ -433,7 +447,7 @@ myApp.onPageInit('dailysummary', function (page) {
             data: {
                 agendaId: $("#AgendaId").val()
             },
-            success: function (data) {      
+            success: function (data) {
                 $$('#dailysummary-content').html(data);
                 currentTextAreaLength("qcdailysummarypartial-form", "Remark", 200, "qccheckin-currentlen");
             }
@@ -463,52 +477,52 @@ myApp.onPageInit('dailysummary', function (page) {
             } else {
                 if (!$dailysummarysubmit.prop("disabled")) {
                     $dailysummarysubmit.prop("disabled", true).addClass("color-gray");
-                        var remark = $("#Remark").val();
-                        if (remark == "") {
-                            $("#Remark").attr("placeholder", "请输入备注信息").addClass("invalid-input");
-                            $dailysummarysubmit.prop("disabled", false).removeClass("color-gray");
-                        }
-                        else if (remark.length > 200) {
-                            $("#Remark").attr("placeholder", "超过字数").addClass("invalid-input");
-                            $dailysummarysubmit.prop("disabled", false).removeClass("color-gray");
-                        }
-                        else if ($(".invalid-input").length > 0) {
-                            $dailysummarysubmit.prop("disabled", false).removeClass("color-gray");
-                        }
-                        else {
-                            myApp.showIndicator();
-                            setTimeout(function () {
-                                $('#qcdailysummarypartial-form').ajaxSubmit(function (data) {
-                                    if (data == "SUCCESS") {
-                                        myApp.hideIndicator();
-                                        mainView.router.back();
-                                        myApp.addNotification({
-                                            title: "通知",
-                                            message: "签退成功"
-                                        });
-                                        setTimeout(function () {
-                                            myApp.closeNotification(".notifications");
-                                        }, 2e3);
-                                    }
-                                    else {
-                                        myApp.hideIndicator();
-                                        myApp.addNotification({
-                                            title: "通知",
-                                            message: "签退失败"
-                                        });
-                                        $dailysummarysubmit.prop("disabled", false).removeClass("color-gray");
-                                        setTimeout(function () {
-                                            myApp.closeNotification(".notifications");
-                                        }, 2e3);
-                                    }
-                                });
-                            }, 500)
-                        }
+                    var remark = $("#Remark").val();
+                    if (remark == "") {
+                        $("#Remark").attr("placeholder", "请输入备注信息").addClass("invalid-input");
+                        $dailysummarysubmit.prop("disabled", false).removeClass("color-gray");
+                    }
+                    else if (remark.length > 200) {
+                        $("#Remark").attr("placeholder", "超过字数").addClass("invalid-input");
+                        $dailysummarysubmit.prop("disabled", false).removeClass("color-gray");
+                    }
+                    else if ($(".invalid-input").length > 0) {
+                        $dailysummarysubmit.prop("disabled", false).removeClass("color-gray");
+                    }
+                    else {
+                        myApp.showIndicator();
+                        setTimeout(function () {
+                            $('#qcdailysummarypartial-form').ajaxSubmit(function (data) {
+                                if (data == "SUCCESS") {
+                                    myApp.hideIndicator();
+                                    mainView.router.back();
+                                    myApp.addNotification({
+                                        title: "通知",
+                                        message: "签退成功"
+                                    });
+                                    setTimeout(function () {
+                                        myApp.closeNotification(".notifications");
+                                    }, 2e3);
+                                }
+                                else {
+                                    myApp.hideIndicator();
+                                    myApp.addNotification({
+                                        title: "通知",
+                                        message: "签退失败"
+                                    });
+                                    $dailysummarysubmit.prop("disabled", false).removeClass("color-gray");
+                                    setTimeout(function () {
+                                        myApp.closeNotification(".notifications");
+                                    }, 2e3);
+                                }
+                            });
+                        }, 500)
+                    }
                 }
             }
         })
     });
-    
+
 });
 /*==========
 确认修复页
@@ -525,77 +539,72 @@ myApp.onPageInit('recoverybreakdown', function (page) {
         value: ["10", "00"],
         cols: time_col
     });
-        var $recoverybreakdownsubmit = $("#recoverybreakdown-submit");
-        var $recoveybreakdownform = $('#recoverybreakdown-form');
-        //效验规则
-        $recoveybreakdownform.validate({
-            debug: false,
-            //调试模式取消submit的默认提交功能
-            focusInvalid: false,
-            //当为false时，验证无效时，没有焦点响应
-            onkeyup: false,
-            rules: {
-                RecoveryRemark: {
-                    maxlength: 200,
-                    required: true
-                }
-            },
-            //错误处理
-            errorPlacement: function (error, element) {
-                myApp.hideIndicator();
-                $recoverybreakdownsubmit.prop("disabled", false).removeClass("color-gray");
-            },
-            errorClass: "invalid-input",
-            //提交成功后处理函数
-            submitHandler: function (form) {
-                var photoList = splitArray($("#Photos").val());
-                if (photoList.length == 0) {
+    var $recoverybreakdownsubmit = $("#recoverybreakdown-submit");
+    var $recoveybreakdownform = $('#recoverybreakdown-form');
+    //效验规则
+    $recoveybreakdownform.validate({
+        debug: false,
+        //调试模式取消submit的默认提交功能
+        focusInvalid: false,
+        //当为false时，验证无效时，没有焦点响应
+        onkeyup: false,
+        rules: {
+            RecoveryRemark: {
+                maxlength: 200,
+                required: true
+            }
+        },
+        //错误处理
+        errorPlacement: function (error, element) {
+            myApp.hideIndicator();
+            $recoverybreakdownsubmit.prop("disabled", false).removeClass("color-gray");
+        },
+        errorClass: "invalid-input",
+        //提交成功后处理函数
+        submitHandler: function (form) {
+            $recoveybreakdownform.ajaxSubmit(function (data) {
+                if (data == "SUCCESS") {
                     myApp.hideIndicator();
-                    myApp.alert("至少上传一张照片");
-                    $recoverybreakdownsubmit.prop("disabled", false).removeClass("color-gray");
-
-                } else {
-                    $recoveybreakdownform.ajaxSubmit(function (data) {
-                        if (data == "SUCCESS") {
-                            myApp.hideIndicator();
-                            mainView.router.back();
-                            myApp.addNotification({
-                                title: "通知",
-                                message: "表单提交成功"
-                            });
-                            setTimeout(function () {
-                                myApp.closeNotification(".notifications");
-                            }, 2e3);
-                        }
-                        else {
-                            myApp.hideIndicator();
-                            myApp.addNotification({
-                                title: "通知",
-                                message: "表单提交失败"
-                            });
-                            $recoverybreakdownsubmit.prop("disabled", false).removeClass("color-gray");
-                            setTimeout(function () {
-                                myApp.closeNotification(".notifications");
-                            }, 2e3);
-                        }
+                    mainView.router.back();
+                    myApp.addNotification({
+                        title: "通知",
+                        message: "表单提交成功"
                     });
+                    setTimeout(function () {
+                        myApp.closeNotification(".notifications");
+                    }, 2e3);
                 }
-            }
-        });
-        //按钮点击事件
-        $recoverybreakdownsubmit.on("click", function () {
-            if (!$recoverybreakdownsubmit.prop("disabled")) {
-                myApp.showIndicator();
-                $recoverybreakdownsubmit.prop("disabled", true).addClass("color-gray");
-                setTimeout(function () {
-                    $recoveybreakdownform.submit();
-                }, 500);
-            }
-        });
-        uploadCheckinFile("recoverybreakdown-form", "recoverybreakdown-photos", "Photos", "recoverybreakdown-imgcount", 7);
-        currentTextAreaLength("recoverybreakdown-form", "RecoveryRemark", 200, "recoverybreakdown-currentlen");
+                else {
+                    myApp.hideIndicator();
+                    myApp.addNotification({
+                        title: "通知",
+                        message: "表单提交失败"
+                    });
+                    $recoverybreakdownsubmit.prop("disabled", false).removeClass("color-gray");
+                    setTimeout(function () {
+                        myApp.closeNotification(".notifications");
+                    }, 2e3);
+                }
+            });
+        }
+    });
+    //按钮点击事件
+    $recoverybreakdownsubmit.on("click", function () {
+        if (!$recoverybreakdownsubmit.prop("disabled")) {
+            myApp.showIndicator();
+            $recoverybreakdownsubmit.prop("disabled", true).addClass("color-gray");
+            setTimeout(function () {
+                $recoveybreakdownform.submit();
+            }, 500);
+        }
+    });
+    currentTextAreaLength("recoverybreakdown-form", "RecoveryRemark", 200, "recoverybreakdown-currentlen");
+    PhotoBrowser("recoverybreakdown");
 });
 
+/*==========
+故障详情页
+=========*/
 myApp.onPageInit("breakdowndetails", function (page) {
     PhotoBrowser("breakdowndetails")
 });
@@ -720,7 +729,8 @@ myApp.onPageInit("addqualitytest", function (page) {
             scanType: ["barCode"], // 可以指定扫二维码还是一维码，默认二者都有
             success: function (res) {
                 var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
-                $input.val(result);
+                var _result = result.toString().substr(result.toString().lastIndexOf(",") + 1);
+                $input.val(_result);
             }
         });
     });
@@ -732,7 +742,7 @@ myApp.onPageInit("addqualitytest", function (page) {
             if (photoList.length == 0) {
                 myApp.hideIndicator();
                 myApp.alert("至少上传一张照片");
-                $("#addqualitytest-submit").prop("disabled", false).removeClass("color-gray"); 
+                $("#addqualitytest-submit").prop("disabled", false).removeClass("color-gray");
             } else if (remark == "") {
                 $("#Remark").attr("placeholder", "请输入备注信息").addClass("invalid-input");
                 $("#addqualitytest-submit").prop("disabled", false).removeClass("color-gray");
@@ -766,7 +776,7 @@ myApp.onPageInit("addqualitytest", function (page) {
                     });
                 }, 500);
             }
-        }   
+        }
     });
 });
 /*==========

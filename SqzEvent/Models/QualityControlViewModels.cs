@@ -54,8 +54,6 @@ namespace SqzEvent.Models
 
     public class TestTemplateItem
     {
-        public int tid { get; set; }
-
         public int type { get; set; }
 
         public string key { get; set; }
@@ -63,5 +61,7 @@ namespace SqzEvent.Models
         public string value { get; set; }
 
         public string title { get; set; }
+
+        public string default_value { get; set; }
     }
 }

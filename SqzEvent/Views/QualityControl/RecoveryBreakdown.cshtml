@@ -14,7 +14,7 @@
     </div>
 </div>
 <div class="pages">
-    <div class="page" data-page="recoverybreakdown">
+    <div class="page" data-page="recoverybreakdown" id="recoverybreakdown">
         <div class="page-content">
             <div class="content-block-title">故障数据</div>
             <div class="list-block">
@@ -43,6 +43,14 @@
                             <div class="item-after">@Html.Encode(Model.BreakdownType.SimpleDescribe)</div>
                         </div>
                     </li>
+                    <li>
+                        <a href="javascript:;" class="item-content item-link qc-photos" data-photos="@Model.Photos">
+                            <div class="item-inner">
+                                <div class="item-title">故障图片</div>
+                                <div class="item-after">点击查看</div>
+                            </div>
+                        </a>
+                    </li>
                 </ul>
             </div>
             @using (Html.BeginForm("RecoveryBreakdown", "QualityControl", FormMethod.Post, new { @id = "recoverybreakdown-form", @class = "validate-form" }))
@@ -67,22 +75,6 @@
                                     <div class="item-input">
                                         <input type="text" class="item-input-right" id="RecoveryTimeTiny" name="RecoveryTimeTiny" placeholder="恢复时间" />
                                     </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="item-content">
-                                <div class="item-inner">
-                                    <div class="item-title">上传照片</div>
-                                    <div class="item-after"><abbr id="recoverybreakdown-imgcount">0</abbr>/7</div>
-                                </div>
-                            </div>
-                            <div class="item-content middle-content">
-                                <div class="item-inner">
-                                    <div class="hidden">
-                                        @Html.EditorFor(m => m.Photos)
-                                    </div>
-                                    <ul class="rep-imglist" id="recoverybreakdown-photos"></ul>
                                 </div>
                             </div>
                         </li>

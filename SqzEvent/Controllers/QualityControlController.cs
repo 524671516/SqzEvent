@@ -304,6 +304,43 @@ namespace SqzEvent.Controllers
             return PartialView(model);
         }
 
+        [HttpPost]
+        public JsonResult HomeInfoAjax()
+        {
+            try
+            {
+                QCStaff staff = getStaff(User.Identity.Name);
+                DateTime _start = DateTime.Now.Date;
+                DateTime _end = _start.AddDays(1);
+                // 检验数
+                var qt_list = from m in _qcdb.QualityTest
+                              where m.ApplyTime >= _start && m.ApplyTime < _end
+                              && m.QCStaffId == staff.Id
+                              select m;
+                int _qt_count = qt_list.Count();
+                bool _qt_dot = qt_list.Count(m => !m.EvalResult) > 0 ? true : false;
+                // 故障数
+                var bd_list = from m in _qcdb.BreadkdownReport
+                              where m.BreakDownTime >= _start && m.BreakDownTime < _end
+                              && m.QCStaffId == staff.Id
+                              select m;
+                int _bd_count = bd_list.Count();
+                bool _bd_dot = bd_list.Count(m => m.Status == 0) > 0 ? true : false;
+                // 可签退数&待总结数
+                var agendalist = from m in _qcdb.QCAgenda
+                                 where m.QCStaffId == staff.Id
+                                 && m.Status > 0 && m.Status < 3
+                                 select m;
+                int _checkout_cnt = agendalist.Count(m => m.Status == 1);
+                int _summary_cnt = agendalist.Count(m => m.Status == 2);
+                return Json(new { result = "SUCCESS", qt_count = _qt_count, qt_dot = _qt_dot, bd_count = _bd_count, db_dot = _bd_dot, checkout_cnt = _checkout_cnt, summary_cnt = _summary_cnt });
+            }
+            catch
+            {
+                return Json(new { result = "FAIL" });
+            }
+        }
+
         // 签到页面
         public PartialViewResult QCCheckin()
         {
@@ -323,8 +360,9 @@ namespace SqzEvent.Controllers
                 QCAgenda agenda = new QCAgenda();
                 if (TryUpdateModel(agenda))
                 {
+                    QCStaff staff = getStaff(User.Identity.Name);
                     DateTime _subscribe = DateTime.Now.Date;
-                    var exist_agenda = _qcdb.QCAgenda.SingleOrDefault(m => m.FactoryId == agenda.FactoryId && m.Subscribe == _subscribe && m.Status >= 1);
+                    var exist_agenda = _qcdb.QCAgenda.SingleOrDefault(m => m.FactoryId == agenda.FactoryId && m.Subscribe == _subscribe && m.Status >= 1 && m.QCStaffId == staff.Id);
                     // 判断是否存在同一天，同一个工厂的日程
                     if (exist_agenda==null)
                     {
@@ -352,6 +390,18 @@ namespace SqzEvent.Controllers
             }
             else
                 return Content("FAIL");
+        }
+        [HttpPost]
+        public JsonResult CheckCheckinAjax(int fid)
+        {
+            QCStaff staff = getStaff(User.Identity.Name);
+            DateTime _subscribe = DateTime.Now.Date;
+            var exist_agenda = _qcdb.QCAgenda.SingleOrDefault(m => m.FactoryId == fid && m.Subscribe == _subscribe && m.Status >= 1 && m.QCStaffId == staff.Id);
+            if (exist_agenda != null)
+            {
+                return Json(new { result = true });
+            }
+            return Json(new { result = false });
         }
 
         // 故障列表
@@ -688,7 +738,7 @@ namespace SqzEvent.Controllers
                                 _value = form[template.KeyName].ToString();
                             TestTemplateItem tt_item = new TestTemplateItem()
                             {
-                                tid = template.Id,
+                                default_value =template.StandardValue,
                                 type = template.ValueTypeId,
                                 key = template.KeyName,
                                 value = _value,
@@ -697,6 +747,7 @@ namespace SqzEvent.Controllers
                             templatelist.Add(tt_item);
                         }
                         item.Values = Newtonsoft.Json.JsonConvert.SerializeObject(templatelist);
+                        item.EvalResult = EvalQualityTest(templatelist);
                     }
                     _qcdb.QualityTest.Add(item);
                     await _qcdb.SaveChangesAsync();
@@ -741,6 +792,24 @@ namespace SqzEvent.Controllers
         {
             QCStaff user = _qcdb.QCStaff.SingleOrDefault(m => m.UserId == username);
             return user;
+        }
+
+        public bool EvalQualityTest(List<TestTemplateItem> items)
+        {
+            foreach(var item in items)
+            {
+                if (item.default_value == null)
+                {
+                    if (item.value == "")
+                        return false;
+                }
+                else
+                {
+                    if (item.value == "0")
+                        return false;
+                }
+            }
+            return true;
         }
 
         // 保存图片
