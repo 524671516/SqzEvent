@@ -625,6 +625,39 @@ myApp.onPageInit("dailysummary", function (page) {
     });
 });
 
+myApp.onPageInit("qualitytestlist", function (page) {
+    //添加日历
+    var calendarMultiple = myApp.calendar({
+        input: "#qualitytestlist-date",
+        dateFormat: "yyyy-mm-dd",
+        monthNames: monthNames,
+        monthNamesShort: monthNamesShort,
+        dayNames: dayNames,
+        dayNamesShort: dayNamesShort,
+        closeOnSelect: true
+    });
+    $$.ajax({
+        url: "/QualityControl/QualityTestListPartial",
+        data: {
+            date: $$("#qualitytestlist-date").val()
+        },
+        success: function (data) {
+            $$("#qualitytestlist-content").html(data);
+        }
+    });
+    $$("#qualitytestlist-date").on("change", function () {
+        $$.ajax({
+            url: "/QualityControl/QualityTestListPartial",
+            data: {
+                date: $$("#qualitytestlist-date").val()
+            },
+            success: function (data) {
+                $$("#qualitytestlist-content").html(data);
+            }
+        });
+    });
+});
+
 // 新增产品检验
 myApp.onPageInit("addqualitytest", function (page) {
     uploadCheckinFile("addqualitytest-form", "addqualitytest-photos", "Photos", "addqualitytest-imgcount", 7);

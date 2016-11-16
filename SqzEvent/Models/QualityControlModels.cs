@@ -51,6 +51,7 @@
             modelBuilder.Entity<Product>().HasMany(e => e.QualityTestTemplate).WithRequired(e => e.Product).HasForeignKey(e => e.ProductId).WillCascadeOnDelete(true);
             modelBuilder.Entity<Product>().HasMany(e => e.QualityTest).WithRequired(e => e.Product).HasForeignKey(e => e.ProductId).WillCascadeOnDelete(true);
             modelBuilder.Entity<QCStaff>().HasMany(e => e.QualityTest).WithRequired(e => e.QCStaff).HasForeignKey(e => e.QCStaffId).WillCascadeOnDelete(true);
+            modelBuilder.Entity<Factory>().HasMany(e => e.QualityTest).WithRequired(e => e.Factory).HasForeignKey(e => e.FactoryId).WillCascadeOnDelete(true);
         }
     }
 
@@ -117,6 +118,9 @@
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<QCAgenda> QCAgenda { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<QualityTest> QualityTest { get; set; }
     }
 
     /// <summary>
@@ -373,6 +377,8 @@
 
         public int ProductId { get; set; }
 
+        public int FactoryId { get; set; }
+
         public int QCStaffId { get; set; }
         
         public string Keys { get; set; }
@@ -397,6 +403,8 @@
         public virtual Product Product { get; set; }
 
         public virtual QCStaff QCStaff { get; set; }
+
+        public virtual Factory Factory { get; set; }
     }
     //public class MyEntity
     //{
