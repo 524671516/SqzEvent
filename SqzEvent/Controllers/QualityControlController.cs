@@ -320,9 +320,10 @@ namespace SqzEvent.Controllers
                 int _qt_count = qt_list.Count();
                 bool _qt_dot = qt_list.Count(m => !m.EvalResult) > 0 ? true : false;
                 // 故障数
+                var factoryIdlist = staff.Factory.Select(m => m.Id);
                 var bd_list = from m in _qcdb.BreadkdownReport
                               where m.BreakDownTime >= _start && m.BreakDownTime < _end
-                              && m.QCStaffId == staff.Id
+                              && factoryIdlist.Contains(m.QCEquipment.FactoryId)
                               select m;
                 int _bd_count = bd_list.Count();
                 bool _bd_dot = bd_list.Count(m => m.Status == 0) > 0 ? true : false;
@@ -339,6 +340,23 @@ namespace SqzEvent.Controllers
             {
                 return Json(new { result = "FAIL" });
             }
+        }
+
+        // 每日生产计划
+        public PartialViewResult ProductionPlan()
+        {
+            return PartialView();
+        }
+
+        public PartialViewResult ProductPlanPartial(string date)
+        {
+            DateTime _subscribe = Convert.ToDateTime(date);
+            QCStaff staff = getStaff(User.Identity.Name);
+            var factoryIdList = staff.Factory.Select(m => m.Id);
+            var model = from m in _qcdb.ProductionSchedule
+                           where factoryIdList.Contains(m.FactoryId) && m.Subscribe == _subscribe
+                           select m;
+            return PartialView(model);
         }
 
         // 签到页面
@@ -418,8 +436,10 @@ namespace SqzEvent.Controllers
                 var _start = Convert.ToDateTime(date);
                 var _end = _start.AddDays(1);
                 QCStaff staff = getStaff(User.Identity.Name);
+                var factoryIdlist = staff.Factory.Select(m => m.Id);
                 var list = from m in _qcdb.BreadkdownReport
-                           where m.QCStaffId == staff.Id && m.ReportTime >= _start && m.ReportTime < _end
+                           where m.ReportTime >= _start && m.ReportTime < _end
+                           && factoryIdlist.Contains(m.QCEquipment.FactoryId)
                            select m;
                 return PartialView(list);
             }

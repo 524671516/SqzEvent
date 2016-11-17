@@ -35,6 +35,7 @@
         public virtual DbSet<ProductionDetails> ProductionDetails { get; set; }
         public virtual DbSet<QualityTestTemplate> QualityTestTemplate { get; set; }
         public virtual DbSet<QualityTest> QualityTest { get; set; }
+        public virtual DbSet<ProductionSchedule> ProductionSchedule { get; set; }
         
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -52,6 +53,8 @@
             modelBuilder.Entity<Product>().HasMany(e => e.QualityTest).WithRequired(e => e.Product).HasForeignKey(e => e.ProductId).WillCascadeOnDelete(true);
             modelBuilder.Entity<QCStaff>().HasMany(e => e.QualityTest).WithRequired(e => e.QCStaff).HasForeignKey(e => e.QCStaffId).WillCascadeOnDelete(true);
             modelBuilder.Entity<Factory>().HasMany(e => e.QualityTest).WithRequired(e => e.Factory).HasForeignKey(e => e.FactoryId).WillCascadeOnDelete(true);
+            modelBuilder.Entity<Factory>().HasMany(e => e.ProductionSchedule).WithRequired(e => e.Factory).HasForeignKey(e => e.FactoryId).WillCascadeOnDelete(true);
+            modelBuilder.Entity<Product>().HasMany(e => e.ProductionSchedule).WithRequired(e => e.Product).HasForeignKey(e => e.ProductId).WillCascadeOnDelete(true);
         }
     }
 
@@ -121,6 +124,9 @@
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<QualityTest> QualityTest { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ProductionSchedule> ProductionSchedule { get; set; }
     }
 
     /// <summary>
@@ -160,6 +166,9 @@
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<QualityTest> QualityTest { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ProductionSchedule> ProductionSchedule { get; set; }
     }
 
     /// <summary>
@@ -396,6 +405,11 @@
         [StringLength(256)]
         public string Photos { get; set; }
 
+        public int ProductionQty { get; set; }
+
+        [Range(0, 10)]
+        public decimal CompleteRate { get; set; }
+
         [StringLength(256)]
         public string Remark { get; set; }
 
@@ -403,6 +417,27 @@
         public virtual Product Product { get; set; }
 
         public virtual QCStaff QCStaff { get; set; }
+
+        public virtual Factory Factory { get; set; }
+    }
+
+    public partial class ProductionSchedule
+    {
+        public int Id { get; set; }
+
+        public int FactoryId { get; set; }
+
+        public int ProductId { get; set; }
+
+        public bool Status { get; set; }
+
+        public DateTime Subscribe { get; set; }
+
+        public int ProductionPlan { get; set; }
+
+        public int? ProductionQty { get; set; }
+
+        public virtual Product Product { get; set; }
 
         public virtual Factory Factory { get; set; }
     }
