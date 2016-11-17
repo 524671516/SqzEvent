@@ -160,7 +160,7 @@ namespace SqzEvent.Controllers
                             await UserManager.AddToRoleAsync(user.Id, "QC");
                             QCStaff staff = new QCStaff()
                             {
-                                UserId = model.Open_Id,
+                                UserId = user.UserName,
                                 Name = model.NickName,
                                 Mobile = model.Mobile
                             };
@@ -257,7 +257,7 @@ namespace SqzEvent.Controllers
                 await UserManager.AddToRoleAsync(user.Id, "QC");
                 QCStaff staff = new QCStaff()
                 {
-                    UserId = user.OpenId,
+                    UserId = user.UserName,
                     Name = model.NickName,
                     Mobile = user.PhoneNumber
                 };
@@ -333,7 +333,7 @@ namespace SqzEvent.Controllers
                                  select m;
                 int _checkout_cnt = agendalist.Count(m => m.Status == 1);
                 int _summary_cnt = agendalist.Count(m => m.Status == 2);
-                return Json(new { result = "SUCCESS", qt_count = _qt_count, qt_dot = _qt_dot, bd_count = _bd_count, db_dot = _bd_dot, checkout_cnt = _checkout_cnt, summary_cnt = _summary_cnt });
+                return Json(new { result = "SUCCESS", qt_count = _qt_count, qt_dot = _qt_dot, bd_count = _bd_count, bd_dot = _bd_dot, checkout_cnt = _checkout_cnt, summary_cnt = _summary_cnt });
             }
             catch
             {

@@ -35,15 +35,27 @@ wx.config({
 $$.ajax({
     url: "/QualityControl/UserInfoPartial",
     type: "post",
-    data: {},
     success: function (data) {
         $$("#userinfo").html(data);
     }
+});
+updateHomeInfo();
+
+var ptrContent = $$("#home-refresh");
+// Add 'refresh' listener on it
+ptrContent.on("refresh", function (e) {
+    setTimeout(updateHomeInfo, 500);
 });
 /*==========
 主页
 =========*/
 myApp.onPageInit('Home', function (page) {
+    updateHomeInfo();
+    var ptrContent = $$("#home-refresh");
+    // Add 'refresh' listener on it
+    ptrContent.on("refresh", function (e) {
+        setTimeout(updateHomeInfo, 500);
+    });
 })
 /*==========
 签到页
@@ -778,6 +790,40 @@ myApp.onPageInit("addqualitytest", function (page) {
         }
     });
 });
+
+// 首页更新
+function updateHomeInfo() {
+    $$.ajax({
+        url: "/QualityControl/HomeInfoAjax",
+        type: "post",
+        success: function (data) {
+            var data = JSON.parse(data);
+            if (data.result == "SUCCESS") {
+                if (data.qt_dot)
+                    $$("#qt_dot").removeClass("hidden");
+                else
+                    $$("#qt_dot").addClass("hidden");
+                if (data.bd_dot)
+                    $$("#bd_dot").removeClass("hidden");
+                else
+                    $$("#bd_dot").addClass("hidden");
+                $$("#bd_count").text(data.bd_count);
+                $$("#qt_count").text(data.qt_count);
+                if (data.checkout_cnt != 0)
+                    $$("#checkout_dot").removeClass("hidden");
+                else
+                    $$("#checkout_dot").addClass("hidden");
+                if (data.summary_cnt != 0)
+                    $$("#summary_dot").removeClass("hidden");
+                else
+                    $$("#summary_dot").addClass("hidden");
+                $$("#checkout_cnt").text(data.checkout_cnt);
+                $$("#summary_cnt").text(data.summary_cnt);
+                myApp.pullToRefreshDone();
+            }
+        }
+    });
+}
 // 图片浏览模块
 function PhotoBrowser(pagename) {
     $$("#" + pagename).on("click", ".qc-photos", function () {
@@ -934,7 +980,6 @@ function uploadCheckinFile(pagename, imglist, photolist_id, current_count, max_c
     });
     $$("#" + imglist).on("click", ".rep-imgitem-selected", function () {
         myApp.confirm("是否确认删除已上传图片?", "提示", function () {
-            //myApp.alert('You clicked Ok button');
             var delete_item = $(".rep-imgitem-selected").closest(".rep-imgitem").attr("data-rel");
             var arraylist = splitArray($("#" + photolist_id).val());
             var pos = $.inArray(delete_item, arraylist);
@@ -951,8 +996,11 @@ function uploadCheckinFile(pagename, imglist, photolist_id, current_count, max_c
 }
 //判断是否是正整数
 function isPInt(str) {
-    var g = /^(?:0|[0-9][0-9]?|100)$/;
-    return g.test(str);
+    if (!isNaN(str)) {
+        if (str >= 0)
+            return true;
+    }
+    return false;
 }
 // 图片数组转化
 function splitArray(value) {
