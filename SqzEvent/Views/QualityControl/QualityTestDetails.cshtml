@@ -103,9 +103,25 @@
                     }
                 </ul>
             </div>
-            <div class="content-block-title">故障备注</div>
+            <div class="content-block-title">其他信息</div>
             <div class="list-block">
                 <ul>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">生产数</div>
+                                <div class="item-after">@Html.Encode(Model.ProductionQty)</div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">质检结果</div>
+                                <div class="item-after">@Html.Encode(Model.CompleteRate*100)%</div>
+                            </div>
+                        </div>
+                    </li>
                     <li>
                         <div class="item-content middle-content">
                             @Html.TextAreaFor(m => m.Remark, new { placeholder = "请输入签到备注", @class = "required input-textarea", @readonly = "readonly" })

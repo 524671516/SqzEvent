@@ -59,6 +59,16 @@
                         <li>
                             <div class="item-content">
                                 <div class="item-inner">
+                                    <div class="item-title label">生产进度</div>
+                                    <div class="item-input">
+                                        @Html.TextBoxFor(m => m.ProductionQty, new { placeholder = "盒", @class = "item-input-right", type = "number" })
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
                                     <div class="item-title">上传照片</div>
                                     <div class="item-after"><abbr id="addqualitytest-imgcount">0</abbr>/7</div>
                                 </div>

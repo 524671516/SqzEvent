@@ -750,11 +750,11 @@ myApp.onPageInit("addqualitytest", function (page) {
             $(this).prop("disabled", true).addClass("color-gray");
             var remark = $$("#Remark").val();
             var photoList = splitArray($("#Photos").val());
-            if (photoList.length == 0) {
+            /*if (photoList.length == 0) {
                 myApp.hideIndicator();
                 myApp.alert("至少上传一张照片");
                 $("#addqualitytest-submit").prop("disabled", false).removeClass("color-gray");
-            } else if (remark == "") {
+            } else */if (remark == "") {
                 $("#Remark").attr("placeholder", "请输入备注信息").addClass("invalid-input");
                 $("#addqualitytest-submit").prop("disabled", false).removeClass("color-gray");
             }

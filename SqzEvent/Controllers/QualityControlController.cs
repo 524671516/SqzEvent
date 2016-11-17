@@ -664,6 +664,13 @@ namespace SqzEvent.Controllers
                                 };
                                 _qcdb.ProductionDetails.Add(details);
                             }
+                            ProductionSchedule schedule = _qcdb.ProductionSchedule.SingleOrDefault(m => m.Subscribe == agenda.Subscribe && m.FactoryId == agenda.FactoryId && m.ProductId == p.Id);
+                            if (schedule != null)
+                            {
+                                schedule.ProductionQty = qty;
+                                schedule.Status = true;
+                                _qcdb.Entry(schedule).State = System.Data.Entity.EntityState.Modified;
+                            }
                         }
                         catch
                         {
@@ -768,6 +775,23 @@ namespace SqzEvent.Controllers
                         }
                         item.Values = Newtonsoft.Json.JsonConvert.SerializeObject(templatelist);
                         item.EvalResult = EvalQualityTest(templatelist);
+                    }
+                    try
+                    {
+                        var _date = DateTime.Now.Date;
+                        var schedule = _qcdb.ProductionSchedule.SingleOrDefault(m => m.FactoryId == item.FactoryId && m.Subscribe == _date && m.ProductId == item.ProductId);
+                        if (schedule != null && schedule.ProductionQty!=0)
+                        {
+                            item.CompleteRate = (decimal)item.ProductionQty / (decimal)schedule.ProductionPlan;
+                        }
+                        else
+                        {
+                            item.CompleteRate = 0;
+                        }
+                    }
+                    catch
+                    {
+                        return Content("FAIL");
                     }
                     _qcdb.QualityTest.Add(item);
                     await _qcdb.SaveChangesAsync();
