@@ -634,6 +634,17 @@ myApp.onPageInit("productionplan", function (page) {
             $$("#productionplan-content").html(data);
         }
     });
+    $$("#productionplan-date").on("change", function () {
+        $$.ajax({
+            url: "/QualityControl/ProductPlanPartial",
+            data: {
+                date: $$("#productionplan-date").val()
+            },
+            success: function (data) {
+                $$("#productionplan-content").html(data);
+            }
+        });
+    });
 });
 
 

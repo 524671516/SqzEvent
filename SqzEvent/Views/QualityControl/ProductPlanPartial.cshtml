@@ -9,37 +9,25 @@
                 <li class="swipeout" data-url="@item.Id">
                     @if (item.Status == true)
                     {
-                        <div class="swipeout-content">
-                            <a href="javascript:;" class="item-link item-content random-param pass-border">
+                            <a href="javascript:;" class="item-content random-param pass-border color-black">
                                 <div class="item-inner">
                                     <div class="item-title-row">
-                                        <div class="item-title">@Html.Encode(item.Subscribe)</div>
+                                        <div class="item-title">@Html.Encode(item.Id)</div>
                                         <div class="item-after">@Html.Encode(item.ProductId)</div>
                                     </div>
-                                    <div class="item-subtitle color-gray">@Html.Encode(item.ProductionPlan)</div>
                                 </div>
                             </a>
-                        </div>
-                        <div class="swipeout-actions-right">
-                            <a href="javascript:;" class="bg-gray">已修复</a>
-                        </div>
                     }
                     else
                     {
-                        <div class="swipeout-content">
-                            <a href="/QualityControl/PlanDetails?bdId=@item.Id" class="item-link item-content random-param fail-border">
+                            <a href="javascript:;" class="item-content random-param fail-border color-black">
                                 <div class="item-inner">
                                     <div class="item-title-row">
                                         <div class="item-title">@Html.Encode(item.FactoryId)</div>
                                         <div class="item-after">@Html.Encode(item.ProductId)</div>
                                     </div>
-                                    <div class="item-subtitle color-gray">@Html.Encode(item.ProductionQty)</div>
                                 </div>
                             </a>
-                        </div>
-                        <div class="swipeout-actions-right">
-                            <a href="javascript:;" class="bg-green">确认完成</a>
-                        </div>
                     }
 
                 </li>
