@@ -161,9 +161,9 @@ myApp.onPageInit('qccheckin', function (page) {
     $$("#factory-select").on("change", function () {
         $$.ajax({
             url: "/QualityControl/CheckCheckinAjax",
-            type:"post",
+            type: "post",
             data: {
-                fid:$$("#FactoryId").val()
+                fid: $$("#FactoryId").val()
             },
             success: function (data) {
                 var data = JSON.parse(data);
@@ -195,7 +195,7 @@ myApp.onPageInit("addcheckout", function (page) {
         });
     });
     $("#checkout").on("keyup", "#CheckoutRemark", function () {
-        if ($(this).val() !="") {
+        if ($(this).val() != "") {
             $(this).attr("placeholder", "").removeClass("invalid-input");
         } else {
             $(this).attr("placeholder", "请输入备注信息").addClass("invalid-input");
@@ -481,9 +481,9 @@ myApp.onPageInit('dailysummary', function (page) {
     //按钮点击事件
     $dailysummarysubmit.on("click", function () {
         $(".keyup-input").each(function () {
-            if (isPInt($(this).val()) == false) {
-                $(this).attr("placeholder", "请输入合法数字").addClass("invalid-input");
-            } else {
+            if ($(this).val() == "") {
+                $(this).val("0");
+                $(this).attr("placeholder", "").removeClass("invalid-input");
                 if (!$dailysummarysubmit.prop("disabled")) {
                     $dailysummarysubmit.prop("disabled", true).addClass("color-gray");
                     var remark = $("#Remark").val();
@@ -528,7 +528,7 @@ myApp.onPageInit('dailysummary', function (page) {
                         }, 500)
                     }
                 }
-            }
+            } 
         })
     });
 
@@ -612,10 +612,39 @@ myApp.onPageInit('recoverybreakdown', function (page) {
 });
 
 /*==========
-故障详情页
+工作计划
 =========*/
-myApp.onPageInit("breakdowndetails", function (page) {
-    PhotoBrowser("breakdowndetails")
+myApp.onPageInit("productionplan", function (page) {
+    //添加日历
+    var calendarMultiple = myApp.calendar({
+        input: "#productionplan-date",
+        dateFormat: "yyyy-mm-dd",
+        monthNames: monthNames,
+        monthNamesShort: monthNamesShort,
+        dayNames: dayNames,
+        dayNamesShort: dayNamesShort,
+        closeOnSelect: true
+    });
+    $$.ajax({
+        url: "/QualityControl/ProductPlanPartial",
+        data: {
+            date: $$("#productionplan-date").val()
+        },
+        success: function (data) {
+            $$("#productionplan-content").html(data);
+        }
+    });
+    $$("#productionplan-date").on("change", function () {
+        $$.ajax({
+            url: "/QualityControl/ProductPlanPartial",
+            data: {
+                date: $$("#productionplan-date").val()
+            },
+            success: function (data) {
+                $$("#productionplan-content").html(data);
+            }
+        });
+    });
 });
 
 
@@ -997,10 +1026,9 @@ function uploadCheckinFile(pagename, imglist, photolist_id, current_count, max_c
 //判断是否是正整数
 function isPInt(str) {
     if (!isNaN(str)) {
-        if (str >= 0)
+        if (str >= 0 && str != "")
             return true;
-    }
-    return false;
+    } else { return false; }
 }
 // 图片数组转化
 function splitArray(value) {
