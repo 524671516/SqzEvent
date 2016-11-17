@@ -9,25 +9,25 @@
                 <li class="swipeout" data-url="@item.Id">
                     @if (item.Status == true)
                     {
-                            <a href="javascript:;" class="item-content random-param pass-border color-black">
-                                <div class="item-inner">
-                                    <div class="item-title-row">
-                                        <div class="item-title">@Html.Encode(item.Id)</div>
-                                        <div class="item-after">@Html.Encode(item.ProductId)</div>
-                                    </div>
+                        <a href="javascript:;" class="item-content random-param pass-border color-black">
+                            <div class="item-inner">
+                                <div class="item-title-row">
+                                    <div class="item-title">@Html.Encode(item.Product.SimpleName)</div>
+                                    <div class="item-after">@Html.Encode(item.ProductionQty??0)/@Html.Encode(item.ProductionPlan)</div>
                                 </div>
-                            </a>
+                            </div>
+                        </a>
                     }
                     else
                     {
-                            <a href="javascript:;" class="item-content random-param fail-border color-black">
-                                <div class="item-inner">
-                                    <div class="item-title-row">
-                                        <div class="item-title">@Html.Encode(item.FactoryId)</div>
-                                        <div class="item-after">@Html.Encode(item.ProductId)</div>
-                                    </div>
+                        <a href="javascript:;" class="item-content random-param fail-border color-black">
+                            <div class="item-inner">
+                                <div class="item-title-row">
+                                    <div class="item-title">@Html.Encode(item.Product.SimpleName)</div>
+                                    <div class="item-after">@Html.Encode(item.ProductionQty??0)/@Html.Encode(item.ProductionPlan)</div>
                                 </div>
-                            </a>
+                            </div>
+                        </a>
                     }
 
                 </li>
