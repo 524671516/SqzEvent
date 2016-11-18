@@ -507,7 +507,7 @@ myApp.onPageInit('dailysummary', function (page) {
                                     mainView.router.back();
                                     myApp.addNotification({
                                         title: "通知",
-                                        message: "签退成功"
+                                        message: "表单提交成功"
                                     });
                                     setTimeout(function () {
                                         myApp.closeNotification(".notifications");
@@ -517,7 +517,7 @@ myApp.onPageInit('dailysummary', function (page) {
                                     myApp.hideIndicator();
                                     myApp.addNotification({
                                         title: "通知",
-                                        message: "签退失败"
+                                        message: "表单提交失败"
                                     });
                                     $dailysummarysubmit.prop("disabled", false).removeClass("color-gray");
                                     setTimeout(function () {
@@ -708,6 +708,7 @@ myApp.onPageInit("addqualitytest", function (page) {
             $(this).attr("placeholder", "").removeClass("invalid-input");
         }
     });
+    $$("input[type='number']").val("");
     var checked = false;
     $$("#addqualitytest-submit").prop("disabled", true).addClass("color-gray");
     $$("#info-content").addClass("hidden");
@@ -777,12 +778,24 @@ myApp.onPageInit("addqualitytest", function (page) {
             $(this).prop("disabled", true).addClass("color-gray");
             var remark = $$("#Remark").val();
             var photoList = splitArray($("#Photos").val());
-            /*if (photoList.length == 0) {
+            $$("#addqualitytest-form").on("keyup", ".keyup-input", function () {
+                if (isPInt($(this).val()) == true) {
+                    $(this).attr("placeholder", "").removeClass("invalid-input");
+                } else {
+                    $(this).attr("placeholder", "请输入合法数字").addClass("invalid-input");
+                }
+            });
+            if (photoList.length == 0) {
                 myApp.hideIndicator();
                 myApp.alert("至少上传一张照片");
                 $("#addqualitytest-submit").prop("disabled", false).removeClass("color-gray");
-            } else */if (remark == "") {
+            }
+            else if (remark == "") {
                 $("#Remark").attr("placeholder", "请输入备注信息").addClass("invalid-input");
+                $("#addqualitytest-submit").prop("disabled", false).removeClass("color-gray");
+            }
+            else if (isNaN($("#ProductionQty").val())) {
+                $("#ProductionQty").attr("placeholder", "请输入数字").addClass("invalid-input");
                 $("#addqualitytest-submit").prop("disabled", false).removeClass("color-gray");
             }
             else {
