@@ -646,8 +646,6 @@ myApp.onPageInit("productionplan", function (page) {
         });
     });
 });
-
-
 /*==========
 产品检测列表
 =========*/
@@ -819,6 +817,10 @@ myApp.onPageInit("addqualitytest", function (page) {
         }
     });
 });
+/*故障详情页*/
+myApp.onPageInit("breakdowndetails", function (page) {
+    PhotoBrowser("breakdowndetails");
+})
 
 // 首页更新
 function updateHomeInfo() {
@@ -863,7 +865,7 @@ function PhotoBrowser(pagename) {
                 images[i] = "https://cdn2.shouquanzhai.cn/qc-img/" + images[i];
             }
             var myPhotoBrowser = myApp.photoBrowser({
-                zoom: 400,
+                zoom: 500,
                 photos: images,
                 theme: 'dark',
                 backLinkText: '关闭',
