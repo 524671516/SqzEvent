@@ -1,101 +1,187 @@
 ﻿.item-input-right {
     text-align: right;
 }
+/*图标样式*/
+.icon-css {
+    text-align: center;
+    line-height: 2 !important;
+    width: 35px;
+    height: 35px;
+    background-size: 100% auto;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 6px;
+    display: inline-block;
+    vertical-align: middle;
+    font-style: normal;
+    position: relative;
+}
+
+.fa-calendar {
+    background: -webkit-linear-gradient(#2058ED, #15D3FA); /* Safari */
+    background: -o-linear-gradient(#2058ED, #15D3FA); /* Opera */
+    background: -moz-linear-gradient(#2058ED, #15D3FA); /* Firefox*/
+    background: linear-gradient(#2058ED, #15D3FA); /* 标准的语法 */
+    color: #fff;
+}
+
+.fa-sign-in {
+    background: -webkit-linear-gradient(#FEA606, #FB681B); /* Safari*/
+    background: -o-linear-gradient(#FEA606, #FB681B); /* Opera*/
+    background: -moz-linear-gradient(#FEA606, #FB681B); /* Firefox*/
+    background: linear-gradient(#FEA606, #FB681B); /* 标准的语法 */
+    color: #fff;
+}
+
+.fa-check-square {
+    background: -webkit-linear-gradient(#FF543D, #FC244F); /* Safari*/
+    background: -o-linear-gradient(#FF543D, #FC244F); /* Opera*/
+    background: -moz-linear-gradient(#FF543D, #FC244F); /* Firefox*/
+    background: linear-gradient(#FF543D, #FC244F); /* 标准的语法 */
+    color: #fff;
+}
+
+.fa-sign-in {
+    background: -webkit-linear-gradient(#FEA606, #FB681B); /* Safari*/
+    background: -o-linear-gradient(#FEA606, #FB681B); /* Opera*/
+    background: -moz-linear-gradient(#FEA606, #FB681B); /* Firefox*/
+    background: linear-gradient(#FEA606, #FB681B); /* 标准的语法 */
+    color: #fff;
+}
+
+.fa-wrench {
+    background: -webkit-linear-gradient(#D8DAD9, #92929A); /* Safari*/
+    background: -o-linear-gradient(#D8DAD9, #92929A); /* Opera*/
+    background: -moz-linear-gradient(#D8DAD9, #92929A); /* Firefox*/
+    background: linear-gradient(#D8DAD9, #92929A); /* 标准的语法*/
+    color: #fff;
+}
+
+.fa-sign-out {
+    background: -webkit-linear-gradient(#64FB7A, #18C631); /* Safari*/
+    background: -o-linear-gradient(#64FB7A, #18C631); /* Opera*/
+    background: -moz-linear-gradient(#64FB7A, #18C631); /* Firefox*/
+    background: linear-gradient(#64FB7A, #18C631); /* 标准的语法 */
+    color: #fff;
+}
+
+.fa-pencil-square-o {
+    background: -webkit-linear-gradient(#FAD2EC, #CA42F8); /* Safari*/
+    background: -o-linear-gradient(#FAD2EC, #CA42F8); /* Opera*/
+    background: -moz-linear-gradient(#FAD2EC, #CA42F8); /* Firefox*/
+    background: linear-gradient(#FAD2EC, #CA42F8); /* 标准的语法 */
+    color: #fff;
+}
 /*提交按钮样式*/
-button{
-    border:0;
-    outline:none;
+button {
+    border: 0;
+    outline: none;
     color: #007aff;
     font-size: 17px;
-    background-color:rgb(247,247,248);
+    background-color: rgb(247,247,248);
 }
-
-.h6{
-    font-size:0.8em;
+.h6 {
+    font-size: 0.8em;
 }
 /*home*/
-.external{
-    width:80px;
+.external {
+    width: 80px; /*更新头像按钮*/
 }
-#signin_content .list-block{
-    padding-top:0px;
+#signin_content .list-block {
+    padding-top: 0px;
 }
 /*addqualitytest-form*/
-#addqualitytest-form .item-title{
-    width:50%;
+#addqualitytest-form .item-title {
+    width: 50%;
 }
 /*验证失败样式*/
-input[type="text"].invalid-input, input[type='number'].invalid-input{
-    background-color:rgb(211, 31, 31);
+input[type="text"].invalid-input, input[type='tel'].invalid-input {
+    background-color: rgb(211, 31, 31);
 }
 
-textarea.invalid-input{
-    background-color:rgb(211, 31, 31);
+textarea.invalid-input {
+    background-color: rgb(211, 31, 31);
 }
 /*滑动颜色块样式*/
-#qualitytestlist-content .swipeout-content a{
-    padding-left:0;
+#qualitytestlist-content .swipeout-content a {
+    padding-left: 0;
 }
-#qualitytestlist-content .item-inner{
-  padding:10px;
+
+#qualitytestlist-content .item-inner {
+    padding: 10px;
 }
-.fail-border{
-    border-left:6px solid #ff3b30;
+
+.fail-border {
+    border-left: 6px solid #ff3b30;
 }
-.pass-border{
-    border-left:6px solid #4cd964;
+
+.pass-border {
+    border-left: 6px solid #4cd964;
 }
 /*内容区域居中*/
-.middle-content{
-    padding:0 15px 0 10px;
+.middle-content {
+    padding: 0 15px 0 10px;
 }
 /*个人信息展示页样式*/
 .hidden {
     display: none;
 }
+
 .img-center {
     margin: auto auto;
     padding: 20px;
     font-size: 16px;
     color: lightgray;
 }
+
 .img-responsive {
     display: block;
     height: auto;
     max-width: 100%;
 }
+
 .img-circle {
     border-radius: 50%;
 }
+
 .leftnav-margin-10 {
     margin: 10px 0;
 }
+
 .left-nav ul {
     background-color: #111;
     color: lightgrey;
 }
+
 .list-block ul.rep-imglist {
     padding: 0;
 }
-.list-block ul.rep-imglist li{
-    float:left;
-}
-.rep-imgitem{
+
+    .list-block ul.rep-imglist li {
+        float: left;
+    }
+
+.rep-imgitem {
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    width:60px; height:60px; 
-    border:solid #ccc 1px; 
-    margin:10px;
-    font-size:48px; line-height:60px; text-align:center;
-    color:#ccc;
-    display:block;
+    width: 60px;
+    height: 60px;
+    border: solid #ccc 1px;
+    margin: 10px;
+    font-size: 48px;
+    line-height: 60px;
+    text-align: center;
+    color: #ccc;
+    display: block;
 }
-.rep-imgitem-selected{
-    opacity:0.5;
-    color:#fff;
-    background-color:#000;
+
+.rep-imgitem-selected {
+    opacity: 0.5;
+    color: #fff;
+    background-color: #000;
 }
+
 .rep-imgitem-btn {
     background-position: center;
     background-repeat: no-repeat;
@@ -110,15 +196,16 @@ textarea.invalid-input{
     color: #ccc;
     display: block;
 }
-.sellertasklist-photo{
+
+.sellertasklist-photo {
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    width:44px; height:44px; 
-    border-radius:5px;
+    width: 44px;
+    height: 44px;
+    border-radius: 5px;
 }
+
 .list-block ul.rep-imglist {
     padding: 0;
 }
-
-
