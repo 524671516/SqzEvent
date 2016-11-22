@@ -126,6 +126,7 @@ myApp.onPageInit('qccheckin', function (page) {
             }
         });
     });
+    $("#Photos").val("1.jpg");
     //图片上传数量计算
     uploadCheckinFile("qccheckin-form", "qccheckin-photos", "Photos", "qccheckin-imgcount", 7);
     //textarea字数计算
@@ -975,6 +976,17 @@ function CheckError(SubmitBtn, SubmitForm) {
                     myApp.addNotification({
                         title: "通知",
                         message: "表单提交成功"
+                    });
+                    setTimeout(function () {
+                        myApp.closeNotification(".notifications");
+                    }, 2e3);
+                }
+                else if (data == "MODIFIED") {
+                    myApp.hideIndicator();
+                    mainView.router.back();
+                    myApp.addNotification({
+                        title: "通知",
+                        message: "表单修改成功"
                     });
                     setTimeout(function () {
                         myApp.closeNotification(".notifications");
