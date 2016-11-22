@@ -126,7 +126,6 @@ myApp.onPageInit('qccheckin', function (page) {
             }
         });
     });
-    $("#Photos").val("1.jpg")
     //图片上传数量计算
     uploadCheckinFile("qccheckin-form", "qccheckin-photos", "Photos", "qccheckin-imgcount", 7);
     //textarea字数计算
@@ -915,15 +914,16 @@ var dayNames = ["星期日", "星期一", "星期二", "星期三", "星期四",
 
 var dayNamesShort = ["日", "一", "二", "三", "四", "五", "六"];
 function CheckError(SubmitBtn, SubmitForm) {
-    var selectbool = true;
+    if (!$("#" + SubmitBtn).prop("disabled")) {
+        $("#" + SubmitBtn).prop("disabled", true).addClass("color-gray");
+    }
+    var pass = true;
     $("select").each(function () {
-        if ($(this).val() == "- 请选择 -" || $(this).val() == "") {
-            myApp.alert($(this).next().find(".item-title").html() + "未选择");
-            $("#" + SubmitBtn).prop("disabled", false).removeClass("color-gray");
-            selectbool = selectbool && false;
-        } else {
-            $("#" + SubmitBtn).prop("disabled", false).removeClass("color-gray");
-            selectbool = selectbool && true;
+        if (pass) {
+            if ($(this).val() == "- 请选择 -" || $(this).val() == "") {
+                myApp.alert($(this).next().find(".item-title").html()+"未选择")
+                pass = false;
+            }
         }
     })
     $("input[type=\"tel\"]").each(function () {
@@ -931,50 +931,41 @@ function CheckError(SubmitBtn, SubmitForm) {
             if ($(this).val() != "") {
                 if (!isPInt($(this).val())) {
                     $(this).attr("placeholder", "请输入合法数字").addClass("invalid-input");
-                    selectbool = selectbool && false;
-                } else {
-                    $(this).attr("placeholder", "").removeClass("invalid-input");
-                    selectbool = selectbool && true;
+                    pass = false;
                 }
             } else {
                 $(this).val("0");
                 $(this).attr("placeholder", "").removeClass("invalid-input");
-                selectbool = selectbool && true;
             }
         } else {
             if ($(this).val() == "") {
                 $(this).attr("placeholder", "请输入合法数字").addClass("invalid-input");
-                selectbool = selectbool && false;
+                pass = false;
             } else {
                 $(this).attr("placeholder", "").removeClass("invalid-input");
-                selectbool = selectbool && true;
             }
         }
     })
     $("textarea").each(function () {
         if ($(this).val() == "") {
             $(this).attr("placeholder", "请输入备注信息").addClass("invalid-input");
-            $("#" + SubmitBtn).prop("disabled", false).removeClass("color-gray");
-            selectbool = selectbool && false;
+            pass = false;
         }
         else if ($(this).length > 200) {
             $(this).attr("placeholder", "超过字数").addClass("invalid-input");
-            $("#" + SubmitBtn).prop("disabled", false).removeClass("color-gray");
-            selectbool = selectbool && false;
-        } else {
-            $("#" + SubmitBtn).prop("disabled", false).removeClass("color-gray");
-            selectbool = selectbool && true;
         }
     })
-    $("#Photos").each(function () {
-        var photoList = splitArray($(this).val());
-        if (photoList.length == 0) {
-            myApp.alert("至少上传一张照片");
-            $("#" + SubmitBtn).prop("disabled", false).removeClass("color-gray");
-            selectbool = selectbool && false;
-        }
-    })
-    if (selectbool == true) {
+    if (pass) {
+        $("#Photos").each(function () {
+            var photoList = splitArray($(this).val());
+            if (photoList.length == 0) {
+                myApp.alert("至少上传一张照片");
+                pass = false;
+            }
+        })
+    }
+    if (pass) {
+        $("#" + SubmitBtn).prop("disabled", true).addClass("color-gray");
         myApp.showIndicator();
         setTimeout(function () {
             $("#" + SubmitForm).ajaxSubmit(function (data) {
@@ -1002,6 +993,8 @@ function CheckError(SubmitBtn, SubmitForm) {
                 }
             });
         }, 500)
+    } else {
+        $("#" + SubmitBtn).prop("disabled", false).removeClass("color-gray");
     }
 }
 

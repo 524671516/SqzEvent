@@ -1,6 +1,9 @@
 ﻿.item-input-right {
     text-align: right;
 }
+.color-black{
+    color:black !important;
+}
 /*图标样式*/
 .icon-css {
     text-align: center;
@@ -100,6 +103,9 @@ input[type="text"].invalid-input, input[type='tel'].invalid-input {
 }
 
 textarea.invalid-input {
+    background-color: rgb(211, 31, 31);
+}
+.item-after.invalid-input {
     background-color: rgb(211, 31, 31);
 }
 /*滑动颜色块样式*/
