@@ -52,6 +52,7 @@
                                     <div class="item-input">
                                         @Html.TextBoxFor(m => m.OfficalWorkers, new { placeholder = "正式员工", @class = "item-input-right", type= "tel" })
                                     </div>
+                                    <div class="item-after color-black">人</div>
                                 </div>
                             </div>
                         </li>
@@ -62,6 +63,7 @@
                                     <div class="item-input">
                                         @Html.TextBoxFor(m => m.TemporaryWorkers, new { placeholder = "临时员工", @class = "item-input-right", type = "tel" })
                                     </div>
+                                    <div class="item-after color-black">人</div>
                                 </div>
                             </div>
                         </li>
@@ -79,7 +81,7 @@
                             <div class="item-content middle-content">
                                 <div class="item-inner">
                                     <div class="hidden">
-                                        @Html.EditorFor(m => m.Photos)
+                                        @Html.TextBoxFor(m => m.Photos)
                                     </div>
                                     <ul class="rep-imglist" id="qccheckin-photos">                           
                                     </ul>
@@ -88,7 +90,7 @@
                         </li>
                         <li>
                             <div class="item-content middle-content">
-                                @Html.TextAreaFor(m => m.CheckinRemark, new { placeholder = "请输入签到备注", @class = "required input-textarea"})
+                                @Html.TextAreaFor(m => m.CheckinRemark, new { placeholder = "请输入签到备注", @class = "required input-textarea" })
                             </div>
                             <div class="item-content">
                                 <div class="item-inner">

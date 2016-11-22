@@ -39,7 +39,7 @@
                         </li>
                         <li>
                             <a href="#" class="item-link smart-select" data-back-text="返回" data-back-on-select="true" data-searchbar-placeholder="选择设备" data-searchbar-cancel="取消" id="equipment-select">
-                                <select id="QCEquipmentId" name="QCEquipmentId">
+                                <select id="QCEquipmentId" name="QCEquipmentId" class = "check select">
                                     <option>- 请选择 -</option>
                                 </select>
                                 <div class="item-content">
@@ -52,7 +52,7 @@
                         </li>
                         <li>
                             <a href="#" class="item-link smart-select" data-back-text="返回" data-back-on-select="true" data-searchbar-placeholder="故障类型" data-searchbar-cancel="取消" id="breakdowntype-select">
-                                <select id="BreakDownTypeId" name="BreakDownTypeId">
+                                <select id="BreakDownTypeId" name="BreakDownTypeId" class = "check select">
                                     <option>- 请选择 -</option>
                                 </select>
                                 <div class="item-content">
@@ -83,7 +83,7 @@
                             <div class="item-content middle-content">
                                 <div class="item-inner">
                                     <div class="hidden">
-                                        @Html.EditorFor(m => m.Photos)
+                                        @Html.TextBoxFor(m => m.Photos)
                                     </div>
                                     <ul class="rep-imglist" id="addbreakdown-photos"></ul>
                                 </div>

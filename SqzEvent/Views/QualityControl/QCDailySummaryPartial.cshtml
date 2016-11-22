@@ -23,6 +23,7 @@
                         <div class="item-input">
                             @Html.TextBoxFor(m => m.WorkHours, new { placeholder = "工作时长", @class = "item-input-right keyup-input", type = "tel" })
                         </div>
+                        <div class="item-after color-black">小时</div>
                     </div>
                 </div>
             </li>
@@ -38,8 +39,9 @@
                     <div class="item-inner">
                         <div class="item-title label">@Html.Encode(p.SimpleName)</div>
                         <div class="item-input">
-                            <input type="tel" placeholder="数量" class="item-input-right keyup-input number-input" id="@p.ProductCode" name="@p.ProductCode"/>
+                            <input type="tel" placeholder="数量" class="item-input-right keyup-input number-input input zero-input check" id="@p.ProductCode" name="@p.ProductCode"/>
                         </div>
+                        <div class="item-after color-black">盒</div>
                     </div>
                 </div>
             </li>
