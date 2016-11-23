@@ -327,6 +327,8 @@ namespace SqzEvent.Controllers
                                 };
                                 offlineDB.Off_Membership_Bind.Add(ofb);
                                 await offlineDB.SaveChangesAsync();
+                                WeChatUtilities wechat = new WeChatUtilities();
+                                wechat.setUserToGroup(model.Open_Id, 103);
                             }
                             await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                             return RedirectToAction("Seller_Home");
@@ -436,6 +438,8 @@ namespace SqzEvent.Controllers
                 };
                 offlineDB.Off_Membership_Bind.Add(ofb);
                 await offlineDB.SaveChangesAsync();
+                WeChatUtilities wechat = new WeChatUtilities();
+                wechat.setUserToGroup(user.OpenId, 103);
                 return RedirectToAction("Seller_Home");
             }
             else
@@ -3207,6 +3211,8 @@ namespace SqzEvent.Controllers
                                 };
                                 offlineDB.Off_Membership_Bind.Add(ofb);
                                 await offlineDB.SaveChangesAsync();
+                                WeChatUtilities wechat = new WeChatUtilities();
+                                wechat.setUserToGroup(model.Open_Id, 103);
                             }
                             await SignInManager.SignInAsync(exist_user, isPersistent: false, rememberBrowser: false);
                             return RedirectToAction("SellerTask_Home");
@@ -3236,6 +3242,8 @@ namespace SqzEvent.Controllers
                                 };
                                 offlineDB.Off_Membership_Bind.Add(ofb);
                                 await offlineDB.SaveChangesAsync();
+                                WeChatUtilities wechat = new WeChatUtilities();
+                                wechat.setUserToGroup(model.Open_Id, 103);
                             }
                             await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                             return RedirectToAction("SellerTask_Home");
@@ -3288,6 +3296,8 @@ namespace SqzEvent.Controllers
                 };
                 offlineDB.Off_Membership_Bind.Add(ofb);
                 await offlineDB.SaveChangesAsync();
+                WeChatUtilities wechat = new WeChatUtilities();
+                wechat.setUserToGroup(user.OpenId, 103);
                 return RedirectToAction("SellerTask_Home");
             }
             else
@@ -3830,5 +3840,88 @@ namespace SqzEvent.Controllers
         {
             return View();
         }
+
+        // 促销员招募入口
+        [AllowAnonymous]
+        public ActionResult Recruit_LoginManager(int? systemid)
+        {
+            string user_Agent = HttpContext.Request.UserAgent;
+            int _state = systemid ?? 1;
+            if (user_Agent.Contains("MicroMessenger"))
+            {
+                //return Content("微信");
+                string redirectUri = Url.Encode("https://event.shouquanzhai.cn/Seller/Recruit_Authorization");
+                string appId = WeChatUtilities.getConfigValue(WeChatUtilities.APP_ID);
+                string url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=" + redirectUri + "&response_type=code&scope=snsapi_base&state=" + _state + "#wechat_redirect";
+                return Redirect(url);
+            }
+            else
+            {
+                return Content("其他");
+            }
+        }
+
+        [AllowAnonymous]
+        public async Task<ActionResult> Recruit_Authorization(string code, string state)
+        {
+            try
+            {
+                WeChatUtilities wechat = new WeChatUtilities();
+                var jat = wechat.getWebOauthAccessToken(code);
+                var user = UserManager.FindByEmail(jat.openid);
+                int systemid = Convert.ToInt32(state);
+                if (user != null)
+                {
+                    if (await UserManager.IsInRoleAsync(user.Id, "Staff") || await UserManager.IsInRoleAsync(user.Id, "Seller"))
+                    {
+                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        // 进入已招募页面
+                        return RedirectToAction("Recruit_Done", new { systemid = systemid });
+                    }
+                    else
+                    {
+                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        return RedirectToAction("Recruit_ForceRegister", new { systemid = systemid });
+                    }
+                }
+                //return Content(jat.openid + "," + jat.access_token);
+                return RedirectToAction("Recruit_Register", "Seller", new { open_id = jat.openid, accessToken = jat.access_token, systemid = systemid });
+            }
+            catch (Exception ex)
+            {
+                CommonUtilities.writeLog(ex.Message);
+                return View("Error");
+            }
+        }
+        // 促销员招募页面
+        [AllowAnonymous]
+        public ActionResult Recruit_Register()
+        {
+            return View();
+        }
+        [AllowAnonymous]
+        [HttpPost, ValidateAntiForgeryToken]
+        public ActionResult Recruit_Register(FormCollection form)
+        {
+            return View();
+        }
+
+        // 促销员培训页面
+        [AllowAnonymous]
+        public ActionResult Recruit_Intro()
+        {
+            return View();
+        }
+
+        public ActionResult Recruit_ConfirmInfo()
+        {
+            return View();
+        }
+        [HttpPost, ValidateAntiForgeryToken]
+        public ActionResult Recruit_ConfirmInfo(FormCollection form)
+        {
+            return View();
+        }
+
     }
 }

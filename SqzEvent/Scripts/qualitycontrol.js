@@ -136,8 +136,8 @@ myApp.onPageInit('qccheckin', function (page) {
 签退页
 =========*/
 myApp.onPageInit("addcheckout", function (page) {
-    var $checkoutnoinfo = $("#checkout-noinfo");                     //无信息
-    var $checkout = $("#checkout");                                  //keyup对象
+    var $checkoutnoinfo = $("#checkout-noinfo");                    //无信息
+    var $checkout = $("#checkout");                                 //keyup对象
     var $addqccheckoutsubmit = $("#addqccheckout-submit");          //提交按钮
     var $addqccheckoutform = $('#addqccheckoutform');               //form表单
     //AgendaId改变时触发

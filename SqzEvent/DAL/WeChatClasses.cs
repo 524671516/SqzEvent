@@ -18,6 +18,18 @@ namespace SqzEvent.DAL
     }
     #endregion
 
+    #region 微信用户移动分组的类
+    public class Wx_UserToGroup
+    {
+        public string openid { get; set; }
+        public int to_groupid { get; set; }
+    }
+    public class Wx_UserToGroup_Result
+    {
+        public int errcode { get; set; }
+        public int errmsg { get; set; }
+    }
+    #endregion
 
     #region 微信获取JS接口的类
     /// <summary>
@@ -223,4 +235,6 @@ namespace SqzEvent.DAL
             this.Message = Message;
         }
     }
+
+
 }

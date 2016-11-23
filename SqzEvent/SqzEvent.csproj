@@ -506,6 +506,7 @@
     <Content Include="Views\QualityControl\QualityTestDetails.cshtml" />
     <Content Include="Views\QualityControl\ProductionPlan.cshtml" />
     <Content Include="Views\QualityControl\ProductPlanPartial.cshtml" />
+    <Content Include="Views\Seller\Recruit_Intro.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

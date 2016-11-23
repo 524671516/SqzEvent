@@ -228,7 +228,38 @@ namespace SqzEvent.DAL
         }
         #endregion
 
-
+        #region 移动用户分组
+        /// <summary>
+        /// 移动用户分组
+        /// </summary>
+        /// <param name="openid"></param>
+        /// <param name="groupid"></param>
+        /// <returns></returns>
+        public bool setUserToGroup(string openid, int groupid)
+        {
+            string url = "https://api.weixin.qq.com/cgi-bin/groups/members/update?access_token=" + getAccessToken();
+            Wx_UserToGroup item = new Wx_UserToGroup
+            {
+                openid = openid,
+                to_groupid = groupid
+            };
+            string postdata = Newtonsoft.Json.JsonConvert.SerializeObject(item);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.Method = "POST";
+            byte[] bytes = Encoding.UTF8.GetBytes(postdata);
+            Stream sendStream = request.GetRequestStream();
+            sendStream.Write(bytes, 0, bytes.Length);
+            sendStream.Close();
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            string result = "";
+            using (var reader = new StreamReader(response.GetResponseStream()))
+            {
+                result = reader.ReadToEnd();
+            }
+            Wx_UserToGroup_Result _result = Newtonsoft.Json.JsonConvert.DeserializeObject<Wx_UserToGroup_Result>(result);
+            return _result.errcode == 0;
+        }
+        #endregion
 
         #region WeChatConfig通用GET & SET
         /// <summary>
