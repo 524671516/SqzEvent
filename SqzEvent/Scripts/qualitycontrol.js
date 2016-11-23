@@ -927,7 +927,7 @@ function CheckError(SubmitBtn, SubmitForm) {
             }
         }
     })
-    $("input[type=\"tel\"]").each(function () {
+    $("input").each(function () {
         if ($(this).hasClass("zero-input")) {
             if ($(this).val() != "") {
                 if (!isPInt($(this).val())) {
