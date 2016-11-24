@@ -2,6 +2,7 @@
     Layout = null;
 }
 <!DOCTYPE html>
+<html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
@@ -17,8 +18,8 @@
     </style>
     <meta name="viewport" content="width=device-width" />
     <title>Recruit_Intro</title>
-    <link href="~/Content/framework7.ios.colors.min.css" rel="stylesheet" />
     <link href="~/Content/framework7.ios.min.css" rel="stylesheet" />
+    <link href="~/Content/framework7.ios.colors.min.css" rel="stylesheet" />
 </head>
 <body>
     <div class="views">
@@ -26,9 +27,6 @@
             <div class="navbar">
                 <div class="navbar-inner">
                     <div class="center sliding"><strong>督导管理系统</strong></div>
-                    <div class="right">
-                        <a href="" class="link icon-only open-panel"><i class="icon icon-bars"></i></a>
-                    </div>
                 </div>
             </div>
             <div class="pages navbar-through toolbar-through">
@@ -80,17 +78,20 @@
         var $$ = Dom7;
         var myPhotoBrowserReportNum = myApp.photoBrowser({
             photos: [
-                '/Content/images/Seller_reportnum01.jpg',
-                '/Content/images/Seller_reportnum02.jpg',
-                '/Content/images/Seller_reportnum03.jpg',
-                '/Content/images/Seller_reportnum04.jpg',
-                '/Content/images/Seller_reportnum05.jpg',
-                '/Content/images/Seller_reportnum06.jpg',
-                '/Content/images/Seller_reportnum07.jpg',
-                '/Content/images/Seller_reportnum08.jpg',
-                '/Content/images/Seller_reportnum09.jpg',
-                '/Content/images/Seller_reportnum10.jpg',
-            ]
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_reportnum01.jpg',
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_reportnum02.jpg',
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_reportnum03.jpg',
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_reportnum04.jpg',
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_reportnum05.jpg',
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_reportnum06.jpg',
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_reportnum07.jpg',
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_reportnum08.jpg',
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_reportnum09.jpg',
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_reportnum10.jpg',
+            ],
+            theme: 'dark',
+            backLinkText: '关闭',
+            ofText: '/'
         });
         //点击时打开图片浏览器
         $$('.pb-reportnum').on('click', function () {
@@ -98,35 +99,42 @@
         });
         var myPhotoBrowserOnDuty = myApp.photoBrowser({
             photos: [
-                '/Content/images/Seller_onduty01.jpg',
-                '/Content/images/Seller_onduty02.jpg',
-                '/Content/images/Seller_onduty03.jpg',
-                '/Content/images/Seller_onduty04.jpg',
-                '/Content/images/Seller_onduty05.jpg',
-                '/Content/images/Seller_onduty06.jpg',
-                '/Content/images/Seller_onduty07.jpg',
-                '/Content/images/Seller_onduty08.jpg',
-                '/Content/images/Seller_onduty09.jpg',
-                '/Content/images/Seller_onduty10.jpg',
-            ]
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_onduty01.jpg',
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_onduty02.jpg',
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_onduty03.jpg',
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_onduty04.jpg',
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_onduty05.jpg',
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_onduty06.jpg',
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_onduty07.jpg',
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_onduty08.jpg',
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_onduty09.jpg',
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_onduty10.jpg',
+            ],
+            theme: 'dark',
+            backLinkText: '关闭',
+            ofText: '/'
         });
         //点击时打开图片浏览器
         $$('.pb-onduty').on('click', function () {
             myPhotoBrowserOnDuty.open();
+
         });
         var myPhotoBrowserOffDuty = myApp.photoBrowser({
             photos: [
-                '/Content/images/Seller_offduty01.jpg',
-                '/Content/images/Seller_offduty02.jpg',
-                '/Content/images/Seller_offduty03.jpg',
-                '/Content/images/Seller_offduty04.jpg',
-                '/Content/images/Seller_offduty05.jpg',
-                '/Content/images/Seller_offduty06.jpg',
-                '/Content/images/Seller_offduty07.jpg',
-                '/Content/images/Seller_offduty08.jpg',
-                '/Content/images/Seller_offduty09.jpg',
-                '/Content/images/Seller_offduty10.jpg',
-            ]
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_offduty01.jpg',
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_offduty02.jpg',
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_offduty03.jpg',
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_offduty04.jpg',
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_offduty05.jpg',
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_offduty06.jpg',
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_offduty07.jpg',
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_offduty08.jpg',
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_offduty09.jpg',
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_offduty10.jpg',
+            ],
+            theme: 'dark',
+            backLinkText: '关闭',
+            ofText: '/'
         });
         //点击时打开图片浏览器
         $$('.pb-offduty').on('click', function () {
@@ -135,8 +143,11 @@
         //功能区
         var myPhotoBrowserFunction_1 = myApp.photoBrowser({
             photos: [
-                '/Content/images/Seller_function1_01.jpg',
-            ]
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_function1_01.jpg',
+            ],
+            theme: 'dark',
+            backLinkText: '关闭',
+            ofText: '/'
         });
         //点击时打开图片浏览器
         $$('.pb-function_1').on('click', function () {
@@ -144,10 +155,13 @@
         });
         var myPhotoBrowserFunction_2 = myApp.photoBrowser({
             photos: [
-                '/Content/images/Seller_function2_01.jpg',
-                '/Content/images/Seller_function2_02.jpg',
-                '/Content/images/Seller_function2_03.jpg',
-            ]
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_function2_01.jpg',
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_function2_02.jpg',
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_function2_03.jpg',
+            ],
+            theme: 'dark',
+            backLinkText: '关闭',
+            ofText: '/'
         });
         //点击时打开图片浏览器
         $$('.pb-function_2').on('click', function () {
@@ -155,10 +169,13 @@
         });
         var myPhotoBrowserFunction_3 = myApp.photoBrowser({
             photos: [
-                '/Content/images/Seller_function3_01.jpg',
-                '/Content/images/Seller_function3_02.jpg',
-                '/Content/images/Seller_function3_03.jpg',
-            ]
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_function3_01.jpg',
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_function3_02.jpg',
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_function3_03.jpg',
+            ],
+            theme: 'dark',
+            backLinkText: '关闭',
+            ofText: '/'
         });
         //点击时打开图片浏览器
         $$('.pb-function_3').on('click', function () {
@@ -166,8 +183,11 @@
         });
         var myPhotoBrowserFunction_4 = myApp.photoBrowser({
             photos: [
-                '/Content/images/Seller_function4_01.jpg',
-            ]
+                'https://cdn2.shouquanzhai.cn/SellerIntro/Seller_function4_01.jpg',
+            ],
+            theme: 'dark',
+            backLinkText: '关闭',
+            ofText: '/'
         });
         //点击时打开图片浏览器
         $$('.pb-function_4').on('click', function () {
