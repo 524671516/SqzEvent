@@ -402,7 +402,6 @@
     <Content Include="Views\Seller\Manager_EditSellerInfo.cshtml" />
     <Content Include="Views\Seller\Manager_EventList.cshtml" />
     <Content Include="Views\Seller\Manager_EventListPartial.cshtml" />
-    <Content Include="Views\Seller\Manager_Home.cshtml" />
     <Content Include="Views\Seller\Manager_ReportList.cshtml" />
     <Content Include="Views\Seller\Manager_ReportListPartial.cshtml" />
     <Content Include="Views\Seller\Manager_RequestCreate.cshtml" />
