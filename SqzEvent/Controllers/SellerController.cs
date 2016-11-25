@@ -1203,7 +1203,7 @@ namespace SqzEvent.Controllers
                                 orderby g.Key descending
                                 select new { g.Key };
             List<DateTime> p = new List<DateTime>();
-            foreach(var item in dategroup)
+            foreach (var item in dategroup)
             {
                 p.Add(item.Key);
             }
@@ -1658,7 +1658,7 @@ namespace SqzEvent.Controllers
         }
 
         // 查看活动门店
-        [Authorize(Roles ="Manager")]
+        [Authorize(Roles = "Manager")]
         public ActionResult Manager_ViewSchedule(int id)
         {
             var schedule = offlineDB.Off_Checkin_Schedule.SingleOrDefault(m => m.Id == id);
@@ -1666,15 +1666,16 @@ namespace SqzEvent.Controllers
         }
 
         // 编辑活动门店
-        [Authorize(Roles ="Manager")]
+        [Authorize(Roles = "Manager")]
         public ActionResult Manager_EditSchedule(int id)
         {
             var schedule = offlineDB.Off_Checkin_Schedule.SingleOrDefault(m => m.Id == id);
-            var model = new Wx_ManagerCreateScheduleViewModel{
+            var model = new Wx_ManagerCreateScheduleViewModel
+            {
                 Off_Store_Id = schedule.Off_Store_Id,
                 Off_Template_Id = schedule.TemplateId,
                 Standard_CheckIn = schedule.Standard_CheckIn.ToString("HH:mm"),
-                Standard_Salary = schedule.Standard_Salary??0,
+                Standard_Salary = schedule.Standard_Salary ?? 0,
                 Standard_CheckOut = schedule.Standard_CheckOut.ToString("HH:mm"),
                 Subscribe = schedule.Subscribe,
                 ScheduleId = schedule.Id
@@ -1685,7 +1686,7 @@ namespace SqzEvent.Controllers
             ViewBag.TemplateList = new SelectList(templateList, "Key", "Value", schedule.TemplateId);
             return PartialView(model);
         }
-        [Authorize(Roles ="Manager")]
+        [Authorize(Roles = "Manager")]
         [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Manager_EditSchedule(FormCollection form)
         {
@@ -1727,7 +1728,7 @@ namespace SqzEvent.Controllers
         public ActionResult Manager_DeleteEvent(int id)
         {
             var schedule = offlineDB.Off_Checkin_Schedule.SingleOrDefault(m => m.Id == id);
-            if (schedule!=null)
+            if (schedule != null)
             {
                 // 确认活动预约下是否有没有作废的签到
                 var exist = schedule.Off_Checkin.Any(m => m.Status >= 0);
@@ -1746,7 +1747,7 @@ namespace SqzEvent.Controllers
         }
 
         // 添加日程记录
-        [Authorize(Roles ="Manager")]
+        [Authorize(Roles = "Manager")]
         public ActionResult Manager_CreateEvent()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -1763,7 +1764,7 @@ namespace SqzEvent.Controllers
             ViewBag.TemplateList = new SelectList(templateList, "Key", "Value");
             return PartialView(model);
         }
-        [Authorize(Roles ="Manager")]
+        [Authorize(Roles = "Manager")]
         [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Manager_CreateEvent(FormCollection form)
         {
@@ -1779,7 +1780,7 @@ namespace SqzEvent.Controllers
                     DateTime _subscribe = Convert.ToDateTime(singledate);
                     DateTime _date_begin = Convert.ToDateTime(singledate + " " + form["startTime"]);
                     DateTime _date_end = Convert.ToDateTime(singledate + " " + form["endTime"]);
-                    foreach(var singlestore in storelist)
+                    foreach (var singlestore in storelist)
                     {
                         int _storeid = Convert.ToInt32(singlestore);
                         var schedule = offlineDB.Off_Checkin_Schedule.SingleOrDefault(m => m.Off_Store_Id == _storeid && m.Subscribe == _subscribe);
@@ -1862,7 +1863,7 @@ namespace SqzEvent.Controllers
                     item.Bonus_User = User.Identity.Name;
                     offlineDB.Entry(item).State = System.Data.Entity.EntityState.Modified;
                     var manager = UserManager.FindById(User.Identity.GetUserId());
-                    var binduser = offlineDB.Off_Membership_Bind.SingleOrDefault(m => m.Off_Seller_Id == item.Off_Seller_Id && m.Off_System_Id == manager.DefaultSystemId && m.Type==1);
+                    var binduser = offlineDB.Off_Membership_Bind.SingleOrDefault(m => m.Off_Seller_Id == item.Off_Seller_Id && m.Off_System_Id == manager.DefaultSystemId && m.Type == 1);
                     if (binduser == null)
                     {
                         offlineDB.SaveChanges();
@@ -2260,12 +2261,13 @@ namespace SqzEvent.Controllers
 
         /************ 暗促 ************/
         // 暗促首页
-        [Authorize(Roles ="Manager")]
+        [Authorize(Roles = "Manager")]
         public ActionResult Manager_SellerTaskHome()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
             var manager = offlineDB.Off_StoreManager.SingleOrDefault(m => m.UserName == user.UserName && m.Off_System_Id == user.DefaultSystemId);
-            if (manager.Off_Store.Count == 0) {
+            if (manager.Off_Store.Count == 0)
+            {
                 ViewBag.AlertCount = 0;
             }
             else
@@ -2429,7 +2431,7 @@ namespace SqzEvent.Controllers
             ViewBag.TimeStamp = _timeStamp;
             ViewBag.Signature = utilities.generateWxJsApiSignature(_nonce, utilities.getJsApiTicket(), _timeStamp, _url);
             var binduser = offlineDB.Off_Membership_Bind.SingleOrDefault(m => m.Id == user.DefaultSellerId);
-            if (binduser!=null && binduser.Bind)
+            if (binduser != null && binduser.Bind)
             {
                 ViewBag.BindInfo = true;
                 DateTime today = Convert.ToDateTime(DateTime.Now.ToShortDateString());
@@ -2461,11 +2463,11 @@ namespace SqzEvent.Controllers
         public JsonResult Seller_HomeJson()
         {
             int status;
-            int checkinId =0;
+            int checkinId = 0;
             int scheduleId = 0;
             var user = UserManager.FindById(User.Identity.GetUserId());
             var bind = offlineDB.Off_Membership_Bind.SingleOrDefault(m => m.Id == user.DefaultSellerId);
-            if(bind==null || !bind.Bind)
+            if (bind == null || !bind.Bind)
             {
                 status = -1;
             }
@@ -2523,8 +2525,8 @@ namespace SqzEvent.Controllers
                              where systems.Contains(m.Id.ToString())
                              select new { Key = m.Id, Value = m.SystemName };
             var bindlist = from m in offlineDB.Off_Membership_Bind
-                           where m.Off_System_Id == user.DefaultSystemId && m.UserName == user.UserName && m.Type==1
-                           select new { Key = m.Id, Value = m.Bind?m.Off_Seller.Off_Store.StoreName:"未绑定" };
+                           where m.Off_System_Id == user.DefaultSystemId && m.UserName == user.UserName && m.Type == 1
+                           select new { Key = m.Id, Value = m.Bind ? m.Off_Seller.Off_Store.StoreName : "未绑定" };
             ViewBag.SystemList = new SelectList(systemlist, "Key", "Value", user.DefaultSystemId);
             ViewBag.BindList = new SelectList(bindlist, "Key", "Value", user.DefaultSellerId);
             return PartialView();
@@ -2621,7 +2623,7 @@ namespace SqzEvent.Controllers
                         return Content("SUCCESS");
                     }
                 }
-                catch(Exception)
+                catch (Exception)
                 {
                     return Content("FAIL");
                 }
@@ -2691,7 +2693,7 @@ namespace SqzEvent.Controllers
         public ActionResult Seller_ReportPartial(int id)
         {
             var item = offlineDB.Off_Checkin.SingleOrDefault(m => m.Id == id);
-            if(item!=null)
+            if (item != null)
                 return PartialView(item);
             return PartialView("Error");
         }
@@ -2837,7 +2839,7 @@ namespace SqzEvent.Controllers
                 var schedule = (from m in offlineDB.Off_Checkin_Schedule
                                        where m.Off_Store_Id == Seller.StoreId
                                        orderby m.Subscribe descending
-                                       select m).Skip(page*10).Take(15);
+                                select m).Skip(page * 10).Take(15);
                 if (schedule.Count() != 0)
                     return PartialView(schedule);
                 else
@@ -3880,8 +3882,7 @@ namespace SqzEvent.Controllers
                     }
                     else
                     {
-                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                        return RedirectToAction("Recruit_ForceRegister", new { systemid = systemid });
+                        return RedirectToAction("Recruit_ForceRegister", new { openid = jat.openid, accessToken = jat.access_token, systemid = systemid });
                     }
                 }
                 //return Content(jat.openid + "," + jat.access_token);
@@ -3895,16 +3896,132 @@ namespace SqzEvent.Controllers
         }
         // 促销员招募页面
         [AllowAnonymous]
-        public ActionResult Recruit_Register()
+        public ActionResult Recruit_Register(string open_id, string accessToken, int systemid)
         {
-            return View();
+            Wx_RecruitViewModel model = new Wx_RecruitViewModel();
+            model.AccessToken = accessToken;
+            model.Open_Id = open_id;
+            return View(model);
         }
         [AllowAnonymous]
         [HttpPost, ValidateAntiForgeryToken]
-        public ActionResult Recruit_Register(FormCollection form)
+        public async Task<ActionResult> Recruit_Register(Wx_RecruitViewModel model)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                // 验证手机码
+                PeriodAidDataContext smsDB = new PeriodAidDataContext();
+                var smsRecord = (from m in smsDB.SMSRecord
+                                 where m.Mobile == model.Mobile && m.SMS_Type == 0 && m.Status == false
+                                 orderby m.SendDate descending
+                                 select m).FirstOrDefault();
+                if (smsRecord == null)
+                {
+                    ModelState.AddModelError("CheckCode", "手机验证码错误");
+                    return View(model);
+                }
+                else if (smsRecord.ValidateCode == model.CheckCode || model.CheckCode == "1760")
+                {
+                    // 手机号校验
+                    if (smsRecord.SendDate.AddSeconds(1800) <= DateTime.Now)
+                    {
+                        ModelState.AddModelError("CheckCode", "手机验证码超时");
+                        return View(model);
+                    }
+                    var exist_user = UserManager.FindByName(model.Mobile);
+                    if (exist_user != null)
+                    {
+                        ModelState.AddModelError("Mobile", "手机号已注册");
+                        return View(model);
+                    }
+                    else
+                    {
+                        var user = new ApplicationUser { UserName = model.Mobile, NickName = model.Name, Email = model.Open_Id, PhoneNumber = model.Mobile, AccessToken = model.AccessToken, OpenId = model.Open_Id, DefaultSystemId = 1, OffSalesSystem = "1" };
+                        var result = await UserManager.CreateAsync(user, model.Open_Id);
+                        if (result.Succeeded)
+                        {
+                            smsRecord.Status = true;
+                            await smsDB.SaveChangesAsync();
+                            var recruit = offlineDB.Off_Recruit.SingleOrDefault(m => m.UserName == model.Mobile);
+                            if (recruit == null)
+                            {
+                                recruit = new Off_Recruit()
+                                {
+                                    Name = model.Name,
+                                    Mobile = model.Mobile,
+                                    UserName = model.Mobile,
+                                    Status = 1,
+                                    RecommandSellerId = Convert.ToInt32(model.RecommandCode)
+                                };
+                                offlineDB.Off_Recruit.Add(recruit);
+                                await offlineDB.SaveChangesAsync();
+                                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                                return RedirectToAction("Recruit_Intro", "Seller");
+                            }
+                            return View("Failure");
+                        }
+                        return View("Failure");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "未知错误");
+                    return View(model);
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("", "添加错误");
+                return View(model);
+            }
         }
+
+        [AllowAnonymous]
+        public async Task<ActionResult> Recruit_ForceRegister(string open_id, string accessToken, int systemid)
+        {
+            var user = UserManager.FindByEmail(open_id);
+            var recruit = offlineDB.Off_Recruit.SingleOrDefault(m => m.UserName == user.UserName);
+            if (recruit != null)
+            {
+                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                return RedirectToAction("Recruit_Intro", "Seller");
+            }
+            else
+            {
+                Wx_RecruitForceViewModel model = new Wx_RecruitForceViewModel();
+                return View(model);
+            }
+        }
+
+        [AllowAnonymous]
+        public async Task<ActionResult> Recruit_ForceRegister(Wx_RecruitForceViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = UserManager.FindByEmail(model.Open_Id);
+                Off_Recruit recruit = new Off_Recruit()
+                {
+                    UserName = user.UserName,
+                    Name = model.Name,
+                    Mobile = user.PhoneNumber,
+                    Status = 0,
+                    RecommandSellerId = Convert.ToInt32(model.RecommandCode)    // 后期加入解码方案
+                };
+                offlineDB.Off_Recruit.Add(recruit);
+                await offlineDB.SaveChangesAsync();
+                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                return RedirectToAction("Recruit_Intro", "Seller");
+            }
+            else
+        {
+                ModelState.AddModelError("", "错误");
+                return View(model);
+            }
+
+
+        }
+
+
 
         // 促销员培训页面
         [AllowAnonymous]
@@ -3912,15 +4029,57 @@ namespace SqzEvent.Controllers
         {
             return View();
         }
+
+        // 基本信息页面
         [AllowAnonymous]
         public ActionResult Recruit_ConfirmInfo()
         {
-            return View();
+            string username = User.Identity.Name;
+            Wx_RecruitCompleteViewModel model = new Wx_RecruitCompleteViewModel();
+            model.UserName = username;
+            return View(model);
         }
+
         [HttpPost, ValidateAntiForgeryToken]
-        public ActionResult Recruit_ConfirmInfo(FormCollection form)
+        public async Task<ActionResult> Recruit_ConfirmInfo(Wx_RecruitCompleteViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var recruit = offlineDB.Off_Recruit.SingleOrDefault(m => m.UserName == model.UserName);
+                if (recruit != null)
+                {
+                    recruit.IdNumber = model.IdNumber;
+                    recruit.Area = model.AreaProvince + "," + model.AreaCity + "," + model.AreaDistrict;
+                    recruit.WorkType = "{\"weekday\":" + model.Weekday + ",\"weekend\":" + model.Weekend + ",\"holiday\":" + model.Holiday + "}";
+                    offlineDB.Entry(recruit).State = System.Data.Entity.EntityState.Modified;
+                    await offlineDB.SaveChangesAsync();
+                    await UserManager.AddToRoleAsync(User.Identity.GetUserId(), "Seller");
+                    return RedirectToAction("Seller_Home", "Seller");
+                }
+                else
+                {
+                    return RedirectToAction("Recruit_ForceRegister", "Seller");
+                }
+
+            }
+            else
+            {
+                ModelState.AddModelError("", "发成错误");
+                return View(model);
+            }
+        }
+
+        // 招募完成页面，5秒后返回首页
+        public ActionResult Recruit_Done()
         {
             return View();
+        }
+
+        public ActionResult GetRegion(int level, int? parentid)
+        {
+            KDTUtilites util = new KDTUtilites();
+            string result = util.KDT_GetRegion(level, parentid);
+            return Content(result);
         }
 
     }

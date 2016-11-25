@@ -41,7 +41,7 @@ namespace SqzEvent.Models
         public virtual DbSet<Off_SellerTask> Off_SellerTask { get; set; }
         public virtual DbSet<Off_SellerTaskProduct> Off_SellerTaskProduct { get; set; }
         public virtual DbSet<Off_CompetitionInfo> Off_CompetitionInfo { get; set; }
-
+        public virtual DbSet<Off_Recruit> Off_Recruit { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -1130,6 +1130,35 @@ namespace SqzEvent.Models
         public string Mch_BillNo { get; set; }
 
         public virtual Off_Store Off_Store { get; set; }
+    }
+
+    public partial class Off_Recruit
+    {
+        public int Id { get; set; }
+
+        [StringLength(32)]
+        public string Name { get; set; }
+
+        [StringLength(32)]
+        public string UserName { get; set; }
+
+        [StringLength(32)]
+        public string Mobile { get; set; }
+
+        public int Status { get; set; }
+
+        [StringLength(256)]
+        public string Area { get; set; }
+
+        [StringLength(64)]
+        public string WorkType { get; set; }
+
+        [StringLength(64)]
+        public string IdNumber { get; set; }
+
+        public int? RecommandSellerId { get; set; }
+
+        public bool Reward { get; set; }
     }
     
 }
