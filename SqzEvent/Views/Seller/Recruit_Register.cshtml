@@ -1,0 +1,198 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>Recruit_Register</title>
+    <link href="~/Content/normalize.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+</head>
+<style>
+    html,body{
+        width:100%;
+    }
+    input{
+        outline:none;
+        border:none;
+    }
+    ul,li{
+        list-style:none;
+        margin:0;
+        padding:0;
+    }
+    form{
+        margin-top:30px;
+    }
+    form li{
+        padding:10px 5px 10px 5px;
+    }
+    ul{
+        border:1px solid #ccc;
+        width:90%;
+        margin:0 auto;
+        border-radius:5px;
+    }
+    header{
+        width:80%;
+        margin:0 auto;
+        text-align:center;
+    }
+    .verification-content a{
+        display:inline-block;
+        text-decoration:none;
+    }
+    .col-40{
+        width:40%;
+    }
+    .col-10{
+        width:10%;
+    }
+    .col-50 {
+            width: 50%;
+            margin:0 auto;
+    }
+    .col-25 {
+            text-align:left;
+            width: 25%;
+    }
+    .col-20{
+        width:20%;
+    }
+    .col-33{
+        width:33.333333333%;
+    }
+    .hidden{
+        display:none !important;
+    }
+    .item-inner>div{
+        display:inline-block;
+    }
+    .color-gray{
+        color:#ababab;
+    }
+    .border-bottom{
+        border-bottom:1px solid #ccc;
+    }
+    .border-left{
+        padding:10px 0px 10px 5px;
+        border-left:1px solid #ccc;
+        font-size:14px;
+        width:65px;
+    }
+    .color-blue{
+        color:#007aff;
+    }
+    .color-red{
+        color:red;
+    }
+    .color-green{
+        color:green;
+    }
+</style>
+<body>
+    <header>注册</header>
+        <form id="register-form">
+                <ul>
+                    <li class="item-content username-content border-bottom">
+                        <div class="item-inner">
+                            <div class="item-title col-25">姓名</div>
+                            <div class="item-input">
+                                <input type="text" name="username" placeholder="请输入真实姓名" id="username">
+                            </div>
+                        </div>
+                    </li>
+                    <li class="item-content tel-content border-bottom">
+                        <div class="item-inner">
+                            <div class="item-title col-25">手机号</div>
+                            <div class="item-input">
+                                <input type="tel" name="tel" placeholder="手机号码(11位)" id="tel-number">
+                            </div>
+                        </div>
+                    </li>
+                    <li class="item-content recommend-content border-bottom">
+                        <div class="item-inner">
+                            <div class="item-title col-25">推荐码</div>
+                            <div class="item-input">
+                                <input type="text" name="recommend" placeholder="输入推荐码(选填)" id="recommend-code">
+                            </div>
+                        </div>
+                    </li>
+                    <li class="item-content verification-content">
+                        <div class="item-inner">
+                            <div class="item-title col-20">验证码</div>
+                            <div class="item-input col-40">
+                                <input type="text" name="verification" placeholder="输入六位验证码" id="verification-code">
+                            </div>
+                            <a class="item-after border-left color-blue col-10" href="javascript:;" id="get-verification">获取验证码</a>
+                            <a class="item-after border-left hidden col-10" href="javascript:;" id="wait-num"><span></span>秒后重发</a>
+                        </div>
+                    </li>
+                </ul>
+            <div class="btn">
+                  <a href="#" id="register-btn">成为促销员</a>
+            </div>
+        </form>
+    <script>
+        $("input").each(function () {
+            $(this).on("focus", function () {
+                $(this).parent().next(".add").remove();
+            })
+        })
+        var word_type = /^[\u4e00-\u9fa5]{1,6}$/
+        var tel_type = /^(13[0-9]|14[0-9]|15[0-9]|18[0-9])\d{8}$/
+        var recommend_type = /^\d{6}$/
+        var verification_type = /^\d{6}$/
+        $("#get-verification").on("click", function () {
+            var count = 60;
+            $("#wait-num span").html(count);
+            $("#get-verification").addClass("hidden");
+            $("#wait-num").removeClass("hidden");
+            var timer = setInterval(function () {
+                count--;
+                $("#wait-num span").html(count);
+                if (count == 0) {
+                    clearInterval(timer);
+                    $("#get-verification").removeClass("hidden");
+                    $("#wait-num").addClass("hidden");
+                }
+            }, 1000)
+        })
+        $("#register-btn").on("click", function () {
+            if (!word_type.test($("#username").val())) {
+                $(".username-content .item-after").remove();
+                $("#username").parent().after("<div class=\"item-after add\"><i class=\"fa fa-times color-red\" aria-hidden=\"true\"></i></div>")
+            } else {
+                $(".username-content .item-after").remove();
+                $("#username").parent().after("<div class=\"item-after add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></div>")
+            }
+            if (tel_type.test($("#tel").val()) == false) {
+                $(".tel-content .item-after").remove();
+                $("#tel-number").parent().after("<div class=\"item-after add\"><i class=\"fa fa-times color-red\" aria-hidden=\"true\"></i></div>")
+            } else {
+                $(".tel-content .item-after").remove();
+                $("#tel-number").parent().after("<div class=\"item-after add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></div>")
+            }
+            if (recommend_type.test($("#recommend_code").val()) == false) {
+                $(".recommend-content .item-after").remove();
+                $("#recommend-code").parent().after("<div class=\"item-after add\"><i class=\"fa fa-times color-red\" aria-hidden=\"true\"></i></div>")
+            } else {
+                $(".recommend-content .item-after").remove();
+                $("#recommend-code").parent().after("<div class=\"item-after add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></div>")
+            }
+            if (verification_type.test($("#verification_code").val()) == false) {
+                $(".verification-content .verification_error").remove();
+                $("#verification-code").parent().after("<a class=\"verification-error add\"><i class=\"fa fa-times color-red\" aria-hidden=\"true\"></i></a>")
+            } else {
+                $(".verification-content .verification_error").remove();
+                $("#verification-code").parent().after("<a class=\"verification-error add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></a>")
+            }
+        })
+    </script>
+</body>
+</html>

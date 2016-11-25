@@ -126,7 +126,6 @@ myApp.onPageInit('qccheckin', function (page) {
             }
         });
     });
-    $("#Photos").val("1.jpg");
     //图片上传数量计算
     uploadCheckinFile("qccheckin-form", "qccheckin-photos", "Photos", "qccheckin-imgcount", 7);
     //textarea字数计算

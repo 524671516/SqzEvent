@@ -1,0 +1,130 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>Recruit_ConfirmInfo</title>
+    <link href="~/Content/framework7.ios.min.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <script src="~/Scripts/framework7.min.js"></script>
+</head>
+<body>
+    <style>
+        .col-33 {
+            width: 33.33333333%;
+        }
+
+        .col-75 {
+            width: 75% !important;
+        }
+
+        .col-50 {
+            width: 50% !important;
+            margin: 0 auto;
+        }
+
+        .col-30 {
+            width: 30%;
+        }
+
+        .col-25 {
+            width: 25% !important;
+        }
+    </style>
+    <div class="view">
+        <div class="page">
+            <div class="page-content login-screen-content">
+                <div class="login-screen-title">注册</div>
+                <form>
+                    <div class="list-block">
+                        <ul>
+                            <li class="item-content id-content">
+                                <div class="item-inner">
+                                    <div class="item-title label">身份证号码</div>
+                                    <div class="item-input">
+                                        <input type="text" name="user_id" placeholder="请输入18位身份证号码" id="user_id" maxlength="18">
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="item-content id-content">
+                                <div class="item-inner">
+                                    <div class="item-title label">选择地区</div>
+                                    <div class="item-input col-25">
+                                        <input type="text" readonly id="picker-province" value="省份">
+                                    </div>
+                                    <div class="item-input col-25">
+                                        <input type="text" readonly id="picker-city" value="市">
+                                    </div>
+                                    <div class="item-input col-25">
+                                        <input type="text" readonly id="picker-county" value="区、县">
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="item-content id-content">
+                                <div class="item-inner">
+                                    <div class="item-title label"></div>
+                                    <div class="item-input">
+                                        <input type="text" placeholder="选择小区/写字楼/学校" readonly id="picker-estate">
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="item-content id-content">
+                                <div class="item-inner">
+                                    <div class="item-title label">详细地址</div>
+                                    <div class="item-input">
+                                        <input type="text" placeholder="街道门牌信息">
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="content-block row">
+                        <div class="col-33 button"><input type="radio" name="my-radio" id="my-radio"><label for="my-radio">双休日</label></div>
+                        <div class="col-33 button"><input type="radio" name="my-radio" id="my-radio"><label for="m-radio">双休日</label></div>
+                        <div class="col-33 button"><input type="radio" name="my-radio" id="my-radio"><label for="m-radio">双休日</label></div>
+                    </div>
+                    <div class="list-block">
+                        <ul>
+                            <li>
+                                <a href="#" class="button active col-50" id="register_btn">成为促销员</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    var $$ = Dom7;
+    var myApp = new Framework7({
+        pushState: true,
+    });
+    var pickerDevice = myApp.picker({
+        input: '#picker-province',
+        cols: [
+            {
+                textAlign: 'center',
+                values: ['北京市', '天津市', '上海市', '重庆市', '河北省', '山西省', '内蒙古', '辽宁省', '吉林省', '黑龙江省', '江苏省', '浙江省']
+            }
+        ]
+    });
+    $$("#picker-province").on("change", function () {
+        $$.ajax({
+            url: "/QualityControl/CheckCheckinAjax",
+            type: post,
+            data: {
+                provinceId: $$("#picker-province").val()
+            },
+            success: {
+
+            }
+        })
+    })
+</script>
+</html>

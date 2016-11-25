@@ -3912,7 +3912,7 @@ namespace SqzEvent.Controllers
         {
             return View();
         }
-
+        [AllowAnonymous]
         public ActionResult Recruit_ConfirmInfo()
         {
             return View();

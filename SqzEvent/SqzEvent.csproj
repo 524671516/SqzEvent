@@ -283,6 +283,7 @@
     <Content Include="Content\images\share-pic.png" />
     <Content Include="Content\images\title_bc.png" />
     <Content Include="Content\Manager.css" />
+    <Content Include="Content\normalize.css" />
     <Content Include="Content\QualityControl.css" />
     <Content Include="Content\SellerTask.css" />
     <Content Include="Content\PeriodAid.css" />
@@ -506,6 +507,8 @@
     <Content Include="Views\QualityControl\ProductionPlan.cshtml" />
     <Content Include="Views\QualityControl\ProductPlanPartial.cshtml" />
     <Content Include="Views\Seller\Recruit_Intro.cshtml" />
+    <Content Include="Views\Seller\Recruit_Register.cshtml" />
+    <Content Include="Views\Seller\Recruit_ConfirmInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
