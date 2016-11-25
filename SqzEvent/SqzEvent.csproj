@@ -213,6 +213,7 @@
     <Compile Include="DAL\AliOSSUtilities.cs" />
     <Compile Include="DAL\AppPayUtilities.cs" />
     <Compile Include="DAL\CommonUtilities.cs" />
+    <Compile Include="DAL\KDTUtilites.cs" />
     <Compile Include="DAL\OfflineSalesUtilities.cs" />
     <Compile Include="DAL\PeriodAidUtilities.cs" />
     <Compile Include="DAL\WeChatClasses.cs" />

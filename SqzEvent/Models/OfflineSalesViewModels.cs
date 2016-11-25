@@ -126,4 +126,75 @@ namespace SqzEvent.Models
         public int? MinStorage { get; set; }
         public string StoreName { get; set; }
     }
+
+    public class Wx_RecruitViewModel
+    {
+        [Required]
+        [StringLength(11)]
+        [RegularExpression("1[3|5|7|8|][0-9]{9}", ErrorMessage = "手机号码格式错误")]
+        [Display(Name = "手机号码")]
+        public string Mobile { get; set; }
+
+        [Required(ErrorMessage = "姓名不能为空")]
+        [StringLength(6, ErrorMessage = ("姓名长度不得超过6个字符"))]
+        [Display(Name = "姓名")]
+        public string Name { get; set; }
+
+        [Display(AutoGenerateField = false)]
+        public string Open_Id { get; set; }
+
+        [Display(AutoGenerateField = false)]
+        public string AccessToken { get; set; }
+
+        [StringLength(6, ErrorMessage = "字符长度不得超过6个字符")]
+        [Display(Name = "推荐码")]
+        public string RecommandCode { get; set; }
+
+        [Required]
+        [StringLength(6, ErrorMessage = "手机验证码为6位")]
+        [Display(Name = "手机验证码")]
+        public string CheckCode { get; set; }
+    }
+    public class Wx_RecruitForceViewModel
+    {
+        [Required(ErrorMessage = "姓名不能为空")]
+        [StringLength(6, ErrorMessage = ("姓名长度不得超过6个字符"))]
+        [Display(Name = "姓名")]
+        public string Name { get; set; }
+
+        [StringLength(6, ErrorMessage = "字符长度不得超过6个字符")]
+        [Display(Name = "推荐码")]
+        public string RecommandCode { get; set; }
+
+        [Display(AutoGenerateField = false)]
+        public string Open_Id { get; set; }
+
+        [Display(AutoGenerateField = false)]
+        public string AccessToken { get; set; }
+    }
+
+    public class Wx_RecruitCompleteViewModel
+    {
+        [Display(AutoGenerateField = false)]
+        public string UserName;
+
+        [Required]
+        [StringLength(20)]
+        [RegularExpression("(^\\d{18}$)|(^\\d{15}$)|(^\\d{17}(\\d|X|x))", ErrorMessage = "格式错误")]
+        public string IdNumber { get; set; }
+
+        public string AreaProvince { get; set; }
+
+        public string AreaState { get; set; }
+
+        public string AreaCity { get; set; }
+
+        public string AreaDistrict { get; set; }
+
+        public bool Weekday { get; set; }
+
+        public bool Weekend { get; set; }
+
+        public bool Holiday { get; set; }
+    }
 }
