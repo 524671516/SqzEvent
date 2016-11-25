@@ -4074,7 +4074,7 @@ namespace SqzEvent.Controllers
         {
             return View();
         }
-
+        [AllowAnonymous]
         public ActionResult GetRegion(int level, int? parentid)
         {
             KDTUtilites util = new KDTUtilites();
