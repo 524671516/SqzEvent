@@ -38,10 +38,9 @@
             margin-top: 30px;
         }
 
-            form li {
+       form li {
                 padding: 10px 5px 10px 5px;
-            }
-
+        }
         ul {
             width: 90%;
             margin: 0 auto;
@@ -52,6 +51,7 @@
             margin: 0 auto;
             text-align: center;
         }
+
         header h2{
             color:#007aff;
         }
@@ -80,7 +80,9 @@
         .col-20 {
             width: 20%;
         }
-
+        .col-90{
+            width:90%;
+        }
         .hidden {
             display: none !important;
         }
@@ -94,6 +96,7 @@
         }
 
         .border-left {
+            border-radius:5px;
             height: 22px;
             float: right;
             padding: 5px 5px 1px 5px;
@@ -106,7 +109,9 @@
             cursor: pointer;
             outline: 0;
         }
-
+        .bg-gary{
+            background-color:#ccc;
+        }
         .color-blue {
             color: #007aff;
         }
@@ -136,7 +141,9 @@
             cursor: pointer;
             outline: 0;
         }
-
+       .btn:hover {
+            box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
         #register-btn {
             margin: 50px auto auto auto;
         }
@@ -151,14 +158,56 @@
             position: absolute;
             right: 4.8rem !important;
         }
+        .bg{
+           position: fixed;
+           top: 0;
+           right: 0;
+           bottom: 0;
+           left: 0;
+           background-color: #000;
+           opacity:0.2;
+        }
+        .modal{
+            background-color:#fff;
+            z-index:11;
+            position:absolute;
+            top:-100%;
+            left:0;
+            right:0;
+            bottom:0;
+            border-radius:5px;
+            margin:0 auto;
+            width:90%;
+            height:80%;
+            border:1px solid rgba(0,0,0,.2);
+            box-shadow:0 5px 15px rgba(0,0,0,.5);
+        }
+        #close-btn{
+            position:absolute;
+            right:2px;
+            top:2px;
+            color:#CCC;
+        }
+        .modal-header h2{
+            border-bottom: 1px solid #e5e5e5;
+        }
     </style>
 </head>
 
 <body>
+    <div class="modal">
+        <div class="modal-header">
+            <a id="close-btn"><i class="fa fa-times"></i></a>
+            <h2>aaaa</h2>
+        </div>
+        <div class="modal-body">
+            asdsasad
+        </div>
+    </div>
+    <div class="bg"></div>
     <header><h2>注册</h2></header>
     @using (Html.BeginForm("Recruit_Register", "Seller", FormMethod.Post, new { @id = "register-form" }))
     {
-        @Html.ValidationSummary()
         @Html.AntiForgeryToken()
         @Html.HiddenFor(m=>m.AccessToken)
         @Html.HiddenFor(m=> m.Open_Id)
@@ -198,9 +247,23 @@
                 </div>
             </li>
         </ul>
-        <a href="#" id="register-btn" class="btn col-50">成为促销员</a>
+        <a href="javascript:;" id="register-btn" class="btn col-50">成为促销员</a>
     }
     <script>
+        $(".modal").animate({
+            top: '10%',
+            speed: "show"
+        });;
+        $("#close-btn").on("click", function () {
+            $(".modal").animate({
+                top: '-100%',
+                opacity: '0.5',
+                height: '150px',
+                width: '150px',
+                speed:"show"
+            });;
+            $(".bg").addClass("hidden");
+        })
         $("input").each(function () {
             $(this).on("focus", function () {
                 $(this).parent().next(".add").remove();
@@ -264,46 +327,54 @@
             }
         })
         $("#register-btn").on("click", function () {
-            var verification = true;
-            if (!word_type.test($("#Name").val())) {
-                $(".username-content .item-after").remove();
-                $("#Name").parent().after("<div class=\"item-after add\"><i class=\"fa fa-times color-red\" aria-hidden=\"true\"></i></div>");
+            if (!$("#register-btn").hasClass("bg-gary")) {
+                $("#register-btn").addClass("bg-gary");
+                var verification = true;
+                if (!word_type.test($("#Name").val())) {
+                    $(".username-content .item-after").remove();
+                    $("#Name").parent().after("<div class=\"item-after add\"><i class=\"fa fa-times color-red\" aria-hidden=\"true\"></i></div>");
+                    $("#register-btn").removeClass("bg-gary");
+                    verification = false;
+                } else {
+                    $(".username-content .item-after").remove();
+                    $("#Name").parent().after("<div class=\"item-after add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></div>");
+                }
+                if (!tel_type.test($("#Mobile").val())) {
+                    $(".tel-content .item-after").remove();
+                    $("#Mobile").parent().after("<div class=\"item-after add\"><i class=\"fa fa-times color-red\" aria-hidden=\"true\"></i></div>");
+                    $("#register-btn").removeClass("bg-gary");
+                    verification = false;
+                } else {
+                    $(".tel-content .item-after").remove();
+                    $("#Mobile").parent().after("<div class=\"item-after add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></div>");
+                }
+                if (!recommend_type.test($("#RecommandCode").val())) {
+                    $(".recommend-content .item-after").remove();
+                    $("#RecommandCode").parent().after("<div class=\"item-after add\"><i class=\"fa fa-times color-red\" aria-hidden=\"true\"></i></div>");
+                    $("#register-btn").removeClass("bg-gary");
+                    verification = false;
 
-                verification = false;
-            } else {
-                $(".username-content .item-after").remove();
-                $("#Name").parent().after("<div class=\"item-after add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></div>");
+                } else {
+                    $(".recommend-content .item-after").remove();
+                    $("#RecommandCode").parent().after("<div class=\"item-after add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></div>");
+                }
+                if (!verification_type.test($("#CheckCode").val())) {
+                    $(".verification-content .verification-error").remove();
+                    $("#CheckCode").parent().after("<a class=\"verification-error add\"><i class=\"fa fa-times color-red\" aria-hidden=\"true\"></i></a>");
+                    verification = false;
+                    $("#register-btn").removeClass("bg-gary");
+                } else {
+                    $(".verification-content .verification-error").remove();
+                    $("#CheckCode").parent().after("<a class=\"verification-error add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></a>");
+                }
+                if (verification) {
+                    $("#register-form").submit();
+                    setTimeout(function () {
+                        $("#register-btn").removeClass("bg-gary");
+                    },1000)
+                }
             }
-            if (!tel_type.test($("#Mobile").val())) {
-                $(".tel-content .item-after").remove();
-                $("#Mobile").parent().after("<div class=\"item-after add\"><i class=\"fa fa-times color-red\" aria-hidden=\"true\"></i></div>");
-
-                verification = false;
-            } else {
-                $(".tel-content .item-after").remove();
-                $("#Mobile").parent().after("<div class=\"item-after add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></div>");
-            }
-            if (!recommend_type.test($("#RecommandCode").val())) {
-                $(".recommend-content .item-after").remove();
-                $("#RecommandCode").parent().after("<div class=\"item-after add\"><i class=\"fa fa-times color-red\" aria-hidden=\"true\"></i></div>");
-
-                verification = false;
-
-            } else {
-                $(".recommend-content .item-after").remove();
-                $("#RecommandCode").parent().after("<div class=\"item-after add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></div>");
-            }
-            if (!verification_type.test($("#CheckCode").val())) {
-                $(".verification-content .verification-error").remove();
-                $("#CheckCode").parent().after("<a class=\"verification-error add\"><i class=\"fa fa-times color-red\" aria-hidden=\"true\"></i></a>");
-                verification = false;
-            } else {
-                $(".verification-content .verification-error").remove();
-                $("#CheckCode").parent().after("<a class=\"verification-error add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></a>");
-            }
-            if (verification) {
-                $("#register-form").submit();
-            }
+           
         })
     </script>
 </body>
