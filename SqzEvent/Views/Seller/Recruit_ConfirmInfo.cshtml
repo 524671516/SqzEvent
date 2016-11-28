@@ -1,4 +1,5 @@
-﻿@{
+﻿@model SqzEvent.Models.Wx_RecruitCompleteViewModel
+@{
     Layout = null;
 }
 <!DOCTYPE html>
@@ -12,189 +13,226 @@
     <link href="~/Content/normalize.css" rel="stylesheet" />
     <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
-</head>
-<body>
     <style>
-    html,body{
-        width:100%;
-    }
-    .item-inner div{
-        display:inline-block;
-    }
-    input{
-        outline:none;
-        border:none;
-    }
-    a{
-        text-decoration:none;
-    }
-    ul,li{
-        list-style:none;
-        margin:0;
-        padding:0;
-    }
-    form{
-        margin-top:30px;
-    }
-    form li{
-        padding:10px 5px 10px 5px;
-    }
-    header{
-        width:80%;
-        margin:0 auto;
-        text-align:center;
-    }
-    /*工具样式*/
-    .bg-red{
-        color:red;
-    }
-    .red-border{
-        border:2px solid red !important;
-    }
-    .col-10{
-        width:10%;
-    }
-    .col-40{
-        width:40%;
-    }
-    .col-45{
-        width:45%;
-    }
-    .col-15{
-        width:15%;
-    }
-    .col-50 {
-        width: 50%;
-    }
-    .col-25 {
-        width: 25%;
-    }
-    .col-20{
-        width:20%;
-    }
-    .hidden{
-        display:none;
-    }
-    .color-blue{
-        color:#007aff;
-    }
-    .color-red{
-        color:red;
-    }
-    .color-green{
-        color:green;
-    }
-    .color-gary{
-        color:#ccc;
-    }
-   .border-bottom {
-        border-bottom: 1px solid #ccc;
-    }
-   .blue-border{
-       border:2px solid #007aff;
-   }
-    .btn{
-    border:1px solid #007aff;
-    background: #007aff;
-    color: #fff;
-    text-align: center;
-    display: block;
-    border-radius: 5px;
-    line-height: 27px;
-    box-sizing: border-box;
-    height: 29px;
-    font-size: 14px;
-    cursor: pointer;
-    outline: 0;
-    }
-    /*样式*/
-    .label-btn input{
-       visibility:hidden;
-    }
-    .label-btn span{
-        position:relative;
-        right:6px;
-    }
-    .label-btn{
-    text-align: center;
-    display: inline-block;
-    border-radius: 5px;
-    line-height: 27px;
-    box-sizing: border-box;
-    height: 29px;
-    font-size: 14px;
-    cursor: pointer;
-    outline: 0;
-    width:20%;
-    }
-    .item-input input{
-        width:100%;
-    }
-    .item-input{
-        width:55%;
-    }
-    #improve-btn{
-        margin:50px auto auto auto;
-    }
-    .bg-blue{
-        background-color:#007aff;
-    }
-    #province-select{
-        width:30%;
-    }
-    #city-select{
-        width:23%;
-    }
-        #area-select{
-        width:23%;
-    }
-    select {
-       height:20px;
-       outline:none;
-       border:none;
-       font-size:.7rem;
-       appearance: none;
-       -moz-appearance: none; /* Firefox */
-       -webkit-appearance: none; /* Safari 和 Chrome */
+        html, body {
+            width: 100%;
         }
 
+        .item-inner div {
+            display: inline-block;
+        }
+
+        input {
+            outline: none;
+            border: none;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        ul, li {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        form {
+            margin-top: 30px;
+        }
+
+            form li {
+                padding: 10px 5px 10px 5px;
+            }
+
+        header {
+            width: 80%;
+            margin: 0 auto;
+            text-align: center;
+        }
+        /*工具样式*/
+        .bg-red {
+            color: red;
+        }
+
+        .red-border {
+            border: 2px solid red !important;
+        }
+
+        .col-10 {
+            width: 10%;
+        }
+
+        .col-40 {
+            width: 40%;
+        }
+
+        .col-45 {
+            width: 45%;
+        }
+
+        .col-15 {
+            width: 15%;
+        }
+
+        .col-50 {
+            width: 50%;
+        }
+
+        .col-25 {
+            width: 25%;
+        }
+
+        .col-20 {
+            width: 20%;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .color-blue {
+            color: #007aff;
+        }
+
+        .color-red {
+            color: red;
+        }
+
+        .color-green {
+            color: green;
+        }
+
+        .color-gary {
+            color: #ccc;
+        }
+
+        .border-bottom {
+            border-bottom: 1px solid #ccc;
+        }
+
+        .blue-border {
+            border: 2px solid #007aff;
+        }
+
+        .btn {
+            border: 1px solid #007aff;
+            background: #007aff;
+            color: #fff;
+            text-align: center;
+            display: block;
+            border-radius: 5px;
+            line-height: 27px;
+            box-sizing: border-box;
+            height: 29px;
+            font-size: 14px;
+            cursor: pointer;
+            outline: 0;
+        }
+        /*样式*/
+        .label-btn input {
+            visibility: hidden;
+        }
+
+        .label-btn span {
+            position: relative;
+            right: 6px;
+        }
+
+        .label-btn {
+            text-align: center;
+            display: inline-block;
+            border-radius: 5px;
+            line-height: 27px;
+            box-sizing: border-box;
+            height: 29px;
+            font-size: 14px;
+            cursor: pointer;
+            outline: 0;
+            width: 20%;
+        }
+
+        .item-input input {
+            width: 100%;
+        }
+
+        .item-input {
+            width: 55%;
+        }
+
+        #improve-btn {
+            margin: 50px auto auto auto;
+        }
+
+        .bg-blue {
+            background-color: #007aff;
+        }
+
+        #province-select {
+            width: 30%;
+        }
+
+        #city-select {
+            width: 23%;
+        }
+
+        #area-select {
+            width: 23%;
+        }
+
+        select {
+            height: 20px;
+            outline: none;
+            border: none;
+            font-size: .7rem;
+            appearance: none;
+            -moz-appearance: none; /* Firefox */
+            -webkit-appearance: none; /* Safari 和 Chrome */
+        }
     </style>
+</head>
+<body>
+    
     <header><h2>信息完善</h2></header>
-    <form id="info-form">
+    @using (Html.BeginForm("Recruit_ConfirmInfo", "Seller", FormMethod.Post, new { @id = "info-form" }))
+    {
+        @Html.ValidationSummary()
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m=>m.UserName)
         <ul>
             <li class="id-content border-bottom">
                 <div class="item-inner">
                     <div class="item-title col-30">身份证号码</div>
                     <div class="item-input">
-                        <input type="text" name="id" placeholder="请输入身份证号码" id="personal-id">
+                        <input type="text" name="IdNumber" placeholder="请输入身份证号码" id="IdNumber">
                     </div>
                 </div>
             </li>
             <li class="id-content border-bottom">
                 <div class="item-inner">
                     <div class="item-title col-15">地址</div>
-                        <select id="province-select">
-                            <option>-请选择-</option>
-                        </select>
-                        <select id="city-select">
-                            <option>-请选择-</option>
-                        </select>
-                        <select id="area-select">
-                            <option>-请选择-</option>
-                        </select>
+                    <select id="AreaProvince" name="AreaProvince">
+                        <option>-请选择-</option>
+                    </select>
+                    <select id="AreaCity" name="AreaCity">
+                        <option>-请选择-</option>
+                    </select>
+                    <select id="AreaDistrict" name="AreaDistrict">
+                        <option>-请选择-</option>
+                    </select>
                 </div>
             </li>
             <li class="checkbox-content">
                 <div class="item-inner">
                     <div class="item-title col-30">可工作日期</div>
-                    <label for="holiday" class="label-btn blue-border"><input type="checkbox" id="holiday"/><span>节假日</span></label>
-                    <label for="workday" class="label-btn blue-border"><input type="checkbox" id="workday" /><span>工作日</span></label>
-                    <label for="weekend" class="label-btn blue-border"><input type="checkbox" id="weekend" /><span>双休日</span></label>
+                    <label for="Holiday" class="label-btn blue-border"><input type="checkbox" id="Holiday" name="Holiday"/><span>节假日</span></label>
+                    <label for="Weekday" class="label-btn blue-border"><input type="checkbox" id="Weekday" name="Weekday"/><span>工作日</span></label>
+                    <label for="Weekend" class="label-btn blue-border"><input type="checkbox" id="Weekend" name="Weekend" /><span>双休日</span></label>
                 </div>
             </li>
         </ul>
         <a href="#" id="improve-btn" class="btn col-50">提交信息</a>
-    </form>
+    }
     <script>
         $("label").each(function () {
             $(this).on("click", function () {
@@ -222,49 +260,46 @@
                 for (i = 0; i < data.response.regions.length; i++) {
                     var province = unescape(data.response.regions[i].name);
                     var province_val = data.response.regions[i].id;
-                    $("#province-select").append("<option value=" + province_val + ">" + province + "</option>");
+                    $("#AreaProvince").append("<option target-id=\"" + province_val + "\" value=\"" + province + "\">" + province + "</option>");
                 }
             }
         });
-        $("#province-select").on("change", function () {           
-            $("#city-select").html("");
-            $("#area-select").html("");
-            $("#area-select").append("<option>-请选择-</option>");
-            $("#city-select").append("<option>-请选择-</option>");
+        $("#AreaProvince").on("change", function () {           
+            $("#AreaCity").html("<option>-请选择-</option>");
+            $("#AreaDistrict").html("<option>-请选择-</option>");
             $.ajax({
                 url: "/Seller/GetRegion",
                 data: {
-                    parentid: $("#province-select").val(),
+                    parentid: $("#AreaProvince").find("option:selected").attr("target-id"),
                     level:2
                 },
                 success: function (data) {
                     var data = JSON.parse(data);
-                    if ($("#province-select").val() != "-请选择-") {
+                    if ($("#AreaProvince").val() != "") {
                         for (i = 0; i < data.response.regions.length; i++) {
                             var city = unescape(data.response.regions[i].name);
                             var city_val = data.response.regions[i].id;
-                            $("#city-select").append("<option value=" + city_val + ">" + city + "</option>")
+                            $("#AreaCity").append("<option target-id=\"" + city_val + "\" value=\"" + city + "\">" + city + "</option>");
                         }
                     }                
                 }
             });
         });
-        $("#city-select").on("change", function () {
-            $("#area-select").html("");
-            $("#area-select").append("<option>-请选择-</option>");
+        $("#AreaCity").on("change", function () {
+            $("#AreaDistrict").html("<option>-请选择-</option>");
             $.ajax({
                 url: "/Seller/GetRegion",
                 data: {
-                    parentid: $("#city-select").val(),
+                    parentid: $("#AreaCity").find("option:selected").attr("target-id"),
                     level: 3
                 },
                 success: function (data) {
                     var data = JSON.parse(data);
-                    if ($("#city-select").val() != "-请选择-") {
+                    if ($("#AreaCity").val() != "") {
                         for (i = 0; i < data.response.regions.length; i++) {
                             var area = unescape(data.response.regions[i].name);
                             var area_val = data.response.regions[i].id;
-                            $("#area-select").append("<option value=" + area_val + ">" + area + "</option>")
+                            $("#AreaDistrict").append("<option target-id=\"" + area_val + "\" value=\"" + area + "\">" + area + "</option>");
                         }
                     }     
                 }
@@ -277,14 +312,17 @@
         })
         var id_type = /(^\d{18}$)|(^\d{15}$)|(^\d{17}(\d|X|x)$)/
         $("#improve-btn").on("click", function () {
+            console.log($("#AreaProvince").val());
+            console.log($("#UserName").val());
+            console.log($("#Weekday").val());
             var bool = true;
-            if (!id_type.test($("#personal-id").val())) {
+            if (!id_type.test($("#IdNumber").val())) {
                 $(".id-content .item-after").remove();
-                $("#personal-id").parent().after("<div class=\"item-after add\"><i class=\"fa fa-times color-red\" aria-hidden=\"true\"></i></div>")
+                $("#IdNumber").parent().after("<div class=\"item-after add\"><i class=\"fa fa-times color-red\" aria-hidden=\"true\"></i></div>");
                 bool = false;
             } else {
                 $(".id-content .item-after").remove();
-                $("#personal-id").parent().after("<div class=\"item-after add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></div>")
+                $("#IdNumber").parent().after("<div class=\"item-after add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></div>")
             }
             var lableArray = [];
             $("#info-form").find(".label-btn").each(function () {
@@ -294,6 +332,7 @@
                 if (lableArray.length == 3) {
                     $(".label-btn").removeClass("blue-border");
                     $(".label-btn").addClass("red-border");
+                    console.log(1);
                     bool = false;
                 } else {
                     $(".label-btn").removeClass("red-border");
@@ -301,14 +340,18 @@
                 }
             })
             $("#info-form").find("select").each(function () {
-                if ($(this).val()=="-请选择-") {
+                if ($(this).val() == "-请选择-") {
                     $(this).addClass("bg-red");
+                    console.log(1);
                     bool = false;
                 } else {
                     $(this).removeClass("bg-red");
                 }
-            })
-            })
+            });
+            if (bool) {
+                $("#info-form").submit();
+            }
+        });
     </script>
    
 </body>

@@ -176,7 +176,7 @@ namespace SqzEvent.Models
     public class Wx_RecruitCompleteViewModel
     {
         [Display(AutoGenerateField = false)]
-        public string UserName;
+        public string UserName { get; set; }
 
         [Required]
         [StringLength(20)]
@@ -184,8 +184,6 @@ namespace SqzEvent.Models
         public string IdNumber { get; set; }
 
         public string AreaProvince { get; set; }
-
-        public string AreaState { get; set; }
 
         public string AreaCity { get; set; }
 

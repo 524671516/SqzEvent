@@ -3994,6 +3994,7 @@ namespace SqzEvent.Controllers
         }
 
         [AllowAnonymous]
+        [HttpPost, ValidateAntiForgeryToken]
         public async Task<ActionResult> Recruit_ForceRegister(Wx_RecruitForceViewModel model)
         {
             if (ModelState.IsValid)
