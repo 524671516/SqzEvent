@@ -293,7 +293,7 @@
                 },
                 success: function (data) {
                     var data = JSON.parse(data);
-                    if ($("#AreaProvince").val() != "") {
+                    if ($("#AreaProvince").find("option:selected").attr("target-id")>0) {
                         for (i = 0; i < data.response.regions.length; i++) {
                             var city = unescape(data.response.regions[i].name);
                             var city_val = data.response.regions[i].id;
@@ -313,7 +313,7 @@
                 },
                 success: function (data) {
                     var data = JSON.parse(data);
-                    if ($("#AreaCity").val() != "") {
+                    if ($("#AreaCity").find("option:selected").attr("target-id")>0) {
                         for (i = 0; i < data.response.regions.length; i++) {
                             var area = unescape(data.response.regions[i].name);
                             var area_val = data.response.regions[i].id;
