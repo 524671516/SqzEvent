@@ -45,6 +45,12 @@
         text-align:center;
     }
     /*工具样式*/
+    .bg-red{
+        color:red;
+    }
+    .red-border{
+        border:2px solid red !important;
+    }
     .col-10{
         width:10%;
     }
@@ -84,6 +90,9 @@
    .border-bottom {
         border-bottom: 1px solid #ccc;
     }
+   .blue-border{
+       border:2px solid #007aff;
+   }
     .btn{
     border:1px solid #007aff;
     background: #007aff;
@@ -107,7 +116,6 @@
         right:6px;
     }
     .label-btn{
-    border:1px solid #007aff;
     text-align: center;
     display: inline-block;
     border-radius: 5px;
@@ -144,7 +152,7 @@
        height:20px;
        outline:none;
        border:none;
-       font-size:12px;
+       font-size:.7rem;
        appearance: none;
        -moz-appearance: none; /* Firefox */
        -webkit-appearance: none; /* Safari 和 Chrome */
@@ -179,9 +187,9 @@
             <li class="checkbox-content">
                 <div class="item-inner">
                     <div class="item-title col-30">可工作日期</div>
-                    <label for="holiday" class="label-btn"><input type="checkbox" id="holiday"/><span>节假日</span></label>
-                    <label for="workday" class="label-btn"><input type="checkbox" id="workday" /><span>工作日</span></label>
-                    <label for="weekend" class="label-btn"><input type="checkbox" id="weekend" /><span>双休日</span></label>
+                    <label for="holiday" class="label-btn blue-border"><input type="checkbox" id="holiday"/><span>节假日</span></label>
+                    <label for="workday" class="label-btn blue-border"><input type="checkbox" id="workday" /><span>工作日</span></label>
+                    <label for="weekend" class="label-btn blue-border"><input type="checkbox" id="weekend" /><span>双休日</span></label>
                 </div>
             </li>
         </ul>
@@ -190,11 +198,18 @@
     <script>
         $("label").each(function () {
             $(this).on("click", function () {
+                $(".label-btn").removeClass("red-border");
+                $(".label-btn").addClass("blue-border");
                 if (!$(this).children("input").is(':checked')) {
                     $(this).removeClass("bg-blue");
                 } else {
                     $(this).addClass("bg-blue");
                 }
+            })
+        })
+        $("select").each(function () {
+            $(this).on("click", function () {
+                $(this).removeClass("bg-red");
             })
         })
         $.ajax({
@@ -224,11 +239,13 @@
                 },
                 success: function (data) {
                     var data = JSON.parse(data);
-                    for (i = 0; i < data.response.regions.length; i++) {
-                        var city = unescape(data.response.regions[i].name);
-                        var city_val= data.response.regions[i].id;
-                        $("#city-select").append("<option value=" + city_val + ">" + city + "</option>")
-                    }
+                    if ($("#province-select").val() != "-请选择-") {
+                        for (i = 0; i < data.response.regions.length; i++) {
+                            var city = unescape(data.response.regions[i].name);
+                            var city_val = data.response.regions[i].id;
+                            $("#city-select").append("<option value=" + city_val + ">" + city + "</option>")
+                        }
+                    }                
                 }
             });
         });
@@ -242,12 +259,14 @@
                     level: 3
                 },
                 success: function (data) {
-                    var data = JSON.parse(data);              
-                    for (i = 0; i < data.response.regions.length; i++) {
-                        var area = unescape(data.response.regions[i].name);
-                        var area_val = data.response.regions[i].id;
-                        $("#area-select").append("<option value=" + area_val + ">" + area + "</option>")
-                    }
+                    var data = JSON.parse(data);
+                    if ($("#city-select").val() != "-请选择-") {
+                        for (i = 0; i < data.response.regions.length; i++) {
+                            var area = unescape(data.response.regions[i].name);
+                            var area_val = data.response.regions[i].id;
+                            $("#area-select").append("<option value=" + area_val + ">" + area + "</option>")
+                        }
+                    }     
                 }
             });
         });
@@ -258,13 +277,37 @@
         })
         var id_type = /(^\d{18}$)|(^\d{15}$)|(^\d{17}(\d|X|x)$)/
         $("#improve-btn").on("click", function () {
+            var bool = true;
             if (!id_type.test($("#personal-id").val())) {
                 $(".id-content .item-after").remove();
                 $("#personal-id").parent().after("<div class=\"item-after add\"><i class=\"fa fa-times color-red\" aria-hidden=\"true\"></i></div>")
+                bool = false;
             } else {
                 $(".id-content .item-after").remove();
                 $("#personal-id").parent().after("<div class=\"item-after add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></div>")
             }
+            var lableArray = [];
+            $("#info-form").find(".label-btn").each(function () {
+                if (!$(this).hasClass("bg-blue")) {
+                    lableArray.push("1");
+                }
+                if (lableArray.length == 3) {
+                    $(".label-btn").removeClass("blue-border");
+                    $(".label-btn").addClass("red-border");
+                    bool = false;
+                } else {
+                    $(".label-btn").removeClass("red-border");
+                    $(".label-btn").addClass("blue-border");
+                }
+            })
+            $("#info-form").find("select").each(function () {
+                if ($(this).val()=="-请选择-") {
+                    $(this).addClass("bg-red");
+                    bool = false;
+                } else {
+                    $(this).removeClass("bg-red");
+                }
+            })
             })
     </script>
    
