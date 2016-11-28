@@ -41,6 +41,11 @@
             margin-top: 30px;
         }
 
+            form ul {
+                width: 90%;
+                margin: 0 auto;
+            }
+
             form li {
                 padding: 10px 5px 10px 5px;
             }
@@ -50,33 +55,20 @@
             margin: 0 auto;
             text-align: center;
         }
+        header h2{
+            color:#007aff;
+        }
         /*工具样式*/
-        .bg-red {
-            color: red;
+        .col-100 {
+            width: 100%;
         }
 
-        .red-border {
-            border: 2px solid red !important;
+        .col-30 {
+            width: 30%;
         }
 
-        .col-10 {
-            width: 10%;
-        }
-
-        .col-40 {
-            width: 40%;
-        }
-
-        .col-45 {
-            width: 45%;
-        }
-
-        .col-15 {
-            width: 15%;
-        }
-
-        .col-50 {
-            width: 50%;
+        .col-22 {
+            width: 22%;
         }
 
         .col-25 {
@@ -87,28 +79,46 @@
             width: 20%;
         }
 
+        .col-50 {
+            width: 50%;
+        }
+
+        .col-55 {
+            width: 55%;
+        }
+
+        .col-30 {
+            width: 30%;
+        }
+
         .hidden {
             display: none;
+        }
+
+        .bg-red {
+            color: red;
+        }
+
+        .bg-blue {
+            background-color: #007aff;
         }
 
         .color-blue {
             color: #007aff;
         }
-
+        .color-green{
+            color:green;
+        }
         .color-red {
             color: red;
         }
 
-        .color-green {
-            color: green;
-        }
-
-        .color-gary {
-            color: #ccc;
-        }
-
         .border-bottom {
             border-bottom: 1px solid #ccc;
+        }
+
+        .red-border {
+            border: 2px solid red !important;
         }
 
         .blue-border {
@@ -130,6 +140,28 @@
             outline: 0;
         }
         /*样式*/
+        .add {
+            position: absolute;
+            right: 2.5rem;
+        }
+
+        .checkbox-content {
+            text-align: center;
+        }
+
+            .checkbox-content .item-title {
+                padding-bottom: 10px;
+                text-align: left;
+            }
+
+        .item-title {
+            font-size: 1rem;
+        }
+
+        .item-input input {
+            width: 100%;
+        }
+
         .label-btn input {
             visibility: hidden;
         }
@@ -149,35 +181,10 @@
             font-size: 14px;
             cursor: pointer;
             outline: 0;
-            width: 20%;
-        }
-
-        .item-input input {
-            width: 100%;
-        }
-
-        .item-input {
-            width: 55%;
         }
 
         #improve-btn {
             margin: 50px auto auto auto;
-        }
-
-        .bg-blue {
-            background-color: #007aff;
-        }
-
-        #province-select {
-            width: 30%;
-        }
-
-        #city-select {
-            width: 23%;
-        }
-
-        #area-select {
-            width: 23%;
         }
 
         select {
@@ -202,32 +209,32 @@
         <ul>
             <li class="id-content border-bottom">
                 <div class="item-inner">
-                    <div class="item-title col-30">身份证号码</div>
-                    <div class="item-input">
+                    <div class="item-title col-20">身份证</div>
+                    <div class="item-input col-55">
                         <input type="text" name="IdNumber" placeholder="请输入身份证号码" id="IdNumber">
                     </div>
                 </div>
             </li>
             <li class="id-content border-bottom">
                 <div class="item-inner">
-                    <div class="item-title col-15">地址</div>
-                    <select id="AreaProvince" name="AreaProvince">
+                    <div class="item-title col-20">地址</div>
+                    <select id="AreaProvince" name="AreaProvince" class="col-22">
                         <option>-请选择-</option>
                     </select>
-                    <select id="AreaCity" name="AreaCity">
+                    <select id="AreaCity" name="AreaCity" class="col-22">
                         <option>-请选择-</option>
                     </select>
-                    <select id="AreaDistrict" name="AreaDistrict">
+                    <select id="AreaDistrict" name="AreaDistrict" class="col-22">
                         <option>-请选择-</option>
                     </select>
                 </div>
             </li>
             <li class="checkbox-content">
                 <div class="item-inner">
-                    <div class="item-title col-30">可工作日期</div>
-                    <label for="Holiday" class="label-btn blue-border"><input type="checkbox" id="Holiday" name="Holiday"/><span>节假日</span></label>
-                    <label for="Weekday" class="label-btn blue-border"><input type="checkbox" id="Weekday" name="Weekday"/><span>工作日</span></label>
-                    <label for="Weekend" class="label-btn blue-border"><input type="checkbox" id="Weekend" name="Weekend" /><span>双休日</span></label>
+                    <div class="item-title col-100">可工作日期</div>
+                    <label for="Holiday" class="label-btn blue-border col-30"><input type="checkbox" id="Holiday" name="Holiday"/><span>节假日</span></label>
+                    <label for="Weekday" class="label-btn blue-border col-30"><input type="checkbox" id="Weekday" name="Weekday"/><span>工作日</span></label>
+                    <label for="Weekend" class="label-btn blue-border col-30"><input type="checkbox" id="Weekend" name="Weekend" /><span>双休日</span></label>
                 </div>
             </li>
         </ul>
@@ -312,9 +319,6 @@
         })
         var id_type = /(^\d{18}$)|(^\d{15}$)|(^\d{17}(\d|X|x)$)/
         $("#improve-btn").on("click", function () {
-            console.log($("#AreaProvince").val());
-            console.log($("#UserName").val());
-            console.log($("#Weekday").val());
             var bool = true;
             if (!id_type.test($("#IdNumber").val())) {
                 $(".id-content .item-after").remove();
@@ -332,7 +336,6 @@
                 if (lableArray.length == 3) {
                     $(".label-btn").removeClass("blue-border");
                     $(".label-btn").addClass("red-border");
-                    console.log(1);
                     bool = false;
                 } else {
                     $(".label-btn").removeClass("red-border");
@@ -342,7 +345,6 @@
             $("#info-form").find("select").each(function () {
                 if ($(this).val() == "-请选择-") {
                     $(this).addClass("bg-red");
-                    console.log(1);
                     bool = false;
                 } else {
                     $(this).removeClass("bg-red");

@@ -18,9 +18,10 @@
             width: 100%;
         }
 
-        input {
+        .item-input input {
             outline: none;
             border: none;
+            width: 100%;
         }
 
         a {
@@ -51,18 +52,13 @@
             margin: 0 auto;
             text-align: center;
         }
+        header h2{
+            color:#007aff;
+        }
 
         .verification-content a {
             display: inline-block;
             text-decoration: none;
-        }
-
-        .verification-content input {
-            width: 45%;
-        }
-
-        #verification-code {
-            width: 100%;
         }
 
         .item-inner > div {
@@ -77,33 +73,12 @@
             width: 40%;
         }
 
-        .col-45 {
-            width: 45%;
-        }
-
-        .col-10 {
-            width: 10%;
-        }
-
-        .col-15 {
-            width: 15%;
-        }
-
         .col-50 {
             width: 50%;
         }
 
-        .col-25 {
-            text-align: left;
-            width: 25%;
-        }
-
         .col-20 {
             width: 20%;
-        }
-
-        .col-33 {
-            width: 33.333333333%;
         }
 
         .hidden {
@@ -166,8 +141,15 @@
             margin: 50px auto auto auto;
         }
 
+        .add {
+            position: absolute;
+            right: 2.5rem;
+        }
+
         .verification-error {
             width: 8%;
+            position: absolute;
+            right: 4.8rem !important;
         }
     </style>
 </head>
@@ -184,7 +166,7 @@
             <li class="item-content username-content border-bottom">
                 <div class="item-inner">
                     <div class="item-title col-20">姓名</div>
-                    <div class="item-input">
+                    <div class="item-input col-50">
                         <input type="text" name="Name" placeholder="请输入真实姓名" id="Name" />
                     </div>
                 </div>
@@ -192,24 +174,24 @@
             <li class="item-content tel-content border-bottom">
                 <div class="item-inner">
                     <div class="item-title col-20">手机号</div>
-                    <div class="item-input">
-                        <input type="tel" name="Mobile" placeholder="手机号码(11位)" id="Mobile" />
+                    <div class="item-input col-50">
+                        <input type="tel" name="Mobile" placeholder="手机号码(11位)" id="Mobile" maxlength="11"/>
                     </div>
                 </div>
             </li>
             <li class="item-content recommend-content border-bottom">
                 <div class="item-inner">
                     <div class="item-title col-20">推荐码</div>
-                    <div class="item-input">
-                        <input type="text" name="RecommandCode" placeholder="输入推荐码(选填)" id="RecommandCode">
+                    <div class="item-input col-50">
+                        <input type="text" name="RecommandCode" placeholder="输入推荐码(选填)" id="RecommandCode" maxlength="6">
                     </div>
                 </div>
             </li>
             <li class="item-content verification-content">
                 <div class="item-inner">
                     <div class="item-title col-20">验证码</div>
-                    <div class="item-input col-35">
-                        <input type="text" name="CheckCode" placeholder="输入验证码" id="CheckCode">
+                    <div class="item-input col-40">
+                        <input type="text" name="CheckCode" placeholder="输入验证码" id="CheckCode" maxlength="6">
                     </div>
                     <a class="item-after border-left" href="javascript:;" id="get-verification">获取验证码</a>
                     <a class="item-after border-left hidden" href="javascript:;" id="wait-num"><span></span>秒后重发</a>
@@ -226,7 +208,7 @@
         })
         var word_type = /^[\u4e00-\u9fa5]{1,6}$/
         var tel_type = /^(13[0-9]|14[0-9]|15[0-9]|18[0-9])\d{8}$/
-        var recommend_type = /^\d{6}$/
+        var recommend_type = /^\d{6}$|^\d{0}$/
         var verification_type = /^\d{4,6}$/
         $("#get-verification").on("click", function () {
             var bool = true;
