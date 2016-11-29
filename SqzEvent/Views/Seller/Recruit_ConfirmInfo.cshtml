@@ -146,8 +146,8 @@
         }
 
         .add {
-            position: absolute;
-            right: 2.5rem;
+            width:20%;
+            text-align:center;
         }
 
         .checkbox-content {
@@ -155,8 +155,8 @@
         }
 
         .checkbox-content .item-title {
-                padding-bottom: 10px;
-                text-align: left;
+            padding-bottom: 10px;
+            text-align: left;
         }
 
         .item-title {
@@ -247,7 +247,7 @@
         <a href="javascrirt:;" id="improve-btn" class="btn col-50">提交信息</a>
     }
     <script>
-        /*复选框点击后样式变化*/
+        /*label点击后样式变化*/
         $("label").each(function () {
             $(this).on("click", function () {
                 $(".label-btn").removeClass("red-border");             //输入错误样式移除        
@@ -255,10 +255,10 @@
                 /*复选框选中样式*/
                 if (!$(this).children("input").is(':checked')) {
                     $(this).removeClass("bg-blue");                        
-                    $(this).removeClass("color-white")
+                    $(this).removeClass("color-white");
                 } else {
                     $(this).addClass("bg-blue");
-                    $(this).addClass("color-white")
+                    $(this).addClass("color-white");
                 }
             })
         })
@@ -345,7 +345,7 @@
                     $("#improve-btn").removeClass("bg-gary");
                 } else {
                     $(".id-content .item-after").remove();
-                    $("#IdNumber").parent().after("<div class=\"item-after add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></div>")
+                    $("#IdNumber").parent().after("<div class=\"item-after add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></div>");
                 }
                 var lableArray = [];
                 $("#info-form").find(".label-btn").each(function () {

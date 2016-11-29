@@ -18,11 +18,11 @@
         html, body {
             width: 100%;
         }
-
         .item-input input {
             outline: none;
             border: none;
             width: 100%;
+            height:40px;
         }
 
         a {
@@ -39,8 +39,8 @@
             margin-top: 30px;
         }
 
-       form li {
-                padding: 10px 5px 10px 5px;
+        form li {
+            padding: 0 5px 0 5px;
         }
         ul {
             width: 90%;
@@ -77,9 +77,14 @@
         .col-50 {
             width: 50%;
         }
-
+        .col-30{
+            width:30%;
+        }
         .col-20 {
             width: 20%;
+        }
+        .col-26{
+            width:26%;
         }
         .hidden {
             display: none !important;
@@ -95,12 +100,12 @@
 
         .border-left {
             border-radius:5px;
-            height: 22px;
-            float: right;
+            height: 28px;
             padding: 5px 5px 1px 5px;
             font-size: 12px;
             background: #007aff;
             color: #fff;
+            line-height:1.4;
             text-align: center;
             box-sizing: border-box;
             font-size: 12px;
@@ -140,22 +145,26 @@
             outline: 0;
         }
         /*基本样式*/
-       .btn:hover {
-            box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
-}
+        .item-inner{
+            height:42px;
+        }
+        .item-title{
+            height:30px;
+        }
+        .btn:hover {
+                box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+         }
+        .add{
+            width:25%;
+            text-align:center;
+        }
         #register-btn {
             margin: 50px auto auto auto;
         }
 
-        .add {
-            position: absolute;
-            right: 2.5rem;
-        }
-
         .verification-error {
-            width: 8%;
-            position: absolute;
-            right: 4.8rem !important;
+            width: 8% !important;
+            text-align:center;
         }
         .bg{
            position: fixed;
@@ -166,6 +175,7 @@
            background-color: #000;
            opacity:0.2;
         }
+
         .modal{
             background-color:#fff;
             z-index:11;
@@ -181,14 +191,51 @@
             border:1px solid rgba(0,0,0,.2);
             box-shadow:0 5px 15px rgba(0,0,0,.5);
         }
+
         #close-btn{
             position:absolute;
             right:2px;
             top:2px;
-            color:#CCC;
+            color:#000;
+            opacity:.2;
+        }
+        #know-btn{
+            text-align:center;
+            width:25%;
+            border-radius:4px;
+            color:#fff;
+            display:block;
+            border: 1px solid #428bca;
+            background-color:#428bca;
+            text-align:center;
+            padding:6px 12px;
+            font-weight:400;
+            position:absolute;
+            bottom:5%;
+            left:60%;
+        }
+        #close-btn:hover{
+            opacity:.5;
         }
         .modal-header h2{
+            color:#000;
+            padding:0;
+            margin:0;
+            opacity:.5;
+        }
+        .modal-header{
+            padding:15px;
             border-bottom: 1px solid #e5e5e5;
+
+        }
+        .modal-body{
+            padding-top:10px;
+        }
+        .modal-body p{
+            padding:2px 5px;
+            word-break:break-word;
+            text-indent:2em;
+            margin:0;
         }
     </style>
 </head>
@@ -197,11 +244,13 @@
     <div class="modal">
         <div class="modal-header">
             <a id="close-btn"><i class="fa fa-times"></i></a>
-            <h2>aaaa</h2>
+            <h2>注册须知</h2>
         </div>
         <div class="modal-body">
-            asdsasad
+            <p>知道了知道了知道了知道了撒啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊</p>
+            <p>知道了知道了知道了知道了</p>
         </div>
+        <a href="javascript:;" id="know-btn">我知道了</a>
     </div>
     <div class="bg"></div>
     <header><h2>注册</h2></header>
@@ -241,8 +290,9 @@
                     <div class="item-input col-40">
                         <input type="text" name="CheckCode" placeholder="输入验证码" id="CheckCode" maxlength="6">
                     </div>
-                    <a class="item-after border-left" href="javascript:;" id="get-verification">获取验证码</a>
-                    <a class="item-after border-left hidden" href="javascript:;" id="wait-num"><span></span>秒后重发</a>
+                    <a class="add" id="verification-error"></a>
+                    <a class="item-after border-left col-26" href="javascript:;" id="get-verification">获取验证码</a>
+                    <a class="item-after border-left hidden col-26" href="javascript:;" id="wait-num"><span></span>秒后重发</a>
                 </div>
             </li>
         </ul>
@@ -253,8 +303,18 @@
         $(".modal").animate({
             top: '10%',
             speed: "show"
-        });;
+        });
         /*页面初始化弹出框关闭按钮点击后动画*/
+        $("#know-btn").on("click", function () {
+            $(".modal").animate({
+                top: '-100%',
+                opacity: '0.5',
+                height: '150px',
+                width: '150px',
+                speed: "show"
+            });
+            $(".bg").addClass("hidden");      //遮罩层隐藏
+        })
         $("#close-btn").on("click", function () {
             $(".modal").animate({
                 top: '-100%',
@@ -262,7 +322,7 @@
                 height: '150px',
                 width: '150px',
                 speed:"show"
-            });;
+            });
             $(".bg").addClass("hidden");      //遮罩层隐藏
         })
         /*input获得焦点后清除输入错误警告样式*/
@@ -280,27 +340,27 @@
             var bool = true;
             if (!word_type.test($("#Name").val())) {
                 $(".username-content .item-after").remove();
-                $("#Name").parent().after("<div class=\"item-after add\"><i class=\"fa fa-times color-red\" aria-hidden=\"true\"></i></div>")
-                bool=false
+                $("#Name").parent().after("<div class=\"item-after add\"><i class=\"fa fa-times color-red\" aria-hidden=\"true\"></i></div>");
+                bool = false;
             } else {
                 $(".username-content .item-after").remove();
-                $("#Name").parent().after("<div class=\"item-after add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></div>")
+                $("#Name").parent().after("<div class=\"item-after add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></div>");
             }
             if (!tel_type.test($("#Mobile").val())) {
                 $(".tel-content .item-after").remove();
-                $("#Mobile").parent().after("<div class=\"item-after add\"><i class=\"fa fa-times color-red\" aria-hidden=\"true\"></i></div>")
-                bool = false
+                $("#Mobile").parent().after("<div class=\"item-after add\"><i class=\"fa fa-times color-red\" aria-hidden=\"true\"></i></div>");
+                bool = false;
             } else {
                 $(".tel-content .item-after").remove();
-                $("#Mobile").parent().after("<div class=\"item-after add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></div>")
+                $("#Mobile").parent().after("<div class=\"item-after add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></div>");
             }
             if (!recommend_type.test($("#RecommandCode").val())) {
                 $(".recommend-content .item-after").remove();
-                $("#RecommandCode").parent().after("<div class=\"item-after add\"><i class=\"fa fa-times color-red\" aria-hidden=\"true\"></i></div>")
-                bool = false
+                $("#RecommandCode").parent().after("<div class=\"item-after add\"><i class=\"fa fa-times color-red\" aria-hidden=\"true\"></i></div>");
+                bool = false;
             } else {
                 $(".recommend-content .item-after").remove();
-                $("#RecommandCode").parent().after("<div class=\"item-after add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></div>")
+                $("#RecommandCode").parent().after("<div class=\"item-after add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></div>");
             }
             /*填入信息通过后获取短信*/
             if (bool) {
@@ -364,20 +424,20 @@
                     $("#RecommandCode").parent().after("<div class=\"item-after add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></div>");
                 }
                 if (!verification_type.test($("#CheckCode").val())) {
-                    $(".verification-content .verification-error").remove();
-                    $("#CheckCode").parent().after("<a class=\"verification-error add\"><i class=\"fa fa-times color-red\" aria-hidden=\"true\"></i></a>");
+                    $(".verification-error").remove();
+                    $("#verification-error").html("<i class=\"fa fa-times color-red\" aria-hidden=\"true\"></i>");
                     verification = false;
                     $("#register-btn").removeClass("bg-gary");
                 } else {
-                    $(".verification-content .verification-error").remove();
-                    $("#CheckCode").parent().after("<a class=\"verification-error add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></a>");
+                    $(".verification-error").remove();
+                    $("#verification-error").html("<i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i>");
                 }
                 /*验证通过提交表单*/
                 if (verification) {
                     $("#register-form").submit();
                     setTimeout(function () {
                         $("#register-btn").removeClass("bg-gary");
-                    },1000)
+                    }, 1000)
                 }
             }
            
