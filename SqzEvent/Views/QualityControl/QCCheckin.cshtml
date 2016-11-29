@@ -31,7 +31,7 @@
                     <ul>
                         <li>
                             <a href="#" class="item-link smart-select" id="factory-select" data-back-text="返回" data-back-on-select="true" data-searchbar-placeholder="选择工厂" data-searchbar-cancel="取消">
-                                @Html.DropDownListFor(m => m.FactoryId, ViewBag.FactoryList as SelectList, "- 请选择 -")
+                                @Html.DropDownListFor(m => m.FactoryId, ViewBag.FactoryList as SelectList, "- 请选择 -", new {@class = "required" })
                                 <div class="item-content">
                                     <div class="item-inner">
                                         <div class="item-title">签到工厂</div>
@@ -67,7 +67,7 @@
                         </li>
                         <li>
                             <div class="item-content middle-content">
-                                @Html.TextAreaFor(m => m.CheckinRemark, new { placeholder = "请输入签到备注", @class = "required input-textarea", required="required", maxlength="200" })
+                                @Html.TextAreaFor(m => m.CheckinRemark, new { placeholder = "请输入签到备注", @class = "input-textarea", required="required", maxlength="200"})
                             </div>
                             <div class="item-content">
                                 <div class="item-inner">

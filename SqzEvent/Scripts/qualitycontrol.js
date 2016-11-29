@@ -64,11 +64,14 @@ myApp.onPageInit('qccheckin', function (page) {
     var $factoryselect = $("#factory-select")       //工厂选择按钮
     var $qccheckinsubmit = $("#qccheckin-submit");  //表单提交按钮
     var $qccheckinform = $('#qccheckin-form');      //form表单
-    $("input[type='tel']").val("");                 //清空默认数字0
+    //键盘事件
+    $qccheckinform.on("keyup", ".required", function () {
+        $(this).attr("placeholder", "").removeClass("invalid-input");
+    });
     //效验规则
     $qccheckinform.validate({
-        debug: false,
         //调试模式取消submit的默认提交功能
+        debug: false,
         //错误处理
         errorPlacement: function (error, element) {
             myApp.hideIndicator();
@@ -120,13 +123,12 @@ myApp.onPageInit('qccheckin', function (page) {
     currentTextAreaLength("qccheckin-form", "CheckinRemark", 200, "qccheckin-currentlen");
 });
 /*==========
-签退页 /// 修改***************************
+签退页 
 =========*/
 myApp.onPageInit("addcheckout", function (page) {
     var $checkoutnoinfo = $("#checkout-noinfo");                    //无信息
     var $checkout = $("#checkout");                                 //keyup对象
     var $addqccheckoutsubmit = $("#addqccheckout-submit");          //提交按钮
-    var $addqccheckoutform = $('#addqccheckoutform');               //form表单
     //AgendaId改变时触发
     $$("#AgendaId").on("change", function () {
         $$.ajax({
@@ -141,12 +143,8 @@ myApp.onPageInit("addcheckout", function (page) {
         });
     });
     //键盘事件
-    $checkout.on("keyup", "#CheckoutRemark", function () {
-        if ($(this).val() != "") {
+    $checkout.on("keyup", ".required", function () {
             $(this).attr("placeholder", "").removeClass("invalid-input");
-        } else {
-            $(this).attr("placeholder", "请输入备注信息").addClass("invalid-input");
-        }
     });
     //判断AgendaId是否为空
     if ($$("#AgendaId").val() == "") {
@@ -210,7 +208,7 @@ myApp.onPageInit("breakdownlist", function (page) {
     });
 });
 /*==========
-新增故障报告 /// 修改校验规则******************************
+新增故障报告 
 =========*/
 myApp.onPageInit("addbreakdown", function (page) {
     var $equipmentselect = $("#equipment-select")          //设备选择
@@ -277,21 +275,9 @@ myApp.onPageInit("addbreakdown", function (page) {
             });
         }
     });
-    //效验规则
     $addbreakdownform.validate({
-        rules: {
-            BreakDownTime: {
-                required: true,
-                date: true
-            },
-            FactoryId: {
-                required: true,
-            },
-            ReportContent: {
-                maxlength: 200,
-                required: true
-            }
-        },
+        //调试模式取消submit的默认提交功能
+        debug: false,
         //错误处理
         errorPlacement: function (error, element) {
             myApp.hideIndicator();
@@ -317,13 +303,12 @@ myApp.onPageInit("addbreakdown", function (page) {
     currentTextAreaLength("addbreakdown-form", "ReportContent", 200, "addbreakdown-currentlen");
 });
 /*==========
-每日工作总结页 /// 修改校验规则
+每日工作总结页
 =========*/
 myApp.onPageInit('dailysummary', function (page) {
     var $checkoutnoinfo = $("#checkout-noinfo");                       //无信息
     var $dailysummary = $("#dailysummary");                            //keyup对象
     var $dailysummarysubmit = $("#dailysummary-submit");               //提交按钮
-    var $qcdailysummarypartialform = $('#qcdailysummarypartial-form'); //form表单
     if ($$("#AgendaId").val() == "") {
         $dailysummarysubmit.prop("disabled", true).addClass("color-gray");
         $checkoutnoinfo.append("<div  class=\"content-block-title\">无内容</div>");
@@ -340,20 +325,8 @@ myApp.onPageInit('dailysummary', function (page) {
         });
     }
     //键盘事件
-    $dailysummary.on("keyup", ".keyup-input", function () {
-        if (isPInt($(this).val()) == true) {
-            $(this).attr("placeholder", "").removeClass("invalid-input");
-            $dailysummarysubmit.prop("disabled", false).removeClass("color-gray");
-        } else {
-            $(this).attr("placeholder", "请输入合法数字").addClass("invalid-input");
-        }
-    });
-    $dailysummary.on("keyup", "#Remark", function () {
-        if (($(this).val()) == "") {
-            $(this).attr("placeholder", "请输入备注信息").addClass("invalid-input");
-        } else {
-            $(this).attr("placeholder", "").removeClass("invalid-input");
-        }
+    $dailysummary.on("keyup", ".required", function () {
+        $(this).attr("placeholder", "").removeClass("invalid-input");
     });
     //按钮点击事件
     $dailysummarysubmit.on("click", function () {
@@ -367,7 +340,7 @@ myApp.onPageInit('dailysummary', function (page) {
 
 });
 /*==========
-确认修复页 ///修改校验规则******************
+确认修复页
 =========*/
 myApp.onPageInit('recoverybreakdown', function (page) {
     var $recoverybreakdownsubmit = $("#recoverybreakdown-submit");   //提交按钮
@@ -384,17 +357,8 @@ myApp.onPageInit('recoverybreakdown', function (page) {
     });
     //效验规则
     $recoveybreakdownform.validate({
-        debug: false,
         //调试模式取消submit的默认提交功能
-        focusInvalid: false,
-        //当为false时，验证无效时，没有焦点响应
-        onkeyup: false,
-        rules: {
-            RecoveryRemark: {
-                maxlength: 200,
-                required: true
-            }
-        },
+        debug: false,
         //错误处理
         errorPlacement: function (error, element) {
             myApp.hideIndicator();
@@ -405,28 +369,7 @@ myApp.onPageInit('recoverybreakdown', function (page) {
         submitHandler: function (form) {
             /// 可以用checkerror函数代替
             $recoveybreakdownform.ajaxSubmit(function (data) {
-                if (data == "SUCCESS") {
-                    myApp.hideIndicator();
-                    mainView.router.back();
-                    myApp.addNotification({
-                        title: "通知",
-                        message: "表单提交成功"
-                    });
-                    setTimeout(function () {
-                        myApp.closeNotification(".notifications");
-                    }, 2e3);
-                }
-                else {
-                    myApp.hideIndicator();
-                    myApp.addNotification({
-                        title: "通知",
-                        message: "表单提交失败"
-                    });
-                    $recoverybreakdownsubmit.prop("disabled", false).removeClass("color-gray");
-                    setTimeout(function () {
-                        myApp.closeNotification(".notifications");
-                    }, 2e3);
-                }
+                CheckError("recoverybreakdown-submit", "recoverybreakdown-form")
             });
         }
     });
@@ -531,7 +474,7 @@ myApp.onPageInit("qualitytestlist", function (page) {
     });
 });
 /*==========
-新增产品检验 // 修改校验规则*******************
+新增产品检验
 =========*/
 myApp.onPageInit("addqualitytest", function (page) {
     var $factoryselect = $("#factory-select");
@@ -539,16 +482,8 @@ myApp.onPageInit("addqualitytest", function (page) {
     var $addqualitytestform = $("#addqualitytest-form");
     var $addqualitytestsubmit = $("#addqualitytest-submit");
     $addqualitytestform.validate({
-        rules: {
-            ProductionQty: {
-                required: true,
-                date: true,
-                digits: true
-            },
-            Remark: {
-                required: true,
-            }
-        },
+        //调试模式取消submit的默认提交功能
+        debug: false,
         //错误处理
         errorPlacement: function (error, element) {
             myApp.hideIndicator();
@@ -903,16 +838,14 @@ var dayNames = ["星期日", "星期一", "星期二", "星期三", "星期四",
 
 var dayNamesShort = ["日", "一", "二", "三", "四", "五", "六"];
 function CheckError(SubmitBtn, SubmitForm) {
-    //  按钮变灰？？？是否可以去除
-    if (!$("#" + SubmitBtn).prop("disabled")) {
-        $("#" + SubmitBtn).prop("disabled", true).addClass("color-gray");
-    }
     var pass = true;
     // 先字段信息
     $("input.required").each(function () {
         if ($(this).val() == "") {
             $(this).attr("placeholder", "请输入信息").addClass("invalid-input");
             pass = false;
+        } else {
+            $(this).removeClass("invalid-input");
         }
     });
     $("input.isnumber").each(function () {
@@ -939,7 +872,7 @@ function CheckError(SubmitBtn, SubmitForm) {
     });
     // 然后弹窗信息
     if (pass) {
-        $("select.requried").each(function () {
+        $("select.required").each(function () {
             if (pass) {
                 if ($(this).val() == "- 请选择 -" || $(this).val() == "") {
                     myApp.alert($(this).next().find(".item-title").html() + "未选择");
@@ -947,13 +880,15 @@ function CheckError(SubmitBtn, SubmitForm) {
                 }
             }
         });
-        $("input#Photos").each(function () {
+    if (pass) {
+        $("#Photos").each(function () {
             var photoList = splitArray($(this).val());
             if (photoList.length == 0) {
                 myApp.alert("至少上传一张照片");
                 pass = false;
             }
         })
+        }
     }
     // 提交字段
     if (pass) {
@@ -972,13 +907,22 @@ function CheckError(SubmitBtn, SubmitForm) {
                         myApp.closeNotification(".notifications");
                     }, 2e3);
                 }
-                else if (data == "MODIFIED") {
-                    myApp.hideIndicator();
-                    mainView.router.back();
-                    myApp.addNotification({
-                        title: "通知",
-                        message: "表单修改成功"
-                    });
+                else if (data == "MODIFIED" || data == "FAIL") {
+                    if(data == "MODIFIED"){
+                        myApp.hideIndicator();
+                        mainView.router.back();
+                        myApp.addNotification({
+                            title: "通知",
+                            message: "表单修改成功"
+                        });
+                    } else {
+                        myApp.hideIndicator();
+                        mainView.router.back();
+                        myApp.addNotification({
+                            title: "通知",
+                            message: "故障修复成功"
+                        });
+                    }   
                     setTimeout(function () {
                         myApp.closeNotification(".notifications");
                     }, 2e3);
