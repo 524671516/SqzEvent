@@ -14,6 +14,7 @@
     <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <style>
+        /*结构样式*/
         html, body {
             width: 100%;
         }
@@ -143,11 +144,11 @@
             cursor: pointer;
             outline: 0;
         }
+         /*基础样式*/
         .btn:hover {
             box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
         }
 
-        /*样式*/
         .add {
             position: absolute;
             right: 2.5rem;
@@ -250,6 +251,7 @@
         <a href="javascrirt:;" id="improve-btn" class="btn col-50">提交信息</a>
     }
     <script>
+        /*复选框点击后样式变化*/
         $("label").each(function () {
             $(this).on("click", function () {
                 $(".label-btn").removeClass("red-border");
@@ -263,11 +265,19 @@
                 }
             })
         })
+        /*input获得焦点后清除输入错误警告样式*/
+        $("input").each(function () {
+            $(this).on("focus", function () {
+                $(this).parent().next(".add").remove();
+            })
+        })
+        /*下拉选择被点击后取消输入错误警告样式*/
         $("select").each(function () {
             $(this).on("click", function () {
                 $(this).removeClass("bg-red");
             })
         })
+        /*页面初始化获得所有省信息*/
         $.ajax({
             url: "/Seller/GetRegion",
             data: {
@@ -282,6 +292,7 @@
                 }
             }
         });
+        /*选择省后获取对应市级信息*/
         $("#AreaProvince").on("change", function () {           
             $("#AreaCity").html("<option>-请选择-</option>");
             $("#AreaDistrict").html("<option>-请选择-</option>");
@@ -303,6 +314,7 @@
                 }
             });
         });
+        /*选择市级信息后获得区县级信息*/
         $("#AreaCity").on("change", function () {
             $("#AreaDistrict").html("<option>-请选择-</option>");
             $.ajax({
@@ -323,12 +335,8 @@
                 }
             });
         });
-        $("input").each(function () {
-            $(this).on("focus", function () {
-                $(this).parent().next(".add").remove();
-            })
-        })
-        var id_type = /(^\d{18}$)|(^\d{15}$)|(^\d{17}(\d|X|x)$)/
+        var id_type = /(^\d{18}$)|(^\d{15}$)|(^\d{17}(\d|X|x)$)/  //身份证正则
+        /*点击提交按钮时验证*/
         $("#improve-btn").on("click", function () {
             if (!$("#improve-btn").hasClass("bg-gary")) {
                 $("#improve-btn").addClass("bg-gary");
@@ -366,6 +374,7 @@
                         $(this).removeClass("bg-red");
                     }
                 });
+                /*验证通过提交表单*/
                 if (bool) {
                     $("#info-form").submit();
                     setTimeout(function () {

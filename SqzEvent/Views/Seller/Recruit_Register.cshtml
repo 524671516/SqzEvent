@@ -14,6 +14,7 @@
     <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <style>
+        /*结构样式*/
         html, body {
             width: 100%;
         }
@@ -64,7 +65,7 @@
         .item-inner > div {
             display: inline-block;
         }
-
+        /*工具样式*/
         .col-35 {
             width: 35%;
         }
@@ -138,6 +139,7 @@
             cursor: pointer;
             outline: 0;
         }
+        /*基本样式*/
        .btn:hover {
             box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
 }
@@ -247,10 +249,12 @@
         <a href="javascript:;" id="register-btn" class="btn col-50">成为促销员</a>
     }
     <script>
+        /*页面初始化弹出框动画*/
         $(".modal").animate({
             top: '10%',
             speed: "show"
         });;
+        /*页面初始化弹出框关闭按钮点击后动画*/
         $("#close-btn").on("click", function () {
             $(".modal").animate({
                 top: '-100%',
@@ -261,15 +265,17 @@
             });;
             $(".bg").addClass("hidden");
         })
+        /*input获得焦点后清除输入错误警告样式*/
         $("input").each(function () {
             $(this).on("focus", function () {
                 $(this).parent().next(".add").remove();
             })
         })
-        var word_type = /^[\u4e00-\u9fa5]{1,6}$/
-        var tel_type = /^(13[0-9]|14[0-9]|15[0-9]|18[0-9])\d{8}$/
-        var recommend_type = /^\d{6}$|^\d{0}$/
-        var verification_type = /^\d{4,6}$/
+        var word_type = /^[\u4e00-\u9fa5]{1,6}$/                       //输入姓名正则
+        var tel_type = /^(13[0-9]|14[0-9]|15[0-9]|18[0-9])\d{8}$/      //电话号码正则
+        var recommend_type = /^\d{6}$|^\d{0}$/                         //推荐码正则
+        var verification_type = /^\d{4,6}$/                            //验证码正则
+        /*获取验证码时对填入信息进行验证*/
         $("#get-verification").on("click", function () {
             var bool = true;
             if (!word_type.test($("#Name").val())) {
@@ -296,6 +302,7 @@
                 $(".recommend-content .item-after").remove();
                 $("#RecommandCode").parent().after("<div class=\"item-after add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></div>")
             }
+            /*填入信息通过后获取短信*/
             if (bool) {
                 $.ajax({
                     url: "/Seller/Wx_SendSms",
@@ -323,6 +330,7 @@
                 }, 1000)
             }
         })
+        /*点击提交按钮时验证*/
         $("#register-btn").on("click", function () {
             if (!$("#register-btn").hasClass("bg-gary")) {
                 $("#register-btn").addClass("bg-gary");
@@ -364,6 +372,7 @@
                     $(".verification-content .verification-error").remove();
                     $("#CheckCode").parent().after("<a class=\"verification-error add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></a>");
                 }
+                /*验证通过提交表单*/
                 if (verification) {
                     $("#register-form").submit();
                     setTimeout(function () {
