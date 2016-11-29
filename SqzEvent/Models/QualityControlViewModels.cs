@@ -64,4 +64,5 @@ namespace SqzEvent.Models
 
         public string default_value { get; set; }
     }
+    
 }

@@ -42,32 +42,9 @@
                         </li>
                     </ul>
                 </div>
-                <div class="content-block-title">工作人数</div>
-                <div class="list-block">
-                    <ul>
-                        <li>
-                            <div class="item-content">
-                                <div class="item-inner">
-                                    <div class="item-title label">正式员工</div>
-                                    <div class="item-input">
-                                        @Html.TextBoxFor(m => m.OfficalWorkers, new { placeholder = "正式员工", @class = "item-input-right", type= "tel" })
-                                    </div>
-                                    <div class="item-after color-black">人</div>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="item-content">
-                                <div class="item-inner">
-                                    <div class="item-title label">临时员工</div>
-                                    <div class="item-input">
-                                        @Html.TextBoxFor(m => m.TemporaryWorkers, new { placeholder = "临时员工", @class = "item-input-right", type = "tel" })
-                                    </div>
-                                    <div class="item-after color-black">人</div>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
+                <div class="content-block-title">签到信息</div>
+                <div class="list-block" id="template-content">
+                    
                 </div>
                 <div class="list-block">
                     <ul>
@@ -90,7 +67,7 @@
                         </li>
                         <li>
                             <div class="item-content middle-content">
-                                @Html.TextAreaFor(m => m.CheckinRemark, new { placeholder = "请输入签到备注", @class = "required input-textarea" })
+                                @Html.TextAreaFor(m => m.CheckinRemark, new { placeholder = "请输入签到备注", @class = "required input-textarea", required="required", maxlength="200" })
                             </div>
                             <div class="item-content">
                                 <div class="item-inner">

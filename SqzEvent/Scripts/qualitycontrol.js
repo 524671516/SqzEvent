@@ -69,27 +69,6 @@ myApp.onPageInit('qccheckin', function (page) {
     $qccheckinform.validate({
         debug: false,
         //调试模式取消submit的默认提交功能
-        focusInvalid: false,
-        //当为false时，验证无效时，没有焦点响应
-        onkeyup: false,
-        rules: {
-            CheckinRemark: {
-                maxlength: 200,
-                required: true
-            },
-            OfficalWorkers: {
-                min: 0,
-                digits: true,
-                max: 100,
-                required: true
-            },
-            TemporaryWorkers: {
-                min: 0,
-                digits: true,
-                max: 100,
-                required: true
-            }
-        },
         //错误处理
         errorPlacement: function (error, element) {
             myApp.hideIndicator();
@@ -125,6 +104,15 @@ myApp.onPageInit('qccheckin', function (page) {
                 }
             }
         });
+        $$.ajax({
+            url: "/QualityControl/QCCheckinPartial",
+            data: {
+                factoryId: $$("#FactoryId").val()
+            },
+            success: function (data) {
+                $$("#template-content").html(data);
+            }
+        })
     });
     //图片上传数量计算
     uploadCheckinFile("qccheckin-form", "qccheckin-photos", "Photos", "qccheckin-imgcount", 7);
@@ -132,7 +120,7 @@ myApp.onPageInit('qccheckin', function (page) {
     currentTextAreaLength("qccheckin-form", "CheckinRemark", 200, "qccheckin-currentlen");
 });
 /*==========
-签退页
+签退页 /// 修改***************************
 =========*/
 myApp.onPageInit("addcheckout", function (page) {
     var $checkoutnoinfo = $("#checkout-noinfo");                    //无信息
@@ -222,7 +210,7 @@ myApp.onPageInit("breakdownlist", function (page) {
     });
 });
 /*==========
-新增故障报告
+新增故障报告 /// 修改校验规则******************************
 =========*/
 myApp.onPageInit("addbreakdown", function (page) {
     var $equipmentselect = $("#equipment-select")          //设备选择
@@ -329,7 +317,7 @@ myApp.onPageInit("addbreakdown", function (page) {
     currentTextAreaLength("addbreakdown-form", "ReportContent", 200, "addbreakdown-currentlen");
 });
 /*==========
-每日工作总结页
+每日工作总结页 /// 修改校验规则
 =========*/
 myApp.onPageInit('dailysummary', function (page) {
     var $checkoutnoinfo = $("#checkout-noinfo");                       //无信息
@@ -379,7 +367,7 @@ myApp.onPageInit('dailysummary', function (page) {
 
 });
 /*==========
-确认修复页
+确认修复页 ///修改校验规则******************
 =========*/
 myApp.onPageInit('recoverybreakdown', function (page) {
     var $recoverybreakdownsubmit = $("#recoverybreakdown-submit");   //提交按钮
@@ -415,6 +403,7 @@ myApp.onPageInit('recoverybreakdown', function (page) {
         errorClass: "invalid-input",
         //提交成功后处理函数
         submitHandler: function (form) {
+            /// 可以用checkerror函数代替
             $recoveybreakdownform.ajaxSubmit(function (data) {
                 if (data == "SUCCESS") {
                     myApp.hideIndicator();
@@ -542,7 +531,7 @@ myApp.onPageInit("qualitytestlist", function (page) {
     });
 });
 /*==========
-新增产品检验
+新增产品检验 // 修改校验规则*******************
 =========*/
 myApp.onPageInit("addqualitytest", function (page) {
     var $factoryselect = $("#factory-select");
@@ -878,7 +867,7 @@ function currentTextAreaLength(pagename, id_name, max_length, result_id) {
             myApp.alert("已超出最大值，请重新填写或删除部分信息");
             var str = $$("#" + id_name).val();
             $$("#" + id_name).val(str.slice(0, 50));
-            $$("#" + result_id).text("500");
+            $$("#" + result_id).text(max_length);
         }
     });
 }
@@ -914,49 +903,51 @@ var dayNames = ["星期日", "星期一", "星期二", "星期三", "星期四",
 
 var dayNamesShort = ["日", "一", "二", "三", "四", "五", "六"];
 function CheckError(SubmitBtn, SubmitForm) {
+    //  按钮变灰？？？是否可以去除
     if (!$("#" + SubmitBtn).prop("disabled")) {
         $("#" + SubmitBtn).prop("disabled", true).addClass("color-gray");
     }
     var pass = true;
-    $("select").each(function () {
-        if (pass) {
-            if ($(this).val() == "- 请选择 -" || $(this).val() == "") {
-                myApp.alert($(this).next().find(".item-title").html()+"未选择")
-                pass = false;
-            }
+    // 先字段信息
+    $("input.required").each(function () {
+        if ($(this).val() == "") {
+            $(this).attr("placeholder", "请输入信息").addClass("invalid-input");
+            pass = false;
         }
-    })
-    $("input").each(function () {
-        if ($(this).hasClass("zero-input")) {
-            if ($(this).val() != "") {
-                if (!isPInt($(this).val())) {
-                    $(this).attr("placeholder", "请输入合法数字").addClass("invalid-input");
-                    pass = false;
-                }
-            } else {
-                $(this).val("0");
-                $(this).attr("placeholder", "").removeClass("invalid-input");
-            }
-        } else {
-            if ($(this).val() == "") {
+    });
+    $("input.isnumber").each(function () {
+        if ($(this).val() != "") {
+            if (!isPInt($(this).val())) {
                 $(this).attr("placeholder", "请输入合法数字").addClass("invalid-input");
                 pass = false;
-            } else {
-                $(this).attr("placeholder", "").removeClass("invalid-input");
             }
+        } else {
+            $(this).val("0");
         }
-    })
-    $("textarea").each(function () {
+    });
+    $("textarea.required").each(function () {
         if ($(this).val() == "") {
             $(this).attr("placeholder", "请输入备注信息").addClass("invalid-input");
             pass = false;
         }
-        else if ($(this).length > 200) {
+    });
+    $("textarea.maxlength_200").each(function(){
+        if ($(this).length > 200) {
             $(this).attr("placeholder", "超过字数").addClass("invalid-input");
+            pass = false;
         }
-    })
+    });
+    // 然后弹窗信息
     if (pass) {
-        $("#Photos").each(function () {
+        $("select.requried").each(function () {
+            if (pass) {
+                if ($(this).val() == "- 请选择 -" || $(this).val() == "") {
+                    myApp.alert($(this).next().find(".item-title").html() + "未选择");
+                    pass = false;
+                }
+            }
+        });
+        $("input#Photos").each(function () {
             var photoList = splitArray($(this).val());
             if (photoList.length == 0) {
                 myApp.alert("至少上传一张照片");
@@ -964,6 +955,7 @@ function CheckError(SubmitBtn, SubmitForm) {
             }
         })
     }
+    // 提交字段
     if (pass) {
         $("#" + SubmitBtn).prop("disabled", true).addClass("color-gray");
         myApp.showIndicator();

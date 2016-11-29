@@ -1,0 +1,72 @@
+﻿@model IEnumerable<SqzEvent.Models.AgendaTemplate>
+
+<ul>
+@foreach (var item in Model)
+{
+    switch (item.ValueTypeId)
+    {
+        case 1:
+            {
+                <li>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title label">@Html.Encode(item.KeyTitle)</div>
+                            <div class="item-input item-input-right">
+                                <label class="label-switch">
+                                    <input type="checkbox" id="@item.KeyName" name="@item.KeyName">
+                                    <div class="checkbox"></div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            }
+            break;
+        case 2:
+            {
+                <li>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title label">@Html.Encode(item.KeyTitle)</div>
+                            <div class="item-input">
+                                <input type="digits" id="@item.KeyName" name="@item.KeyName" class="item-input-right" required placeholder="请输入数字" range="1,50" />
+                            </div>
+                            <div class="item-after color-black">@Html.Encode(item.Unit)</div>
+                        </div>
+                    </div>
+                </li>
+            }
+            break;
+        case 3:
+            {
+
+            }
+            break;
+        case 4:
+            {
+                <li>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title label">@Html.Encode(item.KeyTitle)</div>
+                            <div class="item-input">
+                                <input type="text" class="item-input-right scan-input" id="@item.KeyName" name="@item.KeyName" placeholder="点击扫描条形码" value="@item.StandardValue" readonly />
+                            </div>
+                            <div class="item-after"></div>
+                        </div>
+                    </div>
+                </li>
+            }
+            break;
+        default:
+            break;
+    }
+}
+
+
+
+
+
+
+
+
+</ul>

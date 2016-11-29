@@ -36,6 +36,7 @@
         public virtual DbSet<QualityTestTemplate> QualityTestTemplate { get; set; }
         public virtual DbSet<QualityTest> QualityTest { get; set; }
         public virtual DbSet<ProductionSchedule> ProductionSchedule { get; set; }
+        public virtual DbSet<AgendaTemplate> AgendaTemplate { get; set; }
         
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -55,6 +56,7 @@
             modelBuilder.Entity<Factory>().HasMany(e => e.QualityTest).WithRequired(e => e.Factory).HasForeignKey(e => e.FactoryId).WillCascadeOnDelete(true);
             modelBuilder.Entity<Factory>().HasMany(e => e.ProductionSchedule).WithRequired(e => e.Factory).HasForeignKey(e => e.FactoryId).WillCascadeOnDelete(true);
             modelBuilder.Entity<Product>().HasMany(e => e.ProductionSchedule).WithRequired(e => e.Product).HasForeignKey(e => e.ProductId).WillCascadeOnDelete(true);
+            modelBuilder.Entity<Factory>().HasMany(e => e.AgendaTemplate).WithRequired(e => e.Factory).HasForeignKey(e => e.FactoryId).WillCascadeOnDelete(true);
         }
     }
 
@@ -127,6 +129,9 @@
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductionSchedule> ProductionSchedule { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AgendaTemplate> AgendaTemplate { get; set; }
     }
 
     /// <summary>
@@ -311,6 +316,8 @@
 
         public int TemporaryWorkers { get; set; }
 
+        public string TemplateValues { get; set; }
+
         public DateTime? SummaryTime { get; set; }
 
         public decimal? WorkHours { get; set; }
@@ -360,6 +367,7 @@
         [StringLength(16)]
         public string KeyTitle { get; set; }
 
+        public int Priority { get; set; }
 
         public int ValueTypeId { get; set; }
 
@@ -374,6 +382,42 @@
 
         // 对应关系
         public virtual Product Product { get; set; }
+
+    }
+
+    /// <summary>
+    /// 签到信息模板（根据工厂ID）
+    /// </summary>
+    [Table("AgendaTemplate")]
+    public partial class AgendaTemplate
+    {
+        public int Id { get; set; }
+
+        public int FactoryId { get; set; }
+
+        public int ValueTypeId { get; set; }
+
+        public int ValueLength { get; set; }
+
+        public int Priority { get; set; }
+
+        [StringLength(32)]
+        public string KeyName { get; set; }
+
+        [StringLength(16)]
+        public string KeyTitle { get; set; }
+
+        [StringLength(256)]
+        public string StandardValue { get; set; }
+
+        public bool ValueRequired { get; set; }
+
+        public bool ForceComplete { get; set; }
+
+        [StringLength(2)]
+        public string Unit { get; set; }
+        // 对应关系
+        public virtual Factory Factory { get; set; }
     }
 
     /// <summary>

@@ -98,7 +98,7 @@ button {
     width: 50%;
 }
 /*验证失败样式*/
-input[type="text"].invalid-input, input[type='tel'].invalid-input,input[type='number'].invalid-input {
+input[type="text"].invalid-input, input[type='tel'].invalid-input,input[type='number'].invalid-input, input[type='digits'].invalid-input {
     background-color: rgb(211, 31, 31);
 }
 
