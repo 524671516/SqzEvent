@@ -369,9 +369,16 @@ namespace SqzEvent.Controllers
             model.Status = 0; // 默认状态
             return PartialView(model);
         }
+        public PartialViewResult QCCheckinPartial(int factoryId)
+        {
+            var templatelist = from m in _qcdb.AgendaTemplate
+                               where m.FactoryId == factoryId
+                               select m;
+            return PartialView(templatelist);
+        }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<ActionResult> QCCheckin(QCAgenda model)
+        public async Task<ActionResult> QCCheckin(QCAgenda model, FormCollection form)
         {
             if (ModelState.IsValid)
             {
@@ -388,6 +395,26 @@ namespace SqzEvent.Controllers
                         agenda.CheckinTime = DateTime.Now;
                         agenda.Subscribe = _subscribe;
                         agenda.Status = 1; // 已签到
+                        var factory = _qcdb.Factory.SingleOrDefault(m => m.Id == agenda.FactoryId);
+                        List<TestTemplateItem> templatelist = new List<TestTemplateItem>();
+                        foreach (var template in factory.AgendaTemplate)
+                        {
+                            string _value;
+                            if (template.ValueTypeId == 1)
+                                _value = form[template.KeyName] == null ? "0" : "1";
+                            else
+                                _value = form[template.KeyName].ToString();
+                            TestTemplateItem tt_item = new TestTemplateItem()
+                            {
+                                default_value = template.StandardValue,
+                                type = template.ValueTypeId,
+                                key = template.KeyName,
+                                value = _value,
+                                title = template.KeyTitle
+                            };
+                            templatelist.Add(tt_item);
+                        }
+                        agenda.TemplateValues = Newtonsoft.Json.JsonConvert.SerializeObject(templatelist);
                         _qcdb.QCAgenda.Add(agenda);
                         await _qcdb.SaveChangesAsync();
                         return Content("SUCCESS");

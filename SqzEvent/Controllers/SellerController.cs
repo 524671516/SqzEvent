@@ -3956,6 +3956,8 @@ namespace SqzEvent.Controllers
                                 offlineDB.Off_Recruit.Add(recruit);
                                 await offlineDB.SaveChangesAsync();
                                 await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                                WeChatUtilities util = new WeChatUtilities();
+                                util.setUserToGroup(model.Open_Id, 103);
                                 return RedirectToAction("Recruit_Intro", "Seller");
                             }
                             return View("Failure");
