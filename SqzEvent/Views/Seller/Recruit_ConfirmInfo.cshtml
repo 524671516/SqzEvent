@@ -95,10 +95,6 @@
         .hidden {
             display: none;
         }
-
-        .bg-red {
-            color: red;
-        }
         .bg-gary{
             background-color:#ccc !important;
         }
@@ -254,10 +250,11 @@
         /*复选框点击后样式变化*/
         $("label").each(function () {
             $(this).on("click", function () {
-                $(".label-btn").removeClass("red-border");
-                $(".label-btn").addClass("blue-border");
+                $(".label-btn").removeClass("red-border");             //输入错误样式移除        
+                $(".label-btn").addClass("blue-border");               //增加基本样式    
+                /*复选框选中样式*/
                 if (!$(this).children("input").is(':checked')) {
-                    $(this).removeClass("bg-blue");
+                    $(this).removeClass("bg-blue");                        
                     $(this).removeClass("color-white")
                 } else {
                     $(this).addClass("bg-blue");
@@ -271,10 +268,10 @@
                 $(this).parent().next(".add").remove();
             })
         })
-        /*下拉选择被点击后取消输入错误警告样式*/
+        /*下拉选择被点击后清除输入错误警告样式*/
         $("select").each(function () {
             $(this).on("click", function () {
-                $(this).removeClass("bg-red");
+                $(this).removeClass("color-red");
             })
         })
         /*页面初始化获得所有省信息*/
@@ -367,11 +364,11 @@
                 })
                 $("#info-form").find("select").each(function () {
                     if ($(this).val() == "-请选择-") {
-                        $(this).addClass("bg-red");
+                        $(this).addClass("color-red");
                         bool = false;
                         $("#improve-btn").removeClass("bg-gary");
                     } else {
-                        $(this).removeClass("bg-red");
+                        $(this).removeClass("color-red");
                     }
                 });
                 /*验证通过提交表单*/
