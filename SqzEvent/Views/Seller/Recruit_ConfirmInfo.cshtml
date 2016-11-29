@@ -48,7 +48,7 @@
         }
 
        form li {
-                padding: 10px 5px 10px 5px;
+                padding: 0px 5px 0px 5px;
         }
 
         header {
@@ -141,6 +141,16 @@
             outline: 0;
         }
          /*基础样式*/
+         .id-content input{
+            outline: none;
+            border: none;
+            width: 100%;
+            height:40px;
+            padding:0 5px;
+         }
+         .checkbox-content{
+             margin-top:10px;
+         }
         .btn:hover {
             box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
         }
@@ -161,6 +171,9 @@
 
         .item-title {
             font-size: 1rem;
+        }
+        .item-inner{
+            height:42px;
         }
 
         .item-input input {
@@ -194,7 +207,7 @@
         }
 
         select {
-            height: 20px;
+            height: 40px;
             outline: none;
             border: none;
             font-size: .7rem;
@@ -221,7 +234,7 @@
                     </div>
                 </div>
             </li>
-            <li class="id-content border-bottom">
+            <li class="select-content border-bottom">
                 <div class="item-inner">
                     <div class="item-title col-20">地址</div>
                     <select id="AreaProvince" name="AreaProvince" class="col-22">

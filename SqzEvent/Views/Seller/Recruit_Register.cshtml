@@ -23,6 +23,7 @@
             border: none;
             width: 100%;
             height:40px;
+            padding:0 5px;
         }
 
         a {
@@ -99,6 +100,8 @@
         }
 
         .border-left {
+            float:right;
+            margin-top:8px;
             border-radius:5px;
             height: 28px;
             padding: 5px 5px 1px 5px;
@@ -290,7 +293,6 @@
                     <div class="item-input col-40">
                         <input type="text" name="CheckCode" placeholder="输入验证码" id="CheckCode" maxlength="6">
                     </div>
-                    <a class="add" id="verification-error"></a>
                     <a class="item-after border-left col-26" href="javascript:;" id="get-verification">获取验证码</a>
                     <a class="item-after border-left hidden col-26" href="javascript:;" id="wait-num"><span></span>秒后重发</a>
                 </div>
@@ -424,13 +426,13 @@
                     $("#RecommandCode").parent().after("<div class=\"item-after add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></div>");
                 }
                 if (!verification_type.test($("#CheckCode").val())) {
-                    $(".verification-error").remove();
-                    $("#verification-error").html("<i class=\"fa fa-times color-red\" aria-hidden=\"true\"></i>");
+                    $(".verification-content .verification-error").remove();
+                    $("#CheckCode").parent().after("<a class=\"verification-error add\"><i class=\"fa fa-times color-red\" aria-hidden=\"true\"></i></a>");
                     verification = false;
                     $("#register-btn").removeClass("bg-gary");
                 } else {
-                    $(".verification-error").remove();
-                    $("#verification-error").html("<i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i>");
+                    $(".verification-content .verification-error").remove();
+                    $("#CheckCode").parent().after("<a class=\"verification-error add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></a>");
                 }
                 /*验证通过提交表单*/
                 if (verification) {
