@@ -61,7 +61,7 @@
                                 <div class="item-inner">
                                     <div class="item-title label">生产进度</div>
                                     <div class="item-input">
-                                        @Html.TextBoxFor(m => m.ProductionQty, new { required="required" ,range = "0,100000000"  ,placeholder = "生产进度", @class = "item-input-right", type = "tel"})
+                                        @Html.TextBoxFor(m => m.ProductionQty, new { required="required" ,range = "0,100000000"  ,placeholder = "生产进度", @class = "item-input-right", type = "digits"})
                                     </div>
                                     <div class="item-after color-black">盒</div>
                                 </div>
@@ -71,13 +71,13 @@
                             <div class="item-content">
                                 <div class="item-inner">
                                     <div class="item-title">上传照片</div>
-                                    <div class="item-after"><abbr id="addqualitytest-imgcount">0</abbr>/7</div>
+                                    <div class="item-after"><abbr id="addqualitytest-imgcount">0</abbr>/9</div>
                                 </div>
                             </div>
                             <div class="item-content middle-content">
                                 <div class="item-inner">
                                     <div class="hidden">
-                                        @Html.TextBoxFor(m => m.Photos)
+                                        @Html.TextBoxFor(m => m.Photos, new { @class = "photos" })
                                     </div>
                                     <ul class="rep-imglist" id="addqualitytest-photos"></ul>
                                 </div>

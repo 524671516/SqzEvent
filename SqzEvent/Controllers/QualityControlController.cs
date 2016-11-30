@@ -334,7 +334,8 @@ namespace SqzEvent.Controllers
                                  select m;
                 int _checkout_cnt = agendalist.Count(m => m.Status == 1);
                 int _summary_cnt = agendalist.Count(m => m.Status == 2);
-                return Json(new { result = "SUCCESS", qt_count = _qt_count, qt_dot = _qt_dot, bd_count = _bd_count, bd_dot = _bd_dot, checkout_cnt = _checkout_cnt, summary_cnt = _summary_cnt });
+                string datecode = GenerateDailyCode();
+                return Json(new { result = "SUCCESS", qt_count = _qt_count, qt_dot = _qt_dot, bd_count = _bd_count, bd_dot = _bd_dot, checkout_cnt = _checkout_cnt, summary_cnt = _summary_cnt, datecode = datecode });
             }
             catch
             {
@@ -373,6 +374,7 @@ namespace SqzEvent.Controllers
         {
             var templatelist = from m in _qcdb.AgendaTemplate
                                where m.FactoryId == factoryId
+                               orderby m.Priority descending
                                select m;
             return PartialView(templatelist);
         }
@@ -424,6 +426,28 @@ namespace SqzEvent.Controllers
                         // 如果有的话 修改日程记录
                         exist_agenda.CheckinTime = DateTime.Now;
                         exist_agenda.Subscribe = _subscribe;
+                        exist_agenda.Photos = agenda.Photos;
+                        exist_agenda.CheckinRemark = agenda.CheckinRemark;
+                        var factory = _qcdb.Factory.SingleOrDefault(m => m.Id == exist_agenda.FactoryId);
+                        List<TestTemplateItem> templatelist = new List<TestTemplateItem>();
+                        foreach (var template in factory.AgendaTemplate)
+                        {
+                            string _value;
+                            if (template.ValueTypeId == 1)
+                                _value = form[template.KeyName] == null ? "0" : "1";
+                            else
+                                _value = form[template.KeyName].ToString();
+                            TestTemplateItem tt_item = new TestTemplateItem()
+                            {
+                                default_value = template.StandardValue,
+                                type = template.ValueTypeId,
+                                key = template.KeyName,
+                                value = _value,
+                                title = template.KeyTitle
+                            };
+                            templatelist.Add(tt_item);
+                        }
+                        exist_agenda.TemplateValues = Newtonsoft.Json.JsonConvert.SerializeObject(templatelist);
                         exist_agenda.Status = 1; // 已签到
                         _qcdb.Entry(exist_agenda).State = System.Data.Entity.EntityState.Modified;
                         await _qcdb.SaveChangesAsync();
@@ -444,9 +468,23 @@ namespace SqzEvent.Controllers
             var exist_agenda = _qcdb.QCAgenda.SingleOrDefault(m => m.FactoryId == fid && m.Subscribe == _subscribe && m.Status >= 1 && m.QCStaffId == staff.Id);
             if (exist_agenda != null)
             {
-                return Json(new { result = true });
+                return Json(new { result = true, agendaId = exist_agenda.Id });
             }
             return Json(new { result = false });
+        }
+        [HttpPost]
+        public JsonResult CheckinContent(int cid)
+        {
+            QCAgenda agenda = _qcdb.QCAgenda.SingleOrDefault(m => m.Id == cid);
+            if (agenda.TemplateValues != null)
+            {
+                var template_result = Newtonsoft.Json.JsonConvert.DeserializeObject<List<TestTemplateItem>>(agenda.TemplateValues);
+                return Json(new { result = "SUCCESS", template = template_result, photos = agenda.Photos, remark = agenda.CheckinRemark });
+            }
+            else
+            {
+                return Json(new { result = "SUCCESS", photos = agenda.Photos, remark = agenda.CheckinRemark });
+            }
         }
 
         // 故障列表
@@ -764,7 +802,7 @@ namespace SqzEvent.Controllers
             Product p = _qcdb.Product.SingleOrDefault(m => m.Id == pid);
             if (p != null)
             {
-                var _templatelist = p.QualityTestTemplate;
+                var _templatelist = p.QualityTestTemplate.OrderByDescending(m=>m.Priority);
                 return PartialView(_templatelist);
             }
             return PartialView("NotFound");
@@ -1041,6 +1079,13 @@ namespace SqzEvent.Controllers
                 bitmap.Dispose();
                 g.Dispose();
             }
+        }
+
+        public string GenerateDailyCode()
+        {
+            TimeSpan ts = DateTime.Now.Date.AddSeconds(135816).ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            var datecode = ts.TotalSeconds.ToString();
+            return "" + datecode[7] + datecode[6] + datecode[5] + datecode[4];
         }
     }
 }

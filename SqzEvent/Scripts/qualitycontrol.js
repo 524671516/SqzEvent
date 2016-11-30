@@ -94,33 +94,66 @@ myApp.onPageInit('qccheckin', function (page) {
     });
     //改变工厂触发事件
     $factoryselect.on("change", function () {
-        $$.ajax({
-            url: "/QualityControl/CheckCheckinAjax",
-            type: "post",
-            data: {
-                fid: $$("#FactoryId").val()
-            },
-            success: function (data) {
-                var data = JSON.parse(data);
-                if (data.result) {
-                    myApp.alert("该工厂当天已有签到，重新签到将覆盖之前的记录");
+        if ($("#FactoryId").val() != "") {
+            $("#input-content").removeClass("hidden");
+            $$.ajax({
+                url: "/QualityControl/QCCheckinPartial",
+                data: {
+                    factoryId: $$("#FactoryId").val()
+                },
+                success: function (data) {
+                    $$("#template-content").html(data);
+                    $$.ajax({
+                        url: "/QualityControl/CheckCheckinAjax",
+                        type: "post",
+                        data: {
+                            fid: $$("#FactoryId").val()
+                        },
+                        success: function (checkdata) {
+                            var checkdata = JSON.parse(checkdata);
+                            if (checkdata.result) {
+                                myApp.alert("该工厂当天已有签到，重新签到将覆盖之前的记录");
+                                // 填入数据
+                                $$.ajax({
+                                    url: "/QualityControl/CheckinContent",
+                                    data: {
+                                        cid: checkdata.agendaId
+                                    },
+                                    type: "post",
+                                    success: function (contentdata) {
+                                        var contentdata = JSON.parse(contentdata);
+                                        if (contentdata.result == "SUCCESS") {
+                                            $("#Photos").val(contentdata.photos);
+                                            $("#CheckinRemark").val(contentdata.remark);
+                                            for (var i = 0; i < contentdata.template.length; i++) {
+                                                $("#" + contentdata.template[i].key).val(contentdata.template[i].value);
+                                            }
+
+                                            uploadCheckinFile("qccheckin-form", "qccheckin-photos", "Photos", "qccheckin-imgcount", 9);
+                                            //textarea字数计算
+                                            currentTextAreaLength("qccheckin-form", "CheckinRemark", 200, "qccheckin-currentlen");
+                                        }
+                                    }
+                                });
+                            }
+                            else {
+                                //图片上传数量计算
+                                $("#Photos").val("");
+                                $("#CheckinRemark").val("");
+                                uploadCheckinFile("qccheckin-form", "qccheckin-photos", "Photos", "qccheckin-imgcount", 9);
+                                //textarea字数计算
+                                currentTextAreaLength("qccheckin-form", "CheckinRemark", 200, "qccheckin-currentlen");
+                            }
+                        }
+                    });
                 }
-            }
-        });
-        $$.ajax({
-            url: "/QualityControl/QCCheckinPartial",
-            data: {
-                factoryId: $$("#FactoryId").val()
-            },
-            success: function (data) {
-                $$("#template-content").html(data);
-            }
-        })
+            });
+        }
+        else {
+            $("#input-content").addClass("hidden");
+        }
     });
-    //图片上传数量计算
-    uploadCheckinFile("qccheckin-form", "qccheckin-photos", "Photos", "qccheckin-imgcount", 7);
-    //textarea字数计算
-    currentTextAreaLength("qccheckin-form", "CheckinRemark", 200, "qccheckin-currentlen");
+    
 });
 /*==========
 签退页 
@@ -320,6 +353,7 @@ myApp.onPageInit('dailysummary', function (page) {
             },
             success: function (data) {
                 $$('#dailysummary-content').html(data);
+                uploadCheckinFile("qcdailysummarypartial-form", "qcsummary-photos", "SummaryPhotos", "qcsummary-imgcount", 7);
                 currentTextAreaLength("qcdailysummarypartial-form", "Remark", 200, "qccheckin-currentlen");
             }
         });
@@ -494,10 +528,10 @@ myApp.onPageInit("addqualitytest", function (page) {
             CheckError("addqualitytest-submit", "addqualitytest-form")
         }
     });
-    $$("input[type='tel']").val("");
+    $$("input[type='digits']").val("");
     $addqualitytestsubmit.prop("disabled", true).addClass("color-gray");
     $$("#info-content").addClass("hidden");
-    uploadCheckinFile("addqualitytest-form", "addqualitytest-photos", "Photos", "addqualitytest-imgcount", 7);
+    uploadCheckinFile("addqualitytest-form", "addqualitytest-photos", "Photos", "addqualitytest-imgcount", 9);
     currentTextAreaLength("addqualitytest-form", "Remark", 200, "addqualitytest-currentlen");
     $factoryselect.on("change", function () {
         $$("#template-content").html("");
@@ -597,6 +631,7 @@ function updateHomeInfo() {
                     $$("#summary_dot").addClass("hidden");
                 $$("#checkout_cnt").text(data.checkout_cnt);
                 $$("#summary_cnt").text(data.summary_cnt);
+                $$("#datecode").text(data.datecode);
                 myApp.pullToRefreshDone();
             }
         }
@@ -880,15 +915,15 @@ function CheckError(SubmitBtn, SubmitForm) {
                 }
             }
         });
+    }
     if (pass) {
-        $("#Photos").each(function () {
+        $(".photos").each(function () {
             var photoList = splitArray($(this).val());
             if (photoList.length == 0) {
                 myApp.alert("至少上传一张照片");
                 pass = false;
             }
-        })
-        }
+        });
     }
     // 提交字段
     if (pass) {

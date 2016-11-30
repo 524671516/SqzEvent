@@ -322,6 +322,9 @@
 
         public decimal? WorkHours { get; set; }
 
+        [StringLength(256)]
+        public string SummaryPhotos { get; set; }
+
         // 对应关系
         public virtual Factory Factory { get; set; }
 
@@ -379,6 +382,9 @@
 
         [StringLength(256)]
         public string StandardValue { get; set; }
+
+        [StringLength(2)]
+        public string Unit { get; set; }
 
         // 对应关系
         public virtual Product Product { get; set; }

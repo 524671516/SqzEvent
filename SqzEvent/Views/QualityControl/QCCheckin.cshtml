@@ -42,41 +42,42 @@
                         </li>
                     </ul>
                 </div>
-                <div class="content-block-title">签到信息</div>
-                <div class="list-block" id="template-content">
-                    
-                </div>
-                <div class="list-block">
-                    <ul>
-                        <li>
-                            <div class="item-content">
-                                <div class="item-inner">
-                                    <div class="item-title">上传照片</div>
-                                    <div class="item-after"><abbr id="qccheckin-imgcount">0</abbr>/7</div>
-                                </div>
-                            </div>
-                            <div class="item-content middle-content">
-                                <div class="item-inner">
-                                    <div class="hidden">
-                                        @Html.TextBoxFor(m => m.Photos)
+                <div class="hidden" id="input-content">
+                    <div class="content-block-title">签到信息</div>
+                    <div class="list-block" id="template-content">
+
+                    </div>
+                    <div class="list-block">
+                        <ul>
+                            <li>
+                                <div class="item-content">
+                                    <div class="item-inner">
+                                        <div class="item-title">上传照片</div>
+                                        <div class="item-after"><abbr id="qccheckin-imgcount">0</abbr>/9</div>
                                     </div>
-                                    <ul class="rep-imglist" id="qccheckin-photos">                           
-                                    </ul>
                                 </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="item-content middle-content">
-                                @Html.TextAreaFor(m => m.CheckinRemark, new { placeholder = "请输入签到备注", @class = "input-textarea", required="required", maxlength="200"})
-                            </div>
-                            <div class="item-content">
-                                <div class="item-inner">
-                                    <div class="item-title"></div>
-                                    <div class="item-after"><span id="qccheckin-currentlen">0</span>/<span>200</span></div>
+                                <div class="item-content middle-content">
+                                    <div class="item-inner">
+                                        <div class="hidden">
+                                            @Html.TextBoxFor(m => m.Photos, new { @class = "photos" })
+                                        </div>
+                                        <ul class="rep-imglist" id="qccheckin-photos"></ul>
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
-                    </ul>
+                            </li>
+                            <li>
+                                <div class="item-content middle-content">
+                                    @Html.TextAreaFor(m => m.CheckinRemark, new { placeholder = "请输入签到备注", @class = "input-textarea", required = "required", maxlength = "200" })
+                                </div>
+                                <div class="item-content">
+                                    <div class="item-inner">
+                                        <div class="item-title"></div>
+                                        <div class="item-after"><span id="qccheckin-currentlen">0</span>/<span>200</span></div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             }
         </div>

@@ -24,7 +24,17 @@
                 break;
             case 2:
                 {
-
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title label">@Html.Encode(item.KeyTitle)</div>
+                                <div class="item-input">
+                                    <input type="text" class="item-input-right scan-input" id="@item.KeyName" name="@item.KeyName" placeholder="请输入数字" value="@item.StandardValue" readonly />
+                                </div>
+                                <div class="item-after"></div>
+                            </div>
+                        </div>
+                    </li>
                 }
                 break;
             case 3:
@@ -32,14 +42,14 @@
 
                 }
                 break;
-            case 4:
+            case 5:
                 {
                     <li>
                         <div class="item-content">
                             <div class="item-inner">
                                 <div class="item-title label">@Html.Encode(item.KeyTitle)</div>
                                 <div class="item-input">
-                                    <input type="text" class="item-input-right scan-input" id="@item.KeyName" name="@item.KeyName" placeholder="点击扫描条形码" value="@item.StandardValue" readonly />
+                                    <input type="text" class="item-input-right scan-input" id="@item.KeyName" name="@item.KeyName" placeholder="点击扫描条形码" value="@item.StandardValue" readonly required />
                                 </div>
                                 <div class="item-after"></div>
                             </div>

@@ -13,22 +13,6 @@
     @Html.HiddenFor(m => m.Subscribe)
     @Html.HiddenFor(m => m.Photos)
     @Html.HiddenFor(model => model.CheckinRemark)
-    <div class="content-block-title">工作信息</div>
-    <div class="list-block">
-        <ul>
-            <li>
-                <div class="item-content">
-                    <div class="item-inner">
-                        <div class="item-title label">工作时长</div>
-                        <div class="item-input">
-                            @Html.TextBoxFor(m => m.WorkHours, new { placeholder = "工作时长", @class = "item-input-right keyup-input required", type = "number"})
-                        </div>
-                        <div class="item-after color-black">小时</div>
-                    </div>
-                </div>
-            </li>
-        </ul>
-    </div>
     <div class="content-block-title">产量数据</div>
     <div class="list-block">
         <ul>
@@ -39,13 +23,45 @@
                     <div class="item-inner">
                         <div class="item-title label">@Html.Encode(p.SimpleName)</div>
                         <div class="item-input">
-                            <input type="tel" placeholder="数量" class="item-input-right keyup-input  isnumber" id="@p.ProductCode" name="@p.ProductCode"/>
+                            <input type="digits" placeholder="数量" class="item-input-right isnumber" id="@p.ProductCode" name="@p.ProductCode"/>
                         </div>
                         <div class="item-after color-black">盒</div>
                     </div>
                 </div>
             </li>
             }
+        </ul>
+    </div>
+    <div class="content-block-title">工作信息</div>
+    <div class="list-block">
+        <ul>
+            <li>
+                <div class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title label">工作时长</div>
+                        <div class="item-input">
+                            @Html.TextBoxFor(m => m.WorkHours, new { placeholder = "工作时长", @class = "item-input-right required", type = "number" })
+                        </div>
+                        <div class="item-after color-black">小时</div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title">上传照片</div>
+                        <div class="item-after"><abbr id="qcsummary-imgcount">0</abbr>/7</div>
+                    </div>
+                </div>
+                <div class="item-content middle-content">
+                    <div class="item-inner">
+                        <div class="hidden">
+                            @Html.TextBoxFor(m => m.SummaryPhotos, new { @class = "photos" })
+                        </div>
+                        <ul class="rep-imglist" id="qcsummary-photos"></ul>
+                    </div>
+                </div>
+            </li>
         </ul>
     </div>
     <div class="content-block-title">备注信息</div>
