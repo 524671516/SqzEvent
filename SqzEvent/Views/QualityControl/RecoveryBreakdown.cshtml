@@ -80,7 +80,7 @@
                         </li>
                         <li>
                             <div class="item-content middle-content">
-                                @Html.TextAreaFor(m => m.RecoveryRemark, new { placeholder = "请输入签到备注", @class = "required input-textarea" })
+                                @Html.TextAreaFor(m => m.RecoveryRemark, new { placeholder = "请输入签到备注", @class = "input-textarea",required="required",maxlength="200"})
                             </div>
                             <div class="item-content">
                                 <div class="item-inner">

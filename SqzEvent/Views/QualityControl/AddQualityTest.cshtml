@@ -28,7 +28,7 @@
                     <ul>
                         <li>
                             <a href="#" class="item-link smart-select" data-back-text="返回" data-back-on-select="true" data-searchbar-cancel="取消" id="factory-select">
-                                @Html.DropDownList("FactoryId", ViewBag.FactoryDropDown as SelectList, "- 请选择 -")
+                                @Html.DropDownList("FactoryId", ViewBag.FactoryDropDown as SelectList, "- 请选择 -", new{@class="required" })
                                 <div class="item-content">
                                     <div class="item-inner">
                                         <div class="item-title">选择工厂</div>
@@ -39,7 +39,7 @@
                         </li>
                         <li>
                             <a href="#" class="item-link smart-select" data-back-text="返回" data-back-on-select="true" data-searchbar-placeholder="选择产品" data-searchbar-cancel="取消" id="product-select">
-                                <select id="ProductId" name="ProductId">
+                                <select id="ProductId" name="ProductId" class="required">
                                     <option>- 请选择 -</option>
                                 </select>
                                 <div class="item-content">
@@ -61,7 +61,7 @@
                                 <div class="item-inner">
                                     <div class="item-title label">生产进度</div>
                                     <div class="item-input">
-                                        @Html.TextBoxFor(m => m.ProductionQty, new { placeholder = "生产进度", @class = "item-input-right keyup-input", type = "tel" })
+                                        @Html.TextBoxFor(m => m.ProductionQty, new { required="required" ,range = "0,100000000"  ,placeholder = "生产进度", @class = "item-input-right", type = "tel"})
                                     </div>
                                     <div class="item-after color-black">盒</div>
                                 </div>
@@ -85,7 +85,7 @@
                         </li>
                         <li>
                             <div class="item-content middle-content">
-                                @Html.TextAreaFor(m => m.Remark, new { placeholder = "请输入签到备注", @class = "required input-textarea" })
+                                @Html.TextAreaFor(m => m.Remark, new { placeholder = "请输入签到备注", @class = "input-textarea", required="required" })
                             </div>
                             <div class="item-content">
                                 <div class="item-inner">
