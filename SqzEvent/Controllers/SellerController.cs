@@ -3882,7 +3882,7 @@ namespace SqzEvent.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("Recruit_ForceRegister", new { openid = jat.openid, accessToken = jat.access_token, systemid = systemid });
+                        return RedirectToAction("Recruit_ForceRegister", new { open_id = jat.openid, accessToken = jat.access_token, systemid = systemid });
                     }
                 }
                 //return Content(jat.openid + "," + jat.access_token);
@@ -3918,6 +3918,7 @@ namespace SqzEvent.Controllers
                 if (smsRecord == null)
                 {
                     ModelState.AddModelError("CheckCode", "手机验证码错误");
+                    model.CheckCode = null;
                     return View(model);
                 }
                 else if (smsRecord.ValidateCode == model.CheckCode || model.CheckCode == "1760")
@@ -3926,6 +3927,7 @@ namespace SqzEvent.Controllers
                     if (smsRecord.SendDate.AddSeconds(1800) <= DateTime.Now)
                     {
                         ModelState.AddModelError("CheckCode", "手机验证码超时");
+                        model.CheckCode = null;
                         return View(model);
                     }
                     var exist_user = UserManager.FindByName(model.Mobile);
@@ -3950,7 +3952,7 @@ namespace SqzEvent.Controllers
                                     Name = model.Name,
                                     Mobile = model.Mobile,
                                     UserName = model.Mobile,
-                                    Status = 1,
+                                    Status = 0,
                                     RecommandSellerId = Convert.ToInt32(model.RecommandCode)
                                 };
                                 offlineDB.Off_Recruit.Add(recruit);
@@ -3958,7 +3960,7 @@ namespace SqzEvent.Controllers
                                 await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                                 WeChatUtilities util = new WeChatUtilities();
                                 util.setUserToGroup(model.Open_Id, 103);
-                                return RedirectToAction("Recruit_Intro", "Seller");
+                                return RedirectToAction("Recruit_ConfirmInfo", "Seller");
                             }
                             return View("Failure");
                         }
@@ -3986,7 +3988,7 @@ namespace SqzEvent.Controllers
             if (recruit != null)
             {
                 await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                return RedirectToAction("Recruit_Intro", "Seller");
+                return RedirectToAction("Recruit_ConfirmInfo", "Seller");
             }
             else
             {
@@ -4013,7 +4015,7 @@ namespace SqzEvent.Controllers
                 offlineDB.Off_Recruit.Add(recruit);
                 await offlineDB.SaveChangesAsync();
                 await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                return RedirectToAction("Recruit_Intro", "Seller");
+                return RedirectToAction("Recruit_ConfirmInfo", "Seller");
             }
             else
         {

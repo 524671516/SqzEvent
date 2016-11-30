@@ -27,7 +27,7 @@ namespace SqzEvent.DAL
     public class Wx_UserToGroup_Result
     {
         public int errcode { get; set; }
-        public int errmsg { get; set; }
+        public string errmsg { get; set; }
     }
     #endregion
 
