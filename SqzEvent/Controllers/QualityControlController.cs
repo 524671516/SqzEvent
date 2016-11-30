@@ -896,6 +896,13 @@ namespace SqzEvent.Controllers
                 return Json(new { result="FAIL"});
         }
 
+        // 管理员首页
+        public ActionResult Manager_Home()
+        {
+            return View();
+        }
+
+
         // 辅助类
         public QCStaff getStaff(string username)
         {

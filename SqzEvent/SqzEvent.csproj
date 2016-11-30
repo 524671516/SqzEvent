@@ -513,6 +513,7 @@
     <Content Include="Views\QualityControl\QCCheckinPartial.cshtml" />
     <Content Include="Views\Seller\Recruit_ForceRegister.cshtml" />
     <Content Include="Views\Seller\Recruit_Done.cshtml" />
+    <Content Include="Views\QualityControl\Manager_Home.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
