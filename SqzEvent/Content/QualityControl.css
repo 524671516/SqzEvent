@@ -19,60 +19,62 @@
     font-style: normal;
     position: relative;
 }
-
+.fa-tag{
+    color:#007aff;
+}
 .fa-calendar {
-    background: -webkit-linear-gradient(#2058ED, #15D3FA); /* Safari */
-    background: -o-linear-gradient(#2058ED, #15D3FA); /* Opera */
-    background: -moz-linear-gradient(#2058ED, #15D3FA); /* Firefox*/
-    background: linear-gradient(#2058ED, #15D3FA); /* 标准的语法 */
+    background: -webkit-linear-gradient(#8fabf6, #2058ED); /* Safari */
+    background: -o-linear-gradient(#8fabf6, #2058ED); /* Opera */
+    background: -moz-linear-gradient(#8fabf6, #2058ED); /* Firefox*/
+    background: linear-gradient(#8fabf6, #2058ED); /* 标准的语法 */
     color: #fff;
 }
 
 .fa-sign-in {
-    background: -webkit-linear-gradient(#FEA606, #FB681B); /* Safari*/
-    background: -o-linear-gradient(#FEA606, #FB681B); /* Opera*/
-    background: -moz-linear-gradient(#FEA606, #FB681B); /* Firefox*/
-    background: linear-gradient(#FEA606, #FB681B); /* 标准的语法 */
+    background: -webkit-linear-gradient(#fdb38d, #FB681B); /* Safari*/
+    background: -o-linear-gradient(#fdb38d, #FB681B); /* Opera*/
+    background: -moz-linear-gradient(#fdb38d, #FB681B); /* Firefox*/
+    background: linear-gradient(#fdb38d, #FB681B); /* 标准的语法 */
     color: #fff;
 }
 
 .fa-check-square {
-    background: -webkit-linear-gradient(#FF543D, #FC244F); /* Safari*/
-    background: -o-linear-gradient(#FF543D, #FC244F); /* Opera*/
-    background: -moz-linear-gradient(#FF543D, #FC244F); /* Firefox*/
-    background: linear-gradient(#FF543D, #FC244F); /* 标准的语法 */
+    background: -webkit-linear-gradient(#fd91a7, #FC244F); /* Safari*/
+    background: -o-linear-gradient(#fd91a7, #FC244F); /* Opera*/
+    background: -moz-linear-gradient(#fd91a7, #FC244F); /* Firefox*/
+    background: linear-gradient(#fd91a7, #FC244F); /* 标准的语法 */
     color: #fff;
 }
 
 .fa-sign-in {
-    background: -webkit-linear-gradient(#FEA606, #FB681B); /* Safari*/
-    background: -o-linear-gradient(#FEA606, #FB681B); /* Opera*/
-    background: -moz-linear-gradient(#FEA606, #FB681B); /* Firefox*/
-    background: linear-gradient(#FEA606, #FB681B); /* 标准的语法 */
+    background: -webkit-linear-gradient(#fdb38d, #FB681B); /* Safari*/
+    background: -o-linear-gradient(#fdb38d, #FB681B); /* Opera*/
+    background: -moz-linear-gradient(#fdb38d, #FB681B); /* Firefox*/
+    background: linear-gradient(#fdb38d, #FB681B); /* 标准的语法 */
     color: #fff;
 }
 
 .fa-wrench {
-    background: -webkit-linear-gradient(#D8DAD9, #92929A); /* Safari*/
-    background: -o-linear-gradient(#D8DAD9, #92929A); /* Opera*/
-    background: -moz-linear-gradient(#D8DAD9, #92929A); /* Firefox*/
-    background: linear-gradient(#D8DAD9, #92929A); /* 标准的语法*/
+    background: -webkit-linear-gradient(#c8c8cc, #92929A); /* Safari*/
+    background: -o-linear-gradient(#c8c8cc, #92929A); /* Opera*/
+    background: -moz-linear-gradient(#c8c8cc, #92929A); /* Firefox*/
+    background: linear-gradient(#c8c8cc, #92929A); /* 标准的语法*/
     color: #fff;
 }
 
 .fa-sign-out {
-    background: -webkit-linear-gradient(#64FB7A, #18C631); /* Safari*/
-    background: -o-linear-gradient(#64FB7A, #18C631); /* Opera*/
-    background: -moz-linear-gradient(#64FB7A, #18C631); /* Firefox*/
-    background: linear-gradient(#64FB7A, #18C631); /* 标准的语法 */
+    background: -webkit-linear-gradient(#8be298, #18C631); /* Safari*/
+    background: -o-linear-gradient(#8be298, #18C631); /* Opera*/
+    background: -moz-linear-gradient(#8be298, #18C631); /* Firefox*/
+    background: linear-gradient(#8be298, #18C631); /* 标准的语法 */
     color: #fff;
 }
 
 .fa-pencil-square-o {
-    background: -webkit-linear-gradient(#FAD2EC, #CA42F8); /* Safari*/
-    background: -o-linear-gradient(#FAD2EC, #CA42F8); /* Opera*/
-    background: -moz-linear-gradient(#FAD2EC, #CA42F8); /* Firefox*/
-    background: linear-gradient(#FAD2EC, #CA42F8); /* 标准的语法 */
+    background: -webkit-linear-gradient(#fd91a7, #CA42F8); /* Safari*/
+    background: -o-linear-gradient(#fd91a7, #CA42F8); /* Opera*/
+    background: -moz-linear-gradient(#fd91a7, #CA42F8); /* Firefox*/
+    background: linear-gradient(#fd91a7, #CA42F8); /* 标准的语法 */
     color: #fff;
 }
 /*提交按钮样式*/
