@@ -935,6 +935,20 @@ namespace SqzEvent.Controllers
             return PartialView(list);
             //return Json(new { result = factoryGroup}, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult Manager_AddSchedule()
+        {
+            var factorylist = from m in _qcdb.Factory
+                              select m;
+            ViewBag.FactoryDropdown = new SelectList(factorylist, "Id", "SimpleName");
+            return PartialView();
+        }
+
+        public ActionResult Manager_AddSchedulePartial(int fid)
+        {
+            var template = _qcdb.Factory.SingleOrDefault(m => m.Id == fid).Product;
+            return PartialView(template);
+        }
+
         public ActionResult Manager_Control()
         {
             return View();
