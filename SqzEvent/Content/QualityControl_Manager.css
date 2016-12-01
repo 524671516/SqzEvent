@@ -1,0 +1,165 @@
+﻿/*个人信息展示页样式*/
+.external {
+    width: 80px; 
+}
+.hidden {
+    display: none;
+}
+
+.img-center {
+    margin: auto auto;
+    padding: 20px;
+    font-size: 16px;
+    color: lightgray;
+}
+
+.img-responsive {
+    display: block;
+    height: auto;
+    max-width: 100%;
+}
+
+.img-circle {
+    border-radius: 50%;
+}
+
+.leftnav-margin-10 {
+    margin: 10px 0;
+}
+
+.left-nav ul {
+    background-color: #111;
+    color: lightgrey;
+}
+
+.list-block ul.rep-imglist {
+    padding: 0;
+}
+
+    .list-block ul.rep-imglist li {
+        float: left;
+    }
+
+.rep-imgitem {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 60px;
+    height: 60px;
+    border: solid #ccc 1px;
+    margin: 10px;
+    font-size: 48px;
+    line-height: 60px;
+    text-align: center;
+    color: #ccc;
+    display: block;
+}
+
+.rep-imgitem-selected {
+    opacity: 0.5;
+    color: #fff;
+    background-color: #000;
+}
+
+.rep-imgitem-btn {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 60px;
+    height: 60px;
+    border: solid #ccc 1px;
+    margin: 10px;
+    font-size: 48px;
+    line-height: 60px;
+    text-align: center;
+    color: #ccc;
+    display: block;
+}
+
+.sellertasklist-photo {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 44px;
+    height: 44px;
+    border-radius: 5px;
+}
+
+.list-block ul.rep-imglist {
+    padding: 0;
+}
+/*图表样式*/
+.fa{
+    font-size:24px;
+    padding:2px 1px;
+}
+.icon-link{
+    padding-top: 4px;
+    padding-bottom: 4px;
+    height: 100%;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    overflow: visible;
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    -webkit-box-orient: vertical;
+    -moz-box-orient: vertical;
+    -ms-flex-direction: column;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+}
+/*设置页样式*/
+#setting-date{
+    color:#000;
+}
+.uncomplete{
+    display:inline-block;
+    width:10px;
+    height:10px;
+    border-radius:100%;
+    background-color:red;
+}
+.complete{
+    display:inline-block;
+    width:10px;
+    height:10px;
+    border-radius:100%;
+    background-color:green;
+}
+.event-destribe{
+    text-align:center;
+}
+.date-content{
+    margin:10px 0 0 0 ;
+}
+.picker-calendar{
+    height:280px;
+}
+.red-border{
+border-bottom:1px solid green;
+}
+.green-border{
+    border-bottom:1px solid green;
+}
+span.picker-calendar-day-green {
+    background: green;
+    color:#fff;
+}
+span.picker-calendar-day-red {
+    background:red;
+    color:#fff;
+}

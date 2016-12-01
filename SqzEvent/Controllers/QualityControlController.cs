@@ -901,6 +901,16 @@ namespace SqzEvent.Controllers
         {
             return View();
         }
+        //历史记录
+        public ActionResult Manager_History()
+        {
+            return View();
+        }
+        //设置
+        public ActionResult Manager_Setting()
+        {
+            return View();
+        }
 
 
         // 辅助类

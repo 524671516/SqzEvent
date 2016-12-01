@@ -13,6 +13,7 @@
 /// <reference path="my-validate.js" />
 /// <reference path="periodaid.js" />
 /// <reference path="qualitycontrol.js" />
+/// <reference path="qualitycontrol_manager.js" />
 /// <reference path="respond.js" />
 /// <reference path="seller.js" />
 /// <reference path="sellertask.js" />
