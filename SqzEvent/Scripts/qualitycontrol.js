@@ -530,12 +530,12 @@ myApp.onPageInit("addqualitytest", function (page) {
     });
     $$("input[type='digits']").val("");
     $addqualitytestsubmit.prop("disabled", true).addClass("color-gray");
-    $$("#info-content").addClass("hidden");
+    $$(".info-content").addClass("hidden");
     uploadCheckinFile("addqualitytest-form", "addqualitytest-photos", "Photos", "addqualitytest-imgcount", 9);
     currentTextAreaLength("addqualitytest-form", "Remark", 200, "addqualitytest-currentlen");
     $factoryselect.on("change", function () {
         $$("#template-content").html("");
-        $$("#info-content").addClass("hidden");
+        $$(".info-content").addClass("hidden");
         $addqualitytestsubmit.prop("disabled", true).addClass("color-gray");
         $$("#ProductId").html("");
         $$("#ProductId").append("<option>- 请选择 -</option>");
@@ -560,7 +560,7 @@ myApp.onPageInit("addqualitytest", function (page) {
     });
     $productselect.on("change", function () {
         $$("#template-content").html("");
-        $$("#info-content").addClass("hidden");
+        $$(".info-content").addClass("hidden");
         $addqualitytestsubmit.prop("disabled", true).addClass("color-gray");
         if ($$("#ProductId").val() != "") {
             $$.ajax({
@@ -570,7 +570,7 @@ myApp.onPageInit("addqualitytest", function (page) {
                 },
                 success: function (data) {
                     $$("#template-content").html(data);
-                    $$("#info-content").removeClass("hidden");
+                    $$(".info-content").removeClass("hidden");
                     $addqualitytestsubmit.prop("disabled", false).removeClass("color-gray");
                 }
             });
@@ -908,11 +908,10 @@ function CheckError(SubmitBtn, SubmitForm) {
     // 然后弹窗信息
     if (pass) {
         $("select.required").each(function () {
-            if (pass) {
-                if ($(this).val() == "- 请选择 -" || $(this).val() == "") {
-                    myApp.alert($(this).next().find(".item-title").html() + "未选择");
-                    pass = false;
-                }
+            console.log($(this).val());
+            if ($(this).val() == "- 请选择 -" || $(this).val() == null || $(this).val() =="") {
+                myApp.alert($(this).next().find(".item-title").html() + " 未选择");
+                pass = false;
             }
         });
     }

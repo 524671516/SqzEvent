@@ -64,5 +64,12 @@ namespace SqzEvent.Models
 
         public string default_value { get; set; }
     }
+
+    public class FactoryGroup
+    {
+        public int FactoryId { get; set; }
+
+        public string FactoryName { get; set; }
+    }
     
 }

@@ -901,17 +901,44 @@ namespace SqzEvent.Controllers
         {
             return View();
         }
-        //历史记录
         public ActionResult Manager_History()
         {
             return View();
         }
-        //设置
         public ActionResult Manager_Setting()
         {
             return View();
         }
-
+        [HttpPost]
+        public JsonResult Manager_MonthChange(int year, int month)
+        {
+            var _month_start = new DateTime(year, month, 1);
+            var _month_end = _month_start.AddMonths(1);
+            var t = from m in _qcdb.ProductionSchedule
+                    where m.Subscribe >= _month_start && m.Subscribe < _month_end
+                    group m by m.Subscribe into g
+                    orderby g.Key
+                    select new { g.Key, result = g.All(m=> m.ProductionQty >= m.ProductionPlan) };
+            return Json(new { result = t });
+        }
+        public ActionResult Manager_ScheduleDetails(string date)
+        {
+            DateTime _pickdate = Convert.ToDateTime(date);
+            var list = from m in _qcdb.ProductionSchedule
+                       where m.Subscribe == _pickdate
+                       orderby m.FactoryId
+                       select m;
+            var factoryGroup = from m in list
+                               group m by m.Factory into g
+                               select new FactoryGroup{ FactoryId = g.Key.Id, FactoryName = g.Key.Name };
+            ViewBag.FG = factoryGroup;
+            return PartialView(list);
+            //return Json(new { result = factoryGroup}, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult Manager_Control()
+        {
+            return View();
+        }
 
         // 辅助类
         public QCStaff getStaff(string username)
