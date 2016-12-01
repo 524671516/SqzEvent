@@ -5,10 +5,16 @@
 }
 
 @foreach(FactoryGroup group in ViewBag.FG)
-{
-    <div>@group.FactoryName</div>
-    foreach(var item in Model.Where(m=>m.FactoryId == group.FactoryId))
+{   
+    <li class="item-divider">@group.FactoryName</li>
+    foreach (var item in Model.Where(m => m.FactoryId == group.FactoryId))
     {
-        <div>@Html.Encode(item.Product.SimpleName) @Html.Encode(item.ProductionQty) / @Html.Encode(item.ProductionPlan)</div>
+            <li class="item-content">
+                <div class="item-inner">
+                    <div class="item-title">@Html.Encode(item.Product.SimpleName)</div>
+                    <div class="item-after">@Html.Encode(item.ProductionQty??0) / @Html.Encode(item.ProductionPlan)</div>
+                </div>
+            </li>
     }
+
 }

@@ -286,6 +286,7 @@
     <Content Include="Content\Manager.css" />
     <Content Include="Content\normalize.css" />
     <Content Include="Content\QualityControl.css" />
+    <Content Include="Content\QualityControl_Manager.css" />
     <Content Include="Content\SellerTask.css" />
     <Content Include="Content\PeriodAid.css" />
     <Content Include="Content\Seller.css" />
@@ -329,6 +330,7 @@
     <Content Include="Scripts\manager.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\qualitycontrol.js" />
+    <Content Include="Scripts\qualitycontrol_manager.js" />
     <Content Include="Scripts\qualitycontrol.min.js" />
     <Content Include="Scripts\SellerTask.js" />
     <Content Include="Scripts\my-validate.js" />
@@ -515,6 +517,8 @@
     <Content Include="Views\Seller\Recruit_ForceRegister.cshtml" />
     <Content Include="Views\Seller\Recruit_Done.cshtml" />
     <Content Include="Views\QualityControl\Manager_Home.cshtml" />
+    <Content Include="Views\QualityControl\Manager_History.cshtml" />
+    <Content Include="Views\QualityControl\Manager_Setting.cshtml" />
     <Content Include="Views\QualityControl\Manager_ScheduleDetails.cshtml" />
     <Content Include="Views\QualityControl\Manager_AddSchedule.cshtml" />
     <Content Include="Views\QualityControl\Manager_AddSchedulePartial.cshtml" />
