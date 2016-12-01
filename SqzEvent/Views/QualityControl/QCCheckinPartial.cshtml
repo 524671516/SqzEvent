@@ -29,7 +29,7 @@
                         <div class="item-inner">
                             <div class="item-title label">@Html.Encode(item.KeyTitle)</div>
                             <div class="item-input">
-                                <input type="digits" id="@item.KeyName" name="@item.KeyName" class="item-input-right required"  placeholder="请输入数字" range="1,50" />
+                                <input type="digits" id="@item.KeyName" name="@item.KeyName" class="item-input-right required"  placeholder="请输入数字" range="1,2000" />
                             </div>
                             <div class="item-after color-black">@Html.Encode(item.Unit)</div>
                         </div>
@@ -42,7 +42,7 @@
 
             }
             break;
-        case 4:
+        case 5:
             {
                 <li>
                     <div class="item-content">

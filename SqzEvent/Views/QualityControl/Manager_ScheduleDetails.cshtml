@@ -1,0 +1,14 @@
+﻿@model IEnumerable<SqzEvent.Models.ProductionSchedule>
+@using SqzEvent.Models; 
+@{
+    Layout = null;
+}
+
+@foreach(FactoryGroup group in ViewBag.FG)
+{
+    <div>@group.FactoryName</div>
+    foreach(var item in Model.Where(m=>m.FactoryId == group.FactoryId))
+    {
+        <div>@Html.Encode(item.Product.SimpleName) @Html.Encode(item.ProductionQty) / @Html.Encode(item.ProductionPlan)</div>
+    }
+}

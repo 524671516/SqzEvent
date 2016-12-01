@@ -52,21 +52,25 @@
                         </li>
                     </ul>
                 </div>
-                <div class="list-block" id="template-content"></div>
-                <div class="list-block" id="info-content">
-                    <div class="content-block-title">其他信息</div>
+                <div class="list-block info-content hidden">
                     <ul>
                         <li>
                             <div class="item-content">
                                 <div class="item-inner">
                                     <div class="item-title label">生产进度</div>
                                     <div class="item-input">
-                                        @Html.TextBoxFor(m => m.ProductionQty, new { required="required" ,range = "0,100000000"  ,placeholder = "生产进度", @class = "item-input-right", type = "digits"})
+                                        @Html.TextBoxFor(m => m.ProductionQty, new { required = "required", range = "0,100000000", placeholder = "生产进度", @class = "item-input-right", type = "digits" })
                                     </div>
                                     <div class="item-after color-black">盒</div>
                                 </div>
                             </div>
                         </li>
+                    </ul>
+                </div>
+                <div class="list-block" id="template-content"></div>
+                <div class="list-block hidden info-content">
+                    <ul>
+                        
                         <li>
                             <div class="item-content">
                                 <div class="item-inner">
