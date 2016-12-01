@@ -163,3 +163,9 @@ span.picker-calendar-day-red {
     background:red;
     color:#fff;
 }
+span.picker-calendar-day-gray{
+    background:#cccccc;
+}
+.list-describe{
+    margin:20px 0 50px 0;
+}

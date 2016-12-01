@@ -59,43 +59,107 @@ myApp.onPageInit('Setting', function (page) {
                     '</div>' +
                 '</div>' +
             '</div>',
-
         onOpen: function (p) {
-            $$('.calendar-custom-toolbar .center').text(p.currentYear+"年"+monthNames[p.currentMonth]);
+            $$('.calendar-custom-toolbar .center').text(p.currentYear + "年" + monthNames[p.currentMonth]);
             $$('.calendar-custom-toolbar .left .link').on('click', function () {
                 calendarInline.prevMonth();
             });
             $$('.calendar-custom-toolbar .right .link').on('click', function () {
                 calendarInline.nextMonth();
             });
-            $$(".picker-modal-inner .picker-calendar-day span").append("<i class=\"hidden\">199<i>");
-            $(".picker-modal-inner .picker-calendar-day span .hidden").each(function () {
-                var planyield = 2000;
-                var actualyield = parseInt($(this).text());
-                if (actualyield < planyield) {
-                    $(this).parent().addClass("picker-calendar-day-green");
-                }else{
-                    $(this).parent().addClass("picker-calendar-day-red");
+            $$.ajax({
+                url: "/QualityControl/Manager_MonthChange",
+                data: {
+                    year: p.currentYear,
+                    month: p.currentMonth + 1
+                }, type: "post",
+                success: function (e) {
+                    var data = JSON.parse(e);
+                    for (var i = 0; i < data.result.length; i++) {
+                        var _date = ChangeDateFormat(data.result[i].Key);
+                        if (data.result[i].result) {
+                            $(".picker-calendar-day[data-date='" + _date + "']").find("span").addClass("picker-calendar-day-green");
+                        }
+                        else {
+                            var _today = new Date();
+                            _today = _today.setMonth(_today.getMonth() - 1);
+                            var _targetdate = new Date(_date);
+                            if (_today >= _targetdate) {
+                                $(".picker-calendar-day[data-date='" + _date + "']").find("span").addClass("picker-calendar-day-red");
+                            }
+                            else {
+                                $(".picker-calendar-day[data-date='" + _date + "']").find("span").addClass("picker-calendar-day-gray");
+                            }
+                        }
+                    }
+                    month = p.currentMonth + 1
+                    day = new Date();
+                    _day = day.getDate();
+                    $$.ajax({
+                        url: "/QualityControl/Manager_ScheduleDetails",
+                        data: {
+                            date: p.currentYear + "-" + month + "-" + _day
+                        },
+                        success: function (data) {
+                            $$(".list-describe ul").html(data);
+                        }
+                    });
                 }
-            })
+            });
         },
-        onMonthYearChangeStart: function (p) {
+        onMonthYearChangeEnd: function (p) {
             $$('.calendar-custom-toolbar .center').text(p.currentYear + "年" + monthNames[p.currentMonth]);
-            $$(".picker-modal-inner .picker-calendar-day span").append("<i class=\"hidden\">199<i>");
-            $(".picker-modal-inner .picker-calendar-day span .hidden").each(function () {
-                var planyield = 2000;
-                var actualyield = parseInt($(this).text());
-                if (actualyield < planyield) {
-                    $(this).parent();
-                } else {
-                    $(this).parent();
+            $$.ajax({
+                url: "/QualityControl/Manager_MonthChange",
+                data: {
+                    year: p.currentYear,
+                    month: p.currentMonth + 1
+                }, type: "post",
+                success: function (e) {
+                    var data = JSON.parse(e);
+                    for (var i = 0; i < data.result.length; i++) {
+                        var _date = ChangeDateFormat(data.result[i].Key);
+                        if (data.result[i].result) {
+                            $(".picker-calendar-day[data-date='" + _date + "']").find("span").addClass("picker-calendar-day-green");
+                        }
+                        else {
+                            var _today = new Date();
+                            _today = _today.setMonth(_today.getMonth() - 1);
+                            var _targetdate = new Date(_date);
+                            if (_today >= _targetdate) {
+                                $(".picker-calendar-day[data-date='" + _date + "']").find("span").addClass("picker-calendar-day-red");
+                            }
+                            else {
+                                $(".picker-calendar-day[data-date='" + _date + "']").find("span").addClass("picker-calendar-day-gray");
+                            }
+                        }
+                    }
                 }
-            })
+            });
         },
         onDayClick: function (p, daycontainer, year, month, day) {
+            month = parseInt(month) + 1;
+            $$.ajax({
+                url: "/QualityControl/Manager_ScheduleDetails",
+                data: {
+                    date: year + "-" + month + "-" + day
+                },
+                success: function (data) {
+                    $$(".list-describe ul").html(data);
+                }
+            });
         },
-        onMonthAdd: function (p,monthContainer) {
-        }
     });
 
-})
+});
+function ChangeDateFormat(val) {
+    if (val != null) {
+        var date = new Date(parseInt(val.replace("/Date(", "").replace(")/", ""), 10));
+        //月份为0-11，所以+1，月份小于10时补个0
+        var month =  date.getMonth() ;
+        var currentDate = date.getDate();
+        return date.getFullYear() + "-" + month + "-" + currentDate;
+    }
+
+    return "";
+}
