@@ -12,6 +12,12 @@
 .color-green{
     color:green;
 }
+.color-blue{
+    color:#007aff;
+}
+.bg-blue{
+    background-color:#007aff;
+}
 /*个人信息展示页样式*/
 .external {
     width: 80px; 
@@ -192,9 +198,7 @@ textarea.invalid-input {
 }
 /*Manager_AgendaDetails*/
 #manager_agendadetails .list-block{
-    margin:10px 0 10px 0;
+    margin:10px 0 50px 0;
 }
-.remark-title{
-    margin:10px 15px 2px 15px;
-}
+
 

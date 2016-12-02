@@ -85,7 +85,7 @@ myApp.onPageInit("Manager_agendadetails", function (page) {
                         agendaId: $$("#StaffId").val()
                     },
                     success: function (data) {
-                        $$(".tempalate-info").html(data);
+                        $$(".tempalate-info").html(data);                     
                     }
                 })
             } else {
@@ -110,7 +110,7 @@ myApp.onPageInit("Manager_agendadetails", function (page) {
                             agendaId: $$("#StaffId").val()
                         },
                         success: function (data) {
-                                $$(".tempalate-info").html(data);
+                            $$(".tempalate-info").html(data);                          
                         }
                     })
                 } else {
@@ -124,7 +124,7 @@ myApp.onPageInit("Manager_agendadetails", function (page) {
                                 agendaId: $$("#StaffId").val()
                             },
                             success: function (data) {
-                                    $$(".tempalate-info").html(data);                           
+                                $$(".tempalate-info").html(data);                               
                             }
                         })
                     } else {
