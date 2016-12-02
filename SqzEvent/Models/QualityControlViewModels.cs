@@ -72,4 +72,10 @@ namespace SqzEvent.Models
         public string FactoryName { get; set; }
     }
     
+    public class AgendaDetailsViewModel
+    {
+        public int FactoryId { get; set; }
+        public string SelectDate { get; set; }
+        public string FactoryName { get; set; }
+    }
 }

@@ -901,6 +901,48 @@ namespace SqzEvent.Controllers
         {
             return View();
         }
+        // 参数（工厂ID, 默认当前日期）
+        public ActionResult Manager_AgendaDetails(int fid, string date)
+        {
+            string _date;
+            if (date == "")
+                _date = DateTime.Now.ToString("yyyy-MM-dd");
+            else
+                _date = date;
+            var factory = _qcdb.Factory.SingleOrDefault(m => m.Id == fid);
+            AgendaDetailsViewModel model = new AgendaDetailsViewModel()
+            {
+                FactoryId = fid,
+                SelectDate = date, 
+                FactoryName = factory.SimpleName
+            };
+            return PartialView(model);
+        }
+        // 参数通过工厂引入签到人的名字，可以为空
+        public ActionResult Manager_AgendaDetailsList(int fid, string date)
+        {
+            DateTime subscribe = Convert.ToDateTime(date);
+            var stafflist = from m in _qcdb.QCAgenda
+                            where m.FactoryId == fid && m.Subscribe == subscribe
+                            select new { Id = m.Id, StaffName = m.QCStaff.Name };
+            if (stafflist.Count() > 0)
+            {
+                ViewBag.StaffDropDown = new SelectList(stafflist, "Id", "StaffName", stafflist.FirstOrDefault().Id);
+            }
+            else
+            {
+                ViewBag.StaffDropDown = new SelectList(stafflist, "Id", "StaffName", "-请选择-");
+            }
+            return PartialView();
+        }
+        // 获取签到详情
+        public ActionResult Manager_AgendaDetailsPartial(int agendaId)
+        {
+            var model = _qcdb.QCAgenda.SingleOrDefault(m => m.Id == agendaId);
+            return PartialView(model);
+        }
+
+
         public ActionResult Manager_History()
         {
             return View();
@@ -941,6 +983,58 @@ namespace SqzEvent.Controllers
                               select m;
             ViewBag.FactoryDropdown = new SelectList(factorylist, "Id", "SimpleName");
             return PartialView();
+        }
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<ActionResult> Manager_AddSchedule(FormCollection form)
+        {
+            // 判断下拉菜单以及日期选项是否为空
+            try
+            {
+                int factoryId = Convert.ToInt32(form["FactoryId"].ToString());
+                string[] datelist = form["DateList"].ToString().Split(',');
+                var factory = _qcdb.Factory.SingleOrDefault(m => m.Id == factoryId);
+                if (factory != null)
+                {
+                    foreach(var date in datelist)
+                    {
+                        DateTime Subscribe = Convert.ToDateTime(date);
+                        foreach(var p in factory.Product)
+                        {
+                            string _cnt = form[p.ProductCode].ToString();
+                            if (_cnt != "")
+                            {
+                                int schedule_cnt = Convert.ToInt32(_cnt);
+                                // 判断是否存在
+                                ProductionSchedule exist_item = _qcdb.ProductionSchedule.SingleOrDefault(m => m.ProductId == p.Id && m.Subscribe == Subscribe && m.FactoryId == factoryId);
+                                if (exist_item != null)
+                                {
+                                    exist_item.ProductionPlan = schedule_cnt;
+                                    _qcdb.Entry(exist_item).State = System.Data.Entity.EntityState.Modified;
+                                }
+                                else
+                                {
+                                    ProductionSchedule s = new ProductionSchedule()
+                                    {
+                                        FactoryId = factoryId,
+                                        Subscribe = Subscribe,
+                                        ProductId = p.Id,
+                                        Status = false,
+                                        ProductionPlan = schedule_cnt
+                                    };
+                                    _qcdb.ProductionSchedule.Add(s);
+                                }
+                            }
+                        }
+                    }
+                    await _qcdb.SaveChangesAsync();
+                    return Content("SUCCESS");
+                }
+                return Content("FAIL");
+            }
+            catch
+            {
+                return Content("FAIL");
+            }
         }
 
         public ActionResult Manager_AddSchedulePartial(int fid)
