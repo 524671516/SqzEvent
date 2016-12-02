@@ -1,0 +1,140 @@
+﻿@model SqzEvent.Models.QCAgenda
+
+<div>
+    <h4>QCAgenda</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.FactoryId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FactoryId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.QCStaffId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.QCStaffId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Subscribe)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Subscribe)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CheckinTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CheckinTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CheckoutTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CheckoutTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Photos)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Photos)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CheckinRemark)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CheckinRemark)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CheckoutRemark)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CheckoutRemark)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Remark)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Remark)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OfficalWorkers)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OfficalWorkers)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TemporaryWorkers)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TemporaryWorkers)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TemplateValues)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TemplateValues)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SummaryTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SummaryTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.WorkHours)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WorkHours)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SummaryPhotos)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SummaryPhotos)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

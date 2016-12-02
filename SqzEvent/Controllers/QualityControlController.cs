@@ -899,7 +899,10 @@ namespace SqzEvent.Controllers
         // 管理员首页
         public ActionResult Manager_Home()
         {
-            return View();
+            var model = from m in _qcdb.Factory
+                        select m;
+            ViewBag.Today = DateTime.Now.ToString("yyyy-MM-dd");
+            return View(model);
         }
         // 参数（工厂ID, 默认当前日期）
         public ActionResult Manager_AgendaDetails(int fid, string date)

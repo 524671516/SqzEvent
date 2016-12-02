@@ -522,6 +522,9 @@
     <Content Include="Views\QualityControl\Manager_ScheduleDetails.cshtml" />
     <Content Include="Views\QualityControl\Manager_AddSchedule.cshtml" />
     <Content Include="Views\QualityControl\Manager_AddSchedulePartial.cshtml" />
+    <Content Include="Views\QualityControl\Manager_AgendaDetails.cshtml" />
+    <Content Include="Views\QualityControl\Manager_AgendaDetailsList.cshtml" />
+    <Content Include="Views\QualityControl\Manager_AgendaDetailsPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
