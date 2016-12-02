@@ -1,140 +1,163 @@
 ﻿ @model SqzEvent.Models.QCAgenda
-
-<div>
-    <h4>QCAgenda</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.FactoryId)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.FactoryId)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.QCStaffId)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.QCStaffId)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Subscribe)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Subscribe)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CheckinTime)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CheckinTime)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CheckoutTime)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CheckoutTime)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Photos)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Photos)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CheckinRemark)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CheckinRemark)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CheckoutRemark)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CheckoutRemark)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Remark)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Remark)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.OfficalWorkers)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.OfficalWorkers)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.TemporaryWorkers)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.TemporaryWorkers)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.TemplateValues)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.TemplateValues)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.SummaryTime)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.SummaryTime)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.WorkHours)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.WorkHours)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.SummaryPhotos)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.SummaryPhotos)
-        </dd>
-
-    </dl>
+<div class="list-block">
+    <div class="list-group">
+        <ul>
+            <li class="list-group-title">工厂信息</li>
+            <li>
+                <a href="#" class="item-link item-content">
+                    <div class="item-inner">
+                        <div class="item-title">生产计划</div>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="item-link item-content">
+                    <div class="item-inner">
+                        <div class="item-title">故障信息</div>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="item-link item-content">
+                    <div class="item-inner">
+                        <div class="item-title">检验信息</div>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="list-group">
+        <ul>
+            <li class="list-group-title">个人信息</li>
+            <li class="accordion-item">
+                <a href="#" class="item-content item-link">
+                    <div class="item-inner">
+                        <div class="item-title">签到信息</div>
+                    </div>
+                </a>
+                <div class="accordion-item-content">
+                    <ul>
+                        <li>
+                            <div class="item-inner item-content">
+                                <div class="item-title">签到工厂</div>
+                                <div class="item-after">@Model.FactoryId</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-inner item-content">
+                                <div class="item-title">签到时间</div>
+                                <div class="item-after">@Model.CheckinTime</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-inner item-content">
+                                <div class="item-title">正式员工</div>
+                                <div class="item-after">@Model.OfficalWorkers<span>人</span></div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-inner item-content">
+                                <div class="item-title">兼职员工</div>
+                                <div class="item-after">@Model.TemporaryWorkers<span>人</span></div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-inner item-content">
+                                <div class="item-title">开机数</div>
+                                <div class="item-after">@Model.Status<span>台</span></div>
+                            </div>
+                        </li>                     
+                        <li>
+                            <a href="javascript:;" class="item-content item-link qc-photos" data-photos="@Model.Photos">
+                                <div class="item-inner">
+                                    <div class="item-title">签到图片</div>
+                                    <div class="item-after">点击查看</div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="content-block-title remark-title">签到备注</div>
+                    <ul>
+                        <li>
+                            <div class="item-content middle-content">
+                                @Html.TextAreaFor(m => m.CheckinRemark, new { placeholder = "请输入签到备注", @class = "required input-textarea", @readonly = "readonly" })
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li class="accordion-item">
+                <a href="#" class="item-content item-link">
+                    <div class="item-inner">
+                        <div class="item-title">签退信息</div>
+                    </div>
+                </a>
+                <div class="accordion-item-content">
+                    <ul>                   
+                        <li>
+                            <div class="item-inner item-content">
+                                <div class="item-title">签退时间</div>
+                                <div class="item-after">@Model.CheckoutTime</div>
+                            </div>
+                        </li>                                       
+                        <li>
+                            <a href="javascript:;" class="item-content item-link qc-photos" data-photos="@Model.Photos">
+                                <div class="item-inner">
+                                    <div class="item-title">签退图片</div>
+                                    <div class="item-after">点击查看</div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="content-block-title remark-title">签退备注</div>
+                    <ul>
+                        <li>
+                            <div class="item-content middle-content">
+                                @Html.TextAreaFor(m => m.CheckoutRemark, new { placeholder = "请输入签到备注", @class = "required input-textarea", @readonly = "readonly" })
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li class="accordion-item">
+                <a href="#" class="item-content item-link">
+                    <div class="item-inner">
+                        <div class="item-title">工作总结</div>
+                    </div>
+                </a>
+                <div class="accordion-item-content">
+                    <ul>   
+                        <li>
+                            <div class="item-inner item-content">
+                                <div class="item-title">工作时间</div>
+                                <div class="item-after">@Model.WorkHours<span>小时</span></div>
+                            </div>
+                        </li>                       
+                        <li>
+                            <div class="item-inner item-content">
+                                <div class="item-title">总结时间</div>
+                                <div class="item-after">@Model.SummaryTime</div>
+                            </div>
+                        </li> 
+                        <li>
+                            <a href="javascript:;" class="item-content item-link qc-photos" data-photos="@Model.Photos">
+                                <div class="item-inner">
+                                    <div class="item-title">总结图片</div>
+                                    <div class="item-after">点击查看</div>
+                                </div>
+                            </a>
+                        </li>                                                                       
+                    </ul>
+                    <div class="content-block-title remark-title">总结备注</div>
+                    <ul>
+                        <li>
+                            <div class="item-content middle-content">
+                                @Html.TextAreaFor(m => m.Remark, new { placeholder = "请输入签到备注", @class = "required input-textarea", @readonly = "readonly" })
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>

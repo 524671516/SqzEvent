@@ -50,6 +50,91 @@ $$(".icon-link").each(function () {
 // 实时状态页
 myApp.onPageInit("Home", function (page) {
 });
+//Manager_AgendaDetails页
+myApp.onPageInit("Manager_agendadetails", function (page) {
+    var calendarMultiple = myApp.calendar({
+        input: '#SelectDate',
+        dateFormat: 'yyyy-mm-dd',
+        monthNames: ['1月', '2月', '3月', '4月 ', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+        closeOnSelect: true,
+        dayNamesShort: ['日', '一', '二', '三', '四', '五', '六'],
+        toolbarTemplate: '<div class="toolbar">' + '<div class="toolbar-inner">' +
+            '<div class="picker-calendar-year-picker">' +
+            '<a href="#" class="link icon-only picker-calendar-prev-year">' +
+            '<i class="icon icon-prev">' + '</i>' + '</a>' + '<span class="current-year-value">' + '</span>' +
+            '<a href="#" class="link icon-only picker-calendar-next-year">' +
+            '<i class="icon icon-next">' + '</i>' + '</a>' + '</div>' +
+            '<div class="picker-calendar-month-picker">' +
+            '<a href="#" class="link icon-only picker-calendar-prev-month">' +
+            '<i class="icon icon-prev">' + '</i>' + '</a>' + '<span class="current-month-value">' +
+            '</span>' + '<a href="#" class="link icon-only picker-calendar-next-month">' +
+            '<i class="icon icon-next">' + '</i>' + '</a>' + '</div>' + '</div>' + '</div>'
+    });
+    $$.ajax({
+        url: "/QualityControl/Manager_AgendaDetailsList",
+        data: {
+            fid: $$("#FactoryId").val(),
+            date: $$("#SelectDate").val()
+        },
+        success: function (data) {
+            $$(".tempalate-select").html(data);
+            if ($$("#StaffId").val() != "") {
+                $$.ajax({
+                    url: "/QualityControl/Manager_AgendaDetailsPartial",
+                    data: {
+                        agendaId: $$("#StaffId").val()
+                    },
+                    success: function (data) {
+                        $$(".tempalate-info").html(data);
+                    }
+                })
+            } else {
+                $$(".tempalate-info").html("");
+            }
+        }
+    })
+    $$("#SelectDate").on("change", function () {
+        var date = $$(this).val();
+        $$.ajax({
+            url: "/QualityControl/Manager_AgendaDetailsList",
+            data: {
+                fid: $$("#FactoryId").val(),
+                date: date
+            },
+            success: function (data) {
+                $$(".tempalate-select").html(data);
+                if ($$("#StaffId").val() != "") {
+                    $$.ajax({
+                        url: "/QualityControl/Manager_AgendaDetailsPartial",
+                        data: {
+                            agendaId: $$("#StaffId").val()
+                        },
+                        success: function (data) {
+                                $$(".tempalate-info").html(data);
+                        }
+                    })
+                } else {
+                    $$(".tempalate-info").html("");
+                }
+                $$("#StaffId").on("change", function () {
+                    if ($$("#StaffId").val() != "") {
+                        $$.ajax({
+                            url: "/QualityControl/Manager_AgendaDetailsPartial",
+                            data: {
+                                agendaId: $$("#StaffId").val()
+                            },
+                            success: function (data) {
+                                    $$(".tempalate-info").html(data);                           
+                            }
+                        })
+                    } else {
+                        $$(".tempalate-info").html("");
+                    }
+                });
+            }
+        });
+    });
+});
 //设置页
 myApp.onPageInit('Setting', function (page) {
     var monthNames = ['1月', '2月', '3月', '4月 ', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
@@ -225,7 +310,7 @@ function ChangeDateFormat(val) {
     if (val != null) {
         var date = new Date(parseInt(val.replace("/Date(", "").replace(")/", ""), 10));
         //月份为0-11，所以+1，月份小于10时补个0
-        var month =  date.getMonth() ;
+        var month = date.getMonth();
         var currentDate = date.getDate();
         return date.getFullYear() + "-" + month + "-" + currentDate;
     }

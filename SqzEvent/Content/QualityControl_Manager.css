@@ -166,22 +166,18 @@ border-bottom:1px solid green;
     border-bottom:1px solid green;
 }
 span.picker-calendar-day-green {
-    background: green !important;
-    color:#fff !important;
+    background: green;
+    color:#fff;
 }
 span.picker-calendar-day-red {
-    background:red !important;
-    color:#fff !important;
+    background:red;
+    color:#fff;
 }
 span.picker-calendar-day-gray{
     background:#cccccc !important;
 }
 .list-describe{
     margin:20px 0 50px 0;
-}
-.picker-calendar-day.picker-calendar-day-today{
-    border-bottom:1px solid red;
-    text-align:center;
 }
 /*验证失败错误样式*/
 input[type="text"].invalid-input, input[type='tel'].invalid-input,input[type='number'].invalid-input, input[type='digits'].invalid-input {
@@ -194,5 +190,11 @@ textarea.invalid-input {
 .item-after.invalid-input {
     background-color: rgb(211, 31, 31);
 }
-
+/*Manager_AgendaDetails*/
+#manager_agendadetails .list-block{
+    margin:10px 0 10px 0;
+}
+.remark-title{
+    margin:10px 15px 2px 15px;
+}
 

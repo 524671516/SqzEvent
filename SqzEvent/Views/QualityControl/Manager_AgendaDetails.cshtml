@@ -1,8 +1,4 @@
 ﻿@model SqzEvent.Models.AgendaDetailsViewModel
-    
-<div class="title">@Html.Encode(Model.FactoryName)</div>
-
-<div classs="date">@Html.TextBoxFor(m=>m.SelectDate)</div>
 <div class="navbar">
     <div class="navbar-inner">
         <div class="left">
@@ -15,83 +11,23 @@
     </div>
 </div>
 <div class="pages">
-    <div class="page" data-page="addqualitytest">
+    <div class="page" data-page="Manager_agendadetails" id="manager_agendadetails">
         <div class="page-content">
-                <div class="list-block">
-                    <ul>
-                        <li>
-                            <a href="#" class="item-link smart-select" data-back-text="返回" data-back-on-select="true" data-searchbar-cancel="取消" id="factory-select">                       
-                                <div class="item-content">
-                                    <div class="item-inner">
-                                        <div class="item-title">选择工厂</div>
-                                        <div class="item-after">- 请选择 -</div>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="item-link smart-select" data-back-text="返回" data-back-on-select="true" data-searchbar-placeholder="选择产品" data-searchbar-cancel="取消" id="product-select">
-                                <select id="ProductId" name="ProductId" class="required">
-                                    <option>- 请选择 -</option>
-                                </select>
-                                <div class="item-content">
-                                    <div class="item-inner">
-                                        <div class="item-title">选择产品</div>
-                                        <div class="item-after">- 请选择 -</div>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="list-block info-content hidden">
-                    <ul>
-                        <li>
-                            <div class="item-content">
-                                <div class="item-inner">
-                                    <div class="item-title label">生产进度</div>
-                                    <div class="item-input">
-                                      
-                                    </div>
-                                    <div class="item-after color-black">盒</div>
-                                </div>
+            @Html.HiddenFor(m=>m.FactoryId)
+            <div class="list-block">
+                <ul>
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title label">选择日期</div>
+                            <div class="item-input">
+                                @Html.TextBoxFor(m=>m.SelectDate, new { placeholder= "-请选择-", @class="item-input-right", required="required"})
                             </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="list-block" id="template-content"></div>
-                <div class="list-block hidden info-content">
-                    <ul>
-
-                        <li>
-                            <div class="item-content">
-                                <div class="item-inner">
-                                    <div class="item-title">上传照片</div>
-                                    <div class="item-after"><abbr id="addqualitytest-imgcount">0</abbr>/9</div>
-                                </div>
-                            </div>
-                            <div class="item-content middle-content">
-                                <div class="item-inner">
-                                    <div class="hidden">
-                                       
-                                    </div>
-                                    <ul class="rep-imglist" id="addqualitytest-photos"></ul>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="item-content middle-content">
-                               
-                            </div>
-                            <div class="item-content">
-                                <div class="item-inner">
-                                    <div class="item-title"></div>
-                                    <div class="item-after"><span id="addqualitytest-currentlen">0</span>/<span>200</span></div>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="tempalate-select"></div>
+            <div class="tempalate-info"></div>
         </div>
     </div>
 </div>
