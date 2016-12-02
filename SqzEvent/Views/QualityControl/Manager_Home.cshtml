@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<SqzEvent.Models.Factory>
+@{
     ViewBag.Title = "实时状态";
     Layout = null;
 }
@@ -57,93 +58,17 @@
                         </div>
                         <div class="list-block accordion-list">
                             <ul>
-                                <li class="accordion-item">
-                                    <a href="#" class="item-content item-link">
-                                        <div class="item-inner">
-                                            <div class="item-title">康尔福</div>
-                                        </div>
-                                    </a>
-                                    <div class="accordion-item-content">
-                                        <div class="list-group list-block">
-                                            <ul>
-                                                <li>
-                                                    <a href="/QualityControl/QualityTestList" class="item-link item-content">
-                                                        <div class="item-inner">
-                                                            <div class="item-title">产品检验<sup id="qt_dot" class="hidden"><i class="fa fa-circle color-red"></i></sup></div>
-                                                            <div class="item-after" id="qt_count">0</div>
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="/QualityControl/BreakdownList" class="item-link item-content">
-                                                        <div class="item-inner">
-                                                            <div class="item-title">故障报告<sup id="bd_dot" class="hidden"><i class="fa fa-circle color-red"></i></sup></div>
-                                                            <div class="item-after" id="bd_count">0</div>
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="accordion-item">
-                                    <a href="#" class="item-content item-link">
-                                        <div class="item-inner">
-                                            <div class="item-title">纪亨</div>
-                                        </div>
-                                    </a>
-                                    <div class="accordion-item-content">
-                                        <div class="list-group list-block">
-                                            <ul>
-                                                <li>
-                                                    <a href="/QualityControl/QualityTestList" class="item-link item-content">
-                                                        <div class="item-inner">
-                                                            <div class="item-title">产品检验<sup id="qt_dot" class="hidden"><i class="fa fa-circle color-red"></i></sup></div>
-                                                            <div class="item-after" id="qt_count">0</div>
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="/QualityControl/BreakdownList" class="item-link item-content">
-                                                        <div class="item-inner">
-                                                            <div class="item-title">故障报告<sup id="bd_dot" class="hidden"><i class="fa fa-circle color-red"></i></sup></div>
-                                                            <div class="item-after" id="bd_count">0</div>
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="accordion-item">
-                                    <a href="#" class="item-content item-link">
-                                        <div class="item-inner">
-                                            <div class="item-title">顶能</div>
-                                        </div>
-                                    </a>
-                                    <div class="accordion-item-content">
-                                        <div class="list-group list-block">
-                                            <ul>
-                                                <li>
-                                                    <a href="/QualityControl/QualityTestList" class="item-link item-content">
-                                                        <div class="item-inner">
-                                                            <div class="item-title">产品检验<sup id="qt_dot" class="hidden"><i class="fa fa-circle color-red"></i></sup></div>
-                                                            <div class="item-after" id="qt_count">0</div>
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="/QualityControl/BreakdownList" class="item-link item-content">
-                                                        <div class="item-inner">
-                                                            <div class="item-title">故障报告<sup id="bd_dot" class="hidden"><i class="fa fa-circle color-red"></i></sup></div>
-                                                            <div class="item-after" id="bd_count">0</div>
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </li>
+                                @foreach (var item in Model)
+                                {
+                                    <li>
+                                        <a href="/QualityControl/Manager_AgendaDetails?fid=@item.Id&date=@ViewBag.Today" class="item-content item-link home-link">
+                                            <div class="item-inner">
+                                                <div class="item-title">@Html.Encode(item.SimpleName)<sup id="bd-dot"><i class="fa fa-circle color-red" style="font-size:12px;"></i></sup></div>
+                                                <div class="item-after">状态:<span id="checkstatus">已签到</span></div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                }
                             </ul>
                         </div>
                     </div>

@@ -40,6 +40,16 @@ $$.ajax({
         $$("#userinfo").html(data);
     }
 });
+//图标点击颜色变化
+$$(".icon-link").each(function () {
+    $$(this).on("click", function () {
+        $$(".icon-link").removeClass("active");
+        $$(this).addClass("active");
+    });
+});
+// 实时状态页
+myApp.onPageInit("Home", function (page) {
+});
 //设置页
 myApp.onPageInit('Setting', function (page) {
     var monthNames = ['1月', '2月', '3月', '4月 ', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
@@ -152,7 +162,8 @@ myApp.onPageInit('Setting', function (page) {
     });
 
 });
-myApp.onPageInit('add-schedule', function (page) {
+//添加产量计划页
+myApp.onPageInit('Add-schedule', function (page) {
     var calendarMultiple = myApp.calendar({
         input: '#calendar-multiple',
         dateFormat: 'yyyy-mm-dd',
