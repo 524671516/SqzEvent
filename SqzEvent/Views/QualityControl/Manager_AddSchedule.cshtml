@@ -6,31 +6,35 @@
                 <span>返回</span>
             </a>
         </div>
-        <div class="center sliding"><strong>添加日程</strong></div>
+        <div class="center sliding">添加日程</div>
+        <div class="right">
+            <a href="javascript:;" id="addschedule-submit" class="link">提交</a>
+        </div>
     </div>
 </div>
 <div class="pages">
-    <div class="page" data-page="qualitytestdetails" id="qualitytestdetails">
+    <div class="page" data-page="add-schedule" id="add-schedule">
         <div class="page-content">
+            @using (Html.BeginForm("Manager_AddSchedule","QualityControl",FormMethod.Post, new{@id="manager_addschedule-form",@class="validate-form"})){
             <div class="content-block-title">基本信息</div>
             <div class="list-block">
                 <ul>
                     <li>
                         <div class="item-content">
                             <div class="item-inner">
-                                <div class="item-title label">活动时间</div>
+                                <div class="item-title label">选择日期</div>
                                 <div class="item-input">
-                                    <input type="text" id="actDate" name="actDate" placeholder="请选择日期">
+                                    <input type="text" placeholder="- 请选择 -"  id="calendar-multiple" class="item-input-right" required="required" minlength="1"> 
                                 </div>
                             </div>
                         </div>
                     </li>
                     <li>
                         <a href="#" class="smart-select item-link" data-back-text="返回" data-back-on-select="true" data-searchbar-placeholder="店铺名称" data-searchbar-cancel="取消">
-                            @Html.DropDownList("FactoryId", ViewBag.FactoryDropdown as SelectList, "-请选择-")
+                            @Html.DropDownList("FactoryId", ViewBag.FactoryDropdown as SelectList, "-请选择-",new{@class="required"})
                             <div class="item-content">
                                 <div class="item-inner">
-                                    <div class="item-title">选择门店</div>
+                                    <div class="item-title">选择工厂</div>
                                     <div class="item-after smart-select-value">- 请选择 -</div>
                                 </div>
                             </div>
@@ -38,6 +42,8 @@
                     </li>
                 </ul>
             </div>
+            <div class="tempalate-content"></div>
+            }
         </div>
     </div>
 </div>

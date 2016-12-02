@@ -1,4 +1,8 @@
-﻿/*个人信息展示页样式*/
+﻿/*文本框文字居右*/
+.item-input-right {
+    text-align: right;
+}
+/*个人信息展示页样式*/
 .external {
     width: 80px; 
 }
@@ -156,16 +160,33 @@ border-bottom:1px solid green;
     border-bottom:1px solid green;
 }
 span.picker-calendar-day-green {
-    background: green;
-    color:#fff;
+    background: green !important;
+    color:#fff !important;
 }
 span.picker-calendar-day-red {
-    background:red;
-    color:#fff;
+    background:red !important;
+    color:#fff !important;
 }
 span.picker-calendar-day-gray{
-    background:#cccccc;
+    background:#cccccc !important;
 }
 .list-describe{
     margin:20px 0 50px 0;
 }
+.picker-calendar-day.picker-calendar-day-today{
+    border-bottom:1px solid red;
+    text-align:center;
+}
+/*验证失败错误样式*/
+input[type="text"].invalid-input, input[type='tel'].invalid-input,input[type='number'].invalid-input, input[type='digits'].invalid-input {
+    background-color: rgb(211, 31, 31);
+}
+
+textarea.invalid-input {
+    background-color: rgb(211, 31, 31);
+}
+.item-after.invalid-input {
+    background-color: rgb(211, 31, 31);
+}
+
+
