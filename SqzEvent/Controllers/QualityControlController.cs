@@ -996,7 +996,7 @@ namespace SqzEvent.Controllers
                 int factoryId = Convert.ToInt32(form["FactoryId"].ToString());
                 string[] datelist = form["DateList"].ToString().Split(',');
                 var factory = _qcdb.Factory.SingleOrDefault(m => m.Id == factoryId);
-                if (factory != null)
+                                                                     if (factory != null)
                 {
                     foreach(var date in datelist)
                     {
@@ -1044,6 +1044,111 @@ namespace SqzEvent.Controllers
         {
             var template = _qcdb.Factory.SingleOrDefault(m => m.Id == fid).Product;
             return PartialView(template);
+        }
+        // 质检查询列表
+        public ActionResult Manager_QualityTest(int? fid, string date)
+        {
+            string factoryName = "- 请选择 -";
+            if (date == null)
+            {
+                date = DateTime.Now.ToString("yyyy-MM-dd");
+            }
+            var factoryList = from m in _qcdb.Factory
+                              select new { Id = m.Id, Name = m.SimpleName };
+            
+            if (fid != null)
+            {
+                var factory = _qcdb.Factory.SingleOrDefault(m => m.Id == fid);
+                factoryName = factory.SimpleName;
+                ViewBag.FactoryDropdown = new SelectList(factoryList, "Id", "Name", fid);
+            }
+            else
+            {
+                ViewBag.FactoryDropdown = new SelectList(factoryList, "Id", "Name");
+            }
+            AgendaDetailsViewModel model = new AgendaDetailsViewModel()
+            {
+                FactoryId = fid,
+                SelectDate = date,
+                FactoryName = factoryName
+            };
+            return PartialView(model);
+        }
+
+        public ActionResult Manager_QualityTestPartial(int fid, string date, bool? sorttype)
+        {
+            bool _sorttype = sorttype ?? false;
+            DateTime _start = Convert.ToDateTime(date);
+            DateTime _end = _start.AddDays(1);
+            if (_sorttype)
+            {
+                var qtlist = from m in _qcdb.QualityTest
+                             where m.FactoryId == fid && m.ApplyTime >= _start && m.ApplyTime < _end
+                             orderby m.ProductId, m.ApplyTime descending
+                             select m;
+                return PartialView(qtlist);
+            }
+            else
+            {
+                var qtlist = from m in _qcdb.QualityTest
+                             where m.FactoryId == fid && m.ApplyTime >= _start && m.ApplyTime < _end
+                             orderby m.ApplyTime descending
+                             select m;
+                return PartialView(qtlist);
+            }
+        }
+
+        // 质检信息详情
+        public ActionResult Manager_QualityTestDetail(int qtid)
+        {
+            var item = _qcdb.QualityTest.SingleOrDefault(m => m.Id == qtid);
+            return PartialView(item);
+        }
+
+        
+
+        // 故障查询列表
+        public ActionResult Manager_Breakdown(int? fid, string date)
+        {
+            string factoryName = "- 请选择 -";
+            var factoryList = from m in _qcdb.Factory
+                              select new { Id = m.Id, Name = m.SimpleName };
+
+            if (fid != null)
+            {
+                var factory = _qcdb.Factory.SingleOrDefault(m => m.Id == fid);
+                factoryName = factory.SimpleName;
+                ViewBag.FactoryDropdown = new SelectList(factoryList, "Id", "Name", fid);
+            }
+            else
+            {
+                ViewBag.FactoryDropdown = new SelectList(factoryList, "Id", "Name");
+            }
+            AgendaDetailsViewModel model = new AgendaDetailsViewModel()
+            {
+                FactoryId = fid,
+                SelectDate = date,
+                FactoryName = factoryName
+            };
+            return PartialView(model);
+        }
+
+        public ActionResult Manager_BreakdownPartial(int fid, string date)
+        {
+            DateTime _start = Convert.ToDateTime(date);
+            DateTime _end = _start.AddDays(1);
+            var qtlist = from m in _qcdb.BreadkdownReport
+                         where m.QCEquipment.FactoryId == fid && m.BreakDownTime >= _start && m.BreakDownTime < _end
+                         orderby m.BreakDownTime
+                         select m;
+            return PartialView(qtlist);
+        }
+
+        // 质检信息详情
+        public ActionResult Manager_BreakdownDetail(int qtid)
+        {
+            var item = _qcdb.BreadkdownReport.SingleOrDefault(m => m.Id == qtid);
+            return PartialView(item);
         }
 
         public ActionResult Manager_Control()

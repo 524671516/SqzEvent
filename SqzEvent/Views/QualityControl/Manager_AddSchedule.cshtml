@@ -15,34 +15,36 @@
 <div class="pages">
     <div class="page" data-page="Add-schedule" id="add-schedule">
         <div class="page-content">
-            @using (Html.BeginForm("Manager_AddSchedule","QualityControl",FormMethod.Post, new{@id="manager_addschedule-form",@class="validate-form"})){
-            <div class="content-block-title">基本信息</div>
-            <div class="list-block">
-                <ul>
-                    <li>
-                        <div class="item-content">
-                            <div class="item-inner">
-                                <div class="item-title label">选择日期</div>
-                                <div class="item-input">
-                                    <input type="text" placeholder="- 请选择 -"  id="calendar-multiple" class="item-input-right" required="required" minlength="1"> 
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li>
-                        <a href="#" class="smart-select item-link" data-back-text="返回" data-back-on-select="true" data-searchbar-placeholder="店铺名称" data-searchbar-cancel="取消">
-                            @Html.DropDownList("FactoryId", ViewBag.FactoryDropdown as SelectList, "-请选择-",new{@class="required"})
+            @using (Html.BeginForm("Manager_AddSchedule", "QualityControl", FormMethod.Post, new { @id = "manager_addschedule-form", @class = "validate-form" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="content-block-title">基本信息</div>
+                <div class="list-block">
+                    <ul>
+                        <li>
                             <div class="item-content">
                                 <div class="item-inner">
-                                    <div class="item-title">选择工厂</div>
-                                    <div class="item-after smart-select-value">- 请选择 -</div>
+                                    <div class="item-title label">选择日期</div>
+                                    <div class="item-input">
+                                        <input type="text" placeholder="- 请选择 -" id="DateList" name="DateList" class="item-input-right" required="required" minlength="1">
+                                    </div>
                                 </div>
                             </div>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <div class="tempalate-content"></div>
+                        </li>
+                        <li>
+                            <a href="#" class="smart-select item-link" data-back-text="返回" data-back-on-select="true" data-searchbar-placeholder="店铺名称" data-searchbar-cancel="取消">
+                                @Html.DropDownList("FactoryId", ViewBag.FactoryDropdown as SelectList, "-请选择-", new { @class = "required" })
+                                <div class="item-content">
+                                    <div class="item-inner">
+                                        <div class="item-title">选择工厂</div>
+                                        <div class="item-after smart-select-value">- 请选择 -</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tempalate-content"></div>
             }
         </div>
     </div>
