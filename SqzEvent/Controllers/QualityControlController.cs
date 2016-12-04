@@ -931,10 +931,12 @@ namespace SqzEvent.Controllers
             if (stafflist.Count() > 0)
             {
                 ViewBag.StaffDropDown = new SelectList(stafflist, "Id", "StaffName", stafflist.FirstOrDefault().Id);
+                ViewBag.SelectedName = stafflist.FirstOrDefault().StaffName;
             }
             else
             {
                 ViewBag.StaffDropDown = new SelectList(stafflist, "Id", "StaffName", "-请选择-");
+                ViewBag.SelectedName = "-请选择-";
             }
             return PartialView();
         }
