@@ -40,6 +40,12 @@ $$.ajax({
         $$("#userinfo").html(data);
     }
 });
+//首页刷新
+var ptrContent = $$('.pull-to-refresh-content');
+ptrContent.on('refresh', function (e) {
+    alert(1);
+    myApp.pullToRefreshDone();
+});
 //图标点击颜色变化
 $$(".icon-link").each(function () {
     $$(this).on("click", function () {
@@ -49,6 +55,11 @@ $$(".icon-link").each(function () {
 });
 // 实时状态页
 myApp.onPageInit("Home", function (page) {
+    var ptrContent = $$('.pull-to-refresh-content');
+    ptrContent.on('refresh', function (e) {
+        alert(1);
+        myApp.pullToRefreshDone();
+    });
 });
 //Manager_AgendaDetails页
 myApp.onPageInit("Manager_agendadetails", function (page) {
@@ -306,7 +317,6 @@ myApp.onPageInit('Add-schedule', function (page) {
         }
     })
 })
-
 // 历史检验页面查询
 myApp.onPageInit('manager-qualitytest', function (page) {
     var calendarMultiple = myApp.calendar({
@@ -327,6 +337,18 @@ myApp.onPageInit('manager-qualitytest', function (page) {
             '</span>' + '<a href="#" class="link icon-only picker-calendar-next-month">' +
             '<i class="icon icon-next">' + '</i>' + '</a>' + '</div>' + '</div>' + '</div>'
     });
+    if ($$("#FactoryId").val() != "") {
+        $$.ajax({
+            url: "/QualityControl/Manager_QualityTestPartial",
+            data: {
+                fid: $$("#FactoryId").val(),
+                date: $$("#SelectDate").val()
+            },
+            success: function (data) {
+                $$("#qualitytest-list").html(data);
+            }
+        })
+    }
     $$("#FactoryId").on("change", function () {
         var fid = $$(this).val();
         if ($$(this).val()!="") {
@@ -337,13 +359,91 @@ myApp.onPageInit('manager-qualitytest', function (page) {
                     date: $$("#SelectDate").val()
                 },
                 success: function (data) {
-                    $$("#content-list").html(data);
+                    $$("#qualitytest-list").html(data);
                 }
             });
+        } else {
+            $$("#qualitytest-list").html("");
+        }
+    })
+    $$("#SelectDate").on("change", function () {
+        var fid = $$("#FactoryId").val();
+        if ($$("#FactoryId").val() != "") {
+            $$.ajax({
+                url: "/QualityControl/Manager_QualityTestPartial",
+                data: {
+                    fid: fid,
+                    date:$$("#SelectDate").val()
+                },
+                success: function (data) {
+                    $$("#qualitytest-list").html(data);
+                }
+            })
         }
     })
 });
-
+//历史故障页面查询
+myApp.onPageInit("manager-breakdown", function () {
+    var calendarMultiple = myApp.calendar({
+        input: '#SelectDate',
+        value: [new Date()],
+        dateFormat: 'yyyy-mm-dd',
+        closeOnSelect: true,
+        monthNames: ['1月', '2月', '3月', '4月 ', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+        dayNamesShort: ['日', '一', '二', '三', '四', '五', '六'],
+        toolbarTemplate: '<div class="toolbar">' + '<div class="toolbar-inner">' +
+            '<div class="picker-calendar-year-picker">' +
+            '<a href="#" class="link icon-only picker-calendar-prev-year">' +
+            '<i class="icon icon-prev">' + '</i>' + '</a>' + '<span class="current-year-value">' + '</span>' +
+            '<a href="#" class="link icon-only picker-calendar-next-year">' +
+            '<i class="icon icon-next">' + '</i>' + '</a>' + '</div>' +
+            '<div class="picker-calendar-month-picker">' +
+            '<a href="#" class="link icon-only picker-calendar-prev-month">' +
+            '<i class="icon icon-prev">' + '</i>' + '</a>' + '<span class="current-month-value">' +
+            '</span>' + '<a href="#" class="link icon-only picker-calendar-next-month">' +
+            '<i class="icon icon-next">' + '</i>' + '</a>' + '</div>' + '</div>' + '</div>'
+    });
+    $$("#FactoryId").on("change", function () {
+        if ($$(this).val() != "") {
+            $$.ajax({
+                url: "/QualityControl/Manager_BreakdownPartial",
+                data: {
+                    fid:$$("#FactoryId").val(),
+                    date:$$("#SelectDate").val()
+                },
+                success: function (data) {                  
+                    $$("#breakdown-list").html(data);
+                }
+            })
+        } else {
+            $$("#breakdown-list").html("");
+        }
+    })
+    $$("SelectDate").on("change", function () {
+        if ($$("#FactoryId") != "") {
+            $$.ajax({
+                url: "/QualityControl/Manager_BreakdownDetail",
+                data: {
+                    fid: $$("#FactoryId").val(),
+                    date: $$("#SelectDate").val()
+                },
+                success: function (data) {
+                    console.log(data)
+                    $$("#breakdown-list").html(data);
+                }
+            })
+        }
+    })
+    
+})
+//历史质检信息详情页
+myApp.onPageInit("Manager_QualityTestDetail", function (page) {
+    PhotoBrowser("Manager_QualityTestDetail");
+})
+//历史故障信息详情页
+myApp.onPageInit("Manager_BreakdownDetail", function (page) {
+    PhotoBrowser("Manager_BreakdownDetail");
+})
 //日期转化
 function ChangeDateFormat(val) {
     if (val != null) {
@@ -490,6 +590,40 @@ function PhotoBrowser(pagename) {
             myPhotoBrowser.open();
         } else {
             myApp.alert("没有找到图片");
+        }
+    });
+}
+// 首页更新
+function updateHomeInfo() {
+    $$.ajax({
+        url: "/QualityControl/HomeInfoAjax",
+        type: "post",
+        success: function (data) {
+            var data = JSON.parse(data);
+            if (data.result == "SUCCESS") {
+                if (data.qt_dot)
+                    $$("#qt_dot").removeClass("hidden");
+                else
+                    $$("#qt_dot").addClass("hidden");
+                if (data.bd_dot)
+                    $$("#bd_dot").removeClass("hidden");
+                else
+                    $$("#bd_dot").addClass("hidden");
+                $$("#bd_count").text(data.bd_count);
+                $$("#qt_count").text(data.qt_count);
+                if (data.checkout_cnt != 0)
+                    $$("#checkout_dot").removeClass("hidden");
+                else
+                    $$("#checkout_dot").addClass("hidden");
+                if (data.summary_cnt != 0)
+                    $$("#summary_dot").removeClass("hidden");
+                else
+                    $$("#summary_dot").addClass("hidden");
+                $$("#checkout_cnt").text(data.checkout_cnt);
+                $$("#summary_cnt").text(data.summary_cnt);
+                $$("#datecode").text(data.datecode);
+                myApp.pullToRefreshDone();
+            }
         }
     });
 }

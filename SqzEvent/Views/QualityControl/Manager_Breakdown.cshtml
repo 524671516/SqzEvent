@@ -1,6 +1,46 @@
 ﻿@model SqzEvent.Models.AgendaDetailsViewModel
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="left">
+            <a href="#" class="back link">
+                <i class="icon icon-back" aria-hidden="true"></i>
+                <span>返回</span>
+            </a>
+        </div>
+        <div class="center sliding">历史故障信息</div>
+    </div>
+</div>
+<div class="pages">
+    <div class="page" data-page="manager-breakdown" id="manager-breakdown">
+        <div class="page-content">
+            <div class="list-block">
+                <ul>
+                    <li>
+                        <a href="#" class="smart-select item-link" data-back-text="返回" data-back-on-select="true" data-searchbar-placeholder="店铺名称" data-searchbar-cancel="取消">
+                            @Html.DropDownListFor(m => m.FactoryId, ViewBag.FactoryDropdown as SelectList, "-请选择-", new { @class = "required" })
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title">选择工厂</div>
+                                    <div class="item-after smart-select-value">@Html.Encode(Model.FactoryName)</div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title label">选择日期</div>
+                                <div class="item-input">
+                                    @Html.TextBoxFor(m => m.SelectDate, new { placeholder = "请选择日期", @class = "item-input-right", required = "required" })
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="list-block" id="breakdown-list">
 
-
-<div>@Html.DropDownListFor(m => m.FactoryId, ViewBag.FactoryDropdown as SelectList, "- 请选择-", new { })</div>
-
-<div>@Html.TextBoxFor(m => m.SelectDate)</div>
+            </div>
+        </div>
+    </div>
+</div>

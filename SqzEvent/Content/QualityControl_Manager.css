@@ -196,9 +196,35 @@ textarea.invalid-input {
 .item-after.invalid-input {
     background-color: rgb(211, 31, 31);
 }
-/*Manager_AgendaDetails*/
+/*实时状态信息样式*/
 #manager_agendadetails .list-block{
     margin:10px 0 10px 0;
 }
+.tempalate-info{
+    margin-bottom:30px;
+}
+/*质检列表滑动块样式*/
+#qualitytestlist-content .swipeout-content a {
+    padding-left: 0;
+}
+
+#qualitytestlist-content .item-inner {
+    padding: 10px;
+}
+
+.fail-border {
+    border-left: 6px solid #ff3b30;
+}
+
+.pass-border {
+    border-left: 6px solid #4cd964;
+}
+#sortable-block{
+    text-align:center;
+}
+#sortable-block li{
+    padding:10px 0;
+}
+
 
 

@@ -1,15 +1,48 @@
 ﻿@model IEnumerable<SqzEvent.Models.QualityTest>
+@if (Model.Count() != 0)
+{
+    <div class="content-block-title">产品检验记录</div>
+    <div class="list-block media-list">
+        <ul>
+            @foreach (var item in Model)
+            {
+                <li class="swipeout" data-url="@item.Id">
+                    <div class="swipeout-content">
+                        @if (item.EvalResult)
+                        {
+                            <a href="/QualityControl/Manager_QualityTestDetail?qtid=@item.Id" class="item-link item-content random-param pass-border">
+                                <div class="item-inner">
+                                    <div class="item-title-row">
+                                        <div class="item-title">@Html.Encode(item.Product.SimpleName) @Html.Encode(item.CompleteRate * 100)%</div>
+                                        <div class="item-after">@Html.Encode(item.ApplyTime.ToString("HH:mm"))</div>
+                                    </div>
+                                    <div class="item-subtitle color-gray">@Html.Encode(item.Factory.SimpleName)</div>
+                                </div>
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="/QualityControl/Manager_QualityTestDetail?qtId=@item.Id" class="item-link item-content random-param fail-border">
+                                <div class="item-inner">
+                                    <div class="item-title-row">
+                                        <div class="item-title">@Html.Encode(item.Product.SimpleName) @Html.Encode(item.CompleteRate * 100)%</div>
+                                        <div class="item-after">@Html.Encode(item.ApplyTime.ToString("HH:mm"))</div>
+                                    </div>
+                                    <div class="item-subtitle color-gray">@Html.Encode(item.Factory.SimpleName)</div>
+                                </div>
+                            </a>
+                        }
+                    </div>
+                    <div class="swipeout-actions-right">
+                        <a href="#" class="swipeout-delete" data-confirm="是否确认删除" data-confirm-title="寿全斋" data-close-on-cancel="true" data-url="@item.Id">删除</a>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+}
+else
+{
+    <div class="content-block-title">未找到质检记录</div>
+}
 
-<ul>
-    @foreach (var item in Model)
-    {
-        <li>
-            <a href="/QualityControl/Manager_QualityTestDetail?qtid=@item.Id" class="item-link item-content">
-                <div class="item-inner">
-                    <div class="item-title">@Html.Encode(item.Product.SimpleName)</div>
-                    <div class="item-after">@Html.Encode(item.ProductionQty)</div>
-                </div>
-            </a>
-        </li>
-    }
-</ul>

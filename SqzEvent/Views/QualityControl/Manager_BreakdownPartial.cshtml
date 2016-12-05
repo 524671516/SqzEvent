@@ -1,46 +1,54 @@
 ﻿@model IEnumerable<SqzEvent.Models.BreakdownReport>
+@if (Model.Count() != 0)
+{
+    <div class="content-block-title">设备故障列表</div>
+    <div class="list-block media-list">
+        <ul>
+            @foreach (var item in Model)
+            {
 
-<table class="table">
+                <li class="swipeout" data-url="@item.Id">
+                    @if (item.Status == 1)
+                    {
+                        <div class="swipeout-content">
+                            <a href="/QualityControl/Manager_BreakdownDetail?bdid=@item.Id" class="item-link item-content random-param pass-border">
+                                <div class="item-inner">
+                                    <div class="item-title-row">
+                                        <div class="item-title">@Html.Encode(item.QCEquipment.SimpleName)</div>
+                                        <div class="item-after">@Html.Encode(item.BreakDownTime.ToString("HH:mm"))</div>
+                                    </div>
+                                    <div class="item-subtitle color-gray">@Html.Encode(item.QCEquipment.Factory.SimpleName)</div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="swipeout-actions-right">
+                            <a href="javascript:;" class="bg-gray">已修复</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="swipeout-content">
+                            <a href="/QualityControl/Manager_BreakdownDetail?bdId=@item.Id" class="item-link item-content random-param fail-border">
+                                <div class="item-inner">
+                                    <div class="item-title-row">
+                                        <div class="item-title">@Html.Encode(item.QCEquipment.SimpleName)</div>
+                                        <div class="item-after">@Html.Encode(item.BreakDownTime.ToString("HH:mm"))</div>
+                                    </div>
+                                    <div class="item-subtitle color-gray">@Html.Encode(item.QCEquipment.Factory.SimpleName)</div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="swipeout-actions-right">
+                            <a href="/QualityControl/RecoveryBreakdown?bdId=@item.Id" class="bg-green">确认修复</a>
+                        </div>
+                    }
 
-
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.QCEquipmentId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BreakDownTypeId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.QCStaffId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BreakDownTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReportTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RecoveryTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ConfirmTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Photos)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReportContent)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RecoveryRemark)
-            </td>
-
-        </tr>
-    }
-
-</table>
+                </li>
+            }
+        </ul>
+    </div>
+}
+else
+{
+    <div class="content-block-title">未找到设备故障记录</div>
+}

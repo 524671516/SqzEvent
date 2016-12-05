@@ -102,7 +102,7 @@ myApp.onPageInit('qccheckin', function (page) {
                     factoryId: $$("#FactoryId").val()
                 },
                 success: function (data) {
-                    $$("#template-content").html(data);
+                    $$("#template-content").html(data);                   
                     $$.ajax({
                         url: "/QualityControl/CheckCheckinAjax",
                         type: "post",
@@ -122,13 +122,12 @@ myApp.onPageInit('qccheckin', function (page) {
                                     type: "post",
                                     success: function (contentdata) {
                                         var contentdata = JSON.parse(contentdata);
-                                        if (contentdata.result == "SUCCESS") {
+                                        if (contentdata.result == "SUCCESS") {                                           
                                             $("#Photos").val(contentdata.photos);
                                             $("#CheckinRemark").val(contentdata.remark);
                                             for (var i = 0; i < contentdata.template.length; i++) {
                                                 $("#" + contentdata.template[i].key).val(contentdata.template[i].value);
-                                            }
-
+                                            }                                           
                                             uploadCheckinFile("qccheckin-form", "qccheckin-photos", "Photos", "qccheckin-imgcount", 9);
                                             //textarea字数计算
                                             currentTextAreaLength("qccheckin-form", "CheckinRemark", 200, "qccheckin-currentlen");
@@ -152,8 +151,7 @@ myApp.onPageInit('qccheckin', function (page) {
         else {
             $("#input-content").addClass("hidden");
         }
-    });
-    
+    });    
 });
 /*==========
 签退页 
