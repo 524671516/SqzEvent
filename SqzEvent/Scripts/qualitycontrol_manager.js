@@ -52,6 +52,7 @@ myApp.onPageInit("Home", function (page) {
 });
 //Manager_AgendaDetails页
 myApp.onPageInit("Manager_agendadetails", function (page) {
+    PhotoBrowser("manager_agendadetails");
     var calendarMultiple = myApp.calendar({
         input: '#SelectDate',
         dateFormat: 'yyyy-mm-dd',
@@ -468,4 +469,27 @@ function splitArray(value) {
         }
     }
     return list;
+}
+// 图片浏览模块
+function PhotoBrowser(pagename) {
+    $$("#" + pagename).on("click", ".qc-photos", function () {
+        var photos = $(this).attr("data-photos");
+        if (photos.trim() != "") {
+            var images = photos.split(",");
+            for (var i = 0; i < images.length; i++) {
+                images[i] = "https://cdn2.shouquanzhai.cn/qc-img/" + images[i];
+            }
+            var myPhotoBrowser = myApp.photoBrowser({
+                zoom: 500,
+                photos: images,
+                theme: 'dark',
+                backLinkText: '关闭',
+                toolbar: false,
+                ofText: '/'
+            });
+            myPhotoBrowser.open();
+        } else {
+            myApp.alert("没有找到图片");
+        }
+    });
 }
