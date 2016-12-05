@@ -4,6 +4,7 @@
             <a href="#" class="smart-select item-link" data-back-text="返回" data-back-on-select="true" data-searchbar-placeholder="工厂名称" data-searchbar-cancel="取消">
                 @Html.DropDownList("StaffId", ViewBag.StaffDropdown as SelectList, "-请选择-")
                 <div class="item-content">
+                    <div class="item-media"><i class="fa fa-user  icon-css" aria-hidden="true"></i></div>
                     <div class="item-inner">
                         <div class="item-title">质检员</div>
                         <div class="item-after smart-select-value">@Html.Encode(ViewBag.SelectedName)</div>

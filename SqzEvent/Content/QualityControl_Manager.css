@@ -109,6 +109,9 @@
     font-size:24px;
     padding:2px 1px;
 }
+.icon-css{
+   color: #007aff;
+}
 .icon-link{
     padding-top: 4px;
     padding-bottom: 4px;
@@ -197,6 +200,9 @@ textarea.invalid-input {
     background-color: rgb(211, 31, 31);
 }
 /*实时状态信息样式*/
+.tempalate-info .accordion-item-content li{
+    font-size:14px;
+}
 #manager_agendadetails .list-block{
     margin:10px 0 10px 0;
 }
@@ -224,6 +230,21 @@ textarea.invalid-input {
 }
 #sortable-block li{
     padding:10px 0;
+}
+/*排序*/
+.sort-btn {
+    float:right;
+    padding:2px 3px;
+    color:#000;
+}
+.sort-btn i{
+    font-size:14px;
+}
+.fa-sort{
+    color:#ccc;
+}
+.fa-sort-desc,.fa-sort-asc{
+    color:#007aff;
 }
 
 
