@@ -1,0 +1,33 @@
+﻿@{
+    Layout = null;
+}
+<div class="navbar">
+    <div class="navbar-inner">
+        <!-- We have home navbar without left link-->
+        <div class="center sliding">设置</div>
+        <div class="right">
+            <a href="/QualityControl/Manager_AddSchedule" class="link">添加</a>
+        </div>
+    </div>
+</div>
+<!-- Pages, because we need fixed-through navbar and toolbar, it has additional appropriate classes-->
+<div class="pages navbar-through toolbar-through">
+    <!-- Page, data-page contains page name-->
+    <div data-page="Setting" class="page" id="Setting">
+        <!-- Scrollable page content-->
+        <div class="page-content">
+            <div class="content-block date-content">
+                <div style="padding:0; margin-right:-15px; width:auto" class="content-block-inner">
+                    <div id="calendar-inline-container"></div>
+                </div>
+            </div>
+            <div class="list-block list-describe">
+                <ul>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
