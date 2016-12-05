@@ -250,7 +250,7 @@ myApp.onPageInit('Setting', function (page) {
 //添加产量计划页
 myApp.onPageInit('Add-schedule', function (page) {
     var calendarMultiple = myApp.calendar({
-        input: '#calendar-multiple',
+        input: '#DateList',
         dateFormat: 'yyyy-mm-dd',
         multiple: true,
         monthNames: ['1月', '2月', '3月', '4月 ', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
@@ -305,6 +305,44 @@ myApp.onPageInit('Add-schedule', function (page) {
         }
     })
 })
+
+// 历史检验页面查询
+myApp.onPageInit('manager-qualitytest', function (page) {
+    var calendarMultiple = myApp.calendar({
+        input: '#SelectDate',
+        dateFormat: 'yyyy-mm-dd',
+        closeOnSelect: true,
+        monthNames: ['1月', '2月', '3月', '4月 ', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+        dayNamesShort: ['日', '一', '二', '三', '四', '五', '六'],
+        toolbarTemplate: '<div class="toolbar">' + '<div class="toolbar-inner">' +
+            '<div class="picker-calendar-year-picker">' +
+            '<a href="#" class="link icon-only picker-calendar-prev-year">' +
+            '<i class="icon icon-prev">' + '</i>' + '</a>' + '<span class="current-year-value">' + '</span>' +
+            '<a href="#" class="link icon-only picker-calendar-next-year">' +
+            '<i class="icon icon-next">' + '</i>' + '</a>' + '</div>' +
+            '<div class="picker-calendar-month-picker">' +
+            '<a href="#" class="link icon-only picker-calendar-prev-month">' +
+            '<i class="icon icon-prev">' + '</i>' + '</a>' + '<span class="current-month-value">' +
+            '</span>' + '<a href="#" class="link icon-only picker-calendar-next-month">' +
+            '<i class="icon icon-next">' + '</i>' + '</a>' + '</div>' + '</div>' + '</div>'
+    });
+    $$("#FactoryId").on("change", function () {
+        var fid = $$(this).val();
+        if ($$(this).val()!="") {
+            $$.ajax({
+                url: "/QualityControl/Manager_QualityTestPartial",
+                data: {
+                    fid: fid,
+                    date: $$("#SelectDate").val()
+                },
+                success: function (data) {
+                    $$("#content-list").html(data);
+                }
+            });
+        }
+    })
+});
+
 //日期转化
 function ChangeDateFormat(val) {
     if (val != null) {
@@ -314,7 +352,6 @@ function ChangeDateFormat(val) {
         var currentDate = date.getDate();
         return date.getFullYear() + "-" + month + "-" + currentDate;
     }
-
     return "";
 }
 //文本验证
@@ -386,22 +423,13 @@ function CheckError(SubmitBtn, SubmitForm) {
                         myApp.closeNotification(".notifications");
                     }, 2e3);
                 }
-                else if (data == "MODIFIED" || data == "FAIL") {
-                    if (data == "MODIFIED") {
-                        myApp.hideIndicator();
-                        mainView.router.back();
-                        myApp.addNotification({
-                            title: "通知",
-                            message: "表单修改成功"
-                        });
-                    } else {
-                        myApp.hideIndicator();
-                        mainView.router.back();
-                        myApp.addNotification({
-                            title: "通知",
-                            message: "故障修复成功"
-                        });
-                    }
+                else if (data == "MODIFIED") {
+                    myApp.hideIndicator();
+                    mainView.router.back();
+                    myApp.addNotification({
+                        title: "通知",
+                        message: "表单修改成功"
+                    });
                     setTimeout(function () {
                         myApp.closeNotification(".notifications");
                     }, 2e3);

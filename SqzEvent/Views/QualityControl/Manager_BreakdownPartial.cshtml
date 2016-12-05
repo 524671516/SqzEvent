@@ -1,0 +1,46 @@
+﻿@model IEnumerable<SqzEvent.Models.BreakdownReport>
+
+<table class="table">
+
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.QCEquipmentId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BreakDownTypeId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.QCStaffId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BreakDownTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReportTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RecoveryTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConfirmTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Photos)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReportContent)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RecoveryRemark)
+            </td>
+
+        </tr>
+    }
+
+</table>

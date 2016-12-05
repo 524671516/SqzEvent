@@ -1,0 +1,116 @@
+﻿@model SqzEvent.Models.QualityTest
+
+<div>
+    <h4>QualityTest</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProductId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FactoryId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FactoryId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.QCStaffId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.QCStaffId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Keys)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Keys)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Values)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Values)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EvalScore)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EvalScore)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EvalTotal)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EvalTotal)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EvalResult)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EvalResult)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ApplyTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ApplyTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Photos)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Photos)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductionQty)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProductionQty)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CompleteRate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CompleteRate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Remark)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Remark)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

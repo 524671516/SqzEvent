@@ -1,0 +1,6 @@
+﻿@model SqzEvent.Models.AgendaDetailsViewModel
+
+
+<div>@Html.DropDownListFor(m => m.FactoryId, ViewBag.FactoryDropdown as SelectList, "- 请选择-", new { })</div>
+
+<div>@Html.TextBoxFor(m => m.SelectDate)</div>
