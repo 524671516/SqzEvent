@@ -39,14 +39,19 @@
                     </li>
                 </ul>
             </div>
-            <div class="content-block-title">列表明细</div>
-            <div class="list-block" id="content-list">
-
+            <div class="list-block" id="sortable-block">
+                <ul class="row">
+                    <li class="col-25" id="time-btn">时间<i class="fa fa-sort-up" aria-hidden="true" style="position:absolute;right:-8%;top:18%;"></i><i style="position:absolute;right:-8%;bottom:18%;" class="fa fa-sort-down" aria-hidden="true"></i></li>
+                    <li class="col-25">状态<i class="fa fa-sort-up" aria-hidden="true" style="position:absolute;right:-8%;top:18%;"></i><i style="position:absolute;right:-8%;bottom:18%;" class="fa fa-sort-down" aria-hidden="true"></i></li>
+                    <li class="col-25">进度<i class="fa fa-sort-up" aria-hidden="true" style="position:absolute;right:-8%;top:18%;"></i><i style="position:absolute;right:-8%;bottom:18%;" class="fa fa-sort-down" aria-hidden="true"></i></li>
+                    <li class="col-25"></li>
+                </ul>
+            </div>
+            <div class="list-block" id="qualitytest-list">
+               
             </div>
         </div>
     </div>
 </div>
 
-<div>@Html.DropDownListFor(m => m.FactoryId, ViewBag.FactoryDropdown as SelectList, "- 请选择-", new { })</div>
 
-<div>@Html.TextBoxFor(m => m.SelectDate)</div>

@@ -1128,8 +1128,15 @@ namespace SqzEvent.Controllers
         // 质检信息详情
         public ActionResult Manager_QualityTestDetail(int qtid)
         {
-            var item = _qcdb.QualityTest.SingleOrDefault(m => m.Id == qtid);
-            return PartialView(item);
+            var model = _qcdb.QualityTest.SingleOrDefault(m => m.Id == qtid);
+            if (model != null)
+            {
+                List<TestTemplateItem> list = Newtonsoft.Json.JsonConvert.DeserializeObject<List<TestTemplateItem>>(model.Values);
+                ViewBag.Details = list;
+                return PartialView(model);
+            }
+            else
+                return PartialView("NotFound");
         }
 
         
@@ -1172,9 +1179,9 @@ namespace SqzEvent.Controllers
         }
 
         // 质检信息详情
-        public ActionResult Manager_BreakdownDetail(int qtid)
+        public ActionResult Manager_BreakdownDetail(int bdid)
         {
-            var item = _qcdb.BreadkdownReport.SingleOrDefault(m => m.Id == qtid);
+            var item = _qcdb.BreadkdownReport.SingleOrDefault(m => m.Id == bdid);
             return PartialView(item);
         }
 
