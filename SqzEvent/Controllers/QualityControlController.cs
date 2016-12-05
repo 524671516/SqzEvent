@@ -273,6 +273,31 @@ namespace SqzEvent.Controllers
             }
         }
 
+        public ActionResult UpdateUserInfo()
+        {
+            string redirectUri = Url.Encode("https://event.shouquanzhai.cn/QualityControl/UpdateUserInfo_Authorize");
+            string appId = WeChatUtilities.getConfigValue(WeChatUtilities.APP_ID);
+            string url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=" + redirectUri + "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect";
+            return Redirect(url);
+        }
+
+        public ActionResult UpdateUserInfo_Authorize(string code, string state)
+        {
+            WeChatUtilities wechat = new WeChatUtilities();
+            var jat = wechat.getWebOauthAccessToken(code);
+            var user = UserManager.FindById(User.Identity.GetUserId());
+            user.AccessToken = jat.access_token;
+            UserManager.Update(user);
+            var userinfo = wechat.getWebOauthUserInfo(user.AccessToken, user.OpenId);
+            user.NickName = userinfo.nickname;
+            user.ImgUrl = userinfo.headimgurl;
+            user.Sex = userinfo.sex == "1" ? true : false;
+            user.Province = userinfo.province;
+            user.City = userinfo.city;
+            UserManager.Update(user);
+            return RedirectToAction("Home");
+        }
+
         // 主页
         public ActionResult Home()
         {
