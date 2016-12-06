@@ -2,8 +2,6 @@
 @if (Model.Count() != 0)
 {
     <div class="content-block-title">设备故障列表
-        <a href="javascript:;" class="sort-btn" id="time-btn">时间<i class="fa fa-sort"></i></a>
-        <a href="javascript:;" class="sort-btn" id="product-btn">产品<i class="fa fa-sort"></i></a>
     </div>
     <div class="list-block media-list bottom-list">
         <ul>
@@ -20,7 +18,6 @@
                                         <div class="item-title">@Html.Encode(item.QCEquipment.SimpleName)</div>
                                         <div class="item-after">@Html.Encode(item.BreakDownTime.ToString("HH:mm"))</div>
                                     </div>
-                                    <div class="item-subtitle color-gray">@Html.Encode(item.QCEquipment.Factory.SimpleName)</div>
                                 </div>
                             </a>
                         </div>
@@ -37,7 +34,6 @@
                                         <div class="item-title">@Html.Encode(item.QCEquipment.SimpleName)</div>
                                         <div class="item-after">@Html.Encode(item.BreakDownTime.ToString("HH:mm"))</div>
                                     </div>
-                                    <div class="item-subtitle color-gray">@Html.Encode(item.QCEquipment.Factory.SimpleName)</div>
                                 </div>
                             </a>
                         </div>

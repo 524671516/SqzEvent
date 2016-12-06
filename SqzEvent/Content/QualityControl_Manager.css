@@ -6,9 +6,6 @@
     margin:0;
     padding:5px 15px;
 }
-.list-block{
-    margin:0;
-}
 .content-block-title+.list-block{
     margin:0;
 }
@@ -17,8 +14,10 @@
 }
 .top-list-2{
     margin-top:5px;
+    margin-bottom:0;
 }
 .content-block-title+.bottom-list,.bottom-list{
+    margin-top:0;
     margin-bottom:50px;
 }
 
@@ -249,6 +248,12 @@ textarea.invalid-input {
     padding:10px 0;
 }
 /*排序*/
+.sort-time:after{
+    content:"按时间";
+}
+.sort-product:after{
+    content:"按产品"   
+}
 .sort-btn {
     float:right;
     padding:2px 3px;
@@ -260,9 +265,7 @@ textarea.invalid-input {
 .fa-sort{
     color:#ccc;
 }
-.fa-sort-desc,.fa-sort-asc{
-    color:#007aff;
-}
+
 
 
 
