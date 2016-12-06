@@ -980,6 +980,19 @@ namespace SqzEvent.Controllers
             var model = _qcdb.QCAgenda.SingleOrDefault(m => m.Id == agendaId);
             return PartialView(model);
         }
+        public ActionResult Manager_AgendaDetailsTemplatePartial(string value)
+        {
+            List<TestTemplateItem> content = Newtonsoft.Json.JsonConvert.DeserializeObject<List<TestTemplateItem>>(value);
+            return PartialView(content);
+        }
+        public ActionResult Manager_AgendaProductionDetailsPartial(int agendaId)
+        {
+            var list = from m in _qcdb.ProductionDetails
+                       where m.QCAgendaId == agendaId
+                       select m;
+            return PartialView(list);
+        }
+        
 
 
         public ActionResult Manager_History()

@@ -532,6 +532,8 @@
     <Content Include="Views\QualityControl\Manager_BreakdownDetail.cshtml" />
     <Content Include="Views\QualityControl\Manager_Control.cshtml" />
     <Content Include="Views\QualityControl\Manager_History.cshtml" />
+    <Content Include="Views\QualityControl\Manager_AgendaDetailsTemplatePartial.cshtml" />
+    <Content Include="Views\QualityControl\Manager_AgendaProductionDetailsPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
