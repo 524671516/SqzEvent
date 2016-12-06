@@ -1,5 +1,6 @@
 ﻿//实例化framework7
 var myApp = new Framework7({
+    swipeBackPage:false,
     modalTitle: '生产管理',
     pushState: true,
 });
@@ -338,6 +339,7 @@ myApp.onPageInit('manager-qualitytest', function (page) {
             '<i class="icon icon-next">' + '</i>' + '</a>' + '</div>' + '</div>' + '</div>'
     });
     if ($$("#FactoryId").val() != "") {
+        console.log($$("#SelectDate").val())
         $$.ajax({
             url: "/QualityControl/Manager_QualityTestPartial",
             data: {
@@ -346,6 +348,7 @@ myApp.onPageInit('manager-qualitytest', function (page) {
             },
             success: function (data) {
                 $$("#qualitytest-list").html(data);
+                changeBtb()
             }
         })
     }
@@ -360,6 +363,7 @@ myApp.onPageInit('manager-qualitytest', function (page) {
                 },
                 success: function (data) {
                     $$("#qualitytest-list").html(data);
+                    changeBtb()
                 }
             });
         } else {
@@ -377,6 +381,7 @@ myApp.onPageInit('manager-qualitytest', function (page) {
                 },
                 success: function (data) {
                     $$("#qualitytest-list").html(data);
+                    changeBtb()
                 }
             })
         }
@@ -413,6 +418,7 @@ myApp.onPageInit("manager-breakdown", function () {
                 },
                 success: function (data) {                  
                     $$("#breakdown-list").html(data);
+                    changeBtb()
                 }
             })
         } else {
@@ -430,6 +436,7 @@ myApp.onPageInit("manager-breakdown", function () {
                 success: function (data) {
                     console.log(data)
                     $$("#breakdown-list").html(data);
+                    changeBtb()
                 }
             })
         }
@@ -626,4 +633,21 @@ function updateHomeInfo() {
             }
         }
     });
+}
+//按钮切换
+function changeBtb() {
+    $$(".sort-btn").each(function () {
+        $$(this).on("click", function () {
+            if ($$(this).children("i").hasClass("fa-sort")) {
+                $$(this).children("i").removeClass("fa-sort")
+                $$(this).children("i").addClass("fa-sort-desc")
+            } else if ($$(this).children("i").hasClass("fa-sort-desc")) {
+                $$(this).children("i").removeClass("fa-sort-desc")
+                $$(this).children("i").addClass("fa-sort-asc")
+            } else {
+                $$(this).children("i").removeClass("fa-sort-asc")
+                $$(this).children("i").addClass("fa-sort-desc")
+            }
+        })
+    })
 }
