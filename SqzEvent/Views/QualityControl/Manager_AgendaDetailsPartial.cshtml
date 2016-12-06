@@ -1,4 +1,5 @@
-﻿@model SqzEvent.Models.QCAgenda
+﻿@using SqzEvent.Models;
+@model SqzEvent.Models.QCAgenda
 <div class="list-block bottom-list">
     <div class="list-group">
         <div class="content-block-title">工厂信息</div>
@@ -123,14 +124,12 @@
                         <div class="list-group">
                             <ul>
                                 <li class="list-group-title">产量数据</li>
-                                @*@foreach(var p in Model) {*@
                                 <li>
                                     <div class="item-inner item-content">
                                         <div class="item-title">红糖姜茶</div>
-                                        <div class="item-after">@Model.CheckoutTime</div>
+                                        <div class="item-after">10</div>
                                     </div>
                                 </li>
-                                @*}*@
                                 <li>
                                     <a href="javascript:;" class="item-content item-link qc-photos" data-photos="@Model.Photos">
                                         <div class="item-inner">
