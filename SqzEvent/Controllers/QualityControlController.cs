@@ -924,9 +924,18 @@ namespace SqzEvent.Controllers
         // 管理员首页
         public ActionResult Manager_Home()
         {
+            var _subscribe = DateTime.Now.Date;
+            var _subscribe_tommorrow = _subscribe.AddDays(1);
             var model = from m in _qcdb.Factory
-                        select m;
-            ViewBag.Today = DateTime.Now.ToString("yyyy-MM-dd");
+                        select new Manager_HomeViewModel
+                        {
+                            FactoryId = m.Id,
+                            FatoryName = m.SimpleName,
+                            Status = m.QCAgenda.Where(h => h.Subscribe == _subscribe).Any(g => g.Status > 0),
+                            Tips = m.QualityTest.Where(h => h.ApplyTime >= _subscribe && h.ApplyTime < _subscribe_tommorrow).Any(g => g.EvalResult == false) 
+                               || m.QCEquipment.Any(g => g.BreakdownReport.Where(h => h.ReportTime >= _subscribe && h.ReportTime < _subscribe_tommorrow).Any(l => l.Status == 0))
+                        };
+            ViewBag.Today = _subscribe.ToString("yyyy-MM-dd");
             return View(model);
         }
         // 参数（工厂ID, 默认当前日期）

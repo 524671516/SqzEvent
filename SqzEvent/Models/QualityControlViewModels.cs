@@ -78,4 +78,15 @@ namespace SqzEvent.Models
         public string SelectDate { get; set; }
         public string FactoryName { get; set; }
     }
+
+    public class Manager_HomeViewModel
+    {
+        public string FatoryName { get; set; }
+
+        public int FactoryId { get; set; }
+
+        public bool Tips { get; set; }
+
+        public bool Status { get; set; }
+    }
 }

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SqzEvent.Models.Factory>
+﻿@model IEnumerable<SqzEvent.Models.Manager_HomeViewModel>
 @{
     ViewBag.Title = "实时状态";
     Layout = null;
@@ -61,10 +61,16 @@
                                 @foreach (var item in Model)
                                 {
                                     <li>
-                                        <a href="/QualityControl/Manager_AgendaDetails?fid=@item.Id&date=@ViewBag.Today" class="item-content item-link home-link">
+                                        <a href="/QualityControl/Manager_AgendaDetails?fid=@item.FactoryId&date=@ViewBag.Today" class="item-content item-link home-link">
                                             <div class="item-inner">
-                                                <div class="item-title">@Html.Encode(item.SimpleName)<sup id="bd-dot"><i class="fa fa-circle color-red" style="font-size:12px;"></i></sup></div>
-                                                <div class="item-after">状态:<span id="checkstatus">已签到</span></div>
+                                                <div class="item-title">
+                                                    @Html.Encode(item.FatoryName)
+                                                    @if (item.Tips)
+                                                    {
+                                                        <sup id="bd-dot"><i class="fa fa-circle color-red" style="font-size:12px;"></i></sup>
+                                                    }
+                                                </div>
+                                                <div class="item-after">状态:<span id="checkstatus">@Html.Encode(item.Status==true?"已签到":"未签到")</span></div>
                                             </div>
                                         </a>
                                     </li>
