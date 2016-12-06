@@ -433,13 +433,13 @@ myApp.onPageInit("manager-breakdown", function () {
             $$("#breakdown-list").html("");
         }
     })
-    $$("Bd_SelectDate").on("change", function () {
+    $$("#Bd_SelectDate").on("change", function () {
         if ($$("#Bd_fid") != "") {
             $$.ajax({
-                url: "/QualityControl/Manager_BreakdownDetail",
+                url: "/QualityControl/Manager_BreakdownPartial",
                 data: {
-                    fid: $$("Bd_fid").val(),
-                    date: $$("Bd_SelectDate").val()
+                    fid: $$("#Bd_fid").val(),
+                    date: $$("#Bd_SelectDate").val()
                 },
                 success: function (data) {
                     $$("#breakdown-list").html(data);
