@@ -79,6 +79,19 @@ namespace SqzEvent.Models
         public string FactoryName { get; set; }
     }
 
+    public class QualityTestViewModel
+    {
+        public int? Qt_fid { get; set; }
+        public string Qt_SelectDate { get; set; }
+        public string Qt_FactoryName { get; set; }
+    }
+    public class BreakdownViewModel
+    {
+        public int? Bd_fid { get; set; }
+        public string Bd_SelectDate { get; set; }
+        public string Bd_FactoryName { get; set; }
+    }
+
     public class Manager_HomeViewModel
     {
         public string FatoryName { get; set; }

@@ -321,7 +321,7 @@ myApp.onPageInit('Add-schedule', function (page) {
 // 历史检验页面查询
 myApp.onPageInit('manager-qualitytest', function (page) {
     var calendarMultiple = myApp.calendar({
-        input: '#SelectDate',
+        input: '#Qt_SelectDate',
         dateFormat: 'yyyy-mm-dd',
         closeOnSelect: true,
         monthNames: ['1月', '2月', '3月', '4月 ', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
@@ -338,13 +338,13 @@ myApp.onPageInit('manager-qualitytest', function (page) {
             '</span>' + '<a href="#" class="link icon-only picker-calendar-next-month">' +
             '<i class="icon icon-next">' + '</i>' + '</a>' + '</div>' + '</div>' + '</div>'
     });
-    if ($$("#FactoryId").val() != "") {
-        console.log($$("#SelectDate").val())
+    if ($$("#Qt_fid").val() != "") {
+        console.log($$("#Qt_SelectDate").val())
         $$.ajax({
             url: "/QualityControl/Manager_QualityTestPartial",
             data: {
-                fid: $$("#FactoryId").val(),
-                date: $$("#SelectDate").val()
+                fid: $$("#Qt_fid").val(),
+                date: $$("#Qt_SelectDate").val()
             },
             success: function (data) {
                 $$("#qualitytest-list").html(data);
@@ -352,14 +352,14 @@ myApp.onPageInit('manager-qualitytest', function (page) {
             }
         })
     }
-    $$("#FactoryId").on("change", function () {
+    $$("#Qt_fid").on("change", function () {
         var fid = $$(this).val();
         if ($$(this).val()!="") {
             $$.ajax({
                 url: "/QualityControl/Manager_QualityTestPartial",
                 data: {
                     fid: fid,
-                    date: $$("#SelectDate").val()
+                    date: $$("#Qt_SelectDate").val()
                 },
                 success: function (data) {
                     $$("#qualitytest-list").html(data);
@@ -370,14 +370,14 @@ myApp.onPageInit('manager-qualitytest', function (page) {
             $$("#qualitytest-list").html("");
         }
     })
-    $$("#SelectDate").on("change", function () {
-        var fid = $$("#FactoryId").val();
-        if ($$("#FactoryId").val() != "") {
+    $$("#Qt_SelectDate").on("change", function () {
+        var fid = $$("#Qt_fid").val();
+        if ($$("#Qt_fid").val() != "") {
             $$.ajax({
                 url: "/QualityControl/Manager_QualityTestPartial",
                 data: {
                     fid: fid,
-                    date:$$("#SelectDate").val()
+                    date:$$("#Qt_SelectDate").val()
                 },
                 success: function (data) {
                     $$("#qualitytest-list").html(data);
@@ -390,7 +390,7 @@ myApp.onPageInit('manager-qualitytest', function (page) {
 //历史故障页面查询
 myApp.onPageInit("manager-breakdown", function () {
     var calendarMultiple = myApp.calendar({
-        input: '#SelectDate',
+        input: '#Bd_SelectDate',
         value: [new Date()],
         dateFormat: 'yyyy-mm-dd',
         closeOnSelect: true,
@@ -408,13 +408,27 @@ myApp.onPageInit("manager-breakdown", function () {
             '</span>' + '<a href="#" class="link icon-only picker-calendar-next-month">' +
             '<i class="icon icon-next">' + '</i>' + '</a>' + '</div>' + '</div>' + '</div>'
     });
-    $$("#FactoryId").on("change", function () {
+    if ($$("#Bd_fid").val() != "") {
+        console.log($$("#Bd_SelectDate").val())
+        $$.ajax({
+            url: "/QualityControl/Manager_BreakdownPartial",
+            data: {
+                fid: $$("#Bd_fid").val(),
+                date: $$("#Bd_SelectDate").val()
+            },
+            success: function (data) {
+                $$("#breakdown-list").html(data);
+                changeBtb()
+            }
+        })
+    }
+    $$("#Bd_fid").on("change", function () {
         if ($$(this).val() != "") {
             $$.ajax({
                 url: "/QualityControl/Manager_BreakdownPartial",
                 data: {
-                    fid:$$("#FactoryId").val(),
-                    date:$$("#SelectDate").val()
+                    fid:$$("#Bd_fid").val(),
+                    date:$$("#Bd_SelectDate").val()
                 },
                 success: function (data) {                  
                     $$("#breakdown-list").html(data);
@@ -425,16 +439,15 @@ myApp.onPageInit("manager-breakdown", function () {
             $$("#breakdown-list").html("");
         }
     })
-    $$("SelectDate").on("change", function () {
-        if ($$("#FactoryId") != "") {
+    $$("Bd_SelectDate").on("change", function () {
+        if ($$("#Bd_fid") != "") {
             $$.ajax({
                 url: "/QualityControl/Manager_BreakdownDetail",
                 data: {
-                    fid: $$("#FactoryId").val(),
-                    date: $$("#SelectDate").val()
+                    fid: $$("Bd_fid").val(),
+                    date: $$("Bd_SelectDate").val()
                 },
                 success: function (data) {
-                    console.log(data)
                     $$("#breakdown-list").html(data);
                     changeBtb()
                 }

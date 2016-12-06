@@ -1,4 +1,4 @@
-﻿@model SqzEvent.Models.AgendaDetailsViewModel
+﻿@model SqzEvent.Models.QualityTestViewModel
 
 <div class="navbar">
     <div class="navbar-inner">
@@ -14,15 +14,15 @@
 <div class="pages">
     <div class="page" data-page="manager-qualitytest" id="manager-qualitytest">
         <div class="page-content">
-            <div class="list-block">
+            <div class="list-block top-list-2">
                 <ul>
                     <li>
                         <a href="#" class="smart-select item-link" data-back-text="返回" data-back-on-select="true" data-searchbar-placeholder="店铺名称" data-searchbar-cancel="取消">
-                            @Html.DropDownListFor(m=>m.FactoryId, ViewBag.FactoryDropdown as SelectList, "-请选择-", new { @class = "required" })
+                            @Html.DropDownListFor(m=>m.Qt_fid, ViewBag.FactoryDropdown as SelectList, "-请选择-", new { @class = "required" })
                             <div class="item-content">
                                 <div class="item-inner">
                                     <div class="item-title">选择工厂</div>
-                                    <div class="item-after smart-select-value">@Html.Encode(Model.FactoryName)</div>
+                                    <div class="item-after smart-select-value">@Html.Encode(Model.Qt_FactoryName)</div>
                                 </div>
                             </div>
                         </a>
@@ -32,7 +32,7 @@
                             <div class="item-inner">
                                 <div class="item-title label">选择日期</div>
                                 <div class="item-input">
-                                    @Html.TextBoxFor(m=>m.SelectDate, new { placeholder="请选择日期", @class="item-input-right", required="required"})
+                                    @Html.TextBoxFor(m=>m.Qt_SelectDate, new { placeholder="请选择日期", @class="item-input-right", required="required"})
                                 </div>
                             </div>
                         </div>

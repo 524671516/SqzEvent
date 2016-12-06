@@ -14,19 +14,22 @@
     <div class="page" data-page="Manager_agendadetails" id="manager_agendadetails">
         <div class="page-content">
             @Html.HiddenFor(m=>m.FactoryId)
-            <div class="list-block">
+            <div class="list-block select-block top-list-2">
                 <ul>
                     <li class="item-content">
+                        <div class="item-media"><i class="fa fa-calendar icon-css" aria-hidden="true"></i></div>
                         <div class="item-inner">
                             <div class="item-title label">选择日期</div>
                             <div class="item-input">
                                 @Html.TextBoxFor(m=>m.SelectDate, new { placeholder= "-请选择-", @class="item-input-right", required="required"})
-                            </div>
+                            </div>  
                         </div>
+                    </li>
+                    <li class="tempalate-select">
+
                     </li>
                 </ul>
             </div>
-            <div class="tempalate-select"></div>
             <div class="tempalate-info"></div>
         </div>
     </div>

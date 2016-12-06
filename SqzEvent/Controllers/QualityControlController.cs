@@ -1102,11 +1102,11 @@ namespace SqzEvent.Controllers
             {
                 ViewBag.FactoryDropdown = new SelectList(factoryList, "Id", "Name");
             }
-            AgendaDetailsViewModel model = new AgendaDetailsViewModel()
+            QualityTestViewModel model = new QualityTestViewModel()
             {
-                FactoryId = fid,
-                SelectDate = date,
-                FactoryName = factoryName
+                Qt_fid = fid,
+                Qt_SelectDate = date,
+                Qt_FactoryName = factoryName
             };
             return PartialView(model);
         }
@@ -1167,11 +1167,11 @@ namespace SqzEvent.Controllers
             {
                 ViewBag.FactoryDropdown = new SelectList(factoryList, "Id", "Name");
             }
-            AgendaDetailsViewModel model = new AgendaDetailsViewModel()
+            BreakdownViewModel model = new BreakdownViewModel()
             {
-                FactoryId = fid,
-                SelectDate = date,
-                FactoryName = factoryName
+                Bd_fid = fid,
+                Bd_SelectDate = date,
+                Bd_FactoryName = factoryName
             };
             return PartialView(model);
         }
