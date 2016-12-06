@@ -15,6 +15,7 @@
     margin-top:30px;
 }
 .content-block-title+.bottom-list,.bottom-list{
+    margin-top:0;
     margin-bottom:50px;
 }
 textarea.h5{
@@ -71,7 +72,7 @@ textarea.h5{
     padding: 0;
 }
 
-    .list-block ul.rep-imglist li {
+.list-block ul.rep-imglist li {
         float: left;
     }
 
@@ -164,34 +165,11 @@ textarea.h5{
 #setting-date{
     color:#000;
 }
-.uncomplete{
-    display:inline-block;
-    width:10px;
-    height:10px;
-    border-radius:100%;
-    background-color:red;
-}
-.complete{
-    display:inline-block;
-    width:10px;
-    height:10px;
-    border-radius:100%;
-    background-color:green;
-}
-.event-destribe{
-    text-align:center;
-}
 .date-content{
     margin:10px 0 0 0 ;
 }
 .picker-calendar{
     height:280px;
-}
-.red-border{
-border-bottom:1px solid green;
-}
-.green-border{
-    border-bottom:1px solid green;
 }
 span.picker-calendar-day-green {
     background: green;
@@ -202,7 +180,7 @@ span.picker-calendar-day-red {
     color:#fff;
 }
 span.picker-calendar-day-gray{
-    background:#cccccc !important;
+    background:#cccccc;
 }
 .list-describe{
     margin:20px 0 50px 0;
@@ -211,7 +189,6 @@ span.picker-calendar-day-gray{
 input[type="text"].invalid-input, input[type='tel'].invalid-input,input[type='number'].invalid-input, input[type='digits'].invalid-input {
     background-color: rgb(211, 31, 31);
 }
-
 textarea.invalid-input {
     background-color: rgb(211, 31, 31);
 }
@@ -241,13 +218,13 @@ textarea.invalid-input {
 .pass-border {
     border-left: 6px solid #4cd964;
 }
-#sortable-block{
-    text-align:center;
-}
-#sortable-block li{
-    padding:10px 0;
-}
 /*排序*/
+.sort-time:after{
+    content:"按时间";
+}
+.sort-product:after{
+    content:"按产品"   
+}
 .sort-btn {
     float:right;
     padding:2px 3px;
@@ -259,9 +236,7 @@ textarea.invalid-input {
 .fa-sort{
     color:#ccc;
 }
-.fa-sort-desc,.fa-sort-asc{
-    color:#007aff;
-}
+
 
 
 

@@ -320,6 +320,7 @@ myApp.onPageInit('Add-schedule', function (page) {
 })
 // 历史检验页面查询
 myApp.onPageInit('manager-qualitytest', function (page) {
+    changeBtn()
     var calendarMultiple = myApp.calendar({
         input: '#Qt_SelectDate',
         dateFormat: 'yyyy-mm-dd',
@@ -339,7 +340,6 @@ myApp.onPageInit('manager-qualitytest', function (page) {
             '<i class="icon icon-next">' + '</i>' + '</a>' + '</div>' + '</div>' + '</div>'
     });
     if ($$("#Qt_fid").val() != "") {
-        console.log($$("#Qt_SelectDate").val())
         $$.ajax({
             url: "/QualityControl/Manager_QualityTestPartial",
             data: {
@@ -348,7 +348,6 @@ myApp.onPageInit('manager-qualitytest', function (page) {
             },
             success: function (data) {
                 $$("#qualitytest-list").html(data);
-                changeBtb()
             }
         })
     }
@@ -363,7 +362,6 @@ myApp.onPageInit('manager-qualitytest', function (page) {
                 },
                 success: function (data) {
                     $$("#qualitytest-list").html(data);
-                    changeBtb()
                 }
             });
         } else {
@@ -381,7 +379,6 @@ myApp.onPageInit('manager-qualitytest', function (page) {
                 },
                 success: function (data) {
                     $$("#qualitytest-list").html(data);
-                    changeBtb()
                 }
             })
         }
@@ -409,7 +406,6 @@ myApp.onPageInit("manager-breakdown", function () {
             '<i class="icon icon-next">' + '</i>' + '</a>' + '</div>' + '</div>' + '</div>'
     });
     if ($$("#Bd_fid").val() != "") {
-        console.log($$("#Bd_SelectDate").val())
         $$.ajax({
             url: "/QualityControl/Manager_BreakdownPartial",
             data: {
@@ -418,7 +414,6 @@ myApp.onPageInit("manager-breakdown", function () {
             },
             success: function (data) {
                 $$("#breakdown-list").html(data);
-                changeBtb()
             }
         })
     }
@@ -432,24 +427,22 @@ myApp.onPageInit("manager-breakdown", function () {
                 },
                 success: function (data) {                  
                     $$("#breakdown-list").html(data);
-                    changeBtb()
                 }
             })
         } else {
             $$("#breakdown-list").html("");
         }
     })
-    $$("Bd_SelectDate").on("change", function () {
+    $$("#Bd_SelectDate").on("change", function () {
         if ($$("#Bd_fid") != "") {
             $$.ajax({
-                url: "/QualityControl/Manager_BreakdownDetail",
+                url: "/QualityControl/Manager_BreakdownPartial",
                 data: {
-                    fid: $$("Bd_fid").val(),
-                    date: $$("Bd_SelectDate").val()
+                    fid: $$("#Bd_fid").val(),
+                    date: $$("#Bd_SelectDate").val()
                 },
                 success: function (data) {
                     $$("#breakdown-list").html(data);
-                    changeBtb()
                 }
             })
         }
@@ -648,18 +641,41 @@ function updateHomeInfo() {
     });
 }
 //按钮切换
-function changeBtb() {
+function changeBtn() {
     $$(".sort-btn").each(function () {
         $$(this).on("click", function () {
-            if ($$(this).children("i").hasClass("fa-sort")) {
-                $$(this).children("i").removeClass("fa-sort")
-                $$(this).children("i").addClass("fa-sort-desc")
-            } else if ($$(this).children("i").hasClass("fa-sort-desc")) {
-                $$(this).children("i").removeClass("fa-sort-desc")
-                $$(this).children("i").addClass("fa-sort-asc")
-            } else {
-                $$(this).children("i").removeClass("fa-sort-asc")
-                $$(this).children("i").addClass("fa-sort-desc")
+            if ($$("#Qt_fid").val() != "") {
+                if ($$(this).children("span").hasClass("sort-time")) {
+                    $$(this).children("span").removeClass("sort-time");
+                    $$(this).children("span").addClass("sort-product");
+                    $$.ajax({
+                        url: "/QualityControl/Manager_QualityTestPartial",
+                        data: {
+                            fid: $$("#Qt_fid").val(),
+                            date: $$("#Qt_SelectDate").val(),
+                            sorttype: true
+                        },
+                        success: function (data) {
+                            $$("#qualitytest-list").html(data);
+                        }
+                    })
+                }
+                else {
+                    $$(this).children("span").addClass("sort-time");
+                    $$(this).children("span").removeClass("sort-product");
+                    $$.ajax({
+                        url: "/QualityControl/Manager_QualityTestPartial",
+                        data: {
+                            fid: $$("#Qt_fid").val(),
+                            date: $$("#Qt_SelectDate").val(),
+                            sorttype: false
+                        },
+                        success: function (data) {
+                            $$("#qualitytest-list").html(data);
+                        }
+                    })
+                }
+
             }
         })
     })

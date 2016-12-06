@@ -1,9 +1,10 @@
-﻿@model SqzEvent.Models.QCAgenda
+﻿@using SqzEvent.Models;
+@model SqzEvent.Models.QCAgenda
 <div class="list-block bottom-list">
     <div class="list-group">
         <div class="content-block-title">工厂信息</div>
         <ul>
-            <li>
+            @*<li>
                 <a href="/QualityControl/ProductionPlan" class="item-link item-content">
                     <div class="item-media"><i class="fa fa-industry icon-css" aria-hidden="true"></i></div>
                     <div class="item-inner">
@@ -11,7 +12,7 @@
                         <div class="item-after"></div>
                     </div>
                 </a>
-            </li>
+            </li>*@
             <li>
                 <a href="/QualityControl/Manager_QualityTest?fid=@Model.FactoryId&date=@DateTime.Now.ToString("yyyy-MM-dd")" class="item-link item-content" data-ignore-cache="true">
                     <div class="item-media"><i class="fa fa-check-square icon-css" aria-hidden="true"></i></div>
