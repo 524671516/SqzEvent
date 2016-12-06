@@ -56,11 +56,6 @@ $$(".icon-link").each(function () {
 });
 // 实时状态页
 myApp.onPageInit("Home", function (page) {
-    var ptrContent = $$('.pull-to-refresh-content');
-    ptrContent.on('refresh', function (e) {
-        alert(1);
-        myApp.pullToRefreshDone();
-    });
 });
 //Manager_AgendaDetails页
 myApp.onPageInit("Manager_agendadetails", function (page) {
@@ -98,7 +93,22 @@ myApp.onPageInit("Manager_agendadetails", function (page) {
                         agendaId: $$("#StaffId").val()
                     },
                     success: function (data) {
-                        $$(".tempalate-info").html(data);                     
+                        $$(".tempalate-info").html(data);
+                        $$("#StaffId").on("change", function () {
+                            if ($$("#StaffId").val() != "") {
+                                $$.ajax({
+                                    url: "/QualityControl/Manager_AgendaDetailsPartial",
+                                    data: {
+                                        agendaId: $$("#StaffId").val()
+                                    },
+                                    success: function (data) {
+                                        $$(".tempalate-info").html(data);
+                                    }
+                                })
+                            } else {
+                                $$(".tempalate-info").html("");
+                            }
+                        });                                        
                     }
                 })
             } else {
@@ -122,8 +132,8 @@ myApp.onPageInit("Manager_agendadetails", function (page) {
                         data: {
                             agendaId: $$("#StaffId").val()
                         },
-                        success: function (data) {
-                            $$(".tempalate-info").html(data);                          
+                        success: function (data) {  
+                            $$(".tempalate-info").html(data);
                         }
                     })
                 } else {
@@ -603,40 +613,6 @@ function PhotoBrowser(pagename) {
             myPhotoBrowser.open();
         } else {
             myApp.alert("没有找到图片");
-        }
-    });
-}
-// 首页更新
-function updateHomeInfo() {
-    $$.ajax({
-        url: "/QualityControl/HomeInfoAjax",
-        type: "post",
-        success: function (data) {
-            var data = JSON.parse(data);
-            if (data.result == "SUCCESS") {
-                if (data.qt_dot)
-                    $$("#qt_dot").removeClass("hidden");
-                else
-                    $$("#qt_dot").addClass("hidden");
-                if (data.bd_dot)
-                    $$("#bd_dot").removeClass("hidden");
-                else
-                    $$("#bd_dot").addClass("hidden");
-                $$("#bd_count").text(data.bd_count);
-                $$("#qt_count").text(data.qt_count);
-                if (data.checkout_cnt != 0)
-                    $$("#checkout_dot").removeClass("hidden");
-                else
-                    $$("#checkout_dot").addClass("hidden");
-                if (data.summary_cnt != 0)
-                    $$("#summary_dot").removeClass("hidden");
-                else
-                    $$("#summary_dot").addClass("hidden");
-                $$("#checkout_cnt").text(data.checkout_cnt);
-                $$("#summary_cnt").text(data.summary_cnt);
-                $$("#datecode").text(data.datecode);
-                myApp.pullToRefreshDone();
-            }
         }
     });
 }
