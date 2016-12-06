@@ -1,0 +1,75 @@
+﻿@model IEnumerable<SqzEvent.Models.TestTemplateItem>
+
+@foreach (var item in Model)
+{
+    switch (item.type)
+    {
+        case 1:
+            {
+                <li>
+                    <div class="item-inner item-content">
+                        <div class="item-title">@Html.Encode(item.title)</div>
+                        @if (item.value == "0")
+                        {
+                            <div class="item-after"><i class="fa fa-times color-red" aria-hidden="true"></i></div>
+                        }
+                        else
+                        {
+                            <div class="item-after"><i class="fa fa-check color-green" aria-hidden="true"></i></div>
+                        }
+                    </div>
+                </li>
+            }
+            break;
+        case 2:
+            {
+                <li>
+                    <div class="item-inner item-content">
+                        <div class="item-title">@Html.Encode(item.title)</div>
+                        <div class="item-after">@Html.Encode(item.value)</div>
+                    </div>
+                </li>
+            }
+            break;
+        case 3:
+            {
+                <li>
+                    <div class="item-inner item-content">
+                        <div class="item-title">@Html.Encode(item.title)</div>
+                        <div class="item-after">@Html.Encode(item.value)</div>
+                    </div>
+                </li>
+            }
+            break;
+        case 4:
+            {
+                <li>
+                    <div class="item-inner item-content">
+                        <div class="item-title">@Html.Encode(item.title)</div>
+                        <div class="item-after">@Html.Encode(item.value)</div>
+                    </div>
+                </li>
+            }
+            break;
+        case 5:
+            {
+                <li>
+                    <div class="item-inner item-content">
+                        <div class="item-title">@Html.Encode(item.title)</div>
+                        <div class="item-after">@Html.Encode(item.value)</div>
+                    </div>
+                </li>
+            }
+            break;
+        default:
+            {
+                <li>
+                    <div class="item-inner item-content">
+                        <div class="item-title">@Html.Encode(item.title)</div>
+                        <div class="item-after">@Html.Encode(item.value)</div>
+                    </div>
+                </li>
+            }
+            break;
+    }
+}

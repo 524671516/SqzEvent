@@ -1,20 +1,23 @@
 ﻿@model IEnumerable<SqzEvent.Models.ProductionSchedule>
-@using SqzEvent.Models; 
+@using SqzEvent.Models;
 @{
     Layout = null;
 }
 
-@foreach(FactoryGroup group in ViewBag.FG)
-{   
-    <li class="item-divider">@group.FactoryName</li>
-    foreach (var item in Model.Where(m => m.FactoryId == group.FactoryId))
-    {
+@foreach (FactoryGroup group in ViewBag.FG)
+{
+    <div class="content-block-title">@Html.Encode(group.FactoryName)</div>
+    <div class="list-block">
+        <ul>
+            @foreach (var item in Model.Where(m => m.FactoryId == group.FactoryId))
+            {
             <li class="item-content">
                 <div class="item-inner">
                     <div class="item-title">@Html.Encode(item.Product.SimpleName)</div>
-                    <div class="item-after">@Html.Encode(item.ProductionQty??0) / @Html.Encode(item.ProductionPlan)</div>
+                    <div class="item-after">@Html.Encode(item.ProductionQty ?? 0) / @Html.Encode(item.ProductionPlan)</div>
                 </div>
             </li>
-    }
-
+            }
+        </ul>
+    </div>
 }

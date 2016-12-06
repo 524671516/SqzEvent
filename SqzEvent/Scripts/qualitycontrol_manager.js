@@ -209,7 +209,7 @@ myApp.onPageInit('Setting', function (page) {
                             date: p.currentYear + "-" + month + "-" + _day
                         },
                         success: function (data) {
-                            $$(".list-describe ul").html(data);
+                            $$(".list-describe").html(data);
                         }
                     });
                 }
@@ -253,7 +253,7 @@ myApp.onPageInit('Setting', function (page) {
                     date: year + "-" + month + "-" + day
                 },
                 success: function (data) {
-                    $$(".list-describe ul").html(data);
+                    $$(".list-describe").html(data);
                 }
             });
         },

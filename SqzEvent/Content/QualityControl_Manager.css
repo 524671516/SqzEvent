@@ -2,10 +2,6 @@
 .item-input-right {
     text-align: right;
 }
-.content-block-title{
-    margin:0;
-    padding:5px 15px;
-}
 .list-block{
     margin:0;
 }
@@ -16,10 +12,13 @@
     margin-top:30px;
 }
 .top-list-2{
-    margin-top:5px;
+    margin-top:30px;
 }
 .content-block-title+.bottom-list,.bottom-list{
     margin-bottom:50px;
+}
+textarea.h5{
+    font-size:14px;
 }
 
 /*工具样式*/
