@@ -38,6 +38,19 @@ namespace SqzEvent.Models
 
         public int Systemid { get; set; }
     }
+    public class QC_ManagerLoginViewModel
+    {
+        [Required]
+        [StringLength(11)]
+        [RegularExpression("1[3|5|7|8|][0-9]{9}", ErrorMessage = "手机号码格式错误")]
+        [Display(Name = "手机号码")]
+        public string Mobile { get; set; }
+
+        [Required]
+        [StringLength(6, ErrorMessage = "手机验证码为6位")]
+        [Display(Name = "手机验证码")]
+        public string CheckCode { get; set; }
+    }
 
     public class QC_StaffViewModel
     {
