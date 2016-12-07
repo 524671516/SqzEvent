@@ -978,6 +978,17 @@ namespace SqzEvent.Controllers
         public ActionResult Manager_AgendaDetailsPartial(int agendaId)
         {
             var model = _qcdb.QCAgenda.SingleOrDefault(m => m.Id == agendaId);
+            DateTime _tommorrow = model.Subscribe.AddDays(1);
+            int breakdown_cnt = (from m in _qcdb.BreadkdownReport
+                                 where m.ReportTime >= model.Subscribe && m.ReportTime < _tommorrow
+                                 && m.QCEquipment.FactoryId == model.FactoryId
+                                 select m).Count();
+            int qualitytest_cnt = (from m in _qcdb.QualityTest
+                                  where m.ApplyTime>=model.Subscribe && m.ApplyTime< _tommorrow
+                                  && m.FactoryId == model.FactoryId
+                                  select m).Count();
+            ViewBag.BD_Cnt = breakdown_cnt;
+            ViewBag.QT_Cnt = qualitytest_cnt;
             return PartialView(model);
         }
         public ActionResult Manager_AgendaDetailsTemplatePartial(string value)
