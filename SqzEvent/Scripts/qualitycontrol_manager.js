@@ -41,12 +41,6 @@ $$.ajax({
         $$("#userinfo").html(data);
     }
 });
-//首页刷新
-var ptrContent = $$('.pull-to-refresh-content');
-ptrContent.on('refresh', function (e) {
-    alert(1);
-    myApp.pullToRefreshDone();
-});
 //图标点击颜色变化
 $$(".icon-link").each(function () {
     $$(this).on("click", function () {
@@ -57,27 +51,10 @@ $$(".icon-link").each(function () {
 // 实时状态页
 myApp.onPageInit("Home", function (page) {
 });
-//Manager_AgendaDetails页
+//实时状态信息详细页
 myApp.onPageInit("Manager_agendadetails", function (page) {
     PhotoBrowser("manager_agendadetails");
-    var calendarMultiple = myApp.calendar({
-        input: '#SelectDate',
-        dateFormat: 'yyyy-mm-dd',
-        monthNames: ['1月', '2月', '3月', '4月 ', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-        closeOnSelect: true,
-        dayNamesShort: ['日', '一', '二', '三', '四', '五', '六'],
-        toolbarTemplate: '<div class="toolbar">' + '<div class="toolbar-inner">' +
-            '<div class="picker-calendar-year-picker">' +
-            '<a href="#" class="link icon-only picker-calendar-prev-year">' +
-            '<i class="icon icon-prev">' + '</i>' + '</a>' + '<span class="current-year-value">' + '</span>' +
-            '<a href="#" class="link icon-only picker-calendar-next-year">' +
-            '<i class="icon icon-next">' + '</i>' + '</a>' + '</div>' +
-            '<div class="picker-calendar-month-picker">' +
-            '<a href="#" class="link icon-only picker-calendar-prev-month">' +
-            '<i class="icon icon-prev">' + '</i>' + '</a>' + '<span class="current-month-value">' +
-            '</span>' + '<a href="#" class="link icon-only picker-calendar-next-month">' +
-            '<i class="icon icon-next">' + '</i>' + '</a>' + '</div>' + '</div>' + '</div>'
-    });
+    createCalendar("SelectDate", false, true)
     $$.ajax({
         url: "/QualityControl/Manager_AgendaDetailsList",
         data: {
@@ -193,16 +170,15 @@ myApp.onPageInit('Setting', function (page) {
                 }, type: "post",
                 success: function (e) {
                     var data = JSON.parse(e);
-                    for (var i = 0; i < data.result.length; i++) {
+                    for (var i = 0; i < data.result.length; i++) {                     
                         var _date = ChangeDateFormat(data.result[i].Key);
+                        _date1 = data.result[i].Key.substring(data.result[i].Key.indexOf("(")+1, data.result[i].Key.indexOf(")"))
                         if (data.result[i].result) {
                             $(".picker-calendar-day[data-date='" + _date + "']").find("span").addClass("picker-calendar-day-green");
                         }
                         else {
-                            var _today = new Date();
-                            _today = _today.setMonth(_today.getMonth() - 1);
-                            var _targetdate = new Date(_date);
-                            if (_today >= _targetdate) {
+                            var _today = new Date().getTime();                         
+                            if (_today >= _date1) {
                                 $(".picker-calendar-day[data-date='" + _date + "']").find("span").addClass("picker-calendar-day-red");
                             }
                             else {
@@ -237,14 +213,13 @@ myApp.onPageInit('Setting', function (page) {
                     var data = JSON.parse(e);
                     for (var i = 0; i < data.result.length; i++) {
                         var _date = ChangeDateFormat(data.result[i].Key);
+                        _date1 = data.result[i].Key.substring(data.result[i].Key.indexOf("(") + 1, data.result[i].Key.indexOf(")"))
                         if (data.result[i].result) {
                             $(".picker-calendar-day[data-date='" + _date + "']").find("span").addClass("picker-calendar-day-green");
                         }
                         else {
-                            var _today = new Date();
-                            _today = _today.setMonth(_today.getMonth() - 1);
-                            var _targetdate = new Date(_date);
-                            if (_today >= _targetdate) {
+                            var _today = new Date().getTime();
+                            if (_today >= _date1) {
                                 $(".picker-calendar-day[data-date='" + _date + "']").find("span").addClass("picker-calendar-day-red");
                             }
                             else {
@@ -272,24 +247,7 @@ myApp.onPageInit('Setting', function (page) {
 });
 //添加产量计划页
 myApp.onPageInit('Add-schedule', function (page) {
-    var calendarMultiple = myApp.calendar({
-        input: '#DateList',
-        dateFormat: 'yyyy-mm-dd',
-        multiple: true,
-        monthNames: ['1月', '2月', '3月', '4月 ', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-        dayNamesShort: ['日', '一', '二', '三', '四', '五', '六'],
-        toolbarTemplate: '<div class="toolbar">' + '<div class="toolbar-inner">' +
-            '<div class="picker-calendar-year-picker">' +
-            '<a href="#" class="link icon-only picker-calendar-prev-year">' +
-            '<i class="icon icon-prev">' + '</i>' + '</a>' + '<span class="current-year-value">' + '</span>' +
-            '<a href="#" class="link icon-only picker-calendar-next-year">' +
-            '<i class="icon icon-next">' + '</i>' + '</a>' + '</div>' +
-            '<div class="picker-calendar-month-picker">' +
-            '<a href="#" class="link icon-only picker-calendar-prev-month">' +
-            '<i class="icon icon-prev">' + '</i>' + '</a>' + '<span class="current-month-value">' +
-            '</span>' + '<a href="#" class="link icon-only picker-calendar-next-month">' +
-            '<i class="icon icon-next">' + '</i>' + '</a>' + '</div>' + '</div>' + '</div>'
-    });
+    createCalendar("DateList",true,false)
     $$("#FactoryId").on("change", function () {
         if ($$("#FactoryId").val() != "") {
             $$.ajax({
@@ -331,24 +289,7 @@ myApp.onPageInit('Add-schedule', function (page) {
 // 历史检验页面查询
 myApp.onPageInit('manager-qualitytest', function (page) {
     changeBtn()
-    var calendarMultiple = myApp.calendar({
-        input: '#Qt_SelectDate',
-        dateFormat: 'yyyy-mm-dd',
-        closeOnSelect: true,
-        monthNames: ['1月', '2月', '3月', '4月 ', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-        dayNamesShort: ['日', '一', '二', '三', '四', '五', '六'],
-        toolbarTemplate: '<div class="toolbar">' + '<div class="toolbar-inner">' +
-            '<div class="picker-calendar-year-picker">' +
-            '<a href="#" class="link icon-only picker-calendar-prev-year">' +
-            '<i class="icon icon-prev">' + '</i>' + '</a>' + '<span class="current-year-value">' + '</span>' +
-            '<a href="#" class="link icon-only picker-calendar-next-year">' +
-            '<i class="icon icon-next">' + '</i>' + '</a>' + '</div>' +
-            '<div class="picker-calendar-month-picker">' +
-            '<a href="#" class="link icon-only picker-calendar-prev-month">' +
-            '<i class="icon icon-prev">' + '</i>' + '</a>' + '<span class="current-month-value">' +
-            '</span>' + '<a href="#" class="link icon-only picker-calendar-next-month">' +
-            '<i class="icon icon-next">' + '</i>' + '</a>' + '</div>' + '</div>' + '</div>'
-    });
+    createCalendar('Qt_SelectDate', false, true);
     if ($$("#Qt_fid").val() != "") {
         $$.ajax({
             url: "/QualityControl/Manager_QualityTestPartial",
@@ -396,25 +337,7 @@ myApp.onPageInit('manager-qualitytest', function (page) {
 });
 //历史故障页面查询
 myApp.onPageInit("manager-breakdown", function () {
-    var calendarMultiple = myApp.calendar({
-        input: '#Bd_SelectDate',
-        value: [new Date()],
-        dateFormat: 'yyyy-mm-dd',
-        closeOnSelect: true,
-        monthNames: ['1月', '2月', '3月', '4月 ', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-        dayNamesShort: ['日', '一', '二', '三', '四', '五', '六'],
-        toolbarTemplate: '<div class="toolbar">' + '<div class="toolbar-inner">' +
-            '<div class="picker-calendar-year-picker">' +
-            '<a href="#" class="link icon-only picker-calendar-prev-year">' +
-            '<i class="icon icon-prev">' + '</i>' + '</a>' + '<span class="current-year-value">' + '</span>' +
-            '<a href="#" class="link icon-only picker-calendar-next-year">' +
-            '<i class="icon icon-next">' + '</i>' + '</a>' + '</div>' +
-            '<div class="picker-calendar-month-picker">' +
-            '<a href="#" class="link icon-only picker-calendar-prev-month">' +
-            '<i class="icon icon-prev">' + '</i>' + '</a>' + '<span class="current-month-value">' +
-            '</span>' + '<a href="#" class="link icon-only picker-calendar-next-month">' +
-            '<i class="icon icon-next">' + '</i>' + '</a>' + '</div>' + '</div>' + '</div>'
-    });
+    createCalendar('Bd_SelectDate', false, true);
     if ($$("#Bd_fid").val() != "") {
         $$.ajax({
             url: "/QualityControl/Manager_BreakdownPartial",
@@ -444,7 +367,7 @@ myApp.onPageInit("manager-breakdown", function () {
         }
     })
     $$("#Bd_SelectDate").on("change", function () {
-        if ($$("#Bd_fid") != "") {
+        if ($$("#Bd_fid").val() != "") {
             $$.ajax({
                 url: "/QualityControl/Manager_BreakdownPartial",
                 data: {
@@ -474,7 +397,7 @@ function ChangeDateFormat(val) {
         //月份为0-11，所以+1，月份小于10时补个0
         var month = date.getMonth();
         var currentDate = date.getDate();
-        return date.getFullYear() + "-" + month + "-" + currentDate;
+        return date.getFullYear() + "-" + (month) + "-" + currentDate;
     }
     return "";
 }
@@ -655,4 +578,27 @@ function changeBtn() {
             }
         })
     })
+}
+//日历生成
+function createCalendar(calinput, multiplebool, closeOnSelectbool) {
+    var calendarMultiple = myApp.calendar({
+        input: '#'+calinput,
+        dateFormat: 'yyyy-mm-dd',
+        multiple: multiplebool,
+        closeOnSelect: closeOnSelectbool,
+        monthNames: ['1月', '2月', '3月', '4月 ', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+        dayNamesShort: ['日', '一', '二', '三', '四', '五', '六'],
+        toolbarTemplate: '<div class="toolbar">' + '<div class="toolbar-inner">' +
+            '<div class="picker-calendar-year-picker">' +
+            '<a href="#" class="link icon-only picker-calendar-prev-year">' +
+            '<i class="icon icon-prev">' + '</i>' + '</a>' + '<span class="current-year-value">' + '</span>' +
+            '<a href="#" class="link icon-only picker-calendar-next-year">' +
+            '<i class="icon icon-next">' + '</i>' + '</a>' + '</div>' +
+            '<div class="picker-calendar-month-picker">' +
+            '<a href="#" class="link icon-only picker-calendar-prev-month">' +
+            '<i class="icon icon-prev">' + '</i>' + '</a>' + '<span class="current-month-value">' +
+            '</span>' + '<a href="#" class="link icon-only picker-calendar-next-month">' +
+            '<i class="icon icon-next">' + '</i>' + '</a>' + '</div>' + '</div>' + '</div>'
+    });
+    return calendarMultiple;
 }
