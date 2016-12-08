@@ -21,7 +21,7 @@
        label{
            line-height:2.234;
        }
-       label.control-label{
+       label.text-right{
            padding-right:0;
        }
        form{
@@ -64,25 +64,25 @@
             @Html.HiddenFor(m => m.Open_Id)
             <div class="container">
                 <div class="form-group  has-feedback">
-                        <label for="Name" class="col-xs-3  control-label text-right">姓名</label>
+                        <label for="Name" class="col-xs-3   text-right">姓名</label>
                         <div class="col-xs-9">
                             @Html.TextBoxFor(m => m.Name, new { placeholder = "请输入真实姓名", @class = "form-control" })
                         </div>
                 </div>
                 <div class="form-group  has-feedback">
-                    <label for="Mobile" class="col-xs-3 control-label text-right">手机号</label>
+                    <label for="Mobile" class="col-xs-3  text-right">手机号</label>
                     <div class="col-xs-9">
                         @Html.TextBoxFor(m => m.Mobile, new { maxlength = "11", placeholder = "手机号码(11位)", @class = "form-control" })
                     </div>
                 </div>
                 <div class="form-group  has-feedback">
-                    <label for="RecommandCode" class="col-xs-3  control-label text-right">推荐码</label>
+                    <label for="RecommandCode" class="col-xs-3   text-right">推荐码</label>
                     <div class="col-xs-9">
                         @Html.TextBoxFor(m => m.RecommandCode, new { placeholder = "输入推荐码(选填)", maxlength = "11", @class = "form-control" })
                     </div>
                 </div>
                 <div class="form-group  has-feedback">
-                    <label for="inputPassword3" class="col-xs-3  control-label text-right">验证码</label>
+                    <label for="inputPassword3" class="col-xs-3   text-right">验证码</label>
                     <div class="col-xs-5">
                         @Html.TextBoxFor(m => m.CheckCode, new { placeholder = "验证码", maxlength = "6", @class = "form-control" })
                     </div>
