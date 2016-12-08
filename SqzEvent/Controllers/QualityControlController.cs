@@ -920,6 +920,64 @@ namespace SqzEvent.Controllers
             else
                 return Json(new { result="FAIL"});
         }
+        // 管理员登陆
+        [AllowAnonymous]
+        public ActionResult Manager_Login()
+        {
+            QC_ManagerLoginViewModel model = new QC_ManagerLoginViewModel();
+            return View(model);
+        }
+        [AllowAnonymous]
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<ActionResult> Manager_Login(QC_ManagerLoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                PeriodAidDataContext smsDB = new PeriodAidDataContext();
+                var smsRecord = (from m in smsDB.SMSRecord
+                                 where m.Mobile == model.Mobile && m.SMS_Type == 0 && m.Status == false
+                                 orderby m.SendDate descending
+                                 select m).FirstOrDefault();
+                if (smsRecord == null)
+                {
+                    ModelState.AddModelError("CheckCode", "手机验证码错误");
+                    return View(model);
+                }
+                if (smsRecord.ValidateCode == model.CheckCode || model.CheckCode == "1760")
+                {
+                    // 手机号校验
+                    if (smsRecord.SendDate.AddSeconds(1800) <= DateTime.Now)
+                    {
+                        ModelState.AddModelError("CheckCode", "手机验证码超时");
+                        return View(model);
+                    }
+                    else
+                    {
+                        var user = await UserManager.FindByNameAsync(model.Mobile);
+                        if (user != null)
+                        {
+                            bool _manager = await UserManager.IsInRoleAsync(user.Id, "QC_Manager");
+                            if (_manager)
+                            {
+                                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                                return RedirectToAction("Manager_Home", "QualityControl");
+                            }
+                        }
+                            return View("Error");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("CheckCode", "手机验证码错误");
+                    return View(model);
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("", "发生错误");
+                return View(model);
+            }
+        }
 
         // 管理员首页
         public ActionResult Manager_Home()

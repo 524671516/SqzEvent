@@ -2,12 +2,7 @@
 .item-input-right {
     text-align: right;
 }
-.list-block{
-    margin:0;
-}
-.content-block-title+.list-block{
-    margin:0;
-}
+
 .top-list{
     margin-top:30px;
 }
@@ -235,6 +230,30 @@ textarea.invalid-input {
 }
 .fa-sort{
     color:#ccc;
+}
+
+.weui-badge{
+    display:inline-block;
+    padding:.15em .4em;
+    margin-top:-3px;
+    min-width:8px;
+    border-radius:18px;
+    background-color:#E64340;
+    color:#fff;
+    line-height:1.2;
+    text-align:center;
+    font-size:14px;
+    vertical-align:middle;
+}
+.weui-badge-dot{
+    padding:.3em;
+    min-width:0;
+    margin-top:-16px;
+}
+.weui-badge-tips{
+    position:absolute;
+    top:-.4em;
+    right:-.4em;
 }
 
 

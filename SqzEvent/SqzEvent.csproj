@@ -332,6 +332,7 @@
     <Content Include="Scripts\qualitycontrol.js" />
     <Content Include="Scripts\qualitycontrol_manager.js" />
     <Content Include="Scripts\qualitycontrol.min.js" />
+    <Content Include="Scripts\qualitycontrol_manager.min.js" />
     <Content Include="Scripts\SellerTask.js" />
     <Content Include="Scripts\my-validate.js" />
     <Content Include="Scripts\respond.js" />
@@ -534,6 +535,9 @@
     <Content Include="Views\QualityControl\Manager_History.cshtml" />
     <Content Include="Views\QualityControl\Manager_AgendaDetailsTemplatePartial.cshtml" />
     <Content Include="Views\QualityControl\Manager_AgendaProductionDetailsPartial.cshtml" />
+    <Content Include="Views\QualityControl\Manager_Login.cshtml" />
+    <Content Include="Views\QualityControl\Error.cshtml" />
+    <Content Include="Views\QualityControl\NotFound.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
