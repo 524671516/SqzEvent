@@ -3941,8 +3941,9 @@ namespace SqzEvent.Controllers
                     {
                         var user = new ApplicationUser { UserName = model.Mobile, NickName = model.Name, Email = model.Open_Id, PhoneNumber = model.Mobile, AccessToken = model.AccessToken, OpenId = model.Open_Id, DefaultSystemId = 1, OffSalesSystem = "1" };
                         var result = await UserManager.CreateAsync(user, model.Open_Id);
-                        var recommand_user = await UserManager.FindByNameAsync(model.RecommandCode);
+                        
                         string recommand_user_id = null;
+                        var recommand_user = await UserManager.FindByNameAsync(model.RecommandCode);
                         if (recommand_user != null)
                         {
                             recommand_user_id = recommand_user.Id;
