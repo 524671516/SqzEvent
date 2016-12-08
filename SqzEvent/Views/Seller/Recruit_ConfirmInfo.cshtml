@@ -10,283 +10,138 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <title>促销员招募</title>
-    <link href="~/Content/normalize.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
     <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
-    <style>
-        /*结构样式*/
-        html, body {
-            width: 100%;
-            font-size:16px;
-        }
-        .item-input input {
-            outline: none;
-            border: none;
-            width: 100%;
-            height:40px;
-            padding:0 5px;
-            font-size:16px;
-        }
-
-        .item-inner div {
-            display: inline-block;
-        }
-
-
-        a {
-            text-decoration: none;
-        }
-
-        ul, li {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        form {
-            margin-top: 30px;
-        }
-
-       form ul {
-                width: 90%;
-                margin: 0 auto;
-        }
-
-       form li {
-                padding: 0px 5px 0px 5px;
-        }
-
-        header {
-            width: 80%;
-            margin: 0 auto;
-            text-align: center;
-        }
-        header h2{
-            color:#007aff;
-        }
-        /*工具样式*/
-        .col-100 {
-            width: 100%;
-        }
-
-        .col-30 {
-            width: 30%;
-        }
-
-        .col-22 {
-            width: 22%;
-        }
-
-        .col-25 {
-            width: 25%;
-        }
-
-        .col-20 {
-            width: 20%;
-        }
-
-        .col-50 {
-            width: 50%;
-        }
-
-        .col-55 {
-            width: 55%;
-        }
-
-        .col-30 {
-            width: 30%;
-        }
-
-        .hidden {
-            display: none;
-        }
-        .bg-gary{
-            background-color:#ccc !important;
-        }
-
-        .bg-blue {
-            background-color: #007aff;
-        }
-        .color-white{
-            color:#fff !important;
-        }
-        .color-blue {
-            color: #007aff;
-        }
-        .color-green{
-            color:green;
-        }
-        .color-red {
-            color: red;
-        }
-
-        .border-bottom {
-            border-bottom: 1px solid #ccc;
-        }
-
-        .red-border {
-            border: 1px solid red !important;
-        }
-
-        .blue-border {
-            border: 1px solid #007aff;
-        }
-
-        .btn {
-            background: #007aff;
-            color: #fff;
-            text-align: center;
-            display: block;
-            border-radius: 5px;
-            line-height: 27px;
-            box-sizing: border-box;
-            font-size: 14px;
-            cursor: pointer;
-            outline: 0;
-            padding:5px 0;
-        }
-         /*基础样式*/
-         .id-content input{
-            outline: none;
-            border: none;
-            width: 100%;
-            height:40px;
-            padding:0 5px;
-         }
-         .checkbox-content{
-             margin-top:10px;
-         }
-        
-        .add {
-            width:20%;
-            text-align:center;
-        }
-
-        .checkbox-content {
-            text-align: center;
-        }
-
-        .checkbox-content .item-title {
-            padding-bottom: 10px;
-            text-align: left;
-        }
-
-        .item-title {
-            font-size: 1rem;
-        }
-        .item-inner{
-            height:42px;
-        }
-
-        .item-input input {
-            width: 100%;
-        }
-
-        .label-btn input {
-            visibility: hidden;
-        }
-
-        .label-btn span {
-            position: relative;
-            right: 6px;
-        }
-
-        .label-btn {
-            color:#007aff;
-            padding:5px 0;
-            text-align: center;
-            display: inline-block;
-            border-radius: 5px;
-            line-height: 27px;
-            box-sizing: border-box;
-            font-size: 14px;
-            cursor: pointer;
-            outline: 0;
-        }
-
-        #improve-btn {
-            margin: 50px auto auto auto;
-        }
-
-        select {
-            height: 40px;
-            outline: none;
-            border: none;
-            font-size:16px;
-            appearance: none;
-            -moz-appearance: none; /* Firefox */
-            -webkit-appearance: none; /* Safari 和 Chrome */
-        }
-    </style>
+    <script src="~/Scripts/bootstrap.min.js"></script>
 </head>
 <body>
-    
-    <header><h2>信息完善</h2></header>
-    @using (Html.BeginForm("Recruit_ConfirmInfo", "Seller", FormMethod.Post, new { @id = "info-form" }))
+    <style>
+        label{
+           line-height:2.234;
+       }
+        form{
+           margin-top:10px;
+       }
+        .inputwrap{
+           padding-left:0;
+        }
+        .selectwrap{
+            padding:0;
+        }
+        .border-none{
+            border:1px solid #fff;
+        }
+        .select.form-control {
+            padding: 0;
+            outline:none;
+            text-decoration:none;
+            padding-left:5px;
+        }
+        .btn-gary{
+            border:1px solid #ccc;
+            background-color:#fff;
+            color:#000;
+        }
+        .have-error{
+            border:1px solid #a94442;
+        }
+        .have-success{
+            border:1px solid #3c763d;
+        }
+        .btn-gary.active, .btn-gary:active{
+           color: #fff;
+           background-color: #286090;
+           outline:none;
+        }
+    </style>
+    <div class="container">
+        <br />
+        <div class="row">
+            <div class="col-xs-4 col-md-5"></div>
+            <div class="col-xs-4 col-md-2" style="margin:0 auto;"><img class="img-responsive" src="~/Content/images/logo_new.png"></div>
+            <div class="col-xs-4 col-md-5"></div>
+        </div>
+        <h3 class="text-center">信息完善</h3>
+    </div>
+    @using (Html.BeginForm("Recruit_ConfirmInfo", "Seller", FormMethod.Post, new { @id = "info-form", @class = "form-horizontal" }))
     {
         @Html.AntiForgeryToken()
-        @Html.HiddenFor(m=>m.UserName)
-        <ul>
-            <li class="id-content border-bottom">
-                <div class="item-inner">
-                    <div class="item-title col-20">身份证</div>
-                    <div class="item-input col-55">
-                        <input type="text" name="IdNumber" placeholder="请输入身份证号码" id="IdNumber">
+        @Html.HiddenFor(m => m.UserName)
+        <div class="container">
+            <div class="col-xs-12">
+                <div class="form-group  has-feedback">
+                    <label for="IdNumber" class="col-xs-3 control-label text-right inputwrap">身份证</label>
+                    <div class="col-xs-9 selectwrap">
+                        <input type="text" name="IdNumber" placeholder="请输入身份证号码" id="IdNumber" class="form-control">
                     </div>
                 </div>
-            </li>
-            <li class="select-content border-bottom">
-                <div class="item-inner">
-                    <div class="item-title col-20">地址</div>
-                    <select id="AreaProvince" name="AreaProvince" class="col-22">
-                        <option>请选择</option>
-                    </select>
-                    <select id="AreaCity" name="AreaCity" class="col-22">
-                        <option>请选择</option>
-                    </select>
-                    <select id="AreaDistrict" name="AreaDistrict" class="col-22">
-                        <option>请选择</option>
-                    </select>
+                <div class="form-group  has-feedback">
+                    <label for="IdNumber" class="col-xs-3 control-label text-right">地址</label>
+                    <div class="col-xs-9">
+                        <div class="row">
+                            <div class="col-xs-4 selectwrap">
+                                <select id="AreaProvince" name="AreaProvince" class="form-control select border-none">
+                                    <option>请选择</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-4 selectwrap">
+                                <select id="AreaCity" name="AreaCity" class="form-control select border-none">
+                                    <option>请选择</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-4 selectwrap">
+                                <select id="AreaDistrict" name="AreaDistrict" class="form-control select border-none">
+                                    <option>请选择</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-            </li>
-            <li class="checkbox-content">
-                <div class="item-inner">
-                    <div class="item-title col-100">可工作日期</div>
-                    <label for="Holiday" class="label-btn blue-border col-30">
-                        @Html.CheckBoxFor(m=>m.Holiday)<span>节假日</span></label>
-                    <label for="Weekday" class="label-btn blue-border col-30">@Html.CheckBoxFor(m=>m.Weekday)<span>工作日</span></label>
-                    <label for="Weekend" class="label-btn blue-border col-30">@Html.CheckBoxFor(m=>m.Weekend)<span>双休日</span></label>
+                <div class="form-group has-feedback">
+                    <label class="col-xs-3  control-label text-right">时间</label>
+                    <div class="col-xs-9">
+                        <div class="row">
+                            <div class="btn-group col-xs-12 selectwrap active" data-toggle="buttons">
+                                <label class="btn btn-gary active col-xs-4  text-center">
+                                    <input type="checkbox" autocomplete="off">工作日
+                                </label>
+                                <label class="btn btn-gary   col-xs-4 text-center">
+                                    <input type="checkbox" autocomplete="off">双休日
+                                </label>
+                                <label class="btn btn-gary   col-xs-4 text-center">
+                                    <input type="checkbox" autocomplete="off">节假日
+                                </label>
+                            </div>
+                        </div>                       
+                    </div>
                 </div>
-            </li>
-        </ul>
-        <a href="javascrirt:;" id="improve-btn" class="btn col-50">提交信息</a>
+                <div class="row">
+                    <div class="col-xs-2"></div>
+                    <div class="col-xs-8"><a href="#" class="btn btn-primary  btn-block" role="button" id="improve-btn">提交信息</a></div>
+                    <div class="col-xs-2"></div>
+                </div>
+            </div>
+        </div>
     }
     <script>
-        /*label点击后样式变化*/
-        $("label").each(function () {
-            $(this).on("click", function () {
-                $(".label-btn").removeClass("red-border");             //输入错误样式移除        
-                $(".label-btn").addClass("blue-border");               //增加基本样式    
-                /*复选框选中样式*/
-                if (!$(this).children("input").is(':checked')) {
-                    $(this).removeClass("bg-blue");                        
-                    $(this).removeClass("color-white");
-                } else {
-                    $(this).addClass("bg-blue");
-                    $(this).addClass("color-white");
-                }
-            })
-        })
         /*input获得焦点后清除输入错误警告样式*/
         $("input").each(function () {
             $(this).on("focus", function () {
-                $(this).parent().next(".add").remove();
+                $("#improve-btn").removeClass("btn-default");
+                $(".btn-gary").removeClass("have-error");
+                $(".btn-gary").removeClass("have-success");
+                $(this).parent().parent().removeClass("has-error");
+                $(this).parent().parent().removeClass("has-success");
+                $(".form-control-feedback").remove("span");
             })
         })
         /*下拉选择被点击后清除输入错误警告样式*/
         $("select").each(function () {
             $(this).on("click", function () {
-                $(this).removeClass("color-red");
+                $(this).parent().parent().removeClass("has-error");
+                $(this).parent().parent().removeClass("has-success");
             })
         })
         /*页面初始化获得所有省信息*/
@@ -305,24 +160,24 @@
             }
         });
         /*选择省后获取对应市级信息*/
-        $("#AreaProvince").on("change", function () {           
+        $("#AreaProvince").on("change", function () {
             $("#AreaCity").html("<option>请选择</option>");
             $("#AreaDistrict").html("<option>请选择</option>");
             $.ajax({
                 url: "/Seller/GetRegion",
                 data: {
                     parentid: $("#AreaProvince").find("option:selected").attr("target-id"),
-                    level:2
+                    level: 2
                 },
                 success: function (data) {
                     var data = JSON.parse(data);
-                    if ($("#AreaProvince").find("option:selected").attr("target-id")>0) {
+                    if ($("#AreaProvince").find("option:selected").attr("target-id") > 0) {
                         for (i = 0; i < data.response.regions.length; i++) {
                             var city = unescape(data.response.regions[i].name);
                             var city_val = data.response.regions[i].id;
                             $("#AreaCity").append("<option target-id=\"" + city_val + "\" value=\"" + city + "\">" + city + "</option>");
                         }
-                    }                
+                    }
                 }
             });
         });
@@ -337,64 +192,68 @@
                 },
                 success: function (data) {
                     var data = JSON.parse(data);
-                    if ($("#AreaCity").find("option:selected").attr("target-id")>0) {
+                    if ($("#AreaCity").find("option:selected").attr("target-id") > 0) {
                         for (i = 0; i < data.response.regions.length; i++) {
                             var area = unescape(data.response.regions[i].name);
                             var area_val = data.response.regions[i].id;
                             $("#AreaDistrict").append("<option target-id=\"" + area_val + "\" value=\"" + area + "\">" + area + "</option>");
                         }
-                    }     
+                    }
                 }
             });
         });
         var id_type = /(^\d{18}$)|(^\d{15}$)|(^\d{17}(\d|X|x)$)/  //身份证正则
         /*点击提交按钮时验证*/
         $("#improve-btn").on("click", function () {
-            if (!$("#improve-btn").hasClass("bg-gary")) {
-                $("#improve-btn").addClass("bg-gary");
+            if (!$("#improve-btn").hasClass("btn-default")) {
+                $("#improve-btn").addClass("btn-default");
                 var bool = true;
                 if (!id_type.test($("#IdNumber").val())) {
-                    $(".id-content .item-after").remove();
-                    $("#IdNumber").parent().after("<div class=\"item-after add\"><i class=\"fa fa-times color-red\" aria-hidden=\"true\"></i></div>");
+                    $("#IdNumber").parent().parent().removeClass("has-success");
+                    $("#IdNumber").parent().parent().addClass("has-error");
+                    $("#IdNumber").after("<span class=\"glyphicon glyphicon-remove form-control-feedback\" style=\" padding-left:30px;\"></span>");
+                    $("#improve-btn").removeClass("btn-default");
                     bool = false;
-                    $("#improve-btn").removeClass("bg-gary");
                 } else {
-                    $(".id-content .item-after").remove();
-                    $("#IdNumber").parent().after("<div class=\"item-after add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></div>");
-                }
-                var lableArray = [];
-                $("#info-form").find(".label-btn").each(function () {
-                    if (!$(this).hasClass("bg-blue")) {
-                        lableArray.push("1");
-                    }
-                    if (lableArray.length == 3) {
-                        $(".label-btn").removeClass("blue-border");
-                        $(".label-btn").addClass("red-border");
-                        bool = false;
-                        $("#improve-btn").removeClass("bg-gary");
-                    } else {
-                        $(".label-btn").removeClass("red-border");
-                        $(".label-btn").addClass("blue-border");
-                    }
-                })
+                    $("#IdNumber").parent().parent().removeClass("has-error");
+                    $("#IdNumber").parent().parent().addClass("has-success");
+                    $("#IdNumber").after("<span class=\"glyphicon glyphicon-ok form-control-feedback\"  style=\" padding-left:30px;\"></span>");
+                }              
                 $("#info-form").find("select").each(function () {
                     if ($(this).val() == "请选择") {
-                        $(this).addClass("color-red");
+                        $(this).parent().parent().parent().parent().removeClass("has-success");
+                        $(this).parent().parent().parent().parent().addClass("has-error");
                         bool = false;
-                        $("#improve-btn").removeClass("bg-gary");
+                        $("#improve-btn").removeClass("btn-default");
                     } else {
-                        $(this).removeClass("color-red");
+                        $(this).parent().parent().parent().parent().addClass("has-success");
+                        $(this).parent().parent().parent().parent().removeClass("has-error");
+                    }
+                    var arr = [];
+                    $(".btn-gary").each(function () {
+                        if ($(this).hasClass("active")) {
+                            arr.push("1");
+                        }
+                    })
+                    if (arr.length == 0) {
+                        bool = false;
+                        $(".btn-gary").removeClass("have-success");
+                        $(".btn-gary").addClass("have-error");
+                        $("#improve-btn").removeClass("btn-default");
+                    }else{
+                        $(".btn-gary").removeClass("have-error");
+                        $(".btn-gary").addClass("have-success");
                     }
                 });
                 /*验证通过提交表单*/
                 if (bool) {
                     setTimeout(function () {
                         $("#info-form").submit();
-                    },1000)
+                    }, 1000)
                 }
-            }      
-            });
+            }
+        });
     </script>
-   
+
 </body>
 </html>
