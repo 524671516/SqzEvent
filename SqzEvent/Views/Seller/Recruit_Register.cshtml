@@ -10,446 +10,256 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <title>促销员招募</title>
-    <link href="~/Content/normalize.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
     <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
-    <style>
-        /*结构样式*/
-        html, body {
-            width: 100%;
-            font-size:16px;
-        }
-        .item-input input {
-            outline: none;
-            border: none;
-            width: 100%;
-            height:40px;
-            padding:0 5px;
-            font-size:16px;
-        }
+    <script src="~/Scripts/bootstrap.min.js"></script>
 
-        a {
-            text-decoration: none;
-        }
-
-        ul, li {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        form {
-            margin-top: 30px;
-        }
-
-        form li {
-            padding: 0 5px 0 5px;
-        }
-        ul {
-            width: 90%;
-            margin: 0 auto;
-        }
-
-        header {
-            width: 80%;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        header h2{
-            color:#007aff;
-        }
-
-        .verification-content a {
-            display: inline-block;
-            text-decoration: none;
-        }
-
-        .item-inner > div {
-            display: inline-block;
-        }
-        /*工具样式*/
-        .col-35 {
-            width: 35%;
-        }
-
-        .col-40 {
-            width: 40%;
-        }
-
-        .col-50 {
-            width: 50%;
-        }
-        .col-30{
-            width:30%;
-        }
-        .col-20 {
-            width: 20%;
-        }
-        .col-26{
-            width:26%;
-        }
-        .hidden {
-            display: none !important;
-        }
-
-        .color-gray {
-            color: #ababab;
-        }
-
-        .border-bottom {
-            border-bottom: 1px solid #ccc;
-        }
-
-        .border-left {
-            float:right;
-            margin-top:8px;
-            border-radius:5px;
-            height: 28px;
-            padding: 5px 5px 1px 5px;
-            font-size: 12px;
-            background: #007aff;
-            color: #fff;
-            line-height:1.4;
-            text-align: center;
-            box-sizing: border-box;
-            font-size: 12px;
-            cursor: pointer;
-            outline: 0;
-        }
-        .bg-gary{
-            background-color:#ccc !important;
-        }
-        .color-blue {
-            color: #007aff;
-        }
-
-        .color-red {
-            color: red;
-        }
-
-        .color-green {
-            color: green;
-        }
-
-        .color-gary {
-            color: #ccc;
-        }
-
-        .btn {
-            background: #007aff;
-            color: #fff;
-            text-align: center;
-            display: block;
-            border-radius: 5px;
-            line-height: 27px;
-            box-sizing: border-box;
-            font-size: 14px;
-            cursor: pointer;
-            outline: 0;
-            padding:5px 0;
-        }
-        /*基本样式*/
-        .item-inner{
-            height:42px;
-        }
-        .item-title{
-            height:30px;
-        }
-        
-        .add{
-            width:25%;
-            text-align:center;
-        }
-        #register-btn {
-            margin: 50px auto auto auto;
-        }
-
-        .verification-error {
-            width: 8% !important;
-            text-align:center;
-        }
-        .bg{
-           position: fixed;
-           top: 0;
-           right: 0;
-           bottom: 0;
-           left: 0;
-           background-color: #000;
-           opacity:0.2;
-        }
-
-        .modal{
-            background-color:#fff;
-            z-index:11;
-            position:absolute;
-            top:-100%;
-            left:0;
-            right:0;
-            bottom:0;
-            border-radius:5px;
-            margin:0 auto;
-            width:90%;
-            height:80%;
-            border:1px solid rgba(0,0,0,.2);
-            box-shadow:0 5px 15px rgba(0,0,0,.5);
-        }
-
-        #close-btn{
-            position:absolute;
-            right:10px;
-            top:10px;
-            color:#000;
-            opacity:.2;
-            display:block;
-        }
-        #know-btn{
-            text-align:center;
-            width:25%;
-            border-radius:4px;
-            color:#fff;
-            display:block;
-            border: 1px solid #428bca;
-            background-color:#428bca;
-            text-align:center;
-            padding:12px 12px;
-            font-weight:400;
-            position:absolute;
-            bottom:5%;
-            left:60%;
-        }
-        #close-btn:hover{
-            opacity:.5;
-        }
-        .modal-header h2{
-            color:#000;
-            padding:0;
-            margin:0;
-            opacity:.5;
-        }
-        .modal-header{
-            padding:15px;
-            border-bottom: 1px solid #e5e5e5;
-
-        }
-        .modal-body{
-            padding:10px;
-        }
-        .modal-body p{
-            padding:5px;
-            word-break:break-word;
-            line-height:16px;
-            font-size:12px;
-            text-indent:24px;
-            margin:0;
-        }
-    </style>
 </head>
-
-<body>
-    <div class="modal">
-        <div class="modal-header">
-            <h2>注册须知</h2>
-            <a id="close-btn"><i class="fa fa-times fa-2x"></i></a>
+<body>   
+   <style>
+       label{
+           line-height:2.234;
+       }
+       label.text-right{
+           padding-right:0;
+       }
+       form{
+           margin-top:10px;
+       }
+       #get-verification{
+           font-size:10px;
+       }
+      .get-verification-wrap{
+          padding-top:1px;
+          padding-left:0;
+      }
+      .btn-gary{
+          background-color:#ccc;
+          color:#fff;
+      }
+       #get-verification.focus, #get-verification:focus, #get-verification:hover {
+           color: #fff;
+           text-decoration: none;
+           outline:none;
+       }
+       #CheckCode{
+           padding-right:0;
+       }
+   </style>
+    <div class="container">
+        <br />
+        <div class="row">
+            <div class="col-xs-4 col-md-5"></div>
+            <div class="col-xs-4 col-md-2" style="margin:0 auto;"><img class="img-responsive" src="~/Content/images/logo_new.png"></div>
+            <div class="col-xs-4 col-md-5"></div>
         </div>
-        <div class="modal-body">
-            <p>欢迎进入线下促销人员招募系统！</p>
-            <p>1. 请填写正确填写您的真实姓名以及手机号码，并点击获取验证码；输入手机收到的短信验证码以后，点击注册；</p>
-            <p>2. 如果是您的好友推荐您加入的，请填写您好友的推荐码；</p>
-            <p>3. 注册完成后，请填写您的身份证号码，同时选择您可工作区域以及可工作时间；</p>
-            <p>4. 提交信息后，请仔细阅读促销员的使用指南；</p>
-            <p>5. 请耐心等待，我们的督导会尽快电话与您确定工作安排；</p>
-        </div>
-        <a href="javascript:;" id="know-btn">我知道了</a>
+        <h3 class="text-center">注册</h3>
     </div>
-    <div class="bg"></div>
-    <header><h2>注册</h2></header>
-    @using (Html.BeginForm("Recruit_Register", "Seller", FormMethod.Post, new { @id = "register-form" }))
-    {
-        @Html.AntiForgeryToken()
-        @Html.HiddenFor(m=>m.AccessToken)
-        @Html.HiddenFor(m=> m.Open_Id)
-        <ul>
-            <li class="item-content username-content border-bottom">
-                <div class="item-inner">
-                    <div class="item-title col-20">姓名</div>
-                    <div class="item-input col-50">
-                        @Html.TextBoxFor(m=>m.Name, new { placeholder="请输入真实姓名"})
+    <div class="container">
+        @using (Html.BeginForm("Recruit_Register", "Seller", FormMethod.Post, new { @id = "register-form", @class = "form-horizontal" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.AccessToken)
+            @Html.HiddenFor(m => m.Open_Id)
+            <div class="container">
+                <div class="form-group  has-feedback">
+                        <label for="Name" class="col-xs-3   text-right">姓名</label>
+                        <div class="col-xs-9">
+                            @Html.TextBoxFor(m => m.Name, new { placeholder = "请输入真实姓名", @class = "form-control" })
+                        </div>
+                </div>
+                <div class="form-group  has-feedback">
+                    <label for="Mobile" class="col-xs-3  text-right">手机号</label>
+                    <div class="col-xs-9">
+                        @Html.TextBoxFor(m => m.Mobile, new { maxlength = "11", placeholder = "手机号码(11位)", @class = "form-control" })
                     </div>
                 </div>
-            </li>
-            <li class="item-content tel-content border-bottom">
-                <div class="item-inner">
-                    <div class="item-title col-20">手机号</div>
-                    <div class="item-input col-50">
-                        @Html.TextBoxFor(m=>m.Mobile, new { maxlength="11", placeholder= "手机号码(11位)" })
+                <div class="form-group  has-feedback">
+                    <label for="RecommandCode" class="col-xs-3   text-right">推荐码</label>
+                    <div class="col-xs-9">
+                        @Html.TextBoxFor(m => m.RecommandCode, new { placeholder = "输入推荐码(选填)", maxlength = "11", @class = "form-control" })
                     </div>
                 </div>
-            </li>
-            <li class="item-content recommend-content border-bottom">
-                <div class="item-inner">
-                    <div class="item-title col-20">推荐码</div>
-                    <div class="item-input col-50">
-                        @Html.TextBoxFor(m=>m.RecommandCode, new { placeholder= "输入推荐码(选填)", maxlength="6" })
+                <div class="form-group  has-feedback">
+                    <label for="inputPassword3" class="col-xs-3   text-right">验证码</label>
+                    <div class="col-xs-5">
+                        @Html.TextBoxFor(m => m.CheckCode, new { placeholder = "验证码", maxlength = "6", @class = "form-control" })
+                    </div>
+                    <div class="col-xs-4  get-verification-wrap">
+                        <button class="btn btn-primary btn-block" type="button" id="get-verification">获取验证码</button>
                     </div>
                 </div>
-            </li>
-            <li class="item-content verification-content">
-                <div class="item-inner">
-                    <div class="item-title col-20">验证码</div>
-                    <div class="item-input col-40">
-                        @Html.TextBoxFor(m => m.CheckCode, new { placeholder = "输入验证码", maxlength = "6" })
-                    </div>
-                    <a class="item-after border-left col-26" href="javascript:;" id="get-verification">获取验证码</a>
-                    <a class="item-after border-left hidden col-26" href="javascript:;" id="wait-num"><span></span>秒后重发</a>
+                <div class="row">
+                    <div class="col-xs-2"></div>
+                    <div class="col-xs-8"><a href="#" class="btn btn-primary  btn-block" role="button" id="register-btn">成为促销员</a></div>
+                    <div class="col-xs-2"></div>
                 </div>
-            </li>
-        </ul>
-        <a href="javascript:;" id="register-btn" class="btn col-50">成为促销员</a>
-    }
-    <script>
-        /*页面初始化弹出框动画*/
-        $(".modal").animate({
-            top: '10%',
-            speed: "show"
-        });
-        /*页面初始化弹出框关闭按钮点击后动画*/
-        $("#know-btn").on("click", function () {
-            $(".modal").animate({
-                top: '-500%',
-                opacity: '0.5',
-                height: '150px',
-                width: '150px',
-                speed: "show"
-            });
-            $(".bg").addClass("hidden");      //遮罩层隐藏
-        })
-        $("#close-btn").on("click", function () {
-            $(".modal").animate({
-                top: '-500%',
-                opacity: '0.5',
-                height: '150px',
-                width: '150px',
-                speed:"show"
-            });
-            $(".bg").addClass("hidden");      //遮罩层隐藏
-        })
-        /*input获得焦点后清除输入错误警告样式*/
-        $("input").each(function () {
-            $(this).on("focus", function () {
-                $(this).parent().next(".add").remove();
+            </div>
+        }
+    </div>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">注册须知</h4>
+                </div>
+                <div class="modal-body">
+                    <p>欢迎进入线下促销人员招募系统！</p>
+                    <p>1. 请填写正确填写您的真实姓名以及手机号码，并点击获取验证码；输入手机收到的短信验证码以后，点击注册；</p>
+                    <p>2. 如果是您的好友推荐您加入的，请填写您好友的推荐码；</p>
+                    <p>3. 注册完成后，请填写您的身份证号码，同时选择您可工作区域以及可工作时间；</p>
+                    <p>4. 提交信息后，请仔细阅读促销员的使用指南；</p>
+                    <p>5. 请耐心等待，我们的督导会尽快电话与您确定工作安排；</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+        <script>
+            $('#myModal').modal({
             })
-        })
-        var word_type = /^[\u4e00-\u9fa5]{1,6}$/                       //输入姓名正则
-        var tel_type = /^(13[0-9]|14[0-9]|15[0-9]|18[0-9])\d{8}$/      //电话号码正则
-        var recommend_type = /^\d{6}$|^\d{0}$/                         //推荐码正则
-        var verification_type = /^\d{4,6}$/                            //验证码正则
-        /*获取验证码时对填入信息进行验证*/
-        $("#get-verification").on("click", function () {
-            var bool = true;
-            if (!word_type.test($("#Name").val())) {
-                $(".username-content .item-after").remove();
-                $("#Name").parent().after("<div class=\"item-after add\"><i class=\"fa fa-times color-red\" aria-hidden=\"true\"></i></div>");
-                bool = false;
-            } else {
-                $(".username-content .item-after").remove();
-                $("#Name").parent().after("<div class=\"item-after add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></div>");
-            }
-            if (!tel_type.test($("#Mobile").val())) {
-                $(".tel-content .item-after").remove();
-                $("#Mobile").parent().after("<div class=\"item-after add\"><i class=\"fa fa-times color-red\" aria-hidden=\"true\"></i></div>");
-                bool = false;
-            } else {
-                $(".tel-content .item-after").remove();
-                $("#Mobile").parent().after("<div class=\"item-after add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></div>");
-            }
-            if (!recommend_type.test($("#RecommandCode").val())) {
-                $(".recommend-content .item-after").remove();
-                $("#RecommandCode").parent().after("<div class=\"item-after add\"><i class=\"fa fa-times color-red\" aria-hidden=\"true\"></i></div>");
-                bool = false;
-            } else {
-                $(".recommend-content .item-after").remove();
-                $("#RecommandCode").parent().after("<div class=\"item-after add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></div>");
-            }
-            /*填入信息通过后获取短信*/
-            if (bool) {
-                $.ajax({
-                    url: "/Seller/Wx_SendSms",
-                    data: {
-                        mobile: $("#Mobile").val(),
-                        __RequestVerificationToken: $("input[name=__RequestVerificationToken]").val()
-                    },
-                    type: "POST",
-                    success: function (data) {
-                    }
-                });
-                var count = 60;
-                $("#wait-num span").html(count);
-                $("#get-verification").addClass("hidden");
-                $("#wait-num").removeClass("hidden");
-                $("#wait-num").addClass("color-gary");
-                var timer = setInterval(function () {
-                    count--;
-                    $("#wait-num span").html(count);
-                    if (count == 0) {
-                        clearInterval(timer);
-                        $("#get-verification").removeClass("hidden");
-                        $("#wait-num").addClass("hidden");
-                    }
-                }, 1000)
-            }
-        })
-        /*点击提交按钮时验证*/
-        $("#register-btn").on("click", function () {
-            if (!$("#register-btn").hasClass("bg-gary")) {
-                $("#register-btn").addClass("bg-gary");
-                var verification = true;
+            $("input").each(function () {
+                $(this).on("focus", function () {
+                    $("#register-btn").removeClass("btn-default");
+                    $(this).parent().parent().removeClass("has-error");
+                    $(this).parent().parent().removeClass("has-success");
+                    $(".form-control-feedback").remove("span");
+                })
+            })
+            var word_type = /^[\u4e00-\u9fa5]{1,6}$/                                  //输入姓名正则
+            var tel_type = /^(13[0-9]|14[0-9]|15[0-9]|18[0-9])\d{8}$/                 //电话号码正则
+            var recommend_type = /^(13[0-9]|14[0-9]|15[0-9]|18[0-9])\d{8}$|^\d{0}$/   //推荐码正则
+            var verification_type = /^\d{4,6}$/                                       //验证码正则
+            /*获取验证码时对填入信息进行验证*/
+            $("#get-verification").on("click", function () {
+                $(".form-control-feedback").remove("span");
+                var bool = true;
                 if (!word_type.test($("#Name").val())) {
-                    $(".username-content .item-after").remove();
-                    $("#Name").parent().after("<div class=\"item-after add\"><i class=\"fa fa-times color-red\" aria-hidden=\"true\"></i></div>");
-                    $("#register-btn").removeClass("bg-gary");
-                    verification = false;
+                    $("#Name").parent().parent().removeClass("has-success");
+                    $("#Name").parent().parent().addClass("has-error");
+                    $("#Name").after("<span class=\"glyphicon glyphicon-remove form-control-feedback\"></span>");
+                    bool = false;
                 } else {
-                    $(".username-content .item-after").remove();
-                    $("#Name").parent().after("<div class=\"item-after add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></div>");
+                    $("#Name").parent().parent().removeClass("has-error");
+                    $("#Name").parent().parent().addClass("has-success");
+                    $("#Name").after("<span class=\"glyphicon glyphicon-ok form-control-feedback\"></span>");
                 }
                 if (!tel_type.test($("#Mobile").val())) {
-                    $(".tel-content .item-after").remove();
-                    $("#Mobile").parent().after("<div class=\"item-after add\"><i class=\"fa fa-times color-red\" aria-hidden=\"true\"></i></div>");
-                    $("#register-btn").removeClass("bg-gary");
-                    verification = false;
+                    $("#Mobile").parent().parent().removeClass("has-success");
+                    $("#Mobile").parent().parent().addClass("has-error");
+                    $("#Mobile").after("<span class=\"glyphicon glyphicon-remove form-control-feedback\"></span>");
+                    bool = false;
                 } else {
-                    $(".tel-content .item-after").remove();
-                    $("#Mobile").parent().after("<div class=\"item-after add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></div>");
+                    $("#Mobile").parent().parent().removeClass("has-error");
+                    $("#Mobile").parent().parent().addClass("has-success");
+                    $("#Mobile").after("<span class=\"glyphicon glyphicon-ok form-control-feedback\"></span>");
                 }
                 if (!recommend_type.test($("#RecommandCode").val())) {
-                    $(".recommend-content .item-after").remove();
-                    $("#RecommandCode").parent().after("<div class=\"item-after add\"><i class=\"fa fa-times color-red\" aria-hidden=\"true\"></i></div>");
-                    $("#register-btn").removeClass("bg-gary");
-                    verification = false;
+                    $("#RecommandCode").parent().parent().removeClass("has-success");
+                    $("#RecommandCode").parent().parent().addClass("has-error");
+                    $("#RecommandCode").after("<span class=\"glyphicon glyphicon-remove form-control-feedback\"></span>");
+                    bool = false;
+                } else {
+                    $("#RecommandCode").parent().parent().removeClass("has-error");
+                    $("#RecommandCode").parent().parent().addClass("has-success");
+                    $("#RecommandCode").after("<span class=\"glyphicon glyphicon-ok form-control-feedback\"></span>");
+                }
+                /*填入信息通过后获取短信*/
+                if (bool) {
+                    $.ajax({
+                        url: "/Seller/Wx_SendSms",
+                        data: {
+                            mobile: $("#Mobile").val(),
+                            __RequestVerificationToken: $("input[name=__RequestVerificationToken]").val()
+                        },
+                        type: "POST",
+                        success: function (data) {
+                        }
+                    });
+                    if ($("#get-verification").hasClass("btn-primary")) {
+                        $("#get-verification").removeClass("btn-primary")
+                        $("#get-verification").addClass("btn-gary")
+                        $("#get-verification").html("已发送");
+                        setTimeout(function () {
+                            var count = 60;
+                            var inner = "秒后重发";
+                            var timer = setInterval(function () {
+                                count--;
+                                var counthtml = count + inner;
+                                $("#get-verification").html(counthtml);
+                                if (count == 0) {
+                                    clearInterval(timer);
+                                    $("#get-verification").addClass("btn-primary")
+                                    $("#get-verification").removeClass("btn-gary")
+                                    $("#get-verification").html("获取验证码");
+                                }
+                            }, 1000)
+                        }, 500)
+                    }                 
+                }
+            })
+            /*点击提交按钮时验证*/
+            $("#register-btn").on("click", function () {
+                if (!$("#register-btn").hasClass("btn-default")) {
+                    $("#register-btn").addClass("btn-default");
+                    var verification = true;
+                    if (!word_type.test($("#Name").val())) {
+                        $("#Name").parent().parent().removeClass("has-success");
+                        $("#Name").parent().parent().addClass("has-error");
+                        $("#Name").after("<span class=\"glyphicon glyphicon-remove form-control-feedback\"></span>");
+                        $("#register-btn").removeClass("btn-default");
+                        verification = false;
+                    } else {
+                        $("#Name").parent().parent().removeClass("has-error");
+                        $("#Name").parent().parent().addClass("has-success");
+                        $("#Name").after("<span class=\"glyphicon glyphicon-ok form-control-feedback\"></span>");
+                    }
+                    if (!tel_type.test($("#Mobile").val())) {
+                        $("#Mobile").parent().parent().removeClass("has-success");
+                        $("#Mobile").parent().parent().addClass("has-error");
+                        $("#Mobile").after("<span class=\"glyphicon glyphicon-remove form-control-feedback\"></span>");
+                        $("#register-btn").removeClass("btn-default");
+                        verification = false;
+                    } else {
+                        $("#Mobile").parent().parent().removeClass("has-error");
+                        $("#Mobile").parent().parent().addClass("has-success");
+                        $("#Mobile").after("<span class=\"glyphicon glyphicon-ok form-control-feedback\"></span>");
+                    }
+                    if (!recommend_type.test($("#RecommandCode").val())) {
+                        $("#RecommandCode").parent().parent().removeClass("has-success");
+                        $("#RecommandCode").parent().parent().addClass("has-error");
+                        $("#RecommandCode").after("<span class=\"glyphicon glyphicon-remove form-control-feedback\"></span>");
+                        $("#register-btn").removeClass("btn-default");
+                        verification = false;
 
-                } else {
-                    $(".recommend-content .item-after").remove();
-                    $("#RecommandCode").parent().after("<div class=\"item-after add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></div>");
+                    } else {
+                        $("#RecommandCode").parent().parent().removeClass("has-error");
+                        $("#RecommandCode").parent().parent().addClass("has-success");
+                        $("#RecommandCode").after("<span class=\"glyphicon glyphicon-ok form-control-feedback\"></span>");
+                    }
+                    if (!verification_type.test($("#CheckCode").val())) {
+                        $("#CheckCode").parent().parent().removeClass("has-success");
+                        $("#CheckCode").parent().parent().addClass("has-error");
+                        $("#CheckCode").after("<span class=\"glyphicon glyphicon-remove form-control-feedback\"></span>");
+                        $("#register-btn").removeClass("btn-default");
+                    } else {
+                        $("#CheckCode").parent().parent().removeClass("has-error");
+                        $("#CheckCode").parent().parent().addClass("has-success");
+                        $("#CheckCode").after("<span class=\"glyphicon glyphicon-ok form-control-feedback\"></span>");
+                    }
+                    /*验证通过提交表单*/
+                    if (verification) {
+                        setTimeout(function () {
+                            $("#register-form").submit();
+                        }, 1e3)
+                    }
                 }
-                if (!verification_type.test($("#CheckCode").val())) {
-                    $(".verification-content .verification-error").remove();
-                    $("#CheckCode").parent().after("<a class=\"verification-error add\"><i class=\"fa fa-times color-red\" aria-hidden=\"true\"></i></a>");
-                    verification = false;
-                    $("#register-btn").removeClass("bg-gary");
-                } else {
-                    $(".verification-content .verification-error").remove();
-                    $("#CheckCode").parent().after("<a class=\"verification-error add\"><i class=\"fa fa-check color-green\" aria-hidden=\"true\"></i></a>");
-                }
-                /*验证通过提交表单*/
-                if (verification) {
-                    setTimeout(function () {
-                        $("#register-form").submit();
-                    }, 1e3)
-                }
-            }
-           
-        })
-    </script>
+
+            })
+        </script>
 </body>
 </html>
