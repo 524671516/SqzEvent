@@ -14,53 +14,61 @@
     <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
+    <style>
+        label {
+            line-height: 2.234;
+        }
+
+        form {
+            margin-top: 10px;
+        }
+
+        .inputwrap {
+            padding-left: 0;
+        }
+
+        .selectwrap {
+            padding: 0;
+        }
+
+        .border-none {
+            border: 1px solid #fff;
+        }
+
+        .select.form-control {
+            appearance: none;
+            -moz-appearance: none;
+            -webkit-appearance: none;
+            padding: 0;
+            outline: none;
+            text-decoration: none;
+            background-color: #fff;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+        }
+
+        .btn-gary {
+            border: 1px solid #ccc;
+            background-color: #fff;
+            color: #000;
+        }
+
+        .have-error {
+            border: 1px solid #a94442;
+        }
+
+        .have-success {
+            border: 1px solid #3c763d;
+        }
+
+        .btn-gary.active, .btn-gary:active {
+            color: #fff;
+            background-color: #286090;
+            outline: none;
+        }
+    </style>
 </head>
 <body>
-    <style>
-        label{
-           line-height:2.234;
-       }
-        form{
-           margin-top:10px;
-       }
-        .inputwrap{
-           padding-left:0;
-        }
-        .selectwrap{
-            padding:0;
-        }
-        .border-none{
-            border:1px solid #fff;
-        }
-        .select.form-control {
-            appearance:none;   
-  -moz-appearance:none;   
-  -webkit-appearance:none;   
-            padding: 0;
-            outline:none;
-            text-decoration:none;
-            background-color:#fff;
-            -webkit-box-shadow: none;
-            box-shadow:none;
-        }
-        .btn-gary{
-            border:1px solid #ccc;
-            background-color:#fff;
-            color:#000;
-        }
-        .have-error{
-            border:1px solid #a94442;
-        }
-        .have-success{
-            border:1px solid #3c763d;
-        }
-        .btn-gary.active, .btn-gary:active{
-           color: #fff;
-           background-color: #286090;
-           outline:none;
-        }
-        
-    </style>
     <div class="container">
         <br />
         <div class="row">
