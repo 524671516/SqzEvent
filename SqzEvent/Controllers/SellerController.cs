@@ -2516,6 +2516,7 @@ namespace SqzEvent.Controllers
                 return PartialView(null);
             }
         }
+
         // 更换账户（商家以及店铺的切换）
         public PartialViewResult Seller_ChangeAccount()
         {
@@ -3940,6 +3941,12 @@ namespace SqzEvent.Controllers
                     {
                         var user = new ApplicationUser { UserName = model.Mobile, NickName = model.Name, Email = model.Open_Id, PhoneNumber = model.Mobile, AccessToken = model.AccessToken, OpenId = model.Open_Id, DefaultSystemId = 1, OffSalesSystem = "1" };
                         var result = await UserManager.CreateAsync(user, model.Open_Id);
+                        var recommand_user = await UserManager.FindByNameAsync(model.RecommandCode);
+                        string recommand_user_id = null;
+                        if (recommand_user != null)
+                        {
+                            recommand_user_id = recommand_user.Id;
+                        }
                         if (result.Succeeded)
                         {
                             smsRecord.Status = true;
@@ -3953,7 +3960,7 @@ namespace SqzEvent.Controllers
                                     Mobile = model.Mobile,
                                     UserName = model.Mobile,
                                     Status = 0,
-                                    RecommandSellerId = Convert.ToInt32(model.RecommandCode)
+                                    RecommandUserId = recommand_user_id
                                 };
                                 offlineDB.Off_Recruit.Add(recruit);
                                 await offlineDB.SaveChangesAsync();
@@ -4004,13 +4011,19 @@ namespace SqzEvent.Controllers
             if (ModelState.IsValid)
             {
                 var user = UserManager.FindByEmail(model.Open_Id);
+                var recommand_user = await UserManager.FindByNameAsync(model.RecommandCode);
+                string recommand_user_id = null;
+                if (recommand_user != null)
+                {
+                    recommand_user_id = recommand_user.Id;
+                }
                 Off_Recruit recruit = new Off_Recruit()
                 {
                     UserName = user.UserName,
                     Name = model.Name,
                     Mobile = user.PhoneNumber,
                     Status = 0,
-                    RecommandSellerId = Convert.ToInt32(model.RecommandCode)    // 后期加入解码方案
+                    RecommandUserId = recommand_user_id    // 后期加入解码方案
                 };
                 offlineDB.Off_Recruit.Add(recruit);
                 await offlineDB.SaveChangesAsync();

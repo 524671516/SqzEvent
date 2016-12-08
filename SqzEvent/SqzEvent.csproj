@@ -538,6 +538,7 @@
     <Content Include="Views\QualityControl\Manager_Login.cshtml" />
     <Content Include="Views\QualityControl\Error.cshtml" />
     <Content Include="Views\QualityControl\NotFound.cshtml" />
+    <Content Include="Views\Seller\Manager_Home.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

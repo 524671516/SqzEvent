@@ -147,6 +147,21 @@ $$("#manager_userpanel").on("click", ".manager-photolist", function () {
     myPhotoBrowserPopupDark.open();
 });
 
+/*************** 促销员招募 **************/
+$$("#manager_userpanel").on("click", ".manager-recruitphoto", function () {
+    var photo = [{
+        url: "https://cdn2.shouquanzhai.cn/SellerIntro/p-qrcode-recruit.jpg"
+    }];
+    var myPhotoBrowserPopupDark = myApp.photoBrowser({
+        photos: photo,
+        theme: "dark",
+        type: "standalone",
+        zoom: false,
+        backLinkText: "关闭"
+    });
+    myPhotoBrowserPopupDark.open();
+});
+
 /*************** 督导签到 *************/
 $$(document).on("pageInit", ".page[data-page='manager-task']", function (e) {
     $$.ajax({

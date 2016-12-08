@@ -136,7 +136,7 @@ namespace SqzEvent.Models
         public string Mobile { get; set; }
 
         [Required(ErrorMessage = "姓名不能为空")]
-        [StringLength(6, ErrorMessage = ("姓名长度不得超过6个字符"))]
+        [StringLength(11, ErrorMessage = ("姓名长度不得超过11个字符"))]
         [Display(Name = "姓名")]
         public string Name { get; set; }
 
@@ -162,7 +162,7 @@ namespace SqzEvent.Models
         [Display(Name = "姓名")]
         public string Name { get; set; }
 
-        [StringLength(6, ErrorMessage = "字符长度不得超过6个字符")]
+        [StringLength(11, ErrorMessage = "字符长度不得超过11个字符")]
         [Display(Name = "推荐码")]
         public string RecommandCode { get; set; }
 

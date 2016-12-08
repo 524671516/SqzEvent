@@ -1156,7 +1156,8 @@ namespace SqzEvent.Models
         [StringLength(64)]
         public string IdNumber { get; set; }
 
-        public int? RecommandSellerId { get; set; }
+        [StringLength(128)]
+        public string RecommandUserId { get; set; }
 
         public bool Reward { get; set; }
     }
