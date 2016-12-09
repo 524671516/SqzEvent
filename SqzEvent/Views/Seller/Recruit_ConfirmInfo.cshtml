@@ -87,7 +87,7 @@
                 <div class="form-group  has-feedback">
                     <label for="IdNumber" class="col-xs-3  text-right inputwrap">身份证</label>
                     <div class="col-xs-9 selectwrap">
-                        <input type="text" name="IdNumber" placeholder="请输入身份证号码" id="IdNumber" class="form-control">
+                        <input type="text" name="IdNumber" placeholder="请输入身份证号码(选填)" id="IdNumber" class="form-control">
                     </div>
                 </div>
                 <div class="form-group  has-feedback">
@@ -216,7 +216,7 @@
                 }
             });
         });
-        var id_type = /(^\d{18}$)|(^\d{15}$)|(^\d{17}(\d|X|x)$)/  //身份证正则
+        var id_type = /(^\d{18}$)|(^\d{15}$)|(^\d{17}(\d|X|x)$|^\d{0}$)/  //身份证正则
         /*点击提交按钮时验证*/
         $("#improve-btn").on("click", function () {
             if (!$("#improve-btn").hasClass("btn-default")) {

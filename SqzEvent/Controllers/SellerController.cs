@@ -2403,6 +2403,7 @@ namespace SqzEvent.Controllers
         }
 
         // 查看招募促销员
+        [Authorize(Roles ="Manager")]
         public ActionResult Manager_RecruitList()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -2414,10 +2415,30 @@ namespace SqzEvent.Controllers
         }
 
         // 招募促销员详细信息
+        [Authorize(Roles = "Manager")]
         public ActionResult Manager_RecruitDetails(int rid)
         {
             var recruit = offlineDB.Off_Recruit.SingleOrDefault(m => m.Id == rid);
             return PartialView(recruit);
+        }
+
+        // 绑定招募的促销员
+        [Authorize(Roles = "Manager")]
+        public ActionResult Manager_RecruitBind(int rid)
+        {
+            var recruit = offlineDB.Off_Recruit.SingleOrDefault(m => m.Id == rid);
+            var user = UserManager.FindById(User.Identity.GetUserId());
+            var manager = offlineDB.Off_StoreManager.SingleOrDefault(m => m.UserName == user.UserName && m.Off_System_Id == user.DefaultSystemId);
+            var storelist = manager.Off_Store;
+            ViewBag.StoreList = storelist;
+            return PartialView(recruit);
+        }
+
+        [Authorize(Roles = "Manager")]
+        [ValidateAntiForgeryToken, HttpPost]
+        public ContentResult Manager_RecruitBind(FormCollection form)
+        {
+            return Content("SUCCESS");
         }
 
         /************ 促销员 ************/

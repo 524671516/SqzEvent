@@ -1,0 +1,7 @@
+﻿@model SqzEvent.Models.Off_Recruit
+
+@Html.DropDownList("storename", ViewBag.StoreList as SelectList, new { })
+
+@Html.Encode(Model.Name)
+
+@Html.HiddenFor(m => m.Id);
