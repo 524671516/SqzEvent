@@ -2427,17 +2427,54 @@ namespace SqzEvent.Controllers
         public ActionResult Manager_RecruitBind(int rid)
         {
             var recruit = offlineDB.Off_Recruit.SingleOrDefault(m => m.Id == rid);
+            Wx_ManagerRecruitBindViewModel model = new Wx_ManagerRecruitBindViewModel()
+            {
+                IdNumber = recruit.IdNumber,
+                Mobile = recruit.Mobile,
+                RecruitId = rid
+            };
             var user = UserManager.FindById(User.Identity.GetUserId());
             var manager = offlineDB.Off_StoreManager.SingleOrDefault(m => m.UserName == user.UserName && m.Off_System_Id == user.DefaultSystemId);
             var storelist = manager.Off_Store;
             ViewBag.StoreList = storelist;
-            return PartialView(recruit);
+            return PartialView(model);
         }
 
         [Authorize(Roles = "Manager")]
         [ValidateAntiForgeryToken, HttpPost]
-        public ContentResult Manager_RecruitBind(FormCollection form)
+        public async Task<ContentResult> Manager_RecruitBind(Wx_ManagerRecruitBindViewModel model)
         {
+            var user = UserManager.FindById(User.Identity.GetUserId());
+            // 新建促销员
+            var recruit = offlineDB.Off_Recruit.SingleOrDefault(m => m.Id == model.RecruitId);
+            Off_Seller seller = new Off_Seller()
+            {
+                Off_System_Id = user.DefaultSystemId,
+                Name = model.Name,
+                Mobile = model.Mobile,
+                IdNumber = model.IdNumber,
+                StoreId = model.StoreId
+            };
+            offlineDB.Off_Seller.Add(seller);
+            await offlineDB.SaveChangesAsync();
+            seller = offlineDB.Off_Seller.SingleOrDefault(m => m.Mobile == model.Mobile);
+            // 绑定
+            Off_Membership_Bind omb = new Off_Membership_Bind()
+            {
+                Mobile = seller.Mobile,
+                ApplicationDate = DateTime.Now,
+                Bind = true,
+                Off_Seller_Id = seller.Id,
+                NickName = seller.Name,
+                Off_System_Id = user.DefaultSystemId,
+                Recruit = true,
+                UserName = seller.Mobile,
+                Type = 1
+            };
+            offlineDB.Off_Membership_Bind.Add(omb);
+            recruit.Status = 1;
+            offlineDB.Entry(recruit).State = System.Data.Entity.EntityState.Modified;
+            await offlineDB.SaveChangesAsync();
             return Content("SUCCESS");
         }
 

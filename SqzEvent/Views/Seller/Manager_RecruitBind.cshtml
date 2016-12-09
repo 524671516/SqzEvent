@@ -1,7 +1,7 @@
-﻿@model SqzEvent.Models.Off_Recruit
+﻿@model SqzEvent.Models.Wx_ManagerRecruitBindViewModel
 
-@Html.DropDownList("storename", ViewBag.StoreList as SelectList, new { })
+@Html.DropDownListFor(m => m.StoreId, ViewBag.StoreList as SelectList, new { })
 
 @Html.Encode(Model.Name)
 
-@Html.HiddenFor(m => m.Id);
+@Html.HiddenFor(m => m.RecruitId);

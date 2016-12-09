@@ -126,6 +126,18 @@ namespace SqzEvent.Models
         public int? MinStorage { get; set; }
         public string StoreName { get; set; }
     }
+    public class Wx_ManagerRecruitBindViewModel
+    {
+        public int StoreId { get; set; }
+
+        public string Name { get; set; }
+
+        public int RecruitId { get; set; }
+
+        public string Mobile { get; set; }
+
+        public string IdNumber { get; set; }
+    }
 
     public class Wx_RecruitViewModel
     {
