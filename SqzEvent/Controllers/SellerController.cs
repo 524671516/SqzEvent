@@ -4054,6 +4054,7 @@ namespace SqzEvent.Controllers
                     Mobile = user.PhoneNumber,
                     Status = 0,
                     ApplyTime = DateTime.Now,
+                    Off_System_Id = user.DefaultSystemId,
                     RecommandUserId = recommand_user_id    // 后期加入解码方案
 
                 };

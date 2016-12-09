@@ -146,7 +146,6 @@ $$("#manager_userpanel").on("click", ".manager-photolist", function () {
     });
     myPhotoBrowserPopupDark.open();
 });
-
 /*************** 促销员招募 **************/
 $$("#manager_userpanel").on("click", ".manager-recruitphoto", function () {
     var photo = [{
@@ -161,7 +160,30 @@ $$("#manager_userpanel").on("click", ".manager-recruitphoto", function () {
     });
     myPhotoBrowserPopupDark.open();
 });
-
+/************* 促销员注册 ************/
+$$(document).on("pageInit", ".page[data-page='manager-recruitlist']", function (e) {
+    var mySearchbar = myApp.searchbar('.searchbar', {
+        searchList: '.list-block-search',
+        searchIn: '.item-title'
+    });
+});
+$$(document).on("pageInit", ".page[data-page='manager-recruitdetails']", function (e) {
+    var worktype = $$("#WorkType").val()
+    var weekday = worktype.substr(worktype.indexOf(":") + 1, 1);
+    var weekend = worktype.substr(worktype.indexOf(":", worktype.indexOf(":") + 1) + 1, 1);
+    var holiday = worktype.substr(worktype.indexOf(":", worktype.indexOf(":", worktype.indexOf(":") + 1) + 1) + 1, 1)
+    $$("#weekday").attr("data-checked", weekday)
+    $$("#weekend").attr("data-checked", weekend)
+    $$("#holiday").attr("data-checked", holiday)
+    $$("input").each(function () {
+        if ($(this).attr("data-checked") == "T") {
+            $(this).prop("checked", "checked");
+        }
+    });
+    console.log(weekday);
+    console.log(weekend);
+    console.log(holiday);
+});
 /*************** 督导签到 *************/
 $$(document).on("pageInit", ".page[data-page='manager-task']", function (e) {
     $$.ajax({

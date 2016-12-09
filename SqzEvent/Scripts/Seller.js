@@ -683,7 +683,6 @@ $$(document).on("pageInit", ".page[data-page='seller-statistic']", function () {
         }]
     });
 });
-
 //辅助程序
 //上传位置信息
 function uploadLocation(btn_id, location_id) {

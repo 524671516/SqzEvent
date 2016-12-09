@@ -1,100 +1,75 @@
 ﻿@model SqzEvent.Models.Off_Recruit
-
-<div>
-    <h4>Off_Recruit</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.UserName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.UserName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Mobile)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Mobile)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Area)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Area)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.WorkType)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.WorkType)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.IdNumber)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.IdNumber)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.RecommandUserId)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.RecommandUserId)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Reward)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Reward)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ApplyTime)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ApplyTime)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Off_System_Id)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Off_System_Id)
-        </dd>
-
-    </dl>
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="left">
+            <a href="#" class="back link">
+                <i class="icon icon-back" aria-hidden="true"></i>
+                <span>返回</span>
+            </a>
+        </div>
+        <div class="center sliding"><strong>人员信息</strong></div>
+        <div class="right">
+            <a href="javascript:;" class="link" id="recruitdetails-submit">绑定</a>
+        </div>
+    </div>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+<div class="pages">
+    <div class="page" data-page="manager-recruitdetails">
+        <div class="page-content">
+            @Html.HiddenFor(m => m.WorkType)
+            <div class="content-block-title">基本资料</div>
+            <div class="list-block">
+                <ul>
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">注册时间</div>
+                            <div class="item-after">@Html.Encode(Model.ApplyTime)</div>
+                        </div>
+                    </li>
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">姓名</div>
+                            <div class="item-after">@Html.Encode(Model.Name)</div>
+                        </div>
+                    </li>
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">电话号码</div>
+                            <div class="item-after">@Html.Encode(Model.Mobile)</div>
+                        </div>
+                    </li>
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">地区</div>
+                            <div class="item-after">@Html.Encode(Model.Area)</div>
+                        </div>
+                    </li>
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">时间</div>
+                            <div class="item-after">
+                                <input type="checkbox" name="my-checkbox" disabled data-checked="" id="weekend">周末
+                                <input type="checkbox" name="my-checkbox" disabled data-checked="" id="holiday">节假日
+                                <input type="checkbox" name="my-checkbox" disabled data-checked="" id="weekday">工作日
+                            </div>
+                        </div>
+                    </li>
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">身份证号码</div>
+                            <div class="item-after">@Html.Encode(Model.IdNumber)</div>
+                        </div>
+                    </li>
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">推荐码</div>
+                            <div class="item-after">@Html.Encode(Model.RecommandUserId)</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+   
