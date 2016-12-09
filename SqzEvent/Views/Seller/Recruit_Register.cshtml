@@ -143,71 +143,74 @@
         var verification_type = /^\d{4,6}$/                                       //验证码正则
         /*获取验证码时对填入信息进行验证*/
         $("#get-verification").on("click", function () {
-            $(".form-control-feedback").remove("span");
-            var bool = true;
-            if (!word_type.test($("#Name").val())) {
-                $("#Name").parent().parent().removeClass("has-success");
-                $("#Name").parent().parent().addClass("has-error");
-                $("#Name").after("<span class=\"glyphicon glyphicon-remove form-control-feedback\"></span>");
-                bool = false;
-            } else {
-                $("#Name").parent().parent().removeClass("has-error");
-                $("#Name").parent().parent().addClass("has-success");
-                $("#Name").after("<span class=\"glyphicon glyphicon-ok form-control-feedback\"></span>");
-            }
-            if (!tel_type.test($("#Mobile").val())) {
-                $("#Mobile").parent().parent().removeClass("has-success");
-                $("#Mobile").parent().parent().addClass("has-error");
-                $("#Mobile").after("<span class=\"glyphicon glyphicon-remove form-control-feedback\"></span>");
-                bool = false;
-            } else {
-                $("#Mobile").parent().parent().removeClass("has-error");
-                $("#Mobile").parent().parent().addClass("has-success");
-                $("#Mobile").after("<span class=\"glyphicon glyphicon-ok form-control-feedback\"></span>");
-            }
-            if (!recommend_type.test($("#RecommandCode").val())) {
-                $("#RecommandCode").parent().parent().removeClass("has-success");
-                $("#RecommandCode").parent().parent().addClass("has-error");
-                $("#RecommandCode").after("<span class=\"glyphicon glyphicon-remove form-control-feedback\"></span>");
-                bool = false;
-            } else {
-                $("#RecommandCode").parent().parent().removeClass("has-error");
-                $("#RecommandCode").parent().parent().addClass("has-success");
-                $("#RecommandCode").after("<span class=\"glyphicon glyphicon-ok form-control-feedback\"></span>");
-            }
-            /*填入信息通过后获取短信*/
-            if (bool) {
-                $.ajax({
-                    url: "/Seller/Wx_SendSms",
-                    data: {
-                        mobile: $("#Mobile").val(),
-                        __RequestVerificationToken: $("input[name=__RequestVerificationToken]").val()
-                    },
-                    type: "POST",
-                    success: function (data) {
+            if (!$("#get-verification").hasClass("btn-gary")) {
+                $(".form-control-feedback").remove("span");
+                var bool = true;
+                if (!word_type.test($("#Name").val())) {
+                    $("#Name").parent().parent().removeClass("has-success");
+                    $("#Name").parent().parent().addClass("has-error");
+                    $("#Name").after("<span class=\"glyphicon glyphicon-remove form-control-feedback\"></span>");
+                    bool = false;
+                } else {
+                    $("#Name").parent().parent().removeClass("has-error");
+                    $("#Name").parent().parent().addClass("has-success");
+                    $("#Name").after("<span class=\"glyphicon glyphicon-ok form-control-feedback\"></span>");
+                }
+                if (!tel_type.test($("#Mobile").val())) {
+                    $("#Mobile").parent().parent().removeClass("has-success");
+                    $("#Mobile").parent().parent().addClass("has-error");
+                    $("#Mobile").after("<span class=\"glyphicon glyphicon-remove form-control-feedback\"></span>");
+                    bool = false;
+                } else {
+                    $("#Mobile").parent().parent().removeClass("has-error");
+                    $("#Mobile").parent().parent().addClass("has-success");
+                    $("#Mobile").after("<span class=\"glyphicon glyphicon-ok form-control-feedback\"></span>");
+                }
+                if (!recommend_type.test($("#RecommandCode").val())) {
+                    $("#RecommandCode").parent().parent().removeClass("has-success");
+                    $("#RecommandCode").parent().parent().addClass("has-error");
+                    $("#RecommandCode").after("<span class=\"glyphicon glyphicon-remove form-control-feedback\"></span>");
+                    bool = false;
+                } else {
+                    $("#RecommandCode").parent().parent().removeClass("has-error");
+                    $("#RecommandCode").parent().parent().addClass("has-success");
+                    $("#RecommandCode").after("<span class=\"glyphicon glyphicon-ok form-control-feedback\"></span>");
+                }
+                /*填入信息通过后获取短信*/
+                if (bool) {
+                    $.ajax({
+                        url: "/Seller/Wx_SendSms",
+                        data: {
+                            mobile: $("#Mobile").val(),
+                            __RequestVerificationToken: $("input[name=__RequestVerificationToken]").val()
+                        },
+                        type: "POST",
+                        success: function (data) {
+                        }
+                    });
+                    if ($("#get-verification").hasClass("btn-primary")) {
+                        $("#get-verification").removeClass("btn-primary")
+                        $("#get-verification").addClass("btn-gary")
+                        $("#get-verification").html("已发送");
+                        setTimeout(function () {
+                            var count = 60;
+                            var inner = "秒后重发";
+                            var timer = setInterval(function () {
+                                count--;
+                                var counthtml = count + inner;
+                                $("#get-verification").html(counthtml);
+                                if (count == 0) {
+                                    clearInterval(timer);
+                                    $("#get-verification").addClass("btn-primary")
+                                    $("#get-verification").removeClass("btn-gary")
+                                    $("#get-verification").html("获取验证码");
+                                }
+                            }, 1000)
+                        }, 500)
                     }
-                });
-                if ($("#get-verification").hasClass("btn-primary")) {
-                    $("#get-verification").removeClass("btn-primary")
-                    $("#get-verification").addClass("btn-gary")
-                    $("#get-verification").html("已发送");
-                    setTimeout(function () {
-                        var count = 60;
-                        var inner = "秒后重发";
-                        var timer = setInterval(function () {
-                            count--;
-                            var counthtml = count + inner;
-                            $("#get-verification").html(counthtml);
-                            if (count == 0) {
-                                clearInterval(timer);
-                                $("#get-verification").addClass("btn-primary")
-                                $("#get-verification").removeClass("btn-gary")
-                                $("#get-verification").html("获取验证码");
-                            }
-                        }, 1000)
-                    }, 500)
                 }
             }
+                      
         })
         /*点击提交按钮时验证*/
         $("#register-btn").on("click", function () {
