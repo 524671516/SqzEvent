@@ -154,8 +154,8 @@
         /*下拉选择被点击后清除输入错误警告样式*/
         $("select").each(function () {
             $(this).on("click", function () {
-                $(this).parent().parent().removeClass("has-error");
-                $(this).parent().parent().removeClass("has-success");
+                $(this).parent().parent().parent().parent().removeClass("has-error");
+                $(this).parent().parent().parent().parent().removeClass("has-success");
             })
         })
         /*页面初始化获得所有省信息*/
