@@ -180,9 +180,49 @@ $$(document).on("pageInit", ".page[data-page='manager-recruitdetails']", functio
             $(this).prop("checked", "checked");
         }
     });
-    console.log(weekday);
-    console.log(weekend);
-    console.log(holiday);
+});
+$$(document).on("pageInit", ".page[data-page='manager-recruitbind']", function (e) {
+    $$("#recruitbind-submit").on("click", function () {
+        if (!$$("#recruitbind-submit").hasClass("color-gray")) {
+            $("#recruitbind-submit").prop("disabled", true).addClass("color-gray");
+            myApp.showIndicator();
+            setTimeout(function () {
+                myApp.hideIndicator();
+            }, 5e3);
+            if ($$("#StoreId").val() == "") {
+                myApp.alert("请选择店铺");
+                myApp.hideIndicator();
+                $("#recruitbind-submit").prop("disabled", false).removeClass("color-gray");
+            } else {
+                setTimeout(function () {
+                    //$$("#managerreport-form").submit();
+                    $("#recruitbind-form").ajaxSubmit({
+                        success: function (data) {
+                            if (data == "SUCCESS") {
+                                myApp.hideIndicator();
+                                mainView.router.back();
+                                myApp.addNotification({
+                                    title: "通知",
+                                    message: "表单提交成功"
+                                });
+                                setTimeout(function () {
+                                    //refresh_mainpanel();
+                                    myApp.closeNotification(".notifications");
+                                }, 2e3);
+                            } else {
+                                myApp.hideIndicator();
+                                $("#recruitbind-submit").prop("disabled", true).addClass("color-gray");
+                                myApp.addNotification({
+                                    title: "通知",
+                                    message: "表单提交失败"
+                                });
+                            }
+                        }
+                    });
+                }, 500);
+            }
+        }
+    });
 });
 /*************** 督导签到 *************/
 $$(document).on("pageInit", ".page[data-page='manager-task']", function (e) {

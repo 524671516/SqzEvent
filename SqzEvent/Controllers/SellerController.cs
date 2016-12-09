@@ -2431,12 +2431,13 @@ namespace SqzEvent.Controllers
             {
                 IdNumber = recruit.IdNumber,
                 Mobile = recruit.Mobile,
+                Name = recruit.Name, 
                 RecruitId = rid
             };
             var user = UserManager.FindById(User.Identity.GetUserId());
             var manager = offlineDB.Off_StoreManager.SingleOrDefault(m => m.UserName == user.UserName && m.Off_System_Id == user.DefaultSystemId);
             var storelist = manager.Off_Store;
-            ViewBag.StoreList = storelist;
+            ViewBag.StoreList = new SelectList(storelist, "Id", "StoreName");
             return PartialView(model);
         }
 
