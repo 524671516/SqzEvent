@@ -204,7 +204,7 @@ namespace SqzEvent.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Wx_SendSms(string mobile)
         {
-            if (Regex.IsMatch(mobile, "1[3|5|7|8|][0-9]{9}"))
+            if (Regex.IsMatch(mobile, "1[3|4|5|7|8|][0-9]{9}"))
             {
                 string validateCode = CommonUtilities.generateDigits(6);
                 SMSRecord record = new SMSRecord()

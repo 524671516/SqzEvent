@@ -354,7 +354,7 @@ namespace SqzEvent.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Wx_SendSms(string mobile)
         {
-            if (System.Text.RegularExpressions.Regex.IsMatch(mobile, "1[3|5|7|8|][0-9]{9}"))
+            if (System.Text.RegularExpressions.Regex.IsMatch(mobile, "1[3|4|5|7|8|][0-9]{9}"))
             {
                 string validateCode = CommonUtilities.generateDigits(6);
                 SMSRecord record = new SMSRecord()
@@ -2402,6 +2402,23 @@ namespace SqzEvent.Controllers
             return PartialView(tasklist);
         }
 
+        // 查看招募促销员
+        public ActionResult Manager_RecruitList()
+        {
+            var user = UserManager.FindById(User.Identity.GetUserId());
+            var list = from m in offlineDB.Off_Recruit
+                       where m.Status == 0 && m.Off_System_Id == user.DefaultSystemId
+                       orderby m.ApplyTime descending
+                       select m;
+            return PartialView(list);
+        }
+
+        // 招募促销员详细信息
+        public ActionResult Manager_RecruitDetails(int rid)
+        {
+            var recruit = offlineDB.Off_Recruit.SingleOrDefault(m => m.Id == rid);
+            return PartialView(recruit);
+        }
 
         /************ 促销员 ************/
         // 首页
@@ -3902,6 +3919,7 @@ namespace SqzEvent.Controllers
             Wx_RecruitViewModel model = new Wx_RecruitViewModel();
             model.AccessToken = accessToken;
             model.Open_Id = open_id;
+            model.SystemId = systemid;
             return View(model);
         }
         [AllowAnonymous]
@@ -3943,10 +3961,13 @@ namespace SqzEvent.Controllers
                         var result = await UserManager.CreateAsync(user, model.Open_Id);
                         
                         string recommand_user_id = null;
-                        var recommand_user = await UserManager.FindByNameAsync(model.RecommandCode);
-                        if (recommand_user != null)
+                        if (model.RecommandCode != null)
                         {
-                            recommand_user_id = recommand_user.Id;
+                            var recommand_user = await UserManager.FindByNameAsync(model.RecommandCode);
+                            if (recommand_user != null)
+                            {
+                                recommand_user_id = recommand_user.Id;
+                            }
                         }
                         if (result.Succeeded)
                         {
@@ -3961,7 +3982,9 @@ namespace SqzEvent.Controllers
                                     Mobile = model.Mobile,
                                     UserName = model.Mobile,
                                     Status = 0,
-                                    RecommandUserId = recommand_user_id
+                                    RecommandUserId = recommand_user_id,
+                                    ApplyTime = DateTime.Now,
+                                    Off_System_Id = model.SystemId
                                 };
                                 offlineDB.Off_Recruit.Add(recruit);
                                 await offlineDB.SaveChangesAsync();
@@ -4001,6 +4024,9 @@ namespace SqzEvent.Controllers
             else
             {
                 Wx_RecruitForceViewModel model = new Wx_RecruitForceViewModel();
+                model.Open_Id = open_id;
+                model.SystemId = systemid;
+                model.AccessToken = accessToken;
                 return View(model);
             }
         }
@@ -4012,11 +4038,14 @@ namespace SqzEvent.Controllers
             if (ModelState.IsValid)
             {
                 var user = UserManager.FindByEmail(model.Open_Id);
-                var recommand_user = await UserManager.FindByNameAsync(model.RecommandCode);
                 string recommand_user_id = null;
-                if (recommand_user != null)
+                if (model.RecommandCode != null)
                 {
-                    recommand_user_id = recommand_user.Id;
+                    var recommand_user = await UserManager.FindByNameAsync(model.RecommandCode);
+                    if (recommand_user != null)
+                    {
+                        recommand_user_id = recommand_user.Id;
+                    }
                 }
                 Off_Recruit recruit = new Off_Recruit()
                 {
@@ -4024,7 +4053,9 @@ namespace SqzEvent.Controllers
                     Name = model.Name,
                     Mobile = user.PhoneNumber,
                     Status = 0,
+                    ApplyTime = DateTime.Now,
                     RecommandUserId = recommand_user_id    // 后期加入解码方案
+
                 };
                 offlineDB.Off_Recruit.Add(recruit);
                 await offlineDB.SaveChangesAsync();

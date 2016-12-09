@@ -190,7 +190,7 @@ namespace SqzEvent.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult SendSMS(string mobile)
         {
-            if (System.Text.RegularExpressions.Regex.IsMatch(mobile, "1[3|5|7|8|][0-9]{9}"))
+            if (System.Text.RegularExpressions.Regex.IsMatch(mobile, "1[3|4|5|7|8|][0-9]{9}"))
             {
                 string validateCode = CommonUtilities.generateDigits(6);
                 SMSRecord record = new SMSRecord()

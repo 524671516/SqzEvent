@@ -214,6 +214,12 @@ namespace SqzEvent.Models
                 .HasForeignKey(e => e.Off_System_Id)
                 .WillCascadeOnDelete(false);
 
+            modelBuilder.Entity<Off_System>()
+                .HasMany(e => e.Off_Recruit)
+                .WithRequired(e => e.Off_System)
+                .HasForeignKey(e => e.Off_System_Id)
+                .WillCascadeOnDelete(false);
+
             modelBuilder.Entity<Off_Sales_Template>()
                 .HasMany(e => e.Off_Checkin_Schedule)
                 .WithRequired(e => e.Off_Sales_Template)
@@ -303,6 +309,9 @@ namespace SqzEvent.Models
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Off_System_Setting> Off_System_Setting { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Off_Recruit> Off_Recruit { get; set; }
     }
     public partial class Off_System_Setting
     {
@@ -1160,6 +1169,12 @@ namespace SqzEvent.Models
         public string RecommandUserId { get; set; }
 
         public bool Reward { get; set; }
+
+        public DateTime ApplyTime { get; set; }
+
+        public int Off_System_Id { get; set; }
+
+        public virtual Off_System Off_System { get; set; }
     }
     
 }

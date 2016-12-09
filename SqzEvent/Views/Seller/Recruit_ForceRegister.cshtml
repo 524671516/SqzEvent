@@ -64,11 +64,13 @@
         <h3 class="text-center">注册</h3>
     </div>
     <div class="container">
-        @using (Html.BeginForm("Recruit_Register", "Seller", FormMethod.Post, new { @id = "register-form", @class = "form-horizontal" }))
+        @using (Html.BeginForm("Recruit_ForceRegister", "Seller", FormMethod.Post, new { @id = "register-form", @class = "form-horizontal" }))
         {
             @Html.AntiForgeryToken()
+            @Html.ValidationSummary()
             @Html.HiddenFor(m => m.AccessToken)
             @Html.HiddenFor(m => m.Open_Id)
+            @Html.HiddenFor(m => m.SystemId)
             <div class="container">
                 <div class="form-group  has-feedback">
                     <label for="Name" class="col-xs-3   text-right">姓名</label>

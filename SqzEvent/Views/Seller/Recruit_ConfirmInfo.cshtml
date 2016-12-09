@@ -118,14 +118,14 @@
                     <div class="col-xs-9">
                         <div class="row">
                             <div class="btn-group col-xs-12 selectwrap active" data-toggle="buttons">
-                                <label class="btn btn-gary active col-xs-4  text-center">
-                                    @Html.CheckBoxFor(m => m.Weekday,new { autocomplete = "off" })工作日
+                                <label class="btn btn-gary col-xs-4  text-center">
+                                    @Html.CheckBoxFor(m => m.Weekday)工作日
                                 </label>
                                 <label class="btn btn-gary   col-xs-4 text-center">
-                                    @Html.CheckBoxFor(m => m.Weekday, new { autocomplete = "off" })双休日
+                                    @Html.CheckBoxFor(m => m.Weekend)双休日
                                 </label>
                                 <label class="btn btn-gary   col-xs-4 text-center">
-                                    @Html.CheckBoxFor(m => m.Holiday, new { autocomplete = "off" })节假日
+                                    @Html.CheckBoxFor(m => m.Holiday)节假日
                                 </label>
                             </div>
                         </div>                       

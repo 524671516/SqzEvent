@@ -223,6 +223,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201612090651410_201612091451.cs" />
+    <Compile Include="Migrations\201612090651410_201612091451.Designer.cs">
+      <DependentUpon>201612090651410_201612091451.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AppPay.cs" />
@@ -539,6 +543,8 @@
     <Content Include="Views\QualityControl\Error.cshtml" />
     <Content Include="Views\QualityControl\NotFound.cshtml" />
     <Content Include="Views\Seller\Manager_Home.cshtml" />
+    <Content Include="Views\Seller\Manager_RecruitList.cshtml" />
+    <Content Include="Views\Seller\Manager_RecruitDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -546,6 +552,11 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201612090651410_201612091451.resx">
+      <DependentUpon>201612090651410_201612091451.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
