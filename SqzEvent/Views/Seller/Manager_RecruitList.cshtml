@@ -24,22 +24,8 @@
             <div class="content-block searchbar-not-found">
                 查找内容不存在
             </div>
-            <div class="list-block list-block-search searchbar-found">
-                <ul>
-                    @foreach (var item in Model)
-                    {
-                        <li class="swipeout">
-                            <div class="swipeout-content">
-                                <a href="/Seller/Manager_RecruitDetails?rid=@item.Id" class="item-content item-link">
-                                    <div class="item-inner">
-                                        <div class="item-title">@Html.Encode(item.Name)</div>
-                                        <div class="item-after">@Html.Encode(item.Area)</div>
-                                    </div>
-                                </a>
-                            </div>
-                        </li>
-                    }
-                </ul>
+            <div class="list-block list-block-search searchbar-found recritlistpartial">
+
             </div>
         </div>
     </div>

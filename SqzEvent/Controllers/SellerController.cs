@@ -2406,6 +2406,10 @@ namespace SqzEvent.Controllers
         [Authorize(Roles ="Manager")]
         public ActionResult Manager_RecruitList()
         {
+            return PartialView();
+        }
+        public PartialViewResult Manager_RecritListPartial()
+        {
             var user = UserManager.FindById(User.Identity.GetUserId());
             var list = from m in offlineDB.Off_Recruit
                        where m.Status == 0 && m.Off_System_Id == user.DefaultSystemId

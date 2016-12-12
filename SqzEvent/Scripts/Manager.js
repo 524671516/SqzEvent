@@ -162,6 +162,12 @@ $$("#manager_userpanel").on("click", ".manager-recruitphoto", function () {
 });
 /************* 促销员注册 ************/
 $$(document).on("pageInit", ".page[data-page='manager-recruitlist']", function (e) {
+    $$.ajax({
+        url: "/Seller/Manager_RecritListPartial",
+        success: function (data) {
+            $$(".recritlistpartial").html(data)
+        }
+    })
     var mySearchbar = myApp.searchbar('.searchbar', {
         searchList: '.list-block-search',
         searchIn: '.item-title'
@@ -184,19 +190,19 @@ $$(document).on("pageInit", ".page[data-page='manager-recruitdetails']", functio
 $$(document).on("pageInit", ".page[data-page='manager-recruitbind']", function (e) {
     $$("#recruitbind-submit").on("click", function () {
         if (!$$("#recruitbind-submit").hasClass("color-gray")) {
-            $("#recruitbind-submit").prop("disabled", true).addClass("color-gray");
-            myApp.showIndicator();
-            setTimeout(function () {
-                myApp.hideIndicator();
-            }, 5e3);
+            $$("#recruitbind-submit").addClass("color-gray");
             if ($$("#StoreId").val() == "") {
                 myApp.alert("请选择店铺");
-                myApp.hideIndicator();
-                $("#recruitbind-submit").prop("disabled", false).removeClass("color-gray");
+                $$("#recruitbind-submit").removeClass("color-gray");
             } else {
+                myApp.showIndicator();
                 setTimeout(function () {
                     //$$("#managerreport-form").submit();
+                    myApp.hideIndicator();
                     $("#recruitbind-form").ajaxSubmit({
+                        error:function(){
+                            $("#recruitbind-submit").removeClass("color-gray");
+                        },
                         success: function (data) {
                             if (data == "SUCCESS") {
                                 myApp.hideIndicator();
@@ -209,13 +215,18 @@ $$(document).on("pageInit", ".page[data-page='manager-recruitbind']", function (
                                     //refresh_mainpanel();
                                     myApp.closeNotification(".notifications");
                                 }, 2e3);
+                                $("#recruitbind-submit").removeClass("color-gray");
                             } else {
                                 myApp.hideIndicator();
-                                $("#recruitbind-submit").prop("disabled", true).addClass("color-gray");
                                 myApp.addNotification({
                                     title: "通知",
                                     message: "表单提交失败"
                                 });
+                                setTimeout(function () {
+                                    //refresh_mainpanel();  
+                                    myApp.closeNotification(".notifications");
+                                }, 2e3);
+                                $("#recruitbind-submit").removeClass("color-gray");
                             }
                         }
                     });

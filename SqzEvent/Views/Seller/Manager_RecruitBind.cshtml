@@ -33,7 +33,7 @@
                         </li>
                         <li>
                             <a href="#" class="smart-select item-link" data-back-text="返回" data-back-on-select="true" data-searchbar-placeholder="店铺名称" data-searchbar-cancel="取消">
-                                @Html.DropDownListFor(m => m.StoreId, ViewBag.StoreList as SelectList, "")
+                                @Html.DropDownListFor(m => m.StoreId, ViewBag.StoreList as SelectList, "-请选择-")
                                 <div class="item-content">
                                     <div class="item-inner">
                                         <div class="item-title">选择门店</div>
