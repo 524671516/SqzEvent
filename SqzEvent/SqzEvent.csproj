@@ -543,6 +543,7 @@
     <Content Include="Views\Seller\Manager_RecruitDetails.cshtml" />
     <Content Include="Views\Seller\Manager_RecruitBind.cshtml" />
     <Content Include="Views\Seller\Manager_RecritListPartial.cshtml" />
+    <Content Include="Views\QualityControl\QualityRegularTest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

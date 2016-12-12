@@ -776,7 +776,15 @@ namespace SqzEvent.Controllers
             else
                 return Content("FAIL");
         }
-        
+        //产品定期检测
+        public PartialViewResult QualityRegularTest()
+        {
+            QCStaff staff = getStaff(User.Identity.Name);
+            ViewBag.FactoryList = new SelectList(staff.Factory, "Id", "SimpleName");
+            QCAgenda model = new QCAgenda();
+            model.QCStaffId = staff.Id;
+            return PartialView(model);
+        }
         // 产品检验列表
         public PartialViewResult QualityTestList()
         {

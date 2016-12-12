@@ -239,6 +239,14 @@ myApp.onPageInit("breakdownlist", function (page) {
     });
 });
 /*==========
+定期检测页 
+=========*/
+myApp.onPageInit("qualityregulartest", function (page) {
+    //图片上传数量计算
+    uploadCheckinFile("qualityregulartest-form", "qualityregulartest-photos", "Photos", "qualityregulartest-imgcount", 7);
+
+})
+/*==========
 新增故障报告 
 =========*/
 myApp.onPageInit("addbreakdown", function (page) {
