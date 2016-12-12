@@ -206,7 +206,7 @@ $$(document).on("pageInit", ".page[data-page='manager-recruitbind']", function (
                         success: function (data) {
                             if (data == "SUCCESS") {
                                 myApp.hideIndicator();
-                                mainView.router.loadPage("Manager_RecruitList");
+                                mainView.router.back();
                                 myApp.addNotification({
                                     title: "通知",
                                     message: "表单提交成功"
