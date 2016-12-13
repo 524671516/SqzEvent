@@ -2423,6 +2423,8 @@ namespace SqzEvent.Controllers
         public ActionResult Manager_RecruitDetails(int rid)
         {
             var recruit = offlineDB.Off_Recruit.SingleOrDefault(m => m.Id == rid);
+            var targetUser = UserManager.FindById(recruit.RecommandUserId);
+            ViewBag.RecommandName = targetUser.UserName;
             return PartialView(recruit);
         }
 

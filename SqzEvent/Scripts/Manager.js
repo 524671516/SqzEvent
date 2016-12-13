@@ -162,6 +162,7 @@ $$("#manager_userpanel").on("click", ".manager-recruitphoto", function () {
 });
 /************* 促销员注册 ************/
 $$(document).on("pageInit", ".page[data-page='manager-recruitlist']", function (e) {
+    //mainView.router.reloadPreviousPage("/Seller/Manager_Tools");
     $$.ajax({
         url: "/Seller/Manager_RecritListPartial",
         success: function (data) {
@@ -170,7 +171,7 @@ $$(document).on("pageInit", ".page[data-page='manager-recruitlist']", function (
     })
     var mySearchbar = myApp.searchbar('.searchbar', {
         searchList: '.list-block-search',
-        searchIn: '.item-title'
+        searchIn: '.item-content'
     });
 });
 $$(document).on("pageInit", ".page[data-page='manager-recruitdetails']", function (e) {
@@ -187,6 +188,7 @@ $$(document).on("pageInit", ".page[data-page='manager-recruitdetails']", functio
         }
     });
 });
+
 $$(document).on("pageInit", ".page[data-page='manager-recruitbind']", function (e) {
     $$("#recruitbind-submit").on("click", function () {
         if (!$$("#recruitbind-submit").hasClass("color-gray")) {
@@ -206,6 +208,9 @@ $$(document).on("pageInit", ".page[data-page='manager-recruitbind']", function (
                         success: function (data) {
                             if (data == "SUCCESS") {
                                 myApp.hideIndicator();
+                                //
+                                //mainView.router.loadPage("/Seller/Manager_RecruitList");
+                                //mainView.router.reloadPreviousPage("/Seller/Manager_RecruitList");
                                 mainView.router.back();
                                 myApp.addNotification({
                                     title: "通知",
