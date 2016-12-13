@@ -1206,6 +1206,7 @@ namespace SqzEvent.Controllers
         }
         public ActionResult Manager_QualityRegularTestPartial(int fid)
         {
+            var factory = _qcdb.Factory.SingleOrDefault(m => m.Id == fid);
             var qrtlist = from m in _qcdb.RegularTest
                          where m.FactoryId== fid
                          orderby m.ApplyDate descending

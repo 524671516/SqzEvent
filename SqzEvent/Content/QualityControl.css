@@ -29,7 +29,6 @@
     background: linear-gradient(#8fabf6, #2058ED); /* 标准的语法 */
     color: #fff;
 }
-
 .fa-sign-in {
     background: -webkit-linear-gradient(#fdb38d, #FB681B); /* Safari*/
     background: -o-linear-gradient(#fdb38d, #FB681B); /* Opera*/
@@ -63,6 +62,13 @@
 }
 
 .fa-sign-out {
+    background: -webkit-linear-gradient(#8be298, #18C631); /* Safari*/
+    background: -o-linear-gradient(#8be298, #18C631); /* Opera*/
+    background: -moz-linear-gradient(#8be298, #18C631); /* Firefox*/
+    background: linear-gradient(#8be298, #18C631); /* 标准的语法 */
+    color: #fff;
+}
+.fa-retweet{
     background: -webkit-linear-gradient(#8be298, #18C631); /* Safari*/
     background: -o-linear-gradient(#8be298, #18C631); /* Opera*/
     background: -moz-linear-gradient(#8be298, #18C631); /* Firefox*/

@@ -399,6 +399,7 @@ myApp.onPageInit("manager-regulartest", function (page) {
             $$("#regulartest-list").html("");
         }
     })
+    PhotoBrowser("manager-regulartest");
 })
 //历史质检信息详情页
 myApp.onPageInit("Manager_QualityTestDetail", function (page) {
