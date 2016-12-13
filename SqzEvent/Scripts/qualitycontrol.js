@@ -283,7 +283,7 @@ myApp.onPageInit("qualityregulartest", function (page) {
         }
     })
     //图片上传数量计算
-    uploadCheckinFile("qualityregulartest-form", "qualityregulartest-photos", "Photo", "qualityregulartest-imgcount", 9);
+    uploadCheckinFile("qualityregulartest-form", "qualityregulartest-photos", "Photo", "qualityregulartest-imgcount", 3);
 })
 /*==========
 新增故障报告 
