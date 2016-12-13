@@ -172,7 +172,15 @@ $$(document).on("pageInit", ".page[data-page='manager-recruitlist']", function (
         searchList: '.list-block-search',
         searchIn: '.item-content'
     });
+    $$("#force-back").click(function () {
+        mainView.router.back({
+            url: "/Seller/Manager_Tools",
+            force: true,
+            pushState:false
+        })
+    });
 });
+
 $$(document).on("pageInit", ".page[data-page='manager-recruitdetails']", function (e) {
     var worktype = $$("#WorkType").val()
     var weekday = worktype.substr(worktype.indexOf(":") + 1, 1);
