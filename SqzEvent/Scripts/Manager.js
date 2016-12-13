@@ -162,9 +162,8 @@ $$("#manager_userpanel").on("click", ".manager-recruitphoto", function () {
 });
 /************* 促销员注册 ************/
 $$(document).on("pageInit", ".page[data-page='manager-recruitlist']", function (e) {
-    //mainView.router.reloadPreviousPage("/Seller/Manager_Tools");
     $$.ajax({
-        url: "/Seller/Manager_RecritListPartial",
+        url: "/Seller/Manager_RecruitListPartial",
         success: function (data) {
             $$(".recritlistpartial").html(data)
         }
@@ -209,9 +208,9 @@ $$(document).on("pageInit", ".page[data-page='manager-recruitbind']", function (
                             if (data == "SUCCESS") {
                                 myApp.hideIndicator();
                                 //
-                                //mainView.router.loadPage("/Seller/Manager_RecruitList");
+                                mainView.router.loadPage("/Seller/Manager_RecruitList");
                                 //mainView.router.reloadPreviousPage("/Seller/Manager_RecruitList");
-                                mainView.router.back();
+                                //mainView.router.back();
                                 myApp.addNotification({
                                     title: "通知",
                                     message: "表单提交成功"

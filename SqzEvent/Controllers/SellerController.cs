@@ -2408,7 +2408,7 @@ namespace SqzEvent.Controllers
         {
             return PartialView();
         }
-        public PartialViewResult Manager_RecritListPartial()
+        public PartialViewResult Manager_RecruitListPartial()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
             var list = from m in offlineDB.Off_Recruit
