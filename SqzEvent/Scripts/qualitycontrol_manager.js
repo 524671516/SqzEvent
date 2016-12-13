@@ -382,6 +382,24 @@ myApp.onPageInit("manager-breakdown", function () {
     })
     
 })
+//历史定期检测记录页
+myApp.onPageInit("manager-regulartest", function (page) {
+    $$("#FactoryId").on("change", function () {
+        if ($$("#FactoryId").val() != "") {
+            $$.ajax({
+                url: "/QualityControl/Manager_QualityRegularTestPartial",
+                data: {
+                    fid: $$("#FactoryId").val()
+                },
+                success:function(data){
+                    $$("#regulartest-list").html(data);
+                }
+            })
+        } else {
+            $$("#regulartest-list").html("");
+        }
+    })
+})
 //历史质检信息详情页
 myApp.onPageInit("Manager_QualityTestDetail", function (page) {
     PhotoBrowser("Manager_QualityTestDetail");

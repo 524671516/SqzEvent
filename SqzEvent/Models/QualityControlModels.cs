@@ -37,6 +37,7 @@
         public virtual DbSet<QualityTest> QualityTest { get; set; }
         public virtual DbSet<ProductionSchedule> ProductionSchedule { get; set; }
         public virtual DbSet<AgendaTemplate> AgendaTemplate { get; set; }
+        public virtual DbSet<RegularTest> RegularTest { get; set; }
         
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -57,6 +58,9 @@
             modelBuilder.Entity<Factory>().HasMany(e => e.ProductionSchedule).WithRequired(e => e.Factory).HasForeignKey(e => e.FactoryId).WillCascadeOnDelete(true);
             modelBuilder.Entity<Product>().HasMany(e => e.ProductionSchedule).WithRequired(e => e.Product).HasForeignKey(e => e.ProductId).WillCascadeOnDelete(true);
             modelBuilder.Entity<Factory>().HasMany(e => e.AgendaTemplate).WithRequired(e => e.Factory).HasForeignKey(e => e.FactoryId).WillCascadeOnDelete(true);
+            modelBuilder.Entity<Factory>().HasMany(e => e.RegularTest).WithRequired(e => e.Factory).HasForeignKey(e => e.FactoryId).WillCascadeOnDelete(true);
+            modelBuilder.Entity<QCStaff>().HasMany(e => e.RegularTest).WithRequired(e => e.QCStaff).HasForeignKey(e => e.UploadStaffId).WillCascadeOnDelete(true);
+            modelBuilder.Entity<Product>().HasMany(e => e.RegularTest).WithRequired(e => e.Product).HasForeignKey(e => e.ProductId).WillCascadeOnDelete(true);
         }
     }
 
@@ -89,6 +93,9 @@
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<QualityTest> QualityTest { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RegularTest> RegularTest { get; set; }
     }
 
     /// <summary>
@@ -132,6 +139,9 @@
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AgendaTemplate> AgendaTemplate { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RegularTest> RegularTest { get; set; }
     }
 
     /// <summary>
@@ -174,6 +184,9 @@
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductionSchedule> ProductionSchedule { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RegularTest> RegularTest { get; set; }
     }
 
     /// <summary>
@@ -490,6 +503,33 @@
         public virtual Product Product { get; set; }
 
         public virtual Factory Factory { get; set; }
+    }
+
+    public partial class RegularTest
+    {
+        public int Id { get; set; }
+
+        public DateTime ApplyDate { get; set; }
+
+        public int? UploadStaffId { get; set; }
+
+        public DateTime? UploadTime { get; set; }
+
+        [StringLength(128)]
+        public string Photo { get; set; }
+
+        public int FactoryId { get; set; }
+
+        public int ProductId { get; set; }
+
+        /// 关联信息
+        public virtual QCStaff QCStaff { get; set; }
+
+        public virtual Factory Factory { get; set; }
+
+        public virtual Product Product { get; set; }
+
+
     }
     //public class MyEntity
     //{

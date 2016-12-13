@@ -239,6 +239,53 @@ myApp.onPageInit("breakdownlist", function (page) {
     });
 });
 /*==========
+定期检测页 
+=========*/
+myApp.onPageInit("qualityregulartest", function (page) {
+    //添加日历
+    var calendarMultiple = myApp.calendar({
+        input: "#ApplyDate",
+        dateFormat: "yyyy-mm-dd",
+        monthNames: monthNames,
+        monthNamesShort: monthNamesShort,
+        dayNames: dayNames,
+        dayNamesShort: dayNamesShort,
+        closeOnSelect: true
+    });
+    $$("#FactoryId").on("change", function () {
+        $$("#ProductId").html("");
+        $$("#ProductId").append("<option>" + "- 请选择 -" + "</option>");
+        $$("#product-select").find(".item-after").html("- 请选择 -");
+        if ($$("#FactoryId").val() != "") {
+            $$.ajax({
+                url: "/QualityControl/QualityRegularTestProductListAjax",
+                type: "post",
+                data: {
+                    fid: $$("#FactoryId").val()
+                },
+                success: function (data) {
+                    data = JSON.parse(data);
+                    if (data.result == "SUCCESS") {
+                        for (i = 0; i < data.content.length; i++) {
+                            $$("#ProductId").append("<option value=\"" + data.content[i].Id + "\">" + data.content[i].Name + "</option>");
+                        }
+                    }
+                }
+            })
+        }
+    });
+    $$("#qualityregulartest-submit").on("click", function () {
+        if (!$$("#qualityregulartest-submit").prop("disabled")) {
+            $$("#qualityregulartest-submit").prop("disabled", true).addClass("color-gray");
+            setTimeout(function () {
+                CheckError("qualityregulartest-submit", "qualityregulartest-form");
+            }, 500)
+        }
+    })
+    //图片上传数量计算
+    uploadCheckinFile("qualityregulartest-form", "qualityregulartest-photos", "Photo", "qualityregulartest-imgcount", 9);
+})
+/*==========
 新增故障报告 
 =========*/
 myApp.onPageInit("addbreakdown", function (page) {
@@ -906,7 +953,6 @@ function CheckError(SubmitBtn, SubmitForm) {
     // 然后弹窗信息
     if (pass) {
         $("select.required").each(function () {
-            console.log($(this).val());
             if ($(this).val() == "- 请选择 -" || $(this).val() == null || $(this).val() =="") {
                 myApp.alert($(this).next().find(".item-title").html() + " 未选择");
                 pass = false;

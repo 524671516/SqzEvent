@@ -551,6 +551,9 @@
     <Content Include="Views\Seller\Manager_RecruitDetails.cshtml" />
     <Content Include="Views\Seller\Manager_RecruitBind.cshtml" />
     <Content Include="Views\Seller\Manager_RecruitListPartial.cshtml" />
+    <Content Include="Views\QualityControl\QualityRegularTest.cshtml" />
+    <Content Include="Views\QualityControl\Manager_QualityRegularTest.cshtml" />
+    <Content Include="Views\QualityControl\Manager_QualityRegularTestPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
