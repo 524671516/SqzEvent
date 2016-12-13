@@ -781,9 +781,35 @@ namespace SqzEvent.Controllers
         {
             QCStaff staff = getStaff(User.Identity.Name);
             ViewBag.FactoryList = new SelectList(staff.Factory, "Id", "SimpleName");
-            QCAgenda model = new QCAgenda();
-            model.QCStaffId = staff.Id;
+            RegularTest model = new RegularTest();
             return PartialView(model);
+        }
+        [HttpPost, ValidateAntiForgeryToken]
+        public ContentResult QualityRegularTest(RegularTest model)
+        {
+            if (ModelState.IsValid)
+            {
+                RegularTest item = new RegularTest();
+                QCStaff staff = getStaff(User.Identity.Name);
+                if (TryUpdateModel(item))
+                {
+                    item.UploadStaffId = staff.Id;
+                    item.UploadTime = DateTime.Now;
+                    _qcdb.RegularTest.Add(item);
+                    _qcdb.SaveChangesAsync();
+                    return Content("SUCCESS");
+                }
+            }
+            return Content("FAIL");
+        }
+        [HttpPost]
+        public JsonResult QualityRegularTestProductListAjax(int fid)
+        {
+            var _factory=_qcdb.Factory.SingleOrDefault(m => m.Id == fid);
+            var list = from m in _factory.Product
+                       where m.QCProduct
+                       select new { Id = m.Id, Name = m.SimpleName };
+            return Json(new { result = "SUCCESS", content = list });
         }
         // 产品检验列表
         public PartialViewResult QualityTestList()
@@ -1171,6 +1197,22 @@ namespace SqzEvent.Controllers
             var template = _qcdb.Factory.SingleOrDefault(m => m.Id == fid).Product;
             return PartialView(template);
         }
+        //定期检测查询列表
+        public ActionResult Manager_QualityRegularTest()
+        {
+            QCStaff staff = getStaff(User.Identity.Name);
+            ViewBag.FactoryList = new SelectList(staff.Factory, "Id", "SimpleName");
+            return PartialView();
+        }
+        public ActionResult Manager_QualityRegularTestPartial(int fid)
+        {
+            var qrtlist = from m in _qcdb.RegularTest
+                         where m.FactoryId== fid
+                         orderby m.ApplyDate descending
+                         select m;
+            return PartialView(qrtlist);
+        }
+
         // 质检查询列表
         public ActionResult Manager_QualityTest(int? fid, string date)
         {
