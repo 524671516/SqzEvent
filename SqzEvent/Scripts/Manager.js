@@ -163,16 +163,24 @@ $$("#manager_userpanel").on("click", ".manager-recruitphoto", function () {
 /************* 促销员注册 ************/
 $$(document).on("pageInit", ".page[data-page='manager-recruitlist']", function (e) {
     $$.ajax({
-        url: "/Seller/Manager_RecritListPartial",
+        url: "/Seller/Manager_RecruitListPartial",
         success: function (data) {
             $$(".recritlistpartial").html(data)
         }
     })
     var mySearchbar = myApp.searchbar('.searchbar', {
         searchList: '.list-block-search',
-        searchIn: '.item-title'
+        searchIn: '.item-content'
+    });
+    $$("#force-back").click(function () {
+        mainView.router.back({
+            url: "/Seller/Manager_Tools",
+            force: true,
+            pushState:false
+        })
     });
 });
+
 $$(document).on("pageInit", ".page[data-page='manager-recruitdetails']", function (e) {
     var worktype = $$("#WorkType").val()
     var weekday = worktype.substr(worktype.indexOf(":") + 1, 1);
@@ -187,6 +195,7 @@ $$(document).on("pageInit", ".page[data-page='manager-recruitdetails']", functio
         }
     });
 });
+
 $$(document).on("pageInit", ".page[data-page='manager-recruitbind']", function (e) {
     $$("#recruitbind-submit").on("click", function () {
         if (!$$("#recruitbind-submit").hasClass("color-gray")) {
@@ -206,7 +215,10 @@ $$(document).on("pageInit", ".page[data-page='manager-recruitbind']", function (
                         success: function (data) {
                             if (data == "SUCCESS") {
                                 myApp.hideIndicator();
-                                mainView.router.back();
+                                //
+                                mainView.router.loadPage("/Seller/Manager_RecruitList");
+                                //mainView.router.reloadPreviousPage("/Seller/Manager_RecruitList");
+                                //mainView.router.back();
                                 myApp.addNotification({
                                     title: "通知",
                                     message: "表单提交成功"

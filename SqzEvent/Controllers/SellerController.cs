@@ -2408,7 +2408,7 @@ namespace SqzEvent.Controllers
         {
             return PartialView();
         }
-        public PartialViewResult Manager_RecritListPartial()
+        public PartialViewResult Manager_RecruitListPartial()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
             var list = from m in offlineDB.Off_Recruit
@@ -2423,6 +2423,13 @@ namespace SqzEvent.Controllers
         public ActionResult Manager_RecruitDetails(int rid)
         {
             var recruit = offlineDB.Off_Recruit.SingleOrDefault(m => m.Id == rid);
+            if (recruit.RecommandUserId != null)
+            {
+                var targetUser = UserManager.FindById(recruit.RecommandUserId);
+                ViewBag.RecommandName = targetUser.UserName;
+            }
+            else
+                ViewBag.RecommandName = "";
             return PartialView(recruit);
         }
 
