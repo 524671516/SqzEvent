@@ -2408,14 +2408,29 @@ namespace SqzEvent.Controllers
         {
             return PartialView();
         }
-        public PartialViewResult Manager_RecruitListPartial()
+        public PartialViewResult Manager_RecruitListPartial(int? page, string query)
         {
+            int _page = page ?? 1;
             var user = UserManager.FindById(User.Identity.GetUserId());
-            var list = from m in offlineDB.Off_Recruit
-                       where m.Status == 0 && m.Off_System_Id == user.DefaultSystemId
-                       orderby m.ApplyTime descending
-                       select m;
-            return PartialView(list);
+            if (query != null)
+            {
+
+                var list = (from m in offlineDB.Off_Recruit
+                            where m.Status == 0 && m.Off_System_Id == user.DefaultSystemId
+                            && (m.Name.Contains(query) || m.Area.Contains(query))
+                            orderby m.ApplyTime descending
+                            select m).Skip(_page * 20).Take(20);
+
+                return PartialView(list);
+            }
+            else
+            {
+                var list = (from m in offlineDB.Off_Recruit
+                            where m.Status == 0 && m.Off_System_Id == user.DefaultSystemId
+                            orderby m.ApplyTime descending
+                            select m).Skip(_page * 20).Take(20);
+                return PartialView(list);
+            }
         }
 
         // 招募促销员详细信息
