@@ -1,0 +1,25 @@
+﻿@model IEnumerable<SqzEvent.Models.RegularTest>
+<div class="content-block-title">
+    工厂检测列表
+</div>
+<ul>
+    @foreach (var item in Model)
+            {
+        <li class="swipeout">
+            <div class="swipeout-content">
+                <a href="javascript:;" class="item-link qc-photos item-content" data-photos="@item.Photo">
+                    <div class="item-inner">
+                        <div class="item-title">
+                            @Html.Encode(item.Product.SimpleName)
+                        </div>
+                        <div class="item-after">@Html.Encode(item.ApplyDate.ToString("MM-dd"))</div>
+                    </div>
+                </a>
+            </div>
+            <div class="swipeout-actions-right">
+                <a href="#" class="swipeout-delete" data-confirm="是否确认删除" data-confirm-title="寿全斋" data-close-on-cancel="true" data-url="@item.Id">删除</a>
+            </div>
+        </li>
+    }
+</ul>
+

@@ -776,6 +776,35 @@ namespace SqzEvent.Controllers
             else
                 return Content("FAIL");
         }
+        //厂检报告
+        public PartialViewResult QualityFactoryTest()
+        {
+            QCStaff staff = getStaff(User.Identity.Name);
+            ViewBag.FactoryList = new SelectList(staff.Factory, "Id", "simpleName");
+            return PartialView();
+        }
+        public PartialViewResult QualityFactoryTestPartial(int fid)
+        {
+            var list = from m in _qcdb.RegularTest
+                       where m.FactoryId == fid
+                       orderby m.ApplyDate descending
+                       select m;
+            return PartialView(list);
+        }
+        // 删除工厂报告
+        [HttpPost]
+        public async Task<JsonResult> DeleteFactoryTest(int FtId)
+        {
+            var model = _qcdb.RegularTest.SingleOrDefault(m => m.Id == FtId);
+            if (model != null)
+            {
+                _qcdb.RegularTest.Remove(model);
+                await _qcdb.SaveChangesAsync();
+                return Json(new { result = "SUCCESS" });
+            }
+            else
+                return Json(new { result = "FAIL" });
+        }
         //产品定期检测
         public PartialViewResult QualityRegularTest()
         {
@@ -1205,8 +1234,7 @@ namespace SqzEvent.Controllers
             return PartialView();
         }
         public ActionResult Manager_QualityRegularTestPartial(int fid)
-        {
-            var factory = _qcdb.Factory.SingleOrDefault(m => m.Id == fid);
+        {           
             var qrtlist = from m in _qcdb.RegularTest
                          where m.FactoryId== fid
                          orderby m.ApplyDate descending

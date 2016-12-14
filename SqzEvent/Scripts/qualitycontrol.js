@@ -204,6 +204,53 @@ myApp.onPageInit("addcheckout", function (page) {
     });
 });
 /*==========
+厂检报告页
+=========*/
+myApp.onPageInit("factorytestlist", function (page) {
+    if ($$("#FactoryId").val() != "") {
+        $$.ajax({
+            url: "/QualityControl/QualityFactoryTestPartial",
+            data: {
+                fid: $$("#FactoryId").val()
+            },
+            success: function (data) {
+                $$("#factorytest-list").html(data);
+            }
+        })
+    }
+    $$("#FactoryId").on("change", function () {
+        if ($$("#FactoryId").val() != "") {
+            $$.ajax({
+                url: "/QualityControl/QualityFactoryTestPartial",
+                data: {
+                    fid: $$("#FactoryId").val()
+                },
+                success: function (data) {
+                    $$("#factorytest-list").html(data);
+                }
+            })
+        } else {
+            $$("#factorytest-list").html("");
+        }
+    })
+    $$("#factorytestlist").on("deleted", ".swipeout", function (e) {
+        $$.ajax({
+            url: "/QualityControl/DeleteFactoryTest",
+            data: {
+                FtId: $$(e.target).find(".swipeout-delete").attr("data-url")
+            },
+            method: "post",
+            success: function (data) {
+                data = JSON.parse(data);
+                if (data.result != "SUCCESS") {
+                    myApp.alert("删除失败");
+                }
+            }
+        });
+    });
+    PhotoBrowser("factorytestlist");
+})
+/*==========
 故障报告列表
 =========*/
 myApp.onPageInit("breakdownlist", function (page) {
