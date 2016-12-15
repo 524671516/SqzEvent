@@ -161,16 +161,98 @@ $$("#manager_userpanel").on("click", ".manager-recruitphoto", function () {
     myPhotoBrowserPopupDark.open();
 });
 /************* 促销员注册 ************/
-$$(document).on("pageInit", ".page[data-page='manager-recruitlist']", function (e) {
+$$(document).on("pageInit", ".page[data-page='manager-recruitlist']", function (e) { 
     $$.ajax({
         url: "/Seller/Manager_RecruitListPartial",
+        data: {
+            page: $$("#c_page").val(),
+            query: $$(".searchbar-input input").val()
+        },
         success: function (data) {
-            $$(".recritlistpartial").html(data)
+            $$(".search-list").html(data);
+            var page = $$("#c_page").val();
+            page++;
+            $$("#c_page").val(page);
         }
     })
+    var loading = false;
+    if (!loading) {
+        $$('.infinite-scroll').on("infinite", function () {
+            if (loading)
+                return;
+            loading = true;
+            var page = $$("#c_page").val();
+            setTimeout(function () {
+                $$.ajax({
+                    url: "/Seller/Manager_RecruitListPartial",
+                    data: {
+                        page: $$("#c_page").val(),
+                        query: $$(".searchbar-input input").val()
+                    },
+                    success: function (data) {
+                        $$(".search-list").append(data);
+                        if ($$("#recruit-none").length > 0) {
+                            // 加载完毕，则注销无限加载事件，以防不必要的加载
+                            myApp.detachInfiniteScroll($$('.infinite-scroll'));
+                            // 删除加载提示符
+                            $$('.infinite-scroll-preloader').remove();
+                            return;
+                        }
+                        page++;
+                        $$("#c_page").val(page);
+                        loading = false;
+                    },
+                });
+            }, 1000);
+        });
+    }
     var mySearchbar = myApp.searchbar('.searchbar', {
+        customSearch:true,
         searchList: '.list-block-search',
-        searchIn: '.item-content'
+        searchIn: '.item-content',
+        onDisable: function (s) {
+            $$(".search-list").html("");
+            myApp.attachInfiniteScroll($$('.infinite-scroll'))
+            $$.ajax({
+                url: "/Seller/Manager_RecruitListPartial",
+                data: {
+                    page: $$("#c_page").val("0"),
+                    query: $$(".searchbar-input input").val()
+                },
+                success: function (data) {
+                    $$(".search-list").html(data);
+                    var page = $$("#c_page").val();
+                }
+            })
+        },
+        onSearch: function (s) {
+            loading = true;
+            $$("#c_page").val("0");
+            myApp.attachInfiniteScroll($$('.infinite-scroll'))
+            $$.ajax({
+                url: "/Seller/Manager_RecruitListPartial",
+                data: {
+                    page:$$("#c_page").val(),
+                    query: s.input.val()
+                },
+                success: function (data) {
+                    $$(".search-list").html(data);
+                    if ($$(".search-list").find("li").length < 20) {
+                        $$("#recruit-none").remove();                  
+                        myApp.detachInfiniteScroll($$('.infinite-scroll'));
+                        // 删除加载提示符
+                        $$('.infinite-scroll-preloader').remove();
+                        loading = false;
+                        return;
+                    }else {
+                        var _page = parseInt($$("#c_page").val());
+                        _page++;
+                        $$("#c_page").val(_page);
+                        loading = false;
+                    }
+                }
+            });
+        },
     });
     
 });

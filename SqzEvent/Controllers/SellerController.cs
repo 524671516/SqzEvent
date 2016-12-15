@@ -2479,7 +2479,7 @@ namespace SqzEvent.Controllers
         }
         public PartialViewResult Manager_RecruitListPartial(int? page, string query)
         {
-            int _page = page ?? 1;
+            int _page = page ?? 0;
             var user = UserManager.FindById(User.Identity.GetUserId());
             if (query != null)
             {
