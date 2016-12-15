@@ -162,15 +162,93 @@ $$("#manager_userpanel").on("click", ".manager-recruitphoto", function () {
 });
 /************* 促销员注册 ************/
 $$(document).on("pageInit", ".page[data-page='manager-recruitlist']", function (e) {
+    var page = 0;
     $$.ajax({
         url: "/Seller/Manager_RecruitListPartial",
+        data: {
+            page: page,
+            query: $$(".searchbar-input input").val()
+        },
         success: function (data) {
-            $$(".recritlistpartial").html(data)
+            $$(".recritlistpartial").html(data);
+            page++;
         }
     })
+    var loading = false;
+    $$('.infinite-scroll').on("infinite", function () {
+        if (loading) return;
+        loading = true;
+        setTimeout(function () {
+            loading = false;
+            $$.ajax({
+                url: "/Seller/Manager_RecruitListPartial",
+                data: {
+                    page: page,
+                    query: $$(".searchbar-input input").val()
+                },
+                success: function (data) {
+                    $$(".recritlistpartial").append(data);
+                    if ($$("#recruit-none").length > 0) {
+                        console.log(1);
+                        $$("#recruit-none").remove();
+                        $$(".list-block-search").append(data)
+                        // 加载完毕，则注销无限加载事件，以防不必要的加载
+                        myApp.detachInfiniteScroll($$('.infinite-scroll'));
+                        // 删除加载提示符
+                        $$('.infinite-scroll-preloader').remove();
+                        return;
+                    }
+                    page++;
+                },
+            });
+
+        }, 1000);
+    })
     var mySearchbar = myApp.searchbar('.searchbar', {
+        customSearch:true,
         searchList: '.list-block-search',
-        searchIn: '.item-content'
+        searchIn: '.item-content',
+        onSearch: function (s) {
+            var _page = 0;
+            $$.ajax({
+                url: "/Seller/Manager_RecruitListPartial",
+                data: {
+                    page:_page,
+                    query: s.input.val()
+                },
+                success: function (data) {
+                    $$(".recritlistpartial").html(data);
+                    _page++;
+                }
+            })        
+            var load = false;
+            $$('.infinite-scroll').on("infinite", function () {
+                if (load) return;
+                load = true;
+                setTimeout(function () {
+                    load = false;
+                    $$.ajax({
+                        url: "/Seller/Manager_RecruitListPartial",
+                        data: {
+                            page: _page,
+                            query: s.input.val()
+                        },
+                        success: function (data) {
+                            $(".recritlistpartial").append(data);
+                            if ($$("#recruit-none").length > 0) {                           
+                                // 加载完毕，则注销无限加载事件，以防不必要的加载
+                                myApp.detachInfiniteScroll($$('.infinite-scroll'));
+                                // 删除加载提示符
+                                $$('.infinite-scroll-preloader').remove();
+                                return;
+                            }
+                            _page++;
+                        },
+                    });
+
+                }, 1000);
+            })
+        },
     });
     $$("#force-back").click(function () {
         mainView.router.back({

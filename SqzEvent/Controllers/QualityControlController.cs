@@ -810,6 +810,7 @@ namespace SqzEvent.Controllers
         {
             QCStaff staff = getStaff(User.Identity.Name);
             ViewBag.FactoryList = new SelectList(staff.Factory, "Id", "SimpleName");
+           
             RegularTest model = new RegularTest();
             return PartialView(model);
         }
