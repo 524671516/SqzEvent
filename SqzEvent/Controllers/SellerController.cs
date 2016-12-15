@@ -15,6 +15,7 @@ using System.IO;
 using System.Text;
 using System.Drawing;
 using System.Drawing.Imaging;
+using CsvHelper;
 
 namespace SqzEvent.Controllers
 {
@@ -1634,6 +1635,71 @@ namespace SqzEvent.Controllers
                                 AVG_Total = m.AVG_Total
                             };
             return PartialView(finallist);
+        }
+        [Authorize(Roles ="Manager")]
+        public FileResult Manager_ReportStatistic(string date, string storesystem)
+        {
+            MemoryStream stream = new MemoryStream();
+            StreamWriter writer = new StreamWriter(stream);
+            CsvWriter csv = new CsvWriter(writer);
+            var user = UserManager.FindById(User.Identity.GetUserId());
+            DateTime today = Convert.ToDateTime(date);
+            // 填充表头
+            csv.WriteField("序号");
+            csv.WriteField("店铺名称");
+            csv.WriteField("状态");
+            csv.WriteField("总销量");
+            csv.WriteField("奖金");
+            var productlist = from m in offlineDB.Off_Product
+                              where m.Off_System_Id == user.DefaultSystemId
+                              orderby m.Id
+                              select m;
+            List<int> productIds = new List<int>();
+            foreach(var product in productlist)
+            {
+                csv.WriteField(product.SimpleName);
+                productIds.Add(product.Id);
+            }
+            csv.NextRecord();
+            // 填充产品内容
+            var manager = offlineDB.Off_StoreManager.SingleOrDefault(m => m.UserName == user.UserName && m.Off_System_Id == user.DefaultSystemId);
+            var storelist = manager.Off_Store.Where(m => m.StoreSystem == storesystem).Select(m => m.Id);
+            var checkinlist = from m in offlineDB.Off_Checkin
+                              where storelist.Contains(m.Off_Checkin_Schedule.Off_Store_Id)
+                              && m.Off_Checkin_Schedule.Subscribe == today
+                              && m.Status>0
+                              orderby m.Off_Checkin_Product.Sum(g=>g.SalesCount) descending
+                              select m;
+            int sequence = 1;
+            foreach(var checkin in checkinlist)
+            {
+                csv.WriteField(checkin.Off_Checkin_Schedule.Off_Store.StoreName);
+                csv.WriteField(CheckinStatus(checkin.Status));
+                csv.WriteField(checkin.Off_Checkin_Product.Sum(m => m.SalesCount) ?? 0);
+                csv.WriteField(checkin.Bonus ?? 0);
+                foreach(var pid in productIds)
+                {
+                    var insertproduct = checkin.Off_Checkin_Product.SingleOrDefault(m => m.ProductId == pid);
+                    if (insertproduct != null)
+                    {
+                        csv.WriteField(insertproduct.SalesCount ?? 0);
+                    }
+                    else
+                    {
+                        csv.WriteField("-");
+                    }
+                }
+                csv.NextRecord();
+            }
+            csv.WriteField("");
+            csv.WriteField("总销量");
+            csv.WriteField(checkinlist.Sum(m => m.Off_Checkin_Product.Sum(g => g.SalesCount)) ?? 0);
+            csv.WriteField("平均销量");
+            csv.WriteField(string.Format("{0:F}",checkinlist.Average(m => m.Off_Checkin_Product.Sum(g => g.SalesCount)) ?? 0));
+            csv.NextRecord();
+            writer.Flush();
+            writer.Close();
+            return File(convertCSV(stream.ToArray()), "@text/csv", storesystem + "_" + today.ToShortDateString() + ".csv");
         }
 
         // 活动门店列表
@@ -4218,5 +4284,36 @@ namespace SqzEvent.Controllers
             return Content(result);
         }
 
+        private string CheckinStatus(int status)
+        {
+            switch (status)
+            {
+                case -1:
+                    return "已作废";
+                case 0:
+                    return "无数据";
+                case 1:
+                    return "已签到";
+                case 2:
+                    return "已签退";
+                case 3:
+                    return "已提报";
+                case 4:
+                    return "已确认";
+                case 5:
+                    return "已结算";
+                default:
+                    return "位置未知";
+            }
+        }
+        private byte[] convertCSV(byte[] array)
+        {
+            byte[] outBuffer = new byte[array.Length + 3];
+            outBuffer[0] = (byte)0xEF;//有BOM,解决乱码
+            outBuffer[1] = (byte)0xBB;
+            outBuffer[2] = (byte)0xBF;
+            Array.Copy(array, 0, outBuffer, 3, array.Length);
+            return outBuffer;
+        }
     }
 }

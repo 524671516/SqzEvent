@@ -172,13 +172,7 @@ $$(document).on("pageInit", ".page[data-page='manager-recruitlist']", function (
         searchList: '.list-block-search',
         searchIn: '.item-content'
     });
-    $$("#force-back").click(function () {
-        mainView.router.back({
-            url: "/Seller/Manager_Tools",
-            force: true,
-            pushState:false
-        })
-    });
+    
 });
 
 $$(document).on("pageInit", ".page[data-page='manager-recruitdetails']", function (e) {
@@ -216,9 +210,7 @@ $$(document).on("pageInit", ".page[data-page='manager-recruitbind']", function (
                             if (data == "SUCCESS") {
                                 myApp.hideIndicator();
                                 //
-                                mainView.router.loadPage("/Seller/Manager_RecruitList");
-                                //mainView.router.reloadPreviousPage("/Seller/Manager_RecruitList");
-                                //mainView.router.back();
+                                mainView.router.loadPage("/Seller/Manager_Tools");
                                 myApp.addNotification({
                                     title: "通知",
                                     message: "表单提交成功"
@@ -995,6 +987,15 @@ $$(document).on("pageAfterAnimation", ".page[data-page='manager-reportlist']", f
                 $$("#manager-reportlist-content").html(data);
             }
         });
+    });
+
+    $$("#statistic_btn").on("click", function () {
+        console.log("33");
+        var date = $$("#manager-reportlist-date").val();
+        var storesystem = $$("#manager-reportlist-storesystem").val();
+        var url = "/Seller/Manager_ReportStatistic" + "?date=" + date + "&storesystem=" + storesystem;
+        window.location.href = url;
+        return false;
     });
 });
 
