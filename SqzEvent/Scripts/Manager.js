@@ -2,6 +2,7 @@
 
 // Initialize app
 var myApp = new Framework7({
+    modalTitle: '督导管理',
     pushState:true
 });
 
