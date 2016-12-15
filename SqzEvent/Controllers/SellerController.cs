@@ -1673,6 +1673,7 @@ namespace SqzEvent.Controllers
             int sequence = 1;
             foreach(var checkin in checkinlist)
             {
+                csv.WriteField(sequence);
                 csv.WriteField(checkin.Off_Checkin_Schedule.Off_Store.StoreName);
                 csv.WriteField(CheckinStatus(checkin.Status));
                 csv.WriteField(checkin.Off_Checkin_Product.Sum(m => m.SalesCount) ?? 0);
@@ -1689,8 +1690,10 @@ namespace SqzEvent.Controllers
                         csv.WriteField("-");
                     }
                 }
+                sequence++;
                 csv.NextRecord();
             }
+            csv.WriteField("");
             csv.WriteField("");
             csv.WriteField("总销量");
             csv.WriteField(checkinlist.Sum(m => m.Off_Checkin_Product.Sum(g => g.SalesCount)) ?? 0);
