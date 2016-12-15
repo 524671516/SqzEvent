@@ -207,23 +207,23 @@ myApp.onPageInit("addcheckout", function (page) {
 厂检报告页
 =========*/
 myApp.onPageInit("factorytestlist", function (page) {
-    if ($$("#FactoryId").val() != "") {
+    if ($$("#FactoryIdn").val() != "") {
         $$.ajax({
             url: "/QualityControl/QualityFactoryTestPartial",
             data: {
-                fid: $$("#FactoryId").val()
+                fid: $$("#FactoryIdn").val()
             },
             success: function (data) {
                 $$("#factorytest-list").html(data);
             }
         })
     }
-    $$("#FactoryId").on("change", function () {
-        if ($$("#FactoryId").val() != "") {
+    $$("#FactoryIdn").on("change", function () {
+        if ($$("#FactoryIdn").val() != "") {
             $$.ajax({
                 url: "/QualityControl/QualityFactoryTestPartial",
                 data: {
-                    fid: $$("#FactoryId").val()
+                    fid: $$("#FactoryIdn").val()
                 },
                 success: function (data) {
                     $$("#factorytest-list").html(data);
@@ -329,6 +329,7 @@ myApp.onPageInit("qualityregulartest", function (page) {
             }, 500)
         }
     })
+
     //图片上传数量计算
     uploadCheckinFile("qualityregulartest-form", "qualityregulartest-photos", "Photo", "qualityregulartest-imgcount", 3);
 })
