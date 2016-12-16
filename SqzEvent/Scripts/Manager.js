@@ -227,6 +227,8 @@ $$(document).on("pageInit", ".page[data-page='manager-recruitlist']", function (
             })
         },
         onSearch: function (s) {
+            $$('.infinite-scroll-preloader').remove();
+            $$(".infinite-scroll").append("<div class=\"infinite-scroll-preloader\"><div class=\"preloader\"></div></div>");
             loading = true;
             $$("#c_page").val("0");
             myApp.attachInfiniteScroll($$('.infinite-scroll'))
@@ -1073,7 +1075,6 @@ $$(document).on("pageAfterAnimation", ".page[data-page='manager-reportlist']", f
     });
 
     $$("#statistic_btn").on("click", function () {
-        console.log("33");
         var date = $$("#manager-reportlist-date").val();
         var storesystem = $$("#manager-reportlist-storesystem").val();
         var url = "/Seller/Manager_ReportStatistic" + "?date=" + date + "&storesystem=" + storesystem;
