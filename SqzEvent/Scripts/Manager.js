@@ -1072,7 +1072,6 @@ $$(document).on("pageAfterAnimation", ".page[data-page='manager-reportlist']", f
     });
 
     $$("#statistic_btn").on("click", function () {
-        console.log("33");
         var date = $$("#manager-reportlist-date").val();
         var storesystem = $$("#manager-reportlist-storesystem").val();
         var url = "/Seller/Manager_ReportStatistic" + "?date=" + date + "&storesystem=" + storesystem;

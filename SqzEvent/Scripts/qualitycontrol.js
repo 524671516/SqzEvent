@@ -207,23 +207,23 @@ myApp.onPageInit("addcheckout", function (page) {
 厂检报告页
 =========*/
 myApp.onPageInit("factorytestlist", function (page) {
-    if ($$("#FactoryId").val() != "") {
+    if ($$("#SelectFactoryId").val() != "") {
         $$.ajax({
             url: "/QualityControl/QualityFactoryTestPartial",
             data: {
-                fid: $$("#FactoryId").val()
+                fid: $$("#SelectFactoryId").val()
             },
             success: function (data) {
                 $$("#factorytest-list").html(data);
             }
         })
     }
-    $$("#FactoryId").on("change", function () {
-        if ($$("#FactoryId").val() != "") {
+    $$("#factorytestlist").on("change", "#SelectFactoryId", function () {
+        if ($$("#SelectFactoryId").val() != "") {
             $$.ajax({
                 url: "/QualityControl/QualityFactoryTestPartial",
                 data: {
-                    fid: $$("#FactoryId").val()
+                    fid: $$("#SelectFactoryId").val()
                 },
                 success: function (data) {
                     $$("#factorytest-list").html(data);
@@ -299,7 +299,7 @@ myApp.onPageInit("qualityregulartest", function (page) {
         dayNamesShort: dayNamesShort,
         closeOnSelect: true
     });
-    $$("#FactoryId").on("change", function () {
+    $$("#qualityregulartest").on("change", "#FactoryId", function () {
         $$("#ProductId").html("");
         $$("#ProductId").append("<option>" + "- 请选择 -" + "</option>");
         $$("#product-select").find(".item-after").html("- 请选择 -");
@@ -1003,6 +1003,7 @@ function CheckError(SubmitBtn, SubmitForm) {
             if ($(this).val() == "- 请选择 -" || $(this).val() == null || $(this).val() =="") {
                 myApp.alert($(this).next().find(".item-title").html() + " 未选择");
                 pass = false;
+                
             }
         });
     }
