@@ -227,11 +227,7 @@ $$(document).on("pageInit", ".page[data-page='manager-recruitlist']", function (
             })
         },
         onSearch: function (s) {
-            $$('.infinite-scroll-preloader').remove();
-            $$(".infinite-scroll").append("<div class=\"infinite-scroll-preloader\"><div class=\"preloader\"></div></div>");
-            loading = true;
             $$("#c_page").val("0");
-            myApp.attachInfiniteScroll($$('.infinite-scroll'))
             $$.ajax({
                 url: "/Seller/Manager_RecruitListPartial",
                 data: {
@@ -245,13 +241,16 @@ $$(document).on("pageInit", ".page[data-page='manager-recruitlist']", function (
                         myApp.detachInfiniteScroll($$('.infinite-scroll'));
                         // 删除加载提示符
                         $$('.infinite-scroll-preloader').remove();
-                        loading = false;
+                        loading = true;
                         return;
-                    }else {
+                    } else {
+                        $$('.infinite-scroll-preloader').remove();
+                        $$(".infinite-scroll").append("<div class=\"infinite-scroll-preloader\"><div class=\"preloader\"></div></div>");
+                        myApp.attachInfiniteScroll($$('.infinite-scroll'))
+                        loading = false;
                         var _page = parseInt($$("#c_page").val());
                         _page++;
                         $$("#c_page").val(_page);
-                        loading = false;
                     }
                 }
             });
