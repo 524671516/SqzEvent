@@ -177,3 +177,14 @@ html.ios-gt-8 .list-block li.media-item .item-title, html.ios-gt-8 .list-block.m
 .contacts-content {
     background: none;
 }
+/*无限滚动结束文字样式*/
+.no-more{
+    text-align:center;
+    padding:20px;
+    margin:0;
+    background-color:#efeff4;
+}
+/*input居右样式*/
+.item-input-right {
+    text-align: right;
+}
