@@ -211,4 +211,10 @@ namespace SqzEvent.Models
 
         public bool Holiday { get; set; }
     }
+    public class Wx_WeekendBreakItem
+    {
+        public int ProductId { get; set; }
+        public int SalesCount { get; set; }
+        public string ProductName { get; set; }
+    }
 }

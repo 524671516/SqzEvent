@@ -42,6 +42,8 @@ namespace SqzEvent.Models
         public virtual DbSet<Off_SellerTaskProduct> Off_SellerTaskProduct { get; set; }
         public virtual DbSet<Off_CompetitionInfo> Off_CompetitionInfo { get; set; }
         public virtual DbSet<Off_Recruit> Off_Recruit { get; set; }
+        public virtual DbSet<Off_WeekendBreak> Off_WeekendBreak { get; set; }
+        public virtual DbSet<Off_WeekendBreakRecord> Off_WeekendBreakRecord { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -81,6 +83,12 @@ namespace SqzEvent.Models
                 .WithRequired(e => e.Off_Checkin_Schedule)
                 .HasForeignKey(e => e.Off_Schedule_Id)
                 .WillCascadeOnDelete(true);
+
+            modelBuilder.Entity<Off_Checkin_Schedule>()
+                .HasMany(e => e.Off_WeekendBreak)
+                .WithRequired(e => e.Off_Checkin_Schedule)
+                .HasForeignKey(e => e.ScheduleId)
+                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Off_Checkin>()
                 .HasMany(e => e.Off_BonusRequest)
@@ -226,6 +234,8 @@ namespace SqzEvent.Models
                 .HasForeignKey(e => e.TemplateId)
                 .WillCascadeOnDelete(false);
 
+            modelBuilder.Entity<Off_StoreManager>()
+                .HasMany(e => e.Off_WeekendBreak).WithRequired(e => e.Off_StoreManager).HasForeignKey(e => e.StoreManagerId).WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Off_Product>()
                 .HasMany(e => e.Off_Checkin_Product)
@@ -268,6 +278,8 @@ namespace SqzEvent.Models
                 .WithRequired(e => e.Off_SellerTask)
                 .HasForeignKey(e => e.SellerTaskId)
                 .WillCascadeOnDelete(true);
+
+            modelBuilder.Entity<Off_WeekendBreak>().HasMany(e => e.Off_WeekendBreakRecord).WithRequired(e => e.Off_WeekendBreak).HasForeignKey(e => e.WeekendBreakId).WillCascadeOnDelete(true);
         }
     }
     public partial class Off_System
@@ -749,6 +761,9 @@ namespace SqzEvent.Models
 
         public int TemplateId { get; set; }
         public virtual Off_Sales_Template Off_Sales_Template { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Off_WeekendBreak> Off_WeekendBreak { get; set; }
     }
     public partial class Off_Checkin
     {
@@ -869,6 +884,9 @@ namespace SqzEvent.Models
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Off_Store> Off_Store { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Off_WeekendBreak> Off_WeekendBreak { get; set; }
 
         public int Off_System_Id { get; set; }
 
@@ -1175,6 +1193,50 @@ namespace SqzEvent.Models
         public int Off_System_Id { get; set; }
 
         public virtual Off_System Off_System { get; set; }
+    }
+
+    public partial class Off_WeekendBreak
+    {
+        public int Id { get; set; }
+
+        public int StoreManagerId { get; set; }
+
+        public int ScheduleId { get; set; }
+
+        public DateTime Subscribe { get; set; }
+
+        public DateTime SignInTime { get; set; }
+
+        [StringLength(32)]
+        public string UserName { get; set; }
+
+        public DateTime? LastUploadTime { get; set; }
+
+        public int? TrailDefault { get; set; }
+
+        public virtual Off_StoreManager Off_StoreManager { get; set; }
+
+        public virtual Off_Checkin_Schedule Off_Checkin_Schedule { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Off_WeekendBreakRecord> Off_WeekendBreakRecord { get; set; }
+    }
+
+    public partial class Off_WeekendBreakRecord
+    {
+        public int Id { get; set; }
+
+        public int WeekendBreakId { get; set; }
+
+        public DateTime UploadTime { get; set; }
+
+        public int SalesCount { get; set; }
+
+        public int TrailCount { get; set; }
+
+        public string SalesDetails { get; set; }
+
+        public virtual Off_WeekendBreak Off_WeekendBreak { get;set;}
     }
     
 }

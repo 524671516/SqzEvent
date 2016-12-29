@@ -63,16 +63,28 @@
                         </a>
                         <div class="accordion-item-content item-example">
                             <ul>
-                                @if (Model.CheckinLocation != "" && Model.CheckinLocation != "N/A")
+                                @if (Model.CheckinTime != null)
                                 {
-                                    <li id="checkin-location">
-                                        <a href="javascript:;" class="item-link item-content checkin-lbs" data-location="@Model.CheckinLocation">
+                                    if (Model.CheckinLocation != "" && Model.CheckinLocation != "N/A")
+                                    {
+                                        <li id="checkin-location">
+                                            <a href="javascript:;" class="item-link item-content checkin-lbs" data-location="@Model.CheckinLocation">
+                                                <div class="item-inner">
+                                                    <div class="item-title">签到时间</div>
+                                                    <div class="item-after">@Html.Encode(Convert.ToDateTime(Model.CheckinTime).ToString("HH:mm:ss"))</div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li class="item-content">
                                             <div class="item-inner">
                                                 <div class="item-title">签到时间</div>
                                                 <div class="item-after">@Html.Encode(Convert.ToDateTime(Model.CheckinTime).ToString("HH:mm:ss"))</div>
                                             </div>
-                                        </a>
-                                    </li>
+                                        </li>
+                                    }
                                 }
                                 else
                                 {
@@ -91,16 +103,28 @@
                                         </div>
                                     </a>
                                 </li>
-                                @if (Model.CheckoutLocation != "" && Model.CheckoutLocation != "N/A")
+                                @if (Model.CheckoutTime != null)
                                 {
-                                    <li id="checkout-location">
-                                        <a href="#" class="item-link item-content checkin-lbs" data-location="@Model.CheckoutLocation">
+                                    if (Model.CheckoutLocation != "" && Model.CheckoutLocation != "N/A")
+                                    {
+                                        <li id="checkout-location">
+                                            <a href="#" class="item-link item-content checkin-lbs" data-location="@Model.CheckoutLocation">
+                                                <div class="item-inner">
+                                                    <div class="item-title">签退时间</div>
+                                                    <div class="item-after">@Html.Encode(Convert.ToDateTime(Model.CheckoutTime).ToString("HH:mm:ss"))</div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li class="item-content">
                                             <div class="item-inner">
                                                 <div class="item-title">签退时间</div>
                                                 <div class="item-after">@Html.Encode(Convert.ToDateTime(Model.CheckoutTime).ToString("HH:mm:ss"))</div>
                                             </div>
-                                        </a>
-                                    </li>
+                                        </li>
+                                    }
                                 }
                                 else
                                 {
