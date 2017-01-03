@@ -249,6 +249,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\daterangepicker-bs3.css" />
     <Content Include="Content\font-awesome-ie7.min.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\framework7.ios.colors.min.css" />
@@ -295,6 +296,9 @@
     <Content Include="Content\SellerTask.css" />
     <Content Include="Content\PeriodAid.css" />
     <Content Include="Content\Seller.css" />
+    <Content Include="Content\WeekendBreak.css" />
+    <Content Include="Scripts\daterangepicker.js" />
+    <Content Include="Scripts\moment.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\Framework7Icons-Regular.svg" />
@@ -563,10 +567,18 @@
     <Content Include="Views\QualityControl\QualityFactoryTest.cshtml" />
     <Content Include="Views\QualityControl\QualityFactoryTestPartial.cshtml" />
     <Content Include="Views\Seller\Manager_ReportStatistic.cshtml" />
+    <Content Include="Views\WeekendBreak\WeekendBreak_Start.cshtml" />
+    <Content Include="Views\WeekendBreak\WeekendBreak_Home.cshtml" />
+    <Content Include="Views\WeekendBreak\WeekendBreak_AddRecord.cshtml" />
+    <Content Include="Views\WeekendBreak\WeekendBreak_AddRecordPartial.cshtml" />
+    <Content Include="Views\WeekendBreak\WeekendBreak_ViewRecord.cshtml" />
+    <Content Include="Views\WeekendBreak\WeekendBreak_OverView.cshtml" />
+    <Content Include="Views\WeekendBreak\WeekendBreak_OverViewPartial.cshtml" />
+    <Content Include="Views\Shared\_WeekendBreak.cshtml" />
+    <Content Include="Views\WeekendBreak\WeekendBreak_ViewRecordPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\WeekendBreak\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

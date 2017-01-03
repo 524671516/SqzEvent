@@ -1,0 +1,38 @@
+﻿@model SqzEvent.Models.Off_WeekendBreak
+@{
+    Layout = "~/Views/Shared/_WeekendBreak.cshtml";
+}
+
+<ul class="list-group">
+    <li class="list-group-item">
+        <span class="badge">@Model.Off_StoreManager.NickName</span>
+        督导姓名
+    </li>
+    <li class="list-group-item">
+        <span class="badge">@Model.Off_Checkin_Schedule.Off_Store.StoreName</span>
+        店铺名称
+    </li>
+    <li class="list-group-item">
+        <span class="badge">@Model.LastUploadTime</span>
+        时间
+    </li>
+</ul>
+<div class="table-responsive">
+    <table class="table h6">
+        <tr>
+            <th class="text-center">时间</th>
+            <th class="text-center">试饮</th>
+            <th class="text-center">累计</th>
+            <th class="text-center">销售明细</th>
+        </tr>
+        @foreach (var item in Model.Off_WeekendBreakRecord)
+        {
+            Html.RenderAction("WeekendBreak_ViewRecordPartial", "WeekendBreak", new { recordId = item.Id });
+        }
+    </table>
+</div>
+
+<div class="col-xs-12 padding-10">
+    <a class="btn btn-primary btn-block" id="return-submit" href="/WeekendBreak/WeekendBreak_Home?breakId=@Model.Id">返回</a>
+</div>
+

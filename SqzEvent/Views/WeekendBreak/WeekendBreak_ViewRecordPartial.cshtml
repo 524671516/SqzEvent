@@ -1,0 +1,18 @@
+﻿@using SqzEvent.Models
+@model SqzEvent.Models.Off_WeekendBreakRecord
+<tr>
+    <td class="text-center">@Model.UploadTime.ToString("HH:mm")</td>
+    <td class="text-center">@Model.TrailCount</td>
+    <td class="text-center">@Model.SalesCount</td>
+    <td class="text-center">
+
+        <ul>
+            @foreach (var item in ViewBag.ItemList as List<Wx_WeekendBreakItem>)
+            {
+                <li>@Html.Encode(item.ProductName + ":" + item.SalesCount)</li>
+            }
+        </ul>
+
+
+    </td>
+</tr>

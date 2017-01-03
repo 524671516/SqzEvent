@@ -1,0 +1,34 @@
+﻿@model SqzEvent.Models.Off_StoreManager
+@{
+    Layout = "~/Views/Shared/_WeekendBreak.cshtml";
+}
+@using (Html.BeginForm("WeekendBreak_Start", "WeekendBreak", FormMethod.Post, new { @class = "form", @role = "form", @id = "start-form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        <label for="managerName">督导姓名</label>
+        <input type="text" class="form-control" id="managerName" value="@Model.NickName" readonly>
+    </div>
+    <div class="form-group">
+        <label for="select">店铺名称</label>
+        @Html.DropDownList("ScheduleId", ViewBag.StoreListSelectList as SelectList, new { @class = "form-control" })
+    </div>
+    <div class="col-xs-12 padding-10">
+        <a  class="btn btn-primary btn-block gary-color" id="start-submit" href="WeekendBreak_Home">签到并开始</a>
+    </div>
+}
+@section scripts{  
+    <script>
+        $("#start-submit").on("click", function () {
+            if ($("#start-submit").hasClass("gary-color")) {
+                $("#start-submit").removeClass("gary-color");
+                $("#start-form").submit();
+                setTimeout(function () {
+                    $("#start-submit").addClass("gary-color");
+                },2000)
+
+                
+            };
+        });
+    </script>  
+    }

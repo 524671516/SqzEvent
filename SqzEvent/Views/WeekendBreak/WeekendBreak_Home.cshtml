@@ -1,0 +1,50 @@
+﻿@model SqzEvent.Models.Off_WeekendBreak
+@{
+    Layout = "~/Views/Shared/_WeekendBreak.cshtml";
+}
+@Html.HiddenFor(m=>m.Id)
+<ul class="list-group">
+    <li class="list-group-item">
+        <span class="badge">@Model.Off_StoreManager.NickName</span>
+        督导姓名
+    </li>
+    <li class="list-group-item">
+        <span class="badge">@Model.Off_Checkin_Schedule.Off_Store.StoreName</span>
+        店铺名称
+    </li>
+    <li class="list-group-item">
+        <span class="badge">@Model.LastUploadTime</span>
+        上次提交时间
+    </li>
+</ul>
+<div class="sum row">
+    <div class="col-xs-1"></div>
+    <div class="col-xs-5">
+        <div class="panel panel-primary">
+            <div class="panel-heading text-center">累计销量</div>
+            <div class="panel-body text-center">
+                  @Model.Off_WeekendBreakRecord.Sum(m=>m.SalesCount)
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-5">
+        <div class="panel panel-primary">
+            <div class="panel-heading text-center">累计试饮</div>
+            <div class="panel-body text-center">
+                @Model.Off_WeekendBreakRecord.Sum(m => m.TrailCount)
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-1"></div>
+</div>
+    <div class="col-xs-12 padding-10">
+        <a  class="btn btn-primary btn-block" id="add-data" href="/WeekendBreak/WeekendBreak_AddRecord?breakId=@Model.Id">新增数据</a>
+    </div>
+    <div class="col-xs-12 padding-10">
+        <a  class="btn btn-primary btn-block" id="data-summary" href="/WeekendBreak/WeekendBreak_ViewRecord?breakId=@Model.Id">数据汇总</a>
+    </div>
+<div class="col-xs-12 padding-10">
+    <a class="btn btn-primary btn-block" id="return-submit" href="/WeekendBreak/WeekendBreak_OverView">查看总览</a>
+</div>
+
+

@@ -97,7 +97,6 @@ namespace SqzEvent.Controllers
         }
 
         // GET: WeekendBreak
-        [AllowAnonymous]
         public ActionResult Weekend_Redirect()
         {
             var manager = getOff_StoreManager(User.Identity.Name);
@@ -109,7 +108,6 @@ namespace SqzEvent.Controllers
             }
             return RedirectToAction("WeekendBreak_Start");
         }
-        [AllowAnonymous]
         public ActionResult WeekendBreak_Start()
         {
             var manager = getOff_StoreManager(User.Identity.Name);
@@ -118,14 +116,13 @@ namespace SqzEvent.Controllers
                             select m.Id;
             var scheduleList = from m in offlineDB.Off_Checkin_Schedule
                                where m.Subscribe == today &&
-                               storelist.Contains(m.Id)
+                               storelist.Contains(m.Off_Store_Id)
                                select new { Key = m.Id, Value = m.Off_Store.StoreName };
-            ViewBag.StoreListSelectList = new SelectList(storelist, "Key", "Value");
-            return View();
+            ViewBag.StoreListSelectList = new SelectList(scheduleList, "Key", "Value");
+            return View(manager);
         }
-        [AllowAnonymous]
         [HttpPost,ValidateAntiForgeryToken]
-        public async Task<ActionResult> WeekendBreak_Start(FormCollection form)
+        public ActionResult WeekendBreak_Start(FormCollection form)
         {
             var manager = getOff_StoreManager(User.Identity.Name);
             Off_WeekendBreak model = new Off_WeekendBreak()
@@ -138,12 +135,11 @@ namespace SqzEvent.Controllers
                 ScheduleId = Convert.ToInt32(form["ScheduleId"].ToString())
             };
             offlineDB.Off_WeekendBreak.Add(model);
-            await offlineDB.SaveChangesAsync();
+            offlineDB.SaveChanges();
             return RedirectToAction("WeekendBreak_Home");
         }
 
         // 首页
-        [AllowAnonymous]
         public ActionResult WeekendBreak_Home()
         {
             // 获取当天的签到
@@ -153,16 +149,15 @@ namespace SqzEvent.Controllers
         }
 
         // 新增数据
-        [AllowAnonymous]
         public ActionResult WeekendBreak_AddRecord(int breakId)
         {
             var weekendbreak = offlineDB.Off_WeekendBreak.SingleOrDefault(m => m.Id == breakId);
             Off_WeekendBreakRecord record = new Off_WeekendBreakRecord();
             record.WeekendBreakId = breakId;
             ViewBag.ScheduleId = weekendbreak.ScheduleId;
+            ViewBag.OldRecord = weekendbreak.Off_WeekendBreakRecord;
             return View(record);
         }
-        [AllowAnonymous]
         public ActionResult WeekendBreak_AddRecordPartial(int scheduleId)
         {
             List<int> plist = new List<int>();
@@ -171,19 +166,27 @@ namespace SqzEvent.Controllers
             {
                 plist.Add(Convert.ToInt32(i));
             }
+            var records = offlineDB.Off_WeekendBreak.SingleOrDefault(m => m.ScheduleId == scheduleId).Off_WeekendBreakRecord;
+            List<Wx_WeekendBreakItem> itemlist = new List<Wx_WeekendBreakItem>();
+            foreach(var record in records)
+            {
+                List<Wx_WeekendBreakItem> itemlist_partial = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Wx_WeekendBreakItem>>(record.SalesDetails);
+                itemlist.AddRange(itemlist_partial);
+            }
+            ViewBag.RecordList = itemlist;
             var model = from m in offlineDB.Off_Product
                         where plist.Contains(m.Id)
                         select m;
             return PartialView(model);
         }
-        [AllowAnonymous]
         [HttpPost,ValidateAntiForgeryToken]
         public async Task<ActionResult> WeekendBreak_AddRecord(Off_WeekendBreakRecord model, FormCollection form)
         {
+            var _t = form;
             if (ModelState.IsValid)
             {
                 Off_WeekendBreakRecord record = new Off_WeekendBreakRecord();
-                if (TryValidateModel(record))
+                if (TryUpdateModel(record))
                 {
                     List<int> plist = new List<int>();
                     int scheduleId = Convert.ToInt32(form["ScheduleId"].ToString());
@@ -215,6 +218,7 @@ namespace SqzEvent.Controllers
                     }
                     DateTime lasttime = DateTime.Now;
                     record.SalesDetails = Newtonsoft.Json.JsonConvert.SerializeObject(itemlist);
+                    record.SalesCount = itemlist.Sum(m => m.SalesCount);
                     record.UploadTime = lasttime;
                     offlineDB.Off_WeekendBreakRecord.Add(record);
                     var weekendbreak = offlineDB.Off_WeekendBreak.SingleOrDefault(m => m.Id == record.WeekendBreakId);
@@ -233,13 +237,11 @@ namespace SqzEvent.Controllers
         }
 
         // 查看数据
-        [AllowAnonymous]
         public ActionResult WeekendBreak_ViewRecord(int breakId)
         {
             var item = offlineDB.Off_WeekendBreak.SingleOrDefault(m => m.Id == breakId);
             return View(item);
         }
-        [AllowAnonymous]
         public ActionResult WeekendBreak_ViewRecordPartial(int recordId)
         {
             var record = offlineDB.Off_WeekendBreakRecord.SingleOrDefault(m => m.Id == recordId);
@@ -247,13 +249,10 @@ namespace SqzEvent.Controllers
             ViewBag.ItemList = itemlist;
             return PartialView(record);
         }
-        [AllowAnonymous]
         public Off_StoreManager getOff_StoreManager(string username)
         {
-            return offlineDB.Off_StoreManager.SingleOrDefault(m => m.UserName == username);
+            return offlineDB.Off_StoreManager.SingleOrDefault(m => m.UserName == username && m.Off_System_Id==1);
         }
-
-        [AllowAnonymous]
         public ActionResult WeekendBreak_OverView()
         {
             return View();
@@ -264,6 +263,7 @@ namespace SqzEvent.Controllers
             var list = from m in offlineDB.Off_WeekendBreak
                        where m.Subscribe == today
                        select m;
+            
             return PartialView(list);
         }
 
