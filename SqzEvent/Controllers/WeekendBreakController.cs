@@ -266,6 +266,5 @@ namespace SqzEvent.Controllers
                        select m;
             return PartialView(list);
         }
-
     }
 }
