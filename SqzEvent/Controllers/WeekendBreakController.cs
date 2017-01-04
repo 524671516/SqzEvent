@@ -104,7 +104,7 @@ namespace SqzEvent.Controllers
             var breakitem = offlineDB.Off_WeekendBreak.SingleOrDefault(m => m.StoreManagerId == manager.Id && m.Subscribe == today);
             if (breakitem != null)
             {
-                return RedirectToAction("WeekendBreakHome", new { Id = breakitem.Id });
+                return RedirectToAction("WeekendBreak_Home");
             }
             return RedirectToAction("WeekendBreak_Start");
         }
@@ -122,7 +122,7 @@ namespace SqzEvent.Controllers
             return View(manager);
         }
         [HttpPost,ValidateAntiForgeryToken]
-        public ActionResult WeekendBreak_Start(FormCollection form)
+        public async Task<ActionResult> WeekendBreak_Start(FormCollection form)
         {
             var manager = getOff_StoreManager(User.Identity.Name);
             Off_WeekendBreak model = new Off_WeekendBreak()
@@ -135,8 +135,8 @@ namespace SqzEvent.Controllers
                 ScheduleId = Convert.ToInt32(form["ScheduleId"].ToString())
             };
             offlineDB.Off_WeekendBreak.Add(model);
-            offlineDB.SaveChanges();
-            return RedirectToAction("WeekendBreak_Home");
+            await offlineDB.SaveChangesAsync();
+            return Content("SUCCESS");
         }
 
         // 首页
@@ -205,7 +205,7 @@ namespace SqzEvent.Controllers
                         int? sales = null;
                         if (form["sales_" + item.Id] != "")
                             sales = Convert.ToInt32(form["sales_" + item.Id]);
-                        if (sales != null)
+                        if (sales != null && sales!=0)
                         {
                             Wx_WeekendBreakItem b_item = new Wx_WeekendBreakItem()
                             {
@@ -225,14 +225,14 @@ namespace SqzEvent.Controllers
                     weekendbreak.LastUploadTime = lasttime;
                     offlineDB.Entry(weekendbreak).State = System.Data.Entity.EntityState.Modified;
                     await offlineDB.SaveChangesAsync();
-                    return RedirectToAction("WeekendBreak_Home");
+                    return Content("SUCCESS");
                 }
-                return View("Error");
+                return Content("FAIL");
             }
             else
             {
-                ViewBag.ScheduleId = Convert.ToInt32(form["ScheduleId"].ToString());
-                return View(model);
+                //ViewBag.ScheduleId = Convert.ToInt32(form["ScheduleId"].ToString());
+                return Content("FAIL");
             }
         }
 
@@ -249,22 +249,82 @@ namespace SqzEvent.Controllers
             ViewBag.ItemList = itemlist;
             return PartialView(record);
         }
+        // 删除数据
+        [HttpPost]
+        public async Task<ActionResult> WeekendBreak_DeleteRecord(int recordId)
+        {
+            var item = offlineDB.Off_WeekendBreakRecord.SingleOrDefault(m => m.Id == recordId);
+            offlineDB.Off_WeekendBreakRecord.Remove(item);
+            await offlineDB.SaveChangesAsync();
+            return Content("SUCCESS");
+        }
         public Off_StoreManager getOff_StoreManager(string username)
         {
             return offlineDB.Off_StoreManager.SingleOrDefault(m => m.UserName == username && m.Off_System_Id==1);
         }
+        [AllowAnonymous]
+        public ActionResult SeniorLoginManager()
+        {
+            string user_Agent = HttpContext.Request.UserAgent;
+            if (user_Agent.Contains("MicroMessenger"))
+            {
+                //return Content("微信");
+                string redirectUri = Url.Encode("https://event.shouquanzhai.cn/WeekendBreak/SeniorAuthorization");
+                string appId = WeChatUtilities.getConfigValue(WeChatUtilities.APP_ID);
+                string url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=" + redirectUri + "&response_type=code&scope=snsapi_base&state=0#wechat_redirect";
+                return Redirect(url);
+            }
+            else
+            {
+                return Content("其他");
+            }
+        }
+        [AllowAnonymous]
+        public async Task<ActionResult> SeniorAuthorization(string code, string state)
+        {
+            try
+            {
+                WeChatUtilities wechat = new WeChatUtilities();
+                var jat = wechat.getWebOauthAccessToken(code);
+                var user = UserManager.FindByEmail(jat.openid);
+                if (user != null)
+                {
+                    if (UserManager.IsInRole(user.Id, "Senior"))
+                    {
+                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        return RedirectToAction("WeekendBreak_OverView");
+                    }
+                }
+                return View("NotAuthorized");
+            }
+            catch (Exception ex)
+            {
+
+                CommonUtilities.writeLog(ex.Message);
+                return View("Error");
+            }
+        }
+        [Authorize(Roles ="Senior")]
         public ActionResult WeekendBreak_OverView()
         {
             return View();
         }
+        [Authorize(Roles = "Senior")]
         public ActionResult WeekendBreak_OverViewPartial(string date)
         {
             var today = Convert.ToDateTime(date);
             var list = from m in offlineDB.Off_WeekendBreak
                        where m.Subscribe == today
+                       orderby m.Off_WeekendBreakRecord.Sum(g=>g.SalesCount) descending
                        select m;
             
             return PartialView(list);
+        }
+        [Authorize(Roles = "Senior")]
+        public ActionResult WeekendBreak_OverViewDetails(int breakId)
+        {
+            var item = offlineDB.Off_WeekendBreak.SingleOrDefault(m => m.Id == breakId);
+            return View(item);
         }
     }
 }

@@ -6,52 +6,59 @@
 
     <div class="controls">
         <div class="input-prepend input-group">
-            <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span><input type="text" readonly style="width: 200px" name="birthday" id="birthday" class="form-control text-center" />
+            <span class="add-on input-group-addon">
         </div>
+    </div>
+</div>
+<div class="weui-cells">
+    <div class="weui-cell">
+        <div class="weui-cell__bd">
+            <p>日期</p>
+        </div>
+        <div class="weui-cell__ft"><input type="text" style="width: 200px" name="birthday" id="birthday" class="weui-input" readonly /></div>
     </div>
 </div>
 <div id="over-partial"></div>
 @section scripts{
-  <script>
-      $(document).ready(function () {
-          var _date = new Date();
-          var _year = parseInt(_date.getFullYear());
-          var _month = parseInt(_date.getMonth()) + 1;
-          var _day = parseInt(_date.getDate());
-          var date = _year + "-" + ((_month < 10) ? "0" + _month : _month) + "-" + ((_day < 10) ? "0" + _day : _day);
-          $("#birthday").val(date);
-          if ($("#birthday").val() != "") {
-              $.ajax({
-                  url: "/WeekendBreak/WeekendBreak_OverViewPartial",
-                  data: {
-                      date: $("#birthday").val()
-                  },
-                  success: function (data) {
-                      $("#over-partial").html(data);
-                  }
-              });
-          }
-          $('#birthday').daterangepicker(
-            {
-                singleDatePicker: true,
-                startDate: new Date,
-                autoUpdateInput: true},
-                function (start, end, label) {
-                    if ($("#birthday").val() != "") {
-                        $.ajax({
-                            url: "/WeekendBreak/WeekendBreak_OverViewPartial",
-                            data: {
-                                date: $("#birthday").val()
-                            },
-                            success: function (data) {
-                                $("#over-partial").html(data);
-                            }
-                        })
-                    };
-            });
+    <script>
+        $(document).ready(function () {
+            var _date = new Date();
+            var _year = parseInt(_date.getFullYear());
+            var _month = parseInt(_date.getMonth()) + 1;
+            var _day = parseInt(_date.getDate());
+            var date = _year + "-" + ((_month < 10) ? "0" + _month : _month) + "-" + ((_day < 10) ? "0" + _day : _day);
+            $("#birthday").val(date);
+            if ($("#birthday").val() != "") {
+                $.ajax({
+                    url: "/WeekendBreak/WeekendBreak_OverViewPartial",
+                    data: {
+                        date: $("#birthday").val()
+                    },
+                    success: function (data) {
+                        $("#over-partial").html(data);
+                        $('#birthday').daterangepicker({
+                            singleDatePicker: true,
+                            startDate: new Date,
+                            autoUpdateInput: true
+                        }, function (start, end, label) {
+                            if ($("#birthday").val() != "") {
+                                $.ajax({
+                                    url: "/WeekendBreak/WeekendBreak_OverViewPartial",
+                                    data: {
+                                        date: $("#birthday").val()
+                                    },
+                                    success: function (data) {
+                                        $("#over-partial").html(data);
+                                    }
+                                })
+                            };
+                        });
+                    }
+                });
+            }
+            
+        });
 
-      });
-     
     </script>
 
 }

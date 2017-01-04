@@ -3,6 +3,26 @@
 @{ 
     var recorditemlist = ViewBag.RecordList as List<Wx_WeekendBreakItem>;
 }
+@foreach (var p in Model)
+{
+    <div class="weui-cell">
+        <div class="weui-cell__bd">
+            <div class="item-title">@Html.Encode(p.SimpleName)</div>
+        </div>
+        <div class="weui-cell_hd" style="line-height:28px;">
+            <span class="sum-sale c_num" id="sales-sum_@p.Id">@Html.Encode(recorditemlist.Where(m => m.ProductId == p.Id).Sum(e => e.SalesCount))</span>
+            <span class="hidden" id="sales-org_@p.Id">@Html.Encode(recorditemlist.Where(m => m.ProductId == p.Id).Sum(e => e.SalesCount))</span>
+        </div>
+        <div class="weui-cell__ft">
+            <div class="input-group">
+                <a class="input-group-addon reduce" data-step="1" href="javascript:reduce('sales_@p.Id',1)">-</a>
+                <input type="tel" class="weui-input sale-input" id="sales_@p.Id" name="sales_@p.Id" value="0" onchange="javascript:salesChanges('sales-sum_@p.Id','sales-org_@p.Id', 'sales_@p.Id');">
+                <a class="input-group-addon add" data-step="1" href="javascript:add('sales_@p.Id',1)">+</a>
+            </div>
+        </div>
+    </div>
+}
+<!--
 <div class="table-responsive">
     <table class="table">
         <tr>
@@ -23,9 +43,8 @@
                     </div>
                 </td>
             </tr>
-
         }
     </table>
 </div>
-
+    -->
 

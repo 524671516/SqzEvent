@@ -1,21 +1,12 @@
 ﻿@model IEnumerable<SqzEvent.Models.Off_WeekendBreak>
-<div class="table-responsive">
-    <table class="table h6">
-        <tr>
-            <th class="text-center">督导</th>
-            <th class="text-center">店铺</th>
-            <th class="text-center">销量</th>
-            <th class="text-center">试饮</th>
-        </tr>
-        @foreach (var p in Model)
-            {
-            <tr class="list">
-                <td class="text-center">@Html.Encode(p.Off_StoreManager.NickName)</td>
-                <td class="text-center">@Html.Encode(p.Off_Checkin_Schedule.Off_Store.StoreName)</td>
-                <td class="text-center">@Html.Encode(p.Off_WeekendBreakRecord.Sum(m=>m.SalesCount))</td>
-                <td class="text-center">@Html.Encode(p.Off_WeekendBreakRecord.Sum(m=>m.TrailCount))</td>
-            </tr>
-
-        }
-    </table>
+<div class="weui-cells">
+    @foreach (var p in Model)
+    {
+        <a class="weui-cell weui-cell_access" href="/WeekendBreak/WeekendBreak_OverViewDetails?breakId=@p.Id">
+            <div class="weui-cell__bd">
+                <p>@Html.Encode(p.Off_Checkin_Schedule.Off_Store.StoreName)</p>
+            </div>
+            <div class="weui-cell__ft">@Html.Encode(p.Off_WeekendBreakRecord.Sum(m => m.SalesCount))/@Html.Encode(p.Off_WeekendBreakRecord.Sum(m=>m.TrailCount))</div>
+        </a>
+    }
 </div>

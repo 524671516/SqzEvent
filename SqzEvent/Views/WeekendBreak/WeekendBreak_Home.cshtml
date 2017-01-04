@@ -3,48 +3,53 @@
     Layout = "~/Views/Shared/_WeekendBreak.cshtml";
 }
 @Html.HiddenFor(m=>m.Id)
-<ul class="list-group">
-    <li class="list-group-item">
-        <span class="badge">@Model.Off_StoreManager.NickName</span>
-        督导姓名
-    </li>
-    <li class="list-group-item">
-        <span class="badge">@Model.Off_Checkin_Schedule.Off_Store.StoreName</span>
-        店铺名称
-    </li>
-    <li class="list-group-item">
-        <span class="badge">@Model.LastUploadTime</span>
-        上次提交时间
-    </li>
-</ul>
-<div class="sum row">
-    <div class="col-xs-1"></div>
-    <div class="col-xs-5">
-        <div class="panel panel-primary">
-            <div class="panel-heading text-center">累计销量</div>
-            <div class="panel-body text-center">
-                  @Model.Off_WeekendBreakRecord.Sum(m=>m.SalesCount)
-            </div>
+<div class="weui-cells__title">周末突破信息</div>
+<div class="weui-cells">
+    <div class="weui-cell">
+        <div class="weui-cell__bd">
+            <p>督导姓名</p>
         </div>
+        <div class="weui-cell__ft">@Html.Encode(Model.Off_StoreManager.NickName)</div>
     </div>
-    <div class="col-xs-5">
-        <div class="panel panel-primary">
-            <div class="panel-heading text-center">累计试饮</div>
-            <div class="panel-body text-center">
-                @Model.Off_WeekendBreakRecord.Sum(m => m.TrailCount)
-            </div>
+    <div class="weui-cell">
+        <div class="weui-cell__bd">
+            <p>店铺名称</p>
         </div>
+        <div class="weui-cell__ft">@Html.Encode(Model.Off_Checkin_Schedule.Off_Store.StoreName)</div>
     </div>
-    <div class="col-xs-1"></div>
+    <div class="weui-cell">
+        <div class="weui-cell__bd">
+            <p>上次提交时间</p>
+        </div>
+        <div class="weui-cell__ft">@Html.Encode(Model.LastUploadTime)</div>
+    </div>
 </div>
-    <div class="col-xs-12 padding-10">
-        <a  class="btn btn-primary btn-block" id="add-data" href="/WeekendBreak/WeekendBreak_AddRecord?breakId=@Model.Id">新增数据</a>
+<br />
+<div class="weui-grids">
+    <div class="weui-grid">
+        <div class="weui-grid__icon">
+            <span>@Html.Encode(Model.Off_WeekendBreakRecord.Count)</span>
+        </div>
+        <p class="weui-grid__label">提交次数</p>
     </div>
-    <div class="col-xs-12 padding-10">
-        <a  class="btn btn-primary btn-block" id="data-summary" href="/WeekendBreak/WeekendBreak_ViewRecord?breakId=@Model.Id">数据汇总</a>
+    <div class="weui-grid">
+        <div class="weui-grid__icon">
+            <span>@Html.Encode(Model.Off_WeekendBreakRecord.Sum(m => m.SalesCount))</span>
+        </div>
+        <p class="weui-grid__label">累计销量</p>
     </div>
-<div class="col-xs-12 padding-10">
-    <a class="btn btn-primary btn-block" id="return-submit" href="/WeekendBreak/WeekendBreak_OverView">查看总览</a>
+    <div class="weui-grid">
+        <div class="weui-grid__icon">
+            <span>@Html.Encode(Model.Off_WeekendBreakRecord.Sum(m => m.TrailCount))</span>
+        </div>
+        <p class="weui-grid__label">累计试饮</p>
+    </div>
 </div>
+<br />
+<div class="weui-btn-area">
+    <a class="weui-btn weui-btn_primary" href="/WeekendBreak/WeekendBreak_AddRecord?breakId=@Model.Id">新增数据</a>
+    <a class="weui-btn weui-btn_default" href="/WeekendBreak/WeekendBreak_ViewRecord?breakId=@Model.Id">数据汇总</a>
+</div>
+<br /><br />
 
 
