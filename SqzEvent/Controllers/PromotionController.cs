@@ -79,7 +79,6 @@ namespace SqzEvent.Controllers
                 }
                 else
                 {
-
                     user.LastQuestion = Convert.ToInt32(collection["QuestionId"].ToString());
                     userResult.AnswerContent = collection["UserResult"].ToString();
                     userResult.QuestionTitle = collection["QuestionTitle"].ToString();
