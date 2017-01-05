@@ -111,7 +111,6 @@ namespace SqzEvent.Models
     {
         public int Id { get; set; }
         public int QuestionId { get; set; }
-        [StringLength(128)]
         public string AnswerContent { get; set; }
         public int DefaultRouter { get; set; }
         public virtual Question Question { get; set; }
