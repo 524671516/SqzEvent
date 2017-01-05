@@ -294,11 +294,8 @@ html,body{
 }
 #next-submit{
     font-weight:500;
-    color:#fff;
-    background: -webkit-linear-gradient(rgba(217,52,84,0.2), rgba(155,6,35,0.2)); /* Safari 5.1 - 6.0 */
-    background: -o-linear-gradient(rgba(217,52,84,0.2), rgba(155,6,35,0.2)); /* Opera 11.1 - 12.0 */
-    background: -moz-linear-gradient(rgba(217,52,84,0.2), rgba(155,6,35,0.2)); /* Firefox 3.6 - 15 */
-    background: linear-gradient(rgba(217,52,84,0.9), rgba(155,6,35,0.9)); /* 标准的语法 */
+    color:rgba(155,6,35,1);
+    background-color:rgba(255,255,255,0.7);
     display:block;
     margin:0 auto;
     width:86%;
@@ -407,6 +404,11 @@ html,body{
     text-decoration:none;
     width:95%;
     margin:0 auto;
+}
+.rule{
+    margin-top:5%;
+    background-color:rgba(255,255,255,0.6);
+    color:#000 !important;
 }
 
 
