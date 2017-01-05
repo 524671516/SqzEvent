@@ -37,7 +37,11 @@
         }
         break;
     case 4:
-        <div></div>
+        foreach (var answer in Model.Result)
+        {
+            
+                @Html.Raw(answer.AnswerContent)
+        }
         break;
     case 8:
         <div class="text result">
