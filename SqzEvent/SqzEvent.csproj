@@ -251,6 +251,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\build.css" />
     <Content Include="Content\daterangepicker-bs3.css" />
     <Content Include="Content\font-awesome-ie7.min.css" />
     <Content Include="Content\font-awesome.min.css" />
@@ -289,10 +290,12 @@
     <Content Include="Content\images\sellertask-guide-06.jpg" />
     <Content Include="Content\images\sellertask-guide-07.jpg" />
     <Content Include="Content\images\sellertask-guide-08.jpg" />
+    <Content Include="Content\images\serveybg2.png" />
     <Content Include="Content\images\share-pic.png" />
     <Content Include="Content\images\title_bc.png" />
     <Content Include="Content\Manager.css" />
     <Content Include="Content\normalize.css" />
+    <Content Include="Content\Promotion.css" />
     <Content Include="Content\QualityControl.css" />
     <Content Include="Content\QualityControl_Manager.css" />
     <Content Include="Content\SellerTask.css" />
@@ -581,10 +584,12 @@
     <Content Include="Views\Shared\_WeekendBreak.cshtml" />
     <Content Include="Views\WeekendBreak\WeekendBreak_ViewRecordPartial.cshtml" />
     <Content Include="Views\WeekendBreak\WeekendBreak_OverViewDetails.cshtml" />
+    <Content Include="Views\Promotion\Index.cshtml" />
+    <Content Include="Views\Promotion\QusetionPartial.cshtml" />
+    <Content Include="Views\Promotion\Start.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Promotion\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

@@ -1,0 +1,141 @@
+﻿@model SqzEvent.Models.SurveyedUser
+@{
+    ViewBag.Title = "寿全斋问卷调查";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Titles</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/build.css" rel="stylesheet" />
+    <link href="~/Content/Promotion.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <div class="logo-content row">
+            <div class="col-xs-4"></div>
+            <div class="col-xs-4">
+                <img class="img-responsive" src="~/Content/images/logo-white.png" />
+            </div>
+            <div class="col-xs-4"></div>
+        </div>
+        @using (Html.BeginForm("GetResult", "Promotion", FormMethod.Post, new { @id = "result-form" }))
+        {   @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.Id)
+            @Html.HiddenFor(m => m.SurveyedUserStatus)
+            @Html.HiddenFor(m => m.StartTime)
+            @Html.HiddenFor(m => m.QuestionLibId)
+            @Html.HiddenFor(m => m.LastQuestion)
+            <input name="comfire" id="comfire" type="hidden" />
+            <div id="question-partial"></div>
+        }
+        <a id="next-submit" class="btn"><strong>下一题</strong></a>
+    </div>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/jquery.form.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(document).on("click", "input[type='radio']", function () {
+                $("#DefaultRouterId").val($(this).attr("date-url"));
+            });
+            $(document).on("click", "input", function () {
+                $("#comfire").val(1);
+            });
+            $(document).on("keyup", "#other", function () {
+                if ($(this).val() == "") {
+                    $("#DefaultRouterId").val("");
+                    $(this).parent().parent().children("input").prop("checked", false);
+                    $(this).parent().parent().children("input").val("[自定义]" + $(this).val());
+                } else {
+                    $("#DefaultRouterId").val($(this).parent().parent().children("input").attr("date-url"));
+                    $(this).parent().parent().children("input").val("[自定义]" + $(this).val());
+                    $(this).parent().parent().children("input").prop("checked", true);
+                }
+            });
+            $.ajax({
+                url: "/Promotion/QusetionPartial",
+                data: {
+                    DefaultRouterId: $("#LastQuestion").val()
+                },
+                success: function (data) {
+                    $("#question-partial").html(data);
+                    $("input").each(function () {
+                        if ($(this).val() == "其他") {
+                            $(this).val("");
+                            $(this).parent().children("label").html("<input type=\"text\" value=\"\" name=\"other\" date-url=\"other\" id=\"other\" placeholder=\"(其他)请填写\">");
+                        }
+                    })
+                    if ($("#QuestionType").val() == 4) {
+                        $("#next-submit").hide();
+                    }
+                }
+            });
+            $("#next-submit").on("click", function () {
+                if ($("#QuestionType").val() > 3) {
+                    $("#comfire").val(1);
+                } else {
+                    $("input[type='radio'],input[type='checkbox']").each(function () {
+                        if ($(this).is(":checked")) {
+                            $("#comfire").val(1);
+                            return false;
+                        } else {
+                            $("#comfire").val("");
+                        }
+                    })
+                }
+                if (!$("#next-submit").hasClass("color-gary")) {
+                    $("#next-submit").addClass("color-gary");
+                    if ($("#comfire").val() == "" || $(":checked").val() == "") {
+                        $("#questiontitle span").removeClass("hide");
+                        setTimeout(function () {
+                            $("#next-submit").removeClass("color-gary");
+                        }, 1000);
+                    } else {
+                        $("#result-form").ajaxSubmit(function () {
+                            $.ajax({
+                                url: "/Promotion/QusetionPartial",
+                                data: {
+                                    DefaultRouterId: $("#DefaultRouterId").val()
+                                },
+                                success: function (data) {
+                                    setTimeout(function () {
+                                        $("#next-submit").removeClass("color-gary");
+                                    }, 500);
+                                    $("#question-partial").html(data);
+                                    $("input").each(function () {
+                                        if ($(this).val() == "其他") {
+                                            $(this).val("");
+                                            $(this).parent().children("label").html("<input type=\"text\" value=\"\" name=\"other\" date-url=\"other\" id=\"other\" placeholder=\"(其他)请填写\">");
+                                        }
+                                    });
+                                    $("#comfire").val("");
+                                    if ($("#QuestionType").val() == 4) {
+                                        $.ajax({
+                                            url: "/Promotion/EendorContinue",
+                                            type: "post",
+                                            data: {
+                                                _DefaultRouterId: $("#DefaultRouterId").val(),
+                                                _UserId: $("#Id").val(),
+                                                _QusetionId: $("#QuestionId").val()
+                                            },
+                                            success: function (data) {
+                                                $("#next-submit").hide();
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        });
+                    }
+                }
+            })
+        })
+    </script>
+</body>
+</html>
