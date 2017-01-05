@@ -280,7 +280,7 @@ input[type="radio"] .styled:checked + label::after {
     box-shadow: 0 0 2px #ccc;
 }
 body {
-    background: url('images/serveybg2.png') repeat-x repeat-y;
+    background: url('/Content/images/serveybg2.png') repeat;
     background-color: #ce013c;
 }
 label{
