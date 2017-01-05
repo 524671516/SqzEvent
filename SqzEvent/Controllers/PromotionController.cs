@@ -54,7 +54,7 @@ namespace SqzEvent.Controllers
         {
             return View();
         }
-        public ActionResult Manager_UpdateUserInfo(int libId)
+        public ActionResult Question_Start(int libId)
         {
             string redirectUri = Url.Encode("https://event.shouquanzhai.cn/Promotion/Question_Authorize");
             string appId = WeChatUtilities.getConfigValue(WeChatUtilities.APP_ID);
