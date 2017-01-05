@@ -64,6 +64,9 @@ namespace SqzEvent.Models
 
         [StringLength(64)]
         public string OpenId { get; set; }
+
+        [StringLength(32)]
+        public string NickName { get; set; }
         public virtual QuestionLib QuestionLib { get; set; }
         // 对应关系
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

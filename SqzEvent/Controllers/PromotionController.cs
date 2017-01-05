@@ -5,6 +5,9 @@ using System.Web;
 using System.Web.Mvc;
 using SqzEvent.Models;
 using Microsoft.AspNet.Identity.Owin;
+using SqzEvent.DAL;
+using Microsoft.AspNet.Identity;
+using System.Threading.Tasks;
 
 namespace SqzEvent.Controllers
 {
@@ -50,6 +53,62 @@ namespace SqzEvent.Controllers
         public ViewResult Start()
         {
             return View();
+        }
+        public ActionResult Manager_UpdateUserInfo(int libId)
+        {
+            string redirectUri = Url.Encode("https://event.shouquanzhai.cn/Promotion/Question_Authorize");
+            string appId = WeChatUtilities.getConfigValue(WeChatUtilities.APP_ID);
+            string url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=" + redirectUri + "&response_type=code&scope=snsapi_userinfo&state=" + libId + "#wechat_redirect";
+            return Redirect(url);
+        }
+
+        public async Task<ActionResult> Question_Authorize(string code, string state)
+        {
+            
+                int libId = Convert.ToInt32(state);
+                WeChatUtilities wechat = new WeChatUtilities();
+                var jat = wechat.getWebOauthAccessToken(code);
+                var user = db.SurveyedUser.SingleOrDefault(m => m.OpenId == jat.openid && m.QuestionLibId == libId);
+                if (user != null)
+                {
+                    //跳转
+                    return RedirectToAction("Index", new { openId = jat.openid, libId = libId });
+                }
+                else
+                {
+                    //新增
+                    var userinfo = wechat.getWebOauthUserInfo(jat.access_token, jat.openid);
+                    var lib = db.QuestionLib.SingleOrDefault(m => m.Id == libId);
+                    user = new SurveyedUser()
+                    {
+                        QuestionLibId = libId,
+                        SurveyedUserStatus = 0,
+                        StartTime = DateTime.Now,
+                        OpenId = userinfo.openid,
+                        NickName = userinfo.nickname,
+                        City = userinfo.city,
+                        ImgUrl = userinfo.headimgurl,
+                        Province = userinfo.province,
+                        Sex = userinfo.sex == "1" ? true : false,
+                        LastQuestion = lib.StartQuestionId
+                    };
+                    db.SurveyedUser.Add(user);
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Index", new { openId = jat.openid, libId = libId });
+                }
+        }
+        // GET: Question
+        public ActionResult Index(string openId, int libId)
+        {
+            try
+            {
+                var surveyedUser = db.SurveyedUser.SingleOrDefault(m => m.OpenId == openId && m.QuestionLibId == libId);
+                return View(surveyedUser);
+            }
+            catch
+            {
+                return View("NotFound");
+            }
         }
 
         [HttpPost]
@@ -128,38 +187,6 @@ namespace SqzEvent.Controllers
                 return PartialView(question);
             return PartialView("NotFound");
         }
-        // GET: Question
-        public ActionResult Index(int? UserId, int LibId)
-        {
-            if (UserId == null)
-            {
-                return View("NotFound");
-            }
-            else
-            {
-                var lib = db.QuestionLib.SingleOrDefault(m => m.Id == LibId);
-                var user = db.SurveyedUser.SingleOrDefault(m => m.Id == UserId && m.QuestionLibId == LibId);
-                if (lib != null)
-                {
-                    if (user != null)
-                        return View(user);
-                }
-                else
-                {
-                    user = new SurveyedUser()
-                    {
-                        QuestionLibId = LibId,
-                        SurveyedUserStatus = 0,
-                        StartTime = DateTime.Now,
-                        //SurveyedUserName = "xya", //待修改
-                        LastQuestion = lib.StartQuestionId
-                    };
-                    db.SurveyedUser.Add(user);
-                    db.SaveChanges();
-                    return View(user);
-                }
-            }
-            return View("NotFound");
-        }
+        
     }
 }
