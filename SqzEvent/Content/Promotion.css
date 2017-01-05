@@ -1,5 +1,4 @@
 ﻿
-
 .checkbox {
   padding-left: 20px; }
 .checkbox label {
@@ -281,7 +280,7 @@ input[type="radio"] .styled:checked + label::after {
     box-shadow: 0 0 2px #ccc;
 }
 body {
-    background: url('images/serveybg2.png') repeat-x;
+    background: url('images/serveybg2.png') repeat-x repeat-y;
     background-color: #ce013c;
 }
 label{

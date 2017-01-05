@@ -5,7 +5,8 @@
 @using (Html.BeginForm("WeekendBreak_Start", "WeekendBreak", FormMethod.Post, new { @class = "form", @role = "form", @id = "start-form" }))
 {
     @Html.AntiForgeryToken()
-    <div class="weui-cells__title">周末突破签到信息</div>
+    <div class="page__header">周末突破签到信息</div>
+                <br />
     <div class="weui-cells">
         <div class="weui-cell">
             <div class="weui-cell__bd">

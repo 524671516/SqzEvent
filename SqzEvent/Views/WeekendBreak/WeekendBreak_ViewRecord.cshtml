@@ -2,6 +2,8 @@
 @{
     Layout = "~/Views/Shared/_WeekendBreak.cshtml";
 }
+<div class="page__header">数据汇总</div>
+<br />
 <div class="weui-cells">
     <div class="weui-cell">
         <div class="weui-cell__bd">
@@ -66,7 +68,7 @@
             $iosActionsheet.addClass('weui-actionsheet_toggle');
             $iosMask.fadeIn(200);
         });
-        $(".iosActionsheetDelete").click(function () {
+        $("#iosActionsheetDelete").click(function () {
             $.ajax({
                 url: "/WeekendBreak/WeekendBreak_DeleteRecord",
                 data: {
