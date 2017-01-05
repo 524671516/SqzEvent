@@ -152,7 +152,7 @@ namespace SqzEvent.Controllers
                         QuestionLibId = LibId,
                         SurveyedUserStatus = 0,
                         StartTime = DateTime.Now,
-                        SurveyedUserName = "xya", //待修改
+                        //SurveyedUserName = "xya", //待修改
                         LastQuestion = lib.StartQuestionId
                     };
                     db.SurveyedUser.Add(user);

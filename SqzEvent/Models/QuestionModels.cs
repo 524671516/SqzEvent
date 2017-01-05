@@ -47,11 +47,23 @@ namespace SqzEvent.Models
     public partial class SurveyedUser
     {
         public int Id { get; set; }
-        public string SurveyedUserName { get; set; }
         public int QuestionLibId { get; set; }
         public int SurveyedUserStatus { get; set; }
         public DateTime StartTime { get; set; }
         public int LastQuestion { get; set; }
+        [StringLength(256)]
+        public string ImgUrl { get; set; }
+
+        [StringLength(64)]
+        public string City { get; set; }
+
+        [StringLength(64)]
+        public string Province { get; set; }
+
+        public bool Sex { get; set; }
+
+        [StringLength(64)]
+        public string OpenId { get; set; }
         public virtual QuestionLib QuestionLib { get; set; }
         // 对应关系
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -80,6 +92,7 @@ namespace SqzEvent.Models
     {
         public int Id { get; set; }
         public int QuestionLibId { get; set; }
+        [StringLength(128)]
         public string QuestionTitle { get; set; }
         public int QuestionType { get; set; }
         public int DefaultRouter { get; set; }
@@ -95,6 +108,7 @@ namespace SqzEvent.Models
     {
         public int Id { get; set; }
         public int QuestionId { get; set; }
+        [StringLength(128)]
         public string AnswerContent { get; set; }
         public int DefaultRouter { get; set; }
         public virtual Question Question { get; set; }
@@ -109,6 +123,7 @@ namespace SqzEvent.Models
         public int SurveyedUserId { get; set; }
         public int QuestionLibId { get; set; }
         public int QuestionId { get; set; }
+        [StringLength(128)]
         public string QuestionTitle { get; set; }
         public string AnswerContent { get; set; }
         public virtual SurveyedUser SurveyedUser { get; set; }
