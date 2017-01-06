@@ -281,7 +281,7 @@ input[type="radio"] .styled:checked + label::after {
 }
 body {
     background: url('/Content/images/serveybg2.png') repeat;
-    background-color: #db4d6d;
+    background-color: #b11d38;
 }
 label{
     text-align:left;
