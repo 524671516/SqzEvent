@@ -281,7 +281,7 @@ input[type="radio"] .styled:checked + label::after {
 }
 body {
     background: url('/Content/images/serveybg2.png') repeat;
-    background-color: #ce013c;
+    background-color: #db4d6d;
 }
 label{
     text-align:left;
@@ -372,7 +372,7 @@ html,body{
 	border:1px solid #dcdcdc;
 	display:inline-block;
 	cursor:pointer;
-	color:#000;
+	color:rgba(155,6,35,1);
 	font-family:Arial;
 	font-size:15px;
 	font-weight:bold;
