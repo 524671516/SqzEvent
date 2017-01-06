@@ -64,38 +64,38 @@ namespace SqzEvent.Controllers
 
         public async Task<ActionResult> Question_Authorize(string code, string state)
         {
-            
-                int libId = Convert.ToInt32(state);
-                WeChatUtilities wechat = new WeChatUtilities();
-                var jat = wechat.getWebOauthAccessToken(code);
-                var user = db.SurveyedUser.SingleOrDefault(m => m.OpenId == jat.openid && m.QuestionLibId == libId);
-                if (user != null)
+
+            int libId = Convert.ToInt32(state);
+            WeChatUtilities wechat = new WeChatUtilities();
+            var jat = wechat.getWebOauthAccessToken(code);
+            var user = db.SurveyedUser.SingleOrDefault(m => m.OpenId == jat.openid && m.QuestionLibId == libId);
+            if (user != null)
+            {
+                //跳转
+                return RedirectToAction("Index", new { openId = jat.openid, libId = libId });
+            }
+            else
+            {
+                //新增
+                var userinfo = wechat.getWebOauthUserInfo(jat.access_token, jat.openid);
+                var lib = db.QuestionLib.SingleOrDefault(m => m.Id == libId);
+                user = new SurveyedUser()
                 {
-                    //跳转
-                    return RedirectToAction("Index", new { openId = jat.openid, libId = libId });
-                }
-                else
-                {
-                    //新增
-                    var userinfo = wechat.getWebOauthUserInfo(jat.access_token, jat.openid);
-                    var lib = db.QuestionLib.SingleOrDefault(m => m.Id == libId);
-                    user = new SurveyedUser()
-                    {
-                        QuestionLibId = libId,
-                        SurveyedUserStatus = 0,
-                        StartTime = DateTime.Now,
-                        OpenId = userinfo.openid,
-                        NickName = userinfo.nickname,
-                        City = userinfo.city,
-                        ImgUrl = userinfo.headimgurl,
-                        Province = userinfo.province,
-                        Sex = userinfo.sex == "1" ? true : false,
-                        LastQuestion = lib.StartQuestionId
-                    };
-                    db.SurveyedUser.Add(user);
-                    await db.SaveChangesAsync();
-                    return RedirectToAction("Index", new { openId = jat.openid, libId = libId });
-                }
+                    QuestionLibId = libId,
+                    SurveyedUserStatus = 0,
+                    StartTime = DateTime.Now,
+                    OpenId = userinfo.openid,
+                    NickName = userinfo.nickname,
+                    City = userinfo.city,
+                    ImgUrl = userinfo.headimgurl,
+                    Province = userinfo.province,
+                    Sex = userinfo.sex == "1" ? true : false,
+                    LastQuestion = lib.StartQuestionId
+                };
+                db.SurveyedUser.Add(user);
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index", new { openId = jat.openid, libId = libId });
+            }
         }
         // GET: Question
         public ActionResult Index(string openId, int libId)

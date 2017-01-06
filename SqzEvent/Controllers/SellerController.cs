@@ -4273,6 +4273,13 @@ namespace SqzEvent.Controllers
                 return View(model);
             }
         }
+        [HttpPost, AllowAnonymous]
+        public JsonResult getAllPosition()
+        {
+            var list = from m in offlineDB.Off_Manager_CheckIn
+                       select new { Id = m.Id, UserName = m.Off_Manager_Task.NickName, Location = m.Location, EventId = m.Manager_EventId, EventDate = m.Off_Manager_Task.TaskDate };
+            return Json(list.Take(50));
+        }
 
         // 招募完成页面，5秒后返回首页
         public ActionResult Recruit_Done()
