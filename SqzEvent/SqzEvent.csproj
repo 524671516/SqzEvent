@@ -579,13 +579,15 @@
     <Content Include="Views\WeekendBreak\WeekendBreak_AddRecordPartial.cshtml" />
     <Content Include="Views\WeekendBreak\WeekendBreak_ViewRecord.cshtml" />
     <Content Include="Views\WeekendBreak\WeekendBreak_OverView.cshtml" />
-    <Content Include="Views\WeekendBreak\WeekendBreak_OverViewPartial.cshtml" />
+    <Content Include="Views\WeekendBreak\WeekendBreak_StoreViewPartial.cshtml" />
     <Content Include="Views\Shared\_WeekendBreak.cshtml" />
     <Content Include="Views\WeekendBreak\WeekendBreak_ViewRecordPartial.cshtml" />
-    <Content Include="Views\WeekendBreak\WeekendBreak_OverViewDetails.cshtml" />
+    <Content Include="Views\WeekendBreak\WeekendBreak_StoreViewDetails.cshtml" />
     <Content Include="Views\Promotion\Index.cshtml" />
     <Content Include="Views\Promotion\QusetionPartial.cshtml" />
     <Content Include="Views\Promotion\Start.cshtml" />
+    <Content Include="Views\Seller\getAllPostion.cshtml" />
+    <Content Include="Views\WeekendBreak\WeekendBreak_ReportStatistic.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

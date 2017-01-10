@@ -2,7 +2,7 @@
 <div class="weui-cells">
     @foreach (var p in Model)
     {
-        <a class="weui-cell weui-cell_access" href="/WeekendBreak/WeekendBreak_OverViewDetails?breakId=@p.Id">
+        <a class="weui-cell weui-cell_access" id="recorditem_@p.Id"  date-id="@p.Id">
             <div class="weui-cell__bd">
                 <p>@Html.Encode(p.Off_Checkin_Schedule.Off_Store.StoreName)</p>
             </div>
