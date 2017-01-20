@@ -170,6 +170,12 @@ myApp.onPageInit('Setting', function (page) {
                 }, type: "post",
                 success: function (e) {
                     var data = JSON.parse(e);
+                    $(".list-month").html("");
+                    for (var i = 0; i < data.fp.length; i++) {
+                        var qty = data.fp[i].qty == null ? 0 : data.fp[i].qty
+                        var plan = data.fp[i].plan == null ? 0 : data.fp[i].plan
+                        $(".list-month").append("<li class=\"item-content\">" + "<div class=\"item-inner\">" + "<div class=\"item-title\">" + data.fp[i].pn+"("+data.fp[i].fn+")" + "</div>" + "<div class=\"item-after\">" + qty + "/" + plan + "</div>" + "</div>" + "</li>")
+                    }
                     for (var i = 0; i < data.result.length; i++) {                     
                         var _date = ChangeDateFormat(data.result[i].Key);
                         _date1 = data.result[i].Key.substring(data.result[i].Key.indexOf("(")+1, data.result[i].Key.indexOf(")"))
@@ -211,6 +217,12 @@ myApp.onPageInit('Setting', function (page) {
                 }, type: "post",
                 success: function (e) {
                     var data = JSON.parse(e);
+                    $(".list-month").html("");
+                    for (var i = 0; i < data.fp.length; i++) {
+                        var qty = data.fp[i].qty == null ? 0 : data.fp[i].qty
+                        var plan = data.fp[i].plan == null ? 0 : data.fp[i].plan
+                        $(".list-month").append("<li class=\"item-content\">" + "<div class=\"item-inner\">" + "<div class=\"item-title\">" + data.fp[i].pn + "(" + data.fp[i].fn + ")" + "</div>" + "<div class=\"item-after\">" + qty + "/" + plan + "</div>" + "</div>" + "</li>")
+                    }
                     for (var i = 0; i < data.result.length; i++) {
                         var _date = ChangeDateFormat(data.result[i].Key);
                         _date1 = data.result[i].Key.substring(data.result[i].Key.indexOf("(") + 1, data.result[i].Key.indexOf(")"))

@@ -84,7 +84,6 @@ namespace SqzEvent.Models
 
         public string FactoryName { get; set; }
     }
-    
     public class AgendaDetailsViewModel
     {
         public int? FactoryId { get; set; }
@@ -114,5 +113,16 @@ namespace SqzEvent.Models
         public bool Tips { get; set; }
 
         public bool Status { get; set; }
+    }
+
+    public class MonthSchedule
+    {
+        public int ProductId { get; set; }
+        public string ProductName { get; set; }
+        public string FactoryName { get; set; }
+        public int FactoryId { get; set; }
+        public int Plan { get; set; }
+        public int? Qty { get; set; }
+
     }
 }
