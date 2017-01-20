@@ -47,4 +47,8 @@ div.daterangepicker{
 .daterangepicker.opensright:after{
     display:none;
 }
+#iosActionsheetEdit{
+    color:green;
+}
+
 

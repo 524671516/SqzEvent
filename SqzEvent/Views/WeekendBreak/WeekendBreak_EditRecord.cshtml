@@ -48,7 +48,7 @@
             <div class="weui-cell__ft">
                 <div class="input-group">
                     <a class="input-group-addon reduce" data-step="10" href="javascript:reduce('TrailCount',10)"><i class="fa fa-minus" aria-hidden="true"></i></a>
-                    <input type="tel" class="weui-input try-input" id="TrailCount" name="TrailCount" value="0" onchange="javascript: trailChanges('trail_count', 'trail_org', 'TrailCount');">
+                    <input type="tel" class="weui-input try-input" id="TrailCount" name="TrailCount" value="@Model.TrailCount" onchange="javascript: trailChanges('trail_count', 'trail_org', 'TrailCount');">
                     <a class="input-group-addon add" data-step="10" href="javascript:add('TrailCount',10)"><i class="fa fa-plus" aria-hidden="true"></i></a>
                 </div>
             </div>
@@ -72,7 +72,6 @@
 @section scripts{
     <script>
         var existsale = {};
-        var existeat;
 
         $("#data-submit").on("click", function () {
             if (!$("#data-submit").hasClass("weui-btn_disabled")) {
@@ -101,7 +100,6 @@
                     var id = $(this).parent().parent().parent().find(".sum-sale").attr("id");
                     existsale[id] = value;
                 })
-                console.log(existsale)
                 existeat=$(".try-input").val();
 
             }
@@ -128,7 +126,7 @@
                 current_input = 0;
                 $("#" + inputid).val(0);
             }
-            $("#" + targetsum).html(current_sum + current_input - existeat);
+            $("#" + targetsum).html(current_sum + current_input);
             $("#after-try").html(current_sum + current_input);
         }
         function reduce(inputid, step) {

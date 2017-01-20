@@ -3,23 +3,25 @@
 @{
     var recorditemlist = ViewBag.RecordList as List<Wx_WeekendBreakItem>;
 }
-@foreach (var p in Model)
-{
-    <div class="weui-cell">
-        <div class="weui-cell__bd">
-            <div class="item-title">@Html.Encode(p.ProductName)</div>   
-        </div>
-        <div class="weui-cell_hd" style="line-height:28px;">
-            <span class="sum-sale c_num" id="sales-sum_@p.ProductId">@Html.Encode(recorditemlist.Where(m => m.ProductId == p.ProductId).Sum(e => e.SalesCount))</span>
-            <span class="hidden" id="sales-org_@p.ProductId">@Html.Encode(recorditemlist.Where(m => m.ProductId == p.ProductId).Sum(e => e.SalesCount))</span>
-        </div>
-        <div class="weui-cell__ft">
-            <div class="input-group">
-                <a class="input-group-addon reduce" data-step="1" href="javascript:reduce('sales_@p.ProductId',1)"><i class="fa fa-minus" aria-hidden="true"></i></a>
-                <input type="tel" class="weui-input sale-input" id="sales_@p.ProductId" name="sales_@p.ProductId" value="@p.SalesCount" onchange="javascript:salesChanges('sales-sum_@p.ProductId','sales-org_@p.ProductId', 'sales_@p.ProductId');">
-                <a class="input-group-addon add" data-step="1" href="javascript:add('sales_@p.ProductId',1)"><i class="fa fa-plus" aria-hidden="true"></i></a>
+
+    @foreach (var p in Model)
+    {
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <div class="item-title">@Html.Encode(p.ProductName)</div>
+            </div>
+            <div class="weui-cell_hd" style="line-height:28px;">
+                <span class="sum-sale c_num" id="sales-sum_@p.ProductId">@Html.Encode(recorditemlist.Where(m => m.ProductId == p.ProductId).Sum(e => e.SalesCount))</span>
+                <span class="hidden" id="sales-org_@p.ProductId">@Html.Encode(recorditemlist.Where(m => m.ProductId == p.ProductId).Sum(e => e.SalesCount))</span>
+            </div>
+            <div class="weui-cell__ft">
+                <div class="input-group">
+                    <a class="input-group-addon reduce" data-step="1" href="javascript:reduce('sales_@p.ProductId',1)"><i class="fa fa-minus" aria-hidden="true"></i></a>
+                    <input type="tel" class="weui-input sale-input" id="sales_@p.ProductId" name="sales_@p.ProductId" value="@p.SalesCount" onchange="javascript:salesChanges('sales-sum_@p.ProductId','sales-org_@p.ProductId', 'sales_@p.ProductId');">
+                    <a class="input-group-addon add" data-step="1" href="javascript:add('sales_@p.ProductId',1)"><i class="fa fa-plus" aria-hidden="true"></i></a>
+                </div>
             </div>
         </div>
-    </div>
-}
+    }
+
 
