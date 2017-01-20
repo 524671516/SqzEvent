@@ -26,7 +26,7 @@
 <div style="border-top:1px solid #d9d9d9;">
 </div>
 <div class="weui-btn-area">
-    <a class="weui-btn weui-btn_default" href="/WeekendBreak/WeekendBreak_OverView">返回</a>
+    <a class="weui-btn weui-btn_default" id="return-overview" href="/WeekendBreak/WeekendBreak_OverView?date=@Model.Subscribe.ToString("yyyy-MM-dd")">返回</a>
 </div>
 <br /><br />
 <div class="">
@@ -48,8 +48,7 @@
         <p class="weui-toast__content">删除成功</p>
     </div>
 </div>
-@section scripts{
-    
+@section scripts{  
            <script>
                $iosMask = $("#iosMask");
                $iosActionsheet = $("#iosActionsheet");

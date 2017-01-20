@@ -498,8 +498,6 @@ namespace SqzEvent.Controllers
             writer.Close();
             return File(convertCSV(stream.ToArray()), "text/csv", "周末突破_" + today.ToShortDateString() + ".csv");
         }
-
-
         private byte[] convertCSV(byte[] array)
         {
             byte[] outBuffer = new byte[array.Length + 3];

@@ -377,12 +377,26 @@ namespace SqzEvent.Controllers
         public PartialViewResult ProductPlanPartial(string date)
         {
             DateTime _subscribe = Convert.ToDateTime(date);
+            DateTime fom = new DateTime(_subscribe.Year, _subscribe.Month, 1);
+            DateTime lom = fom.AddMonths(1);
             QCStaff staff = getStaff(User.Identity.Name);
             var factoryIdList = staff.Factory.Select(m => m.Id);
-            var model = from m in _qcdb.ProductionSchedule
-                           where factoryIdList.Contains(m.FactoryId) && m.Subscribe == _subscribe
-                           select m;
-            return PartialView(model);
+            var factorylist = from m in _qcdb.Factory
+                              select m;
+            var monthlist = from m in _qcdb.ProductionSchedule
+                            where m.Subscribe >= fom && m.Subscribe < lom && factoryIdList.Contains(m.FactoryId)
+                            group m by new { c_Product = m.Product, c_Factory = m.Factory } into g
+                            select new MonthSchedule
+                            {
+                                ProductId = g.Key.c_Product.Id,
+                                ProductName = g.Key.c_Product.SimpleName,
+                                FactoryName = g.Key.c_Factory.SimpleName,
+                                FactoryId = g.Key.c_Factory.Id,
+                                Plan = g.Sum(m => m.ProductionPlan),
+                                Qty = g.Sum(m => m.ProductionQty)
+                            };
+            ViewBag.fl = factorylist;
+            return PartialView(monthlist);
         }
 
         // 签到页面
@@ -1146,7 +1160,16 @@ namespace SqzEvent.Controllers
                     group m by m.Subscribe into g
                     orderby g.Key
                     select new { g.Key, result = g.All(m=> m.ProductionQty >= m.ProductionPlan) };
-            return Json(new { result = t });
+            var mlist = from m in _qcdb.ProductionSchedule
+                    where m.Subscribe >= _month_start && m.Subscribe < _month_end
+                    group m by new { c_Product = m.Product, c_Factory = m.Factory } into g
+                    select new {
+                        plan = g.Sum(m => m.ProductionPlan),
+                        qty = g.Sum(m => m.ProductionQty),
+                        fn =g.Key.c_Factory.SimpleName,
+                        pn =g.Key.c_Product.SimpleName
+                    };
+            return Json(new { result = t,fp=mlist });
         }
         public ActionResult Manager_ScheduleDetails(string date)
         {
