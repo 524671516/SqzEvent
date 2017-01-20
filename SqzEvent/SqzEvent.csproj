@@ -588,6 +588,7 @@
     <Content Include="Views\Promotion\Start.cshtml" />
     <Content Include="Views\Seller\getAllPostion.cshtml" />
     <Content Include="Views\WeekendBreak\WeekendBreak_ReportStatistic.cshtml" />
+    <Content Include="Views\WeekendBreak\WeekendBreak_EditRecordPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -4265,7 +4265,6 @@ namespace SqzEvent.Controllers
                 {
                     return RedirectToAction("Recruit_ForceRegister", "Seller");
                 }
-
             }
             else
             {
