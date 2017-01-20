@@ -96,12 +96,13 @@
             },
             success: function (data) {
                 $(".partial").html(data);
-                $(".sum-sale").each(function () {
-                    var value = $(this).html();
-                    var id = $(this).attr("id");
+                $(".sale-input").each(function () {
+                    var value = $(this).val();
+                    var id = $(this).parent().parent().parent().find(".sum-sale").attr("id");
                     existsale[id] = value;
                 })
-                existeat=$("#trail_count").html();
+                console.log(existsale)
+                existeat=$(".try-input").val();
 
             }
         });
