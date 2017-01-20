@@ -72,6 +72,7 @@
 @section scripts{
     <script>
         var existsale = {};
+        var existeat;
 
         $("#data-submit").on("click", function () {
             if (!$("#data-submit").hasClass("weui-btn_disabled")) {
@@ -100,7 +101,7 @@
                     var id = $(this).parent().parent().parent().find(".sum-sale").attr("id");
                     existsale[id] = value;
                 })
-                existeat=$(".try-input").val();
+                existeat = $(".try-input").val();
 
             }
         });
@@ -126,8 +127,8 @@
                 current_input = 0;
                 $("#" + inputid).val(0);
             }
-            $("#" + targetsum).html(current_sum + current_input);
-            $("#after-try").html(current_sum + current_input);
+            $("#" + targetsum).html(current_sum + current_input - existeat);
+            $("#after-try").html(current_sum + current_input - existeat);
         }
         function reduce(inputid, step) {
             current_input = Number($("#" + inputid).val());
