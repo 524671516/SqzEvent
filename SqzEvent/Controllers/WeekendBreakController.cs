@@ -236,6 +236,87 @@ namespace SqzEvent.Controllers
             }
         }
 
+        // 修改数据
+        public ActionResult WeekendBreak_EditRecord(int recordId)
+        {
+            var record = offlineDB.Off_WeekendBreakRecord.SingleOrDefault(m => m.Id == recordId);
+            ViewBag.ScheduleId = record.Off_WeekendBreak.ScheduleId;
+            ViewBag.OldRecord = record.Off_WeekendBreak.Off_WeekendBreakRecord;
+            return View(record);
+        }
+        public ActionResult WeekendBreak_EditRecordPartial(int recordId)
+        {
+            List<int> plist = new List<int>();
+            var current_record = offlineDB.Off_WeekendBreakRecord.SingleOrDefault(m => m.Id == recordId);
+            var productlist = offlineDB.Off_Checkin_Schedule.SingleOrDefault(m => m.Id == current_record.Off_WeekendBreak.ScheduleId).Off_Sales_Template.ProductList;
+            foreach (var i in productlist.Split(','))
+            {
+                plist.Add(Convert.ToInt32(i));
+            }
+            var records = current_record.Off_WeekendBreak.Off_WeekendBreakRecord;
+            List<Wx_WeekendBreakItem> itemlist = new List<Wx_WeekendBreakItem>();
+            foreach (var record in records)
+            {
+                List<Wx_WeekendBreakItem> itemlist_partial = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Wx_WeekendBreakItem>>(record.SalesDetails);
+                itemlist.AddRange(itemlist_partial);
+            }
+            ViewBag.RecordList = itemlist;
+            List<Wx_WeekendBreakItem> model = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Wx_WeekendBreakItem>>(current_record.SalesDetails);
+            return PartialView(model);
+        }
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<ActionResult> WeekendBreak_EditRecord(Off_WeekendBreakRecord model, FormCollection form)
+        {
+            var _t = form;
+            if (ModelState.IsValid)
+            {
+                Off_WeekendBreakRecord record = new Off_WeekendBreakRecord();
+                if (TryUpdateModel(record))
+                {
+                    List<int> plist = new List<int>();
+                    int scheduleId = Convert.ToInt32(form["ScheduleId"].ToString());
+                    var productIdlist = offlineDB.Off_Checkin_Schedule.SingleOrDefault(m => m.Id == scheduleId).Off_Sales_Template.ProductList;
+                    foreach (var i in productIdlist.Split(','))
+                    {
+                        plist.Add(Convert.ToInt32(i));
+                    }
+                    var productlist = from m in offlineDB.Off_Product
+                                      where plist.Contains(m.Id)
+                                      select m;
+                    List<Wx_WeekendBreakItem> itemlist = new List<Wx_WeekendBreakItem>();
+                    foreach (var item in productlist)
+                    {
+                        // 获取单品数据
+                        int? sales = null;
+                        if (form["sales_" + item.Id] != "")
+                            sales = Convert.ToInt32(form["sales_" + item.Id]);
+                        if (sales != null && sales != 0)
+                        {
+                            Wx_WeekendBreakItem b_item = new Wx_WeekendBreakItem()
+                            {
+                                ProductId = item.Id,
+                                ProductName = item.SimpleName,
+                                SalesCount = (int)sales
+                            };
+                            itemlist.Add(b_item);
+                        }
+                    }
+                    DateTime lasttime = DateTime.Now;
+                    record.SalesDetails = Newtonsoft.Json.JsonConvert.SerializeObject(itemlist);
+                    record.SalesCount = itemlist.Sum(m => m.SalesCount);
+                    offlineDB.Entry(record).State = System.Data.Entity.EntityState.Modified;
+                    await offlineDB.SaveChangesAsync();
+                    return Content("SUCCESS");
+                }
+                return Content("FAIL");
+            }
+            else
+            {
+                //ViewBag.ScheduleId = Convert.ToInt32(form["ScheduleId"].ToString());
+                return Content("FAIL");
+            }
+        }
+
         // 查看数据
         public ActionResult WeekendBreak_ViewRecord(int breakId)
         {

@@ -22,29 +22,5 @@
         </div>
     </div>
 }
-<!--
-<div class="table-responsive">
-    <table class="table">
-        <tr>
-            <th>产品明细</th>
-            <th>累计</th>
-            <th class="text-center">新增</th>
-        </tr>
-        @foreach (var p in Model)
-            {
-            <tr class="list">
-                <td>@p.SimpleName</td>
-                <td class="sum-sale sum-same">@Html.Encode(recorditemlist.Where(m=>m.ProductId==p.Id).Sum(e=>e.SalesCount))</td>
-                <td>
-                    <div class="input-group">
-                        <span class="input-group-addon add" data-step="1">+</span>
-                        <input type="tel" class="form-control text-center sale-input" id="salse_@p.Id" name="sales_@p.Id">
-                        <span class="input-group-addon reduce" data-step="1">-</span>
-                    </div>
-                </td>
-            </tr>
-        }
-    </table>
-</div>
-    -->
+
 

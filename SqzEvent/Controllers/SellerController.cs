@@ -4265,7 +4265,6 @@ namespace SqzEvent.Controllers
                 {
                     return RedirectToAction("Recruit_ForceRegister", "Seller");
                 }
-
             }
             else
             {
@@ -4277,6 +4276,7 @@ namespace SqzEvent.Controllers
         public JsonResult getAllPosition()
         {
             var list = from m in offlineDB.Off_Manager_CheckIn
+                       orderby m.Manager_EventId
                        select new { Id = m.Id, UserName = m.Off_Manager_Task.NickName, Location = m.Location, EventId = m.Manager_EventId, EventDate = m.Off_Manager_Task.TaskDate };
             return Json(list.Take(50));
         }

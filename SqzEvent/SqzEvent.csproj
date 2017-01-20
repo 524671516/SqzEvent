@@ -586,6 +586,7 @@
     <Content Include="Views\Promotion\Index.cshtml" />
     <Content Include="Views\Promotion\QusetionPartial.cshtml" />
     <Content Include="Views\Promotion\Start.cshtml" />
+    <Content Include="Views\WeekendBreak\WeekendBreak_EditRecordPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
