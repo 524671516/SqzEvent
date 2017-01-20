@@ -8,6 +8,11 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using System.Threading.Tasks;
 using SqzEvent.DAL;
+using System.IO;
+using CsvHelper;
+using System.Runtime.Serialization.Json;
+using System.Text;
+using Newtonsoft.Json;
 
 namespace SqzEvent.Controllers
 {
@@ -391,9 +396,19 @@ namespace SqzEvent.Controllers
             return View();
         }
         [Authorize(Roles = "Senior")]
-        public ActionResult WeekendBreak_OverViewPartial(string date)
+        [HttpPost]
+        public async Task<ActionResult> WeekendBreak_DeleteStore(int breakId)
+        {
+            var item = offlineDB.Off_WeekendBreak.SingleOrDefault(m => m.Id == breakId);
+            offlineDB.Off_WeekendBreak.Remove(item);
+            await offlineDB.SaveChangesAsync();
+            return Content("SUCCESS");
+        }
+        [Authorize(Roles = "Senior")]
+        public ActionResult WeekendBreak_StoreViewPartial(string date)
         {
             var today = Convert.ToDateTime(date);
+
             var list = from m in offlineDB.Off_WeekendBreak
                        where m.Subscribe == today
                        orderby m.Off_WeekendBreakRecord.Sum(g=>g.SalesCount) descending
@@ -402,10 +417,85 @@ namespace SqzEvent.Controllers
             return PartialView(list);
         }
         [Authorize(Roles = "Senior")]
-        public ActionResult WeekendBreak_OverViewDetails(int breakId)
+        public ActionResult WeekendBreak_StoreViewDetails(int breakId)
         {
             var item = offlineDB.Off_WeekendBreak.SingleOrDefault(m => m.Id == breakId);
             return View(item);
         }
+        [Authorize(Roles = "Senior")]
+        public FileResult WeekendBreak_ReportStatistic(string date)
+        {
+            MemoryStream stream = new MemoryStream();
+            StreamWriter writer = new StreamWriter(stream);
+            CsvWriter csv = new CsvWriter(writer);
+            var user = UserManager.FindById(User.Identity.GetUserId());
+            DateTime today = Convert.ToDateTime(date);
+            // 填充表头
+            csv.WriteField("店名");
+            csv.WriteField("督导姓名");
+            // 填充产品表头
+            var productlist = from m in offlineDB.Off_Product
+                              where m.Off_System_Id == user.DefaultSystemId
+                              orderby m.Id
+                              select m;
+            List<int> productIds = new List<int>();
+            foreach (var product in productlist)
+            {
+                csv.WriteField(product.SimpleName);
+                productIds.Add(product.Id);
+            }
+            csv.WriteField("销量合计");
+            csv.WriteField("试饮合计");
+            csv.NextRecord();
+            // 填充产品内容         
+            var weekendbreaklist = from m in offlineDB.Off_WeekendBreak
+                              where m.Subscribe == today
+                              orderby m.Subscribe
+                              select m;
+            foreach (var wb_item in weekendbreaklist)
+            {
+                //csv.WriteField(sequence);
+                csv.WriteField(wb_item.Off_Checkin_Schedule.Off_Store.StoreName);
+                csv.WriteField(wb_item.Off_StoreManager.NickName);
+                List<Wx_WeekendBreakItem> itemlist = new List<Wx_WeekendBreakItem>();
+                foreach(var details in wb_item.Off_WeekendBreakRecord)
+                {
+                    itemlist.AddRange(Newtonsoft.Json.JsonConvert.DeserializeObject<List<Wx_WeekendBreakItem>>(details.SalesDetails));
+                }
+                var ProductSum = from m in itemlist
+                                 group m by m.ProductId into g
+                                 select new { PId = g.Key, SalesCount = g.Sum(m => m.SalesCount) };
+                foreach (var pid in productIds)
+                {
+                    var _sum = ProductSum.SingleOrDefault(m => m.PId == pid);
+                    if (_sum != null)
+                    {
+                        csv.WriteField(_sum.SalesCount);
+                    }
+                    else
+                    {
+                        csv.WriteField("-");
+                    }                    
+                }
+                csv.WriteField(wb_item.Off_WeekendBreakRecord.Sum(m => m.SalesCount));
+                csv.WriteField(wb_item.Off_WeekendBreakRecord.Sum(m => m.TrailCount));
+                csv.NextRecord();
+            }
+            writer.Flush();
+            writer.Close();
+            return File(convertCSV(stream.ToArray()), "text/csv", "周末突破_" + today.ToShortDateString() + ".csv");
+        }
+
+
+        private byte[] convertCSV(byte[] array)
+        {
+            byte[] outBuffer = new byte[array.Length + 3];
+            outBuffer[0] = (byte)0xEF;//有BOM,解决乱码
+            outBuffer[1] = (byte)0xBB;
+            outBuffer[2] = (byte)0xBF;
+            Array.Copy(array, 0, outBuffer, 3, array.Length);
+            return outBuffer;
+        }
     }
+    
 }
