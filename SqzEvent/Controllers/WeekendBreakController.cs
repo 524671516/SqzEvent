@@ -457,27 +457,40 @@ namespace SqzEvent.Controllers
                 //csv.WriteField(sequence);
                 csv.WriteField(wb_item.Off_Checkin_Schedule.Off_Store.StoreName);
                 csv.WriteField(wb_item.Off_StoreManager.NickName);
-                List<Wx_WeekendBreakItem> itemlist = new List<Wx_WeekendBreakItem>();
+                /*List<Wx_WeekendBreakItem> itemlist = new List<Wx_WeekendBreakItem>();
                 foreach(var details in wb_item.Off_WeekendBreakRecord)
                 {
                     itemlist.AddRange(Newtonsoft.Json.JsonConvert.DeserializeObject<List<Wx_WeekendBreakItem>>(details.SalesDetails));
                 }
                 var ProductSum = from m in itemlist
                                  group m by m.ProductId into g
-                                 select new { PId = g.Key, SalesCount = g.Sum(m => m.SalesCount) };
-                foreach (var pid in productIds)
+                                 select new { PId = g.Key, SalesCount = g.Sum(m => m.SalesCount) };*/
+                var checkin = wb_item.Off_Checkin_Schedule.Off_Checkin.FirstOrDefault();
+                int product_count = 0;
+                if (checkin != null)
                 {
-                    var _sum = ProductSum.SingleOrDefault(m => m.PId == pid);
-                    if (_sum != null)
+                    foreach (var pid in productIds)
                     {
-                        csv.WriteField(_sum.SalesCount);
+                        var _sum = checkin.Off_Checkin_Product.SingleOrDefault(m => m.Id == pid);
+                        if (_sum != null)
+                        {
+                            product_count += _sum.SalesCount ?? 0;
+                            csv.WriteField(_sum.SalesCount);
+                        }
+                        else
+                        {
+                            csv.WriteField("-");
+                        }
                     }
-                    else
+                }
+                else
+                {
+                    foreach(var pid in productIds)
                     {
                         csv.WriteField("-");
-                    }                    
+                    }
                 }
-                csv.WriteField(wb_item.Off_WeekendBreakRecord.Sum(m => m.SalesCount));
+                csv.WriteField(product_count);
                 csv.WriteField(wb_item.Off_WeekendBreakRecord.Sum(m => m.TrailCount));
                 csv.NextRecord();
             }
