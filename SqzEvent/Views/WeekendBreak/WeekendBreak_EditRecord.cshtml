@@ -26,12 +26,13 @@
     </div>
 </div>
 <br />
-@using (Html.BeginForm("WeekendBreak_AddRecord", "WeekendBreak", FormMethod.Post, new { @class = "form", @role = "form", @id = "add-form" }))
+@using (Html.BeginForm("WeekendBreak_EditRecord", "WeekendBreak", FormMethod.Post, new { @class = "form", @role = "form", @id = "edit-form" }))
 {
     @Html.AntiForgeryToken()
     <input value="@ViewBag.ScheduleId" type="hidden" id="ScheduleId" name="ScheduleId" />
     @Html.HiddenFor(m => m.WeekendBreakId)
     @Html.HiddenFor(m=>m.Id)
+    @Html.HiddenFor(m=>m.UploadTime)
     <div class="weui-cells__title">添加产品数据</div>
     <div class="weui-cells partial"></div>
     <div class="weui-cells__title">添加试饮数据</div>
@@ -70,10 +71,13 @@
 
 @section scripts{
     <script>
+        var existsale = {};
+        var existeat;
+
         $("#data-submit").on("click", function () {
             if (!$("#data-submit").hasClass("weui-btn_disabled")) {
                 $("#data-submit").addClass("weui-btn_disabled");
-                $("#add-form").ajaxSubmit(function (data) {
+                $("#edit-form").ajaxSubmit(function (data) {
                     if (data == "SUCCESS") {
                         $("#toast").fadeIn(100);
                         setTimeout(function () {
@@ -86,22 +90,30 @@
             return false;
         });
         $.ajax({
-            url: "/WeekendBreak/WeekendBreak_AddRecordPartial",
+            url: "/WeekendBreak/WeekendBreak_EditRecordPartial",
             data: {
-                scheduleId: $("#ScheduleId").val()
+                recordId: $("#Id").val()
             },
             success: function (data) {
                 $(".partial").html(data);
+                $(".sum-sale").each(function () {
+                    var value = $(this).html();
+                    var id = $(this).attr("id");
+                    existsale[id] = value;
+                })
+                existeat=$("#trail_count").html();
+
             }
         });
-        function salesChanges(targetsum, orgsum, inputid) {
+        function salesChanges(targetsum, orgsum, inputid) {        
+            var existnum = existsale[targetsum];
             current_sum = Number($("#" + orgsum).html());
             current_input = Number($("#" + inputid).val());
             if (isNaN(current_input)) {
                 current_input = 0;
                 $("#" + inputid).val(0);
             }
-            $("#" + targetsum).html(current_sum + current_input);
+            $("#" + targetsum).html(current_sum + current_input - existnum);
             sum_sales = 0;
             $(".sum-sale").each(function () {
                 sum_sales += Number($(this).html());
@@ -115,7 +127,7 @@
                 current_input = 0;
                 $("#" + inputid).val(0);
             }
-            $("#" + targetsum).html(current_sum + current_input);
+            $("#" + targetsum).html(current_sum + current_input - existeat);
             $("#after-try").html(current_sum + current_input);
         }
         function reduce(inputid, step) {
@@ -147,3 +159,4 @@
 
 }
 
+>

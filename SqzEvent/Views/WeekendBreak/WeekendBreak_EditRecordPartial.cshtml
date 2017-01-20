@@ -7,7 +7,7 @@
 {
     <div class="weui-cell">
         <div class="weui-cell__bd">
-            <div class="item-title">@Html.Encode(p.ProductName)</div>
+            <div class="item-title">@Html.Encode(p.ProductName)</div>   
         </div>
         <div class="weui-cell_hd" style="line-height:28px;">
             <span class="sum-sale c_num" id="sales-sum_@p.ProductId">@Html.Encode(recorditemlist.Where(m => m.ProductId == p.ProductId).Sum(e => e.SalesCount))</span>

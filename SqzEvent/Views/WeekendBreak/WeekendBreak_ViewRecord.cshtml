@@ -33,6 +33,9 @@
     <div class="weui-mask hidden" id="iosMask" style="opacity: 1;"></div>
     <div class="weui-actionsheet" id="iosActionsheet" >
         <div class="weui-actionsheet__menu">
+            <div class="weui-actionsheet__cell" id="iosActionsheetEdit">修改</div>
+        </div>
+        <div class="weui-actionsheet__menu">
             <div class="weui-actionsheet__cell" id="iosActionsheetDelete">删除</div>
         </div>
         <div class="weui-actionsheet__action">
@@ -86,6 +89,9 @@
                     }
                 }
             });
+        });
+        $("#iosActionsheetEdit").click(function () {
+            window.location.href = "WeekendBreak_EditRecord?recordid=" + $("#currentid").val();
         });
     </script>
     }

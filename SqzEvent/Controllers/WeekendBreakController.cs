@@ -313,7 +313,7 @@ namespace SqzEvent.Controllers
                     await offlineDB.SaveChangesAsync();
                     return Content("SUCCESS");
                 }
-                return Content("FAIL");
+                   return Content("FAIL");
             }
             else
             {
