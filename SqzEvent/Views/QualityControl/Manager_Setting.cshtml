@@ -16,10 +16,26 @@
     <div data-page="Setting" class="page" id="Setting">
         <!-- Scrollable page content-->
         <div class="page-content">
-            <div class="content-block date-content">
+            @*<div class="content-block date-content">
                 <div style="padding:0; margin-right:-15px; width:auto" class="content-block-inner">
-                    <div id="calendar-inline-container"></div>
+                    <div id="calendar-inline-container">
+
+                    </div>
                 </div>
+            </div>*@
+            <div class="list-block">
+                <ul>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title label">选择时间</div>
+                                <div class="item-input">
+                                    <input type="text" class="item-input-right" id="calendar-inline-container" name="calendar-inline-container" placeholder="选择时间" value="@DateTime.Now.ToString("yyyy-MM")" />
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
             </div>
                 <div class="list-block">
                     <div class="content-block-title">本月生产计划</div>
