@@ -267,6 +267,9 @@ namespace SqzEvent.Controllers
             }
             ViewBag.RecordList = itemlist;
             List<Wx_WeekendBreakItem> model = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Wx_WeekendBreakItem>>(current_record.SalesDetails);
+            ViewBag.ProductList = from m in offlineDB.Off_Product
+                        where plist.Contains(m.Id)
+                        select m;
             return PartialView(model);
         }
         [HttpPost, ValidateAntiForgeryToken]
@@ -471,7 +474,7 @@ namespace SqzEvent.Controllers
                 {
                     foreach (var pid in productIds)
                     {
-                        var _sum = checkin.Off_Checkin_Product.SingleOrDefault(m => m.Id == pid);
+                        var _sum = checkin.Off_Checkin_Product.SingleOrDefault(m => m.ProductId == pid);
                         if (_sum != null)
                         {
                             product_count += _sum.SalesCount ?? 0;

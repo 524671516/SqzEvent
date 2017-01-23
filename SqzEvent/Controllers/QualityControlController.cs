@@ -106,7 +106,7 @@ namespace SqzEvent.Controllers
                 CommonUtilities.writeLog(ex.Message);
                 return View("Error");
             }
-        }
+        }  
         
         // 注册
         [AllowAnonymous]
