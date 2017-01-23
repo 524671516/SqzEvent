@@ -519,14 +519,26 @@ myApp.onPageInit('recoverybreakdown', function (page) {
 =========*/
 myApp.onPageInit("productionplan", function (page) {
     //添加日历
-    var calendarMultiple = myApp.calendar({
-        input: "#productionplan-date",
-        dateFormat: "yyyy-mm-dd",
-        monthNames: monthNames,
-        monthNamesShort: monthNamesShort,
-        dayNames: dayNames,
-        dayNamesShort: dayNamesShort,
-        closeOnSelect: true
+    //var calendarMultiple = myApp.calendar({
+    //    input: "#productionplan-date",
+    //    dateFormat: "yyyy-mm-dd",
+    //    monthNames: monthNames,
+    //    monthNamesShort: monthNamesShort,
+    //    dayNames: dayNames,
+    //    dayNamesShort: dayNamesShort,
+    //    closeOnSelect: true
+    //});
+    var today = new Date();
+    var currentYear = today.getFullYear();
+    var currentMonth = (today.getMonth() + 1) < 10 ? "0" + (today.getMonth() + 1) : (today.getMonth() + 1);
+    var pickerInline = myApp.picker({
+        input: '#productionplan-date',
+        formatValue: function (p, values, displayValues) {
+            return values[0] + '-' + values[1];           //文本框显示格式
+        },
+        toolbarCloseText: "关闭",
+        value: [currentYear, currentMonth],
+        cols: time_col2
     });
     $$.ajax({
         url: "/QualityControl/ProductPlanPartial",
@@ -933,6 +945,23 @@ function currentTextAreaLength(pagename, id_name, max_length, result_id) {
         }
     });
 }
+var time_col2 = [
+    {
+        values: (function () {
+            var arr = [];
+            for (var i = 1999; i <= 2030; i++) { arr.push(i); }
+            return arr;
+        })(),
+    },
+    {
+        divider: true,
+        content: '-'
+    },
+     {
+         values: ('01 02 03 04 05 06 07 08 09 10 11 12').split(' '),
+         textAlign: 'right'
+     },
+]
 var time_col = [
     {
         values: (function () {
