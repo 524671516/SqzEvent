@@ -336,7 +336,8 @@ $$(document).on("pageInit", ".page[data-page='manager-task']", function (e) {
         }
     });
 });
-
+//活动提报信息填写 validate验证
+//本周活动页列表形式
 //Manager_Addchekin 添加签到信息 填写备注信息字数提示
 $$(document).on("pageInit", ".page[data-page='manager-task-addcheckin']", function (e) {
     // 获取当前备注文本长度

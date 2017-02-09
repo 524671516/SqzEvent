@@ -32,34 +32,6 @@ $$.ajax({
         $$("#user-panel").html(data);
     }
 });
-myApp.modal({
-   title: '促销员问卷调查',
-    text: '为了完善软件,我们为您提供了一份问卷调查,希望您能抽出宝贵的几分钟时间填写一下!',
-    verticalButtons: true,
-   buttons: [
-     {
-          text: '残忍拒绝',
-         onClick: function () {
-
-          }
-      },
-      {
-         text: '前往填写',
-         onClick: function () {
-             myApp.popup('.popup-survey');
-          }
-     },
-      {
-         text: '不再提醒',
-          onClick: function () {
-              $$.ajax({
-
-              })
-          }
-     },
-
-    ]
-})
 //切换版本
 $$("#user-panel").on("click", "#versionChange", function () {
     var url = $$(this).attr("href");
@@ -159,7 +131,6 @@ $$(document).on("pageInit", ".page[data-page='seller-changeaccount']", function 
         }
     });
 })
-
 //Seller_CheckIn 签到
 $$(document).on("pageInit", ".page[data-page='seller-checkin']", function (e) {
     //新用户弹窗
