@@ -41,9 +41,6 @@ namespace SqzEvent.Models
         [Required(ErrorMessage = "至少选择一个门店")]
         public int Off_Store_Id { get; set; }
 
-        [Required(ErrorMessage ="至少选择一个模板")]
-        public int Off_Template_Id { get; set; }
-
         public DateTime Subscribe { get; set; }
 
         [RegularExpression("[012]\\d:[0-6]\\d", ErrorMessage = "格式错误")]

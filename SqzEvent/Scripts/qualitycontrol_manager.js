@@ -260,6 +260,7 @@ myApp.onPageInit('Setting', function (page) {
     var today = new Date();
     var currentYear = today.getFullYear();
     var currentMonth = (today.getMonth() + 1) < 10 ? "0" + (today.getMonth() + 1) : (today.getMonth() + 1);
+    
     var pickerInline = myApp.picker({
         input: '#calendar-inline-container',
         formatValue: function (p, values, displayValues) {
@@ -269,7 +270,44 @@ myApp.onPageInit('Setting', function (page) {
         value: [currentYear, currentMonth],
         cols: time_col
     });
-
+    $$.ajax({
+        url: "/QualityControl/Manager_ScheduleDetails",
+        data: {
+            date: $$("#calendar-inline-container").val() + "-01"
+        },
+        success: function (data) {
+            $$(".list-month").html(data);
+        }
+    });
+    $$("#calendar-inline-container").on("change", function () {
+        if ($$("#calendar-inline-container").val() != "") {
+            $$.ajax({
+                url: "/QualityControl/Manager_ScheduleDetails",
+                data: {
+                    date: $$("#calendar-inline-container").val()+"-01"
+                },
+                success: function (data) {
+                    $$(".list-month").html(data);
+                }
+            });
+        }
+    });
+    $$(document).on("touchstart", ".production-details", function () {
+        var date = $$("#calendar-inline-container").val() + "-01";
+        var url = $$(this).attr("href") + "&date=" + date;
+        $$(this).attr("href", url);
+    });
+});
+myApp.onPageAfterBack("Add-schedule", function (page) {
+    $$.ajax({
+        url: "/QualityControl/Manager_ScheduleDetails",
+        data: {
+            date: $$("#calendar-inline-container").val() + "-01"
+        },
+        success: function (data) {
+            $$(".list-month").html(data);
+        }
+    });
 });
 //添加产量计划页
 myApp.onPageInit('Add-schedule', function (page) {
@@ -291,7 +329,8 @@ myApp.onPageInit('Add-schedule', function (page) {
             $$.ajax({
                 url: "/QualityControl/Manager_AddSchedulePartial",
                 data: {
-                    fid: $$("#FactoryId").val()
+                    fid: $$("#FactoryId").val(),
+                    date: $$("#DateList").val()+"-01"
                 },
                 success: function (data) {
                     $$(".tempalate-content").html(data);

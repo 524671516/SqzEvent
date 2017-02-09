@@ -147,6 +147,25 @@ textarea.invalid-input {
     font-size: 16px;
     color: lightgray;
 }
+.list-block input[type=digits]{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
+    box-sizing: border-box;
+    border: none;
+    background: 0 0;
+    border-radius: 0;
+    box-shadow: none;
+    display: block;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 43px;
+    color: #000;
+    font-size: 17px;
+    font-family: inherit;
+}
 
 .img-responsive {
     display: block;

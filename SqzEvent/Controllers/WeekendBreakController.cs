@@ -166,7 +166,7 @@ namespace SqzEvent.Controllers
         public ActionResult WeekendBreak_AddRecordPartial(int scheduleId)
         {
             List<int> plist = new List<int>();
-            var productlist = offlineDB.Off_Checkin_Schedule.SingleOrDefault(m=>m.Id==scheduleId).Off_Sales_Template.ProductList;
+            var productlist = offlineDB.Off_Checkin_Schedule.SingleOrDefault(m=>m.Id==scheduleId).Off_Store.Off_StoreSystem.ProductList;
             foreach (var i in productlist.Split(','))
             {
                 plist.Add(Convert.ToInt32(i));
@@ -195,7 +195,7 @@ namespace SqzEvent.Controllers
                 {
                     List<int> plist = new List<int>();
                     int scheduleId = Convert.ToInt32(form["ScheduleId"].ToString());
-                    var productIdlist = offlineDB.Off_Checkin_Schedule.SingleOrDefault(m => m.Id == scheduleId).Off_Sales_Template.ProductList;
+                    var productIdlist = offlineDB.Off_Checkin_Schedule.SingleOrDefault(m => m.Id == scheduleId).Off_Store.Off_StoreSystem.ProductList;
                     foreach (var i in productIdlist.Split(','))
                     {
                         plist.Add(Convert.ToInt32(i));
@@ -253,7 +253,7 @@ namespace SqzEvent.Controllers
         {
             List<int> plist = new List<int>();
             var current_record = offlineDB.Off_WeekendBreakRecord.SingleOrDefault(m => m.Id == recordId);
-            var productlist = offlineDB.Off_Checkin_Schedule.SingleOrDefault(m => m.Id == current_record.Off_WeekendBreak.ScheduleId).Off_Sales_Template.ProductList;
+            var productlist = offlineDB.Off_Checkin_Schedule.SingleOrDefault(m => m.Id == current_record.Off_WeekendBreak.ScheduleId).Off_Store.Off_StoreSystem.ProductList;
             foreach (var i in productlist.Split(','))
             {
                 plist.Add(Convert.ToInt32(i));
@@ -283,7 +283,7 @@ namespace SqzEvent.Controllers
                 {
                     List<int> plist = new List<int>();
                     int scheduleId = Convert.ToInt32(form["ScheduleId"].ToString());
-                    var productIdlist = offlineDB.Off_Checkin_Schedule.SingleOrDefault(m => m.Id == scheduleId).Off_Sales_Template.ProductList;
+                    var productIdlist = offlineDB.Off_Checkin_Schedule.SingleOrDefault(m => m.Id == scheduleId).Off_Store.Off_StoreSystem.ProductList;
                     foreach (var i in productIdlist.Split(','))
                     {
                         plist.Add(Convert.ToInt32(i));

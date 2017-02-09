@@ -463,7 +463,19 @@ myApp.onPageInit('dailysummary', function (page) {
             }, 500)
         }
     });
-
+    $$("#AgendaId").on("change", function () {
+        $$.ajax({
+            url: "/QualityControl/QCDailySummaryPartial",
+            data: {
+                agendaId: $$("#AgendaId").val()
+            },
+            success: function (data) {
+                $$('#dailysummary-content').html(data);
+                uploadCheckinFile("qcdailysummarypartial-form", "qcsummary-photos", "SummaryPhotos", "qcsummary-imgcount", 7);
+                currentTextAreaLength("qcdailysummarypartial-form", "Remark", 200, "qccheckin-currentlen");
+            }
+        });
+    });
 });
 /*==========
 确认修复页

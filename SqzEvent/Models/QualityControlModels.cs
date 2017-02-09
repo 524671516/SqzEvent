@@ -470,9 +470,6 @@
 
         public int ProductionQty { get; set; }
 
-        [Range(0, 10)]
-        public decimal CompleteRate { get; set; }
-
         [StringLength(256)]
         public string Remark { get; set; }
 
@@ -497,8 +494,6 @@
         public DateTime Subscribe { get; set; }
 
         public int ProductionPlan { get; set; }
-
-        public int? ProductionQty { get; set; }
 
         public virtual Product Product { get; set; }
 

@@ -6,8 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using SqzEvent.Models;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity; 
 using Microsoft.AspNet.Identity.Owin;
 using System.Threading.Tasks;
 using System.Net;
@@ -1036,7 +1035,7 @@ namespace SqzEvent.Controllers
             if (User.IsInRole("Senior"))
             {
                 var list = from m in offlineDB.Off_Manager_Request
-                           where m.Status >= 0 && m.Off_Store.Off_System_Id == user.DefaultSystemId
+                           where m.Status >= 0 && m.Off_Store.Off_StoreSystem.Off_System_Id == user.DefaultSystemId
                            orderby m.Status, m.Id descending
                            select m;
                 return PartialView(list);
@@ -1044,7 +1043,7 @@ namespace SqzEvent.Controllers
             else
             {
                 var list = from m in offlineDB.Off_Manager_Request
-                           where m.Status >= 0 && m.ManagerUserName == User.Identity.Name && m.Off_Store.Off_System_Id == user.DefaultSystemId
+                           where m.Status >= 0 && m.ManagerUserName == User.Identity.Name && m.Off_Store.Off_StoreSystem.Off_System_Id == user.DefaultSystemId
                            orderby m.Status, m.Id descending
                            select m;
                 return PartialView(list);
@@ -1267,7 +1266,7 @@ namespace SqzEvent.Controllers
                     offlineDB.Off_Checkin.Add(checkin);
                     offlineDB.SaveChanges();
                     List<int> plist = new List<int>();
-                    var Template = offlineDB.Off_Checkin_Schedule.SingleOrDefault(m => m.Id == checkin.Off_Schedule_Id).Off_Sales_Template;
+                    var Template = offlineDB.Off_Checkin_Schedule.SingleOrDefault(m => m.Id == checkin.Off_Schedule_Id).Off_Store.Off_StoreSystem;
                     foreach (var i in Template.ProductList.Split(','))
                     {
                         plist.Add(Convert.ToInt32(i));
@@ -1331,12 +1330,12 @@ namespace SqzEvent.Controllers
             if (id == 0)
             {
                 var schedule = offlineDB.Off_Checkin_Schedule.SingleOrDefault(m => m.Id == ScheduleId);
-                plist_tmp = schedule.Off_Sales_Template.ProductList.Split(',');
+                plist_tmp = schedule.Off_Store.Off_StoreSystem.ProductList.Split(',');
             }
             else
             {
                 item = offlineDB.Off_Checkin.SingleOrDefault(m => m.Id == id);
-                plist_tmp = item.Off_Checkin_Schedule.Off_Sales_Template.ProductList.Split(',');
+                plist_tmp = item.Off_Checkin_Schedule.Off_Store.Off_StoreSystem.ProductList.Split(',');
             }
             List<int> plist = new List<int>();
             foreach (var i in plist_tmp)
@@ -1369,8 +1368,8 @@ namespace SqzEvent.Controllers
 
                 Wx_ReportItemsViewModel model = new Wx_ReportItemsViewModel()
                 {
-                    AmountRequried = item.Off_Checkin_Schedule.Off_Sales_Template.RequiredAmount,
-                    StorageRequired = item.Off_Checkin_Schedule.Off_Sales_Template.RequiredStorage,
+                    AmountRequried = item.Off_Checkin_Schedule.Off_Store.Off_StoreSystem.RequiredAmount,
+                    StorageRequired = item.Off_Checkin_Schedule.Off_Store.Off_StoreSystem.RequiredStorage,
                     ProductList = templatelist
                 };
                 return PartialView(model);
@@ -1380,8 +1379,8 @@ namespace SqzEvent.Controllers
                 var schedule = offlineDB.Off_Checkin_Schedule.SingleOrDefault(m => m.Id == ScheduleId);
                 Wx_ReportItemsViewModel model = new Wx_ReportItemsViewModel()
                 {
-                    AmountRequried = schedule.Off_Sales_Template.RequiredAmount,
-                    StorageRequired = schedule.Off_Sales_Template.RequiredStorage,
+                    AmountRequried = schedule.Off_Store.Off_StoreSystem.RequiredAmount,
+                    StorageRequired = schedule.Off_Store.Off_StoreSystem.RequiredStorage,
                     ProductList = templatelist
                 };
                 return PartialView(model);
@@ -1411,7 +1410,7 @@ namespace SqzEvent.Controllers
                 {
                     // 获取模板产品列表
                     List<int> plist = new List<int>();
-                    var Template = offlineDB.Off_Checkin_Schedule.SingleOrDefault(m => m.Id == checkin.Off_Schedule_Id).Off_Sales_Template;
+                    var Template = offlineDB.Off_Checkin_Schedule.SingleOrDefault(m => m.Id == checkin.Off_Schedule_Id).Off_Store.Off_StoreSystem;
                     foreach (var i in Template.ProductList.Split(','))
                     {
                         plist.Add(Convert.ToInt32(i));
@@ -1530,7 +1529,7 @@ namespace SqzEvent.Controllers
         {
 
             var item = offlineDB.Off_Checkin.SingleOrDefault(m => m.Id == id);
-            var plist_tmp = item.Off_Checkin_Schedule.Off_Sales_Template.ProductList.Split(',');
+            var plist_tmp = item.Off_Checkin_Schedule.Off_Store.Off_StoreSystem.ProductList.Split(',');
             List<int> plist = new List<int>();
             foreach (var i in plist_tmp)
             {
@@ -1560,8 +1559,8 @@ namespace SqzEvent.Controllers
 
             Wx_ReportItemsViewModel model = new Wx_ReportItemsViewModel()
             {
-                AmountRequried = item.Off_Checkin_Schedule.Off_Sales_Template.RequiredAmount,
-                StorageRequired = item.Off_Checkin_Schedule.Off_Sales_Template.RequiredStorage,
+                AmountRequried = item.Off_Checkin_Schedule.Off_Store.Off_StoreSystem.RequiredAmount,
+                StorageRequired = item.Off_Checkin_Schedule.Off_Store.Off_StoreSystem.RequiredStorage,
                 ProductList = templatelist
             };
             return PartialView(model);
@@ -1583,23 +1582,26 @@ namespace SqzEvent.Controllers
         {
             ViewBag.today = DateTime.Now;
             var user = UserManager.FindById(User.Identity.GetUserId());
-            var manager = offlineDB.Off_StoreManager.SingleOrDefault(m => m.UserName == user.UserName && m.Off_System_Id == user.DefaultSystemId);
-            var storelist = from m in manager.Off_Store
+            //var manager = offlineDB.Off_StoreManager.SingleOrDefault(m => m.UserName == user.UserName && m.Off_System_Id == user.DefaultSystemId);
+            /*var storelist = from m in manager.Off_Store
                             group m by m.StoreSystem into g
-                            select new { Key = g.Key };
-            ViewBag.StoreSystem = new SelectList(storelist, "Key", "Key", storelist.FirstOrDefault().Key);
+                            select new { Key = g.Key };*/
+            var storesystem = from m in offlineDB.Off_StoreSystem
+                              where m.Off_System_Id == user.DefaultSystemId
+                              select m;
+            ViewBag.StoreSystem = new SelectList(storesystem, "Id", "SystemName", storesystem.FirstOrDefault().Id);
             return PartialView();
         }
 
         [Authorize(Roles = "Manager")]
-        public ActionResult Manager_ReportListPartial(string date, string storesystem)
+        public ActionResult Manager_ReportListPartial(string date, int storesystemId)
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
             DateTime today = Convert.ToDateTime(date);
             ViewBag.Today = today;
             int dow = (int)today.DayOfWeek;
             var manager = offlineDB.Off_StoreManager.SingleOrDefault(m => m.UserName == user.UserName && m.Off_System_Id == user.DefaultSystemId);
-            var storelist = manager.Off_Store.Where(m => m.StoreSystem == storesystem).Select(m => m.Id);
+            var storelist = manager.Off_Store.Where(m => m.Off_StoreSystemId == storesystemId).Select(m => m.Id);
             var listview = from m in offlineDB.Off_Checkin
                            where storelist.Contains(m.Off_Checkin_Schedule.Off_Store_Id)
                            && m.Off_Checkin_Schedule.Subscribe == today
@@ -1616,7 +1618,7 @@ namespace SqzEvent.Controllers
                            };
             //var storelist = list.Select(m => m.StoreId);
             var avglist = from m in offlineDB.Off_AVG_Info
-                          where m.DayOfWeek == dow + 1 && m.Off_Store.Off_System_Id == user.DefaultSystemId &&
+                          where m.DayOfWeek == dow + 1 && m.Off_Store.Off_StoreSystem.Off_System_Id == user.DefaultSystemId &&
                           storelist.Contains(m.StoreId)
                           select new { StoreId = m.StoreId, AVG_Total = m.AVG_SalesData, AVG_Amount = m.AVG_AmountData };
 
@@ -1637,7 +1639,7 @@ namespace SqzEvent.Controllers
             return PartialView(finallist);
         }
         [Authorize(Roles ="Manager")]
-        public FileResult Manager_ReportStatistic(string date, string storesystem)
+        public FileResult Manager_ReportStatistic(string date, int storesystemId)
         {
             MemoryStream stream = new MemoryStream();
             StreamWriter writer = new StreamWriter(stream);
@@ -1663,7 +1665,7 @@ namespace SqzEvent.Controllers
             csv.NextRecord();
             // 填充产品内容
             var manager = offlineDB.Off_StoreManager.SingleOrDefault(m => m.UserName == user.UserName && m.Off_System_Id == user.DefaultSystemId);
-            var storelist = manager.Off_Store.Where(m => m.StoreSystem == storesystem).Select(m => m.Id);
+            var storelist = manager.Off_Store.Where(m => m.Off_StoreSystemId==storesystemId).Select(m => m.Id);
             var checkinlist = from m in offlineDB.Off_Checkin
                               where storelist.Contains(m.Off_Checkin_Schedule.Off_Store_Id)
                               && m.Off_Checkin_Schedule.Subscribe == today
@@ -1702,7 +1704,8 @@ namespace SqzEvent.Controllers
             csv.NextRecord();
             writer.Flush();
             writer.Close();
-            return File(convertCSV(stream.ToArray()), "@text/csv", storesystem + "_" + today.ToShortDateString() + ".csv");
+            var storesystem = offlineDB.Off_StoreSystem.SingleOrDefault(m => m.Id == storesystemId);
+            return File(convertCSV(stream.ToArray()), "@text/csv", storesystem.SystemName + "_" + today.ToShortDateString() + ".csv");
         }
 
         // 活动门店列表
@@ -1742,7 +1745,6 @@ namespace SqzEvent.Controllers
             var model = new Wx_ManagerCreateScheduleViewModel
             {
                 Off_Store_Id = schedule.Off_Store_Id,
-                Off_Template_Id = schedule.TemplateId,
                 Standard_CheckIn = schedule.Standard_CheckIn.ToString("HH:mm"),
                 Standard_Salary = schedule.Standard_Salary ?? 0,
                 Standard_CheckOut = schedule.Standard_CheckOut.ToString("HH:mm"),
@@ -1751,8 +1753,6 @@ namespace SqzEvent.Controllers
             };
             var user = UserManager.FindById(User.Identity.GetUserId());
             ViewBag.StoreName = schedule.Off_Store.StoreName;
-            var templateList = offlineDB.Off_Sales_Template.Where(m => m.Off_System_Id == user.DefaultSystemId && m.Status >= 0).Select(m => new { Key = m.Id, Value = m.TemplateName });
-            ViewBag.TemplateList = new SelectList(templateList, "Key", "Value", schedule.TemplateId);
             return PartialView(model);
         }
         [Authorize(Roles = "Manager")]
@@ -1771,7 +1771,6 @@ namespace SqzEvent.Controllers
                         {
                             schedule.Standard_CheckIn = Convert.ToDateTime(schedule.Subscribe.ToString("yyyy-MM-dd") + " " + model.Standard_CheckIn);
                             schedule.Standard_CheckOut = Convert.ToDateTime(schedule.Subscribe.ToString("yyyy-MM-dd") + " " + model.Standard_CheckOut);
-                            schedule.TemplateId = model.Off_Template_Id;
                             schedule.Standard_Salary = model.Standard_Salary;
                             offlineDB.Entry(schedule).State = System.Data.Entity.EntityState.Modified;
                             offlineDB.SaveChanges();
@@ -1824,13 +1823,11 @@ namespace SqzEvent.Controllers
             var storelist = manager.Off_Store;
             ViewBag.StoreList = storelist;
             var grouplist = from m in storelist
-                            group m by m.StoreSystem into g
-                            select g.Key;
+                            group m by m.Off_StoreSystem into g
+                            select g.Key.SystemName;
             ViewBag.GroupList = grouplist;
             Off_Checkin_Schedule model = new Off_Checkin_Schedule();
             model.Off_System_Id = user.DefaultSystemId;
-            var templateList = offlineDB.Off_Sales_Template.Where(m => m.Off_System_Id == user.DefaultSystemId && m.Status >= 0).Select(m => new { Key = m.Id, Value = m.TemplateName });
-            ViewBag.TemplateList = new SelectList(templateList, "Key", "Value");
             return PartialView(model);
         }
         [Authorize(Roles = "Manager")]
@@ -1862,7 +1859,6 @@ namespace SqzEvent.Controllers
                                 Standard_CheckIn = _date_begin,
                                 Standard_CheckOut = _date_end,
                                 Standard_Salary = Salary,
-                                TemplateId = actTemp,
                                 Off_System_Id = user.DefaultSystemId
                             };
                             offlineDB.Off_Checkin_Schedule.Add(schedule);
@@ -1872,7 +1868,6 @@ namespace SqzEvent.Controllers
                             schedule.Standard_CheckIn = _date_begin;
                             schedule.Standard_CheckOut = _date_end;
                             schedule.Standard_Salary = Salary;
-                            schedule.TemplateId = actTemp;
                             offlineDB.Entry(schedule).State = System.Data.Entity.EntityState.Modified;
                         }
                     }
@@ -2191,7 +2186,7 @@ namespace SqzEvent.Controllers
             var user = UserManager.FindById(User.Identity.GetUserId());
             var list = from m in offlineDB.Off_CompetitionInfo
                        where m.Status == 0
-                       && m.Off_Store.Off_System_Id == user.DefaultSystemId
+                       && m.Off_Store.Off_StoreSystem.Off_System_Id == user.DefaultSystemId
                        orderby m.ApplicationDate descending
                        select m;
             return PartialView(list);
@@ -2271,7 +2266,7 @@ namespace SqzEvent.Controllers
             var user = UserManager.FindById(User.Identity.GetUserId());
             var list = (from m in offlineDB.Off_CompetitionInfo
                         where m.Status > 0
-                        && m.Off_Store.Off_System_Id == user.DefaultSystemId
+                        && m.Off_Store.Off_StoreSystem.Off_System_Id == user.DefaultSystemId
                         orderby m.BonusApplyDate descending
                         select m).Take(30);
             return PartialView(list);
@@ -2284,7 +2279,7 @@ namespace SqzEvent.Controllers
         {
             var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
             var query_list = from m in offlineDB.Off_CompetitionInfo
-                             where m.Status == 1 && m.Off_Store.Off_System_Id == user.DefaultSystemId
+                             where m.Status == 1 && m.Off_Store.Off_StoreSystem.Off_System_Id == user.DefaultSystemId
                              orderby m.BonusApplyDate descending
                              select m;
             AppPayUtilities pay = new AppPayUtilities();
@@ -2572,6 +2567,166 @@ namespace SqzEvent.Controllers
             offlineDB.Entry(recruit).State = System.Data.Entity.EntityState.Modified;
             await offlineDB.SaveChangesAsync();
             return Content("SUCCESS");
+        }
+
+        // 活动签呈提报页面
+        public PartialViewResult Manager_CreateSalesEvent()
+        {
+            var user = UserManager.FindById(User.Identity.GetUserId());
+            Off_SalesEvent model = new Off_SalesEvent();
+            var storesystem = from m in offlineDB.Off_StoreSystem
+                              where m.Off_System_Id == user.DefaultSystemId
+                              select m;
+            ViewBag.StoreSystemList = new SelectList(storesystem, "Id", "SystemName");
+            return PartialView(model);
+        }
+        [HttpPost]
+        public JsonResult Manager_StoreListByStoreSystemId(int storesystemId)
+        {
+            var storelist = from m in offlineDB.Off_Store
+                            where m.Off_StoreSystemId == storesystemId
+                            select new { Id = m.Id, StoreName = m.StoreName};
+            return Json(new { result = "SUCCESS", storelist = storelist });
+        }
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<ContentResult> Manager_CreateSalesEvent(Off_SalesEvent model, FormCollection form)
+        {
+            if (ModelState.IsValid)
+            {
+                Off_SalesEvent item = new Off_SalesEvent();
+                if (TryUpdateModel(item))
+                {
+                    string[] storelist = form["StoreList"].Split(','); 
+                    item.Status = 0;
+                    item.CommitUserName = User.Identity.Name;
+                    item.CommitDateTime = DateTime.Now;
+                    foreach(var singlestore in storelist)
+                    {
+                        int _storeId = Convert.ToInt32(singlestore);
+                        var _store = offlineDB.Off_Store.SingleOrDefault(m => m.Id == _storeId);
+                        item.Off_Store.Add(_store);
+                    }
+                    offlineDB.Off_SalesEvent.Add(item);
+                    await offlineDB.SaveChangesAsync();
+                    return Content("SUCCESS");
+                }
+                return Content("FAIL");
+            }
+            else
+            {
+                return Content("FAIL");
+            }
+        }
+        // 个人签呈列表
+        public PartialViewResult Manager_SalesEventList()
+        {
+            return PartialView();
+        }
+        public PartialViewResult Manager_SalesEventListPartial()
+        {
+            var user = UserManager.FindById(User.Identity.GetUserId());
+            var list = from m in offlineDB.Off_SalesEvent
+                       where m.Off_StoreSystem_Id == user.DefaultSystemId
+                       && m.CreateUserName == User.Identity.Name
+                       && m.Status >= 0
+                       select m;
+            return PartialView(list);
+        }
+        // 修改签呈
+        public PartialViewResult Manager_EditSalesEvent(int id)
+        {
+            var model = offlineDB.Off_SalesEvent.SingleOrDefault(m => m.Id == id);
+            var user = UserManager.FindById(User.Identity.Name);
+            var storesystem = from m in offlineDB.Off_StoreSystem
+                              where m.Off_System_Id == user.DefaultSystemId
+                              select m;
+            ViewBag.StoreSystemList = new SelectList(storesystem, "Id", "SystemName");
+            return PartialView(model);
+        }
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<ContentResult> Manager_EditSalesEvent(Off_SalesEvent model, FormCollection form)
+        {
+            if (ModelState.IsValid)
+            {
+                Off_SalesEvent item = new Off_SalesEvent();
+                if (TryUpdateModel(item))
+                {
+                    string[] storelist = form["StoreList"].Split(',');
+                    item.Status = 0;
+                    item.CommitUserName = User.Identity.Name;
+                    item.CommitDateTime = DateTime.Now;
+                    item.Off_Store = null;
+                    foreach (var singlestore in storelist)
+                    {
+                        int _storeId = Convert.ToInt32(singlestore);
+                        var _store = offlineDB.Off_Store.SingleOrDefault(m => m.Id == _storeId);
+                        item.Off_Store.Add(_store);
+                    }
+                    offlineDB.Entry(item).State = System.Data.Entity.EntityState.Modified;
+                    await offlineDB.SaveChangesAsync();
+                    return Content("SUCCESS");
+                }
+                return Content("FAIL");
+            }
+            else
+            {
+                return Content("FAIL");
+            }
+        }
+        // 下架签呈
+        [HttpPost]
+        public async Task<ContentResult> Manager_DeleteSalesEvent(int id)
+        {
+            var item = offlineDB.Off_SalesEvent.SingleOrDefault(m => m.Id == id);
+            if (item != null)
+            {
+                item.Status = -1;
+                offlineDB.Entry(item).State = System.Data.Entity.EntityState.Modified;
+                await offlineDB.SaveChangesAsync();
+                return Content("SUCCESS");
+            }
+            else
+            {
+                return Content("FAIL");
+            }
+        }
+        // 签呈详细信息
+        public PartialViewResult Manager_SalesEventDetails(int id)
+        {
+            var item = offlineDB.Off_SalesEvent.SingleOrDefault(m => m.Id == id);
+            if (item != null)
+            {
+                return PartialView(item);
+            }
+            return PartialView("NotFound");
+        }
+
+        // 对所有人显示当前可用签呈列表
+        public PartialViewResult Manager_SalesEventView()
+        {
+            var user = UserManager.FindById(User.Identity.GetUserId());
+            var currentDate = DateTime.Now.Date;
+            var list = from m in offlineDB.Off_SalesEvent
+                       where m.Off_StoreSystem.Off_System_Id == user.DefaultSystemId
+                       && m.EndDate >= currentDate
+                       orderby m.StartDate
+                       select m;
+            return PartialView(list);
+        }
+
+        // 待审核签呈列表
+        public PartialViewResult Admin_SalesEventList()
+        {
+            return PartialView();
+        }
+        public PartialViewResult Admin_SalesEventListPartial()
+        {
+            var user = UserManager.FindById(User.Identity.GetUserId());
+            var list = from m in offlineDB.Off_SalesEvent
+                       where m.Off_StoreSystem.Off_System_Id == user.DefaultSystemId
+                       && m.Status >= 0
+                       select m;
+            return PartialView(list);
         }
 
         /************ 促销员 ************/
@@ -2879,7 +3034,7 @@ namespace SqzEvent.Controllers
                 {
                     // 获取模板产品列表
                     List<int> plist = new List<int>();
-                    var Template = offlineDB.Off_Checkin_Schedule.SingleOrDefault(m => m.Id == checkin.Off_Schedule_Id).Off_Sales_Template;
+                    var Template = offlineDB.Off_Checkin_Schedule.SingleOrDefault(m => m.Id == checkin.Off_Schedule_Id).Off_Store.Off_StoreSystem;
                     foreach (var i in Template.ProductList.Split(','))
                     {
                         plist.Add(Convert.ToInt32(i));
@@ -2956,7 +3111,7 @@ namespace SqzEvent.Controllers
         public PartialViewResult Seller_EditReport_Item(int id)
         {
             var item = offlineDB.Off_Checkin.SingleOrDefault(m => m.Id == id);
-            string[] plist_tmp = item.Off_Checkin_Schedule.Off_Sales_Template.ProductList.Split(',');
+            string[] plist_tmp = item.Off_Checkin_Schedule.Off_Store.Off_StoreSystem.ProductList.Split(',');
             List<int> plist = new List<int>();
             foreach (var i in plist_tmp)
             {
@@ -2985,8 +3140,8 @@ namespace SqzEvent.Controllers
             }
             Wx_ReportItemsViewModel model = new Wx_ReportItemsViewModel()
             {
-                AmountRequried = item.Off_Checkin_Schedule.Off_Sales_Template.RequiredAmount,
-                StorageRequired = item.Off_Checkin_Schedule.Off_Sales_Template.RequiredStorage,
+                AmountRequried = item.Off_Checkin_Schedule.Off_Store.Off_StoreSystem.RequiredAmount,
+                StorageRequired = item.Off_Checkin_Schedule.Off_Store.Off_StoreSystem.RequiredStorage,
                 ProductList = templatelist
             };
             return PartialView(model);
@@ -3132,7 +3287,7 @@ namespace SqzEvent.Controllers
             if (Seller != null)
             {
                 var list = (from m in offlineDB.Off_CompetitionInfo
-                            where m.ReceiveUserName == user.UserName && m.Off_Store.Off_System_Id == user.DefaultSystemId
+                            where m.ReceiveUserName == user.UserName && m.Off_Store.Off_StoreSystem.Off_System_Id == user.DefaultSystemId
                             orderby m.ApplicationDate descending
                             select m).Skip(15 * _page).Take(15);
                 if (list.Count() > 0)
@@ -4272,6 +4427,9 @@ namespace SqzEvent.Controllers
                 return View(model);
             }
         }
+
+        
+
         [HttpPost, AllowAnonymous]
         public JsonResult getAllPosition()
         {

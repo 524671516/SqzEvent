@@ -121,8 +121,14 @@ namespace SqzEvent.Models
         public string ProductName { get; set; }
         public string FactoryName { get; set; }
         public int FactoryId { get; set; }
-        public int Plan { get; set; }
+        public int ProductionPlan { get; set; }
         public int? Qty { get; set; }
 
+    }
+    public class MonthProduction
+    {
+        public Product Product { get; set; }
+        public int FactoryId { get; set; }
+        public int ProductQty { get; set; }
     }
 }

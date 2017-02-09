@@ -2,45 +2,43 @@
 @using SqzEvent.Models;
 @if (Model.Count() != 0)
 {
-
     <div class="list-block media-list">
         @foreach (Factory fid in ViewBag.fl)
         {
-        <div class="content-block-title">@fid.Name</div>
-        <ul>
-            @foreach (var item in Model.Where(m => m.FactoryId == fid.Id))
-            {
-            <li>
-                @if (item.Plan <= item.Qty)
+            <div class="content-block-title">@fid.Name</div>
+            <ul>
+                @foreach (var item in Model.Where(m => m.FactoryId == fid.Id))
                 {
-                    <a href="javascript:;" class="item-content random-param pass-border color-black">
-                        <div class="item-inner">
-                            <div class="item-title-row">
-                                <div class="item-title">@Html.Encode(item.ProductName)</div>
-                                <div class="item-after">@Html.Encode(item.Qty ?? 0)/@Html.Encode(item.Plan)</div>
-                            </div>
-                        </div>
-                    </a>
+                    <li>
+                        @if (item.ProductId != 0)
+                        {
+                            if (item.ProductionPlan <= item.Qty)
+                            {
+                                <a href="javascript:;" class="item-content random-param pass-border color-black">
+                                    <div class="item-inner">
+                                        <div class="item-title-row">
+                                            <div class="item-title">@Html.Encode(item.ProductName)</div>
+                                            <div class="item-after">@Html.Encode(item.Qty ?? 0)/@Html.Encode(item.ProductionPlan)</div>
+                                        </div>
+                                    </div>
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="javascript:;" class="item-content random-param fail-border color-black">
+                                    <div class="item-inner">
+                                        <div class="item-title-row">
+                                            <div class="item-title">@Html.Encode(item.ProductName)</div>
+                                            <div class="item-after">@Html.Encode(item.Qty ?? 0)/@Html.Encode(item.ProductionPlan)</div>
+                                        </div>
+                                    </div>
+                                </a>
+                            }
+                        }
+                    </li>
                 }
-                else
-                {
-                    <a href="javascript:;" class="item-content random-param fail-border color-black">
-                        <div class="item-inner">
-                            <div class="item-title-row">
-                                <div class="item-title">@Html.Encode(item.ProductName)</div>
-                                <div class="item-after">@Html.Encode(item.Qty ?? 0)/@Html.Encode(item.Plan)</div>
-                            </div>
-                        </div>
-                    </a>
-                }
-
-            </li>
-            }
-        </ul>
+            </ul>
         }
-        <div class="list-block-label">以上为各工厂每个产品的月生产情况</div>
-
-
     </div>
 }
 else
