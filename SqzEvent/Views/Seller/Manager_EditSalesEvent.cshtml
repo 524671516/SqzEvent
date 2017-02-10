@@ -1,0 +1,124 @@
+﻿@model SqzEvent.Models.Off_SalesEvent
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="left">
+            <a href="#" class="back link">
+                <i class="icon icon-back" aria-hidden="true"></i>
+                <span>返回</span>
+            </a>
+        </div>
+        <div class="center sliding">活动需求更改</div>
+    </div>
+</div>
+<div class="pages">
+    <div class="page" data-page="manager-task-eventedit" id="manager-task-eventedit">
+        <div class="page-content">
+            @using (Html.BeginForm("Manager_EditSalesEvent", "Seller", FormMethod.Post, new { @class = "validate-form", id = "editsaleevent-form" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(m => m.Status)
+                @Html.HiddenFor(m => m.Id)
+                @Html.HiddenFor(m => m.EventType)
+                @Html.HiddenFor(m => m.CommitDateTime)
+                @Html.HiddenFor(m => m.CommitUserName)
+                @Html.HiddenFor(m => m.CreateUserName)
+                @Html.HiddenFor(m => m.CreateDateTime)
+                @Html.HiddenFor(m => m.OrderDetials)
+                @Html.HiddenFor(m => m.SerialNo)
+                @Html.HiddenFor(m => m.EventTypeName)
+                @Html.HiddenFor(m => m.OrderAmount)
+                <div class="list-block">
+                    <ul>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title label">活动标题</div>
+                                    <div class="item-input">
+                                        @Html.TextBoxFor(m => m.EventTitle, new { placeholder = "请输入活动标题", @class = "item-input-right", @required = "required", @maxlength = "20" })
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title label">开始时间</div>
+                                    <div class="item-input">
+                                        <input type="text" class="item-input-right" id="StartDate" name="StartDate" placeholder="开始时间" value="@Model.StartDate.ToString("yyyy-MM-dd")" required="required" , maxlength="20" />
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title label">结束时间</div>
+                                    <div class="item-input">
+                                        <input type="text" class="item-input-right" id="EndDate" name="EndDate" placeholder="结束时间" required="required" , maxlength="20" value="@Model.EndDate.ToString("yyyy-MM-dd")"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="#" class="item-link smart-select" data-back-text="返回" data-back-on-select="true" data-searchbar="true" data-searchbar-placeholder="渠道名称" data-searchbar-cancel="取消">
+                                @Html.DropDownListFor(m=>m.Off_StoreSystem_Id, ViewBag.StoreSystemList as SelectList,"-请选择-", new { @required = "required"})
+                                <div class="item-content">
+                                    <div class="item-inner">
+                                        <div class="item-title">渠道选择</div>
+                                        <div class="item-after smart-select-value">@Html.Encode(Model.Off_StoreSystem.SystemName)</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="item-link smart-select" data-back-text="返回" data-back-on-select="true" data-searchbar="true" data-searchbar-placeholder="店铺名称" data-searchbar-cancel="取消" id="smart-select-m">
+                                <select multiple id="storelist" name="storelist" required="required" maxlength="20">
+                                </select>
+                                <div class="item-content">
+                                    <div class="item-inner">
+                                        <div class="item-title">选择店铺</div>
+                                        <div class="item-after smart-select-value"> 
+                                            @foreach (var p in Model.Off_Store)
+                                            {
+                                                @Html.Encode(@p.StoreName.ToString()+",")
+                                              
+                                            }                                
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title label">活动经费</div>
+                                    <div class="item-input">
+                                        @Html.TextBoxFor(m => m.CostAmount, new { placeholder = "请输入活动经费", @class = "item-input-right", @required = "required", @maxlength = "20" })
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content middle-content">
+                                @Html.TextAreaFor(m => m.EventDetails, new { placeholder = "请输入需求详细信息", @class = "", @required = "required", @maxlength = "500" })
+                            </div>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title"></div>
+                                    <div class="item-after">
+                                        <span id="eventcontent_length">0</span>/500
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="content-block">
+                    <a href="javascript:;" class="button button-big button-fill" id="eventedit-btn">提交</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,46 @@
+﻿@model IEnumerable<SqzEvent.Models.Off_SalesEvent>
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="left">
+            <a href="#" class="back link">
+                <i class="icon icon-back" aria-hidden="true"></i>
+                <span>返回</span>
+            </a>
+        </div>
+        <div class="center sliding">本周活动</div>
+    </div>
+</div>
+<div class="pages">
+    <div class="page" data-page="week-event-list">
+        <div class="page-content">
+            <div class="list-block media-list" id="week-eventlist">
+                @if (Model.Count() == 0)
+                {
+                    <div class="content-block-title">无活动签呈</div>
+                }
+                else
+                {
+                    <ul>
+
+                        @foreach (var item in Model)
+                        {
+                            <li data-url="@item.Id">
+                                    <a href="/Seller/Manager_SalesEventDetails?id=@item.Id" class="item-link item-content random-param">
+                                        <div class="item-inner">
+                                            <div class="item-title-row">
+                                                <div class="item-title">@Html.Encode(item.EventTitle)</div>
+                                                <div class="item-after">@Html.Encode(item.StartDate.ToString("yyyy-MM-dd"))</div>
+                                            </div>
+                                            <div class="item-subtitle color-gray"><i class="fa fa-tag" aria-hidden="true"></i>&nbsp;@Html.Encode(item.Status)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-paperclip" aria-hidden="true"></i>&nbsp;@Html.ManagerRequestStatus(item.Status)</div>
+                                        </div>
+                                    </a>
+                            </li>
+                        }
+
+                    </ul>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -336,8 +336,117 @@ $$(document).on("pageInit", ".page[data-page='manager-task']", function (e) {
         }
     });
 });
-//活动提报信息填写 validate验证
-//本周活动页列表形式
+//Manager_CreateSalesEvent 活动提报信息填写 validate验证
+$$(document).on("pageInit", ".page[data-page='manager-task-eventcreate']", function () {
+    currentTextAreaLength("manager-task-eventcreate", "EventDetails", 500, "eventcontent_length");
+    var calendarDefault = myApp.calendar({
+        input: "#EndDate",
+        monthNames: monthNames,
+        monthNamesShort: monthNamesShort,
+        dayNames: dayNames,
+        dayNamesShort: dayNamesShort,
+        closeOnSelect: true
+    });
+    var calendarDefault = myApp.calendar({
+        input: "#StartDate",
+        monthNames: monthNames,
+        monthNamesShort: monthNamesShort,
+        dayNames: dayNames,
+        dayNamesShort: dayNamesShort,
+        closeOnSelect: true
+    });
+    $$.ajax({
+        url: "/Seller/Manager_StoreListByStoreSystemId",
+        type: "post",
+        data: {
+            storesystemId: $$("#Off_StoreSystem_Id").val()
+        },
+        success: function (data) {
+            data = JSON.parse(data);
+            if (data.result == "SUCCESS") {
+                for (var i = 0; i < data.storelist.length; i++) {
+                    $$("#StoreList").append("<option value=\"" + data.storelist[i].Id + "\">" + data.storelist[i].StoreName + "</option>");
+                }
+            }
+        }
+
+    })
+    $$("#Off_StoreSystem_Id").on("change", function () {
+        $$("#StoreList").html("");
+        $$("#manager-task-eventcreate .smart-select-value").html("- 请选择 -")
+        if ($$(this).val() != "") {
+            $$.ajax({
+                url: "/Seller/Manager_StoreListByStoreSystemId",
+                type: "post",
+                data: {
+                    storesystemId: $$("#Off_StoreSystem_Id").val()
+                },
+                success: function (data) {
+                    data = JSON.parse(data);
+                    if (data.result == "SUCCESS") {
+                        for (var i = 0; i < data.storelist.length; i++) {
+                            $$("#StoreList").append("<option value=\"" + data.storelist[i].Id + "\">" + data.storelist[i].StoreName + "</option>");
+                        }
+                    }
+                }
+
+            })
+        }
+    })
+    $("#createsaleevent-form").validate({
+        debug: false,
+        //调试模式取消submit的默认提交功能   
+        errorClass: "custom-error",
+        //默认为错误的样式类为：error   
+        focusInvalid: false,
+        //当为false时，验证无效时，没有焦点响应
+        onkeyup: false,
+        submitHandler: function (form) {
+            if ($$("#StoreList").val() == "") {
+                myApp.alert("请选择店铺")
+                myApp.hideIndicator();
+                $("#eventcreate-btn").prop("disabled", false).removeClass("color-gray");
+            } else {
+                $("#createsaleevent-form").ajaxSubmit(function (data) {
+                    if (data == "SUCCESS") {
+                        myApp.hideIndicator();
+                        mainView.router.back();
+                        myApp.addNotification({
+                            title: "通知",
+                            message: "表单提交成功"
+                        });
+                        setTimeout(function () {
+                            myApp.closeNotification(".notifications");
+                        }, 2e3);
+                    } else {
+                        myApp.hideIndicator();
+                        myApp.addNotification({
+                            title: "通知",
+                            message: "表单提交失败"
+                        });
+                        $("#eventcreate-btn").prop("disabled", false).removeClass("color-gray");
+                        setTimeout(function () {
+                            myApp.closeNotification(".notifications");
+                        }, 2e3);
+                    }
+                });
+            }
+        },
+        errorPlacement: function (error, element) {
+            myApp.hideIndicator();
+            $("#eventcreate-btn").prop("disabled", false).removeClass("color-gray");
+            element.attr("placeholder", error.text());
+        }
+    });
+    $$("#eventcreate-btn").click(function () {
+            myApp.showIndicator();
+            $("#eventcreate-btn").prop("disabled", true).addClass("color-gray");
+            setTimeout(function () {
+                $("#createsaleevent-form").submit();
+            }, 500);  
+    });
+});
+//Manager_SalesEventView 本周活动页列表形式
 //Manager_Addchekin 添加签到信息 填写备注信息字数提示
 $$(document).on("pageInit", ".page[data-page='manager-task-addcheckin']", function (e) {
     // 获取当前备注文本长度
@@ -1039,7 +1148,7 @@ $$(document).on("pageAfterAnimation", ".page[data-page='manager-reportlist']", f
         url: "/Seller/Manager_ReportListPartial",
         data: {
             date: date,
-            storesystem: storesystem
+            storesystemId: storesystem
         },
         success: function (data) {
             $$("#manager-reportlist-content").html(data);
@@ -1052,7 +1161,7 @@ $$(document).on("pageAfterAnimation", ".page[data-page='manager-reportlist']", f
             url: "/Seller/Manager_ReportListPartial",
             data: {
                 date: date,
-                storesystem: storesystem
+                storesystemId: storesystem
             },
             success: function (data) {
                 $$("#manager-reportlist-content").html(data);
@@ -1066,7 +1175,7 @@ $$(document).on("pageAfterAnimation", ".page[data-page='manager-reportlist']", f
             url: "/Seller/Manager_ReportListPartial",
             data: {
                 date: date,
-                storesystem: storesystem
+                storesystemId: storesystem
             },
             success: function (data) {
                 $$("#manager-reportlist-content").html(data);
@@ -1077,12 +1186,306 @@ $$(document).on("pageAfterAnimation", ".page[data-page='manager-reportlist']", f
     $$("#statistic_btn").on("click", function () {
         var date = $$("#manager-reportlist-date").val();
         var storesystem = $$("#manager-reportlist-storesystem").val();
-        var url = "/Seller/Manager_ReportStatistic" + "?date=" + date + "&storesystem=" + storesystem;
+        var url = "/Seller/Manager_ReportStatistic" + "?date=" + date + "&storesystemId=" + storesystem;
         window.location.href = url;
         return false;
     });
 });
+//Admin_SalesEventList 超级管理员个人活动签呈操作列表
+$$(document).on("pageInit", ".page[data-page='admin-event-list']", function () {
+    $$.ajax({
+        url: "/Seller/Admin_SalesEventListPartial",
+        success: function (data) {
+            $$("#admin-eventlist").html(data);
+        }
 
+    })
+    $$("#admin-eventlist").on("deleted", ".swipeout", function (e) {
+        $$.ajax({
+            url: "Manager_DeleteSalesEvent",
+            data: {
+                id: $$(e.target).attr("data-url")
+            },
+            method: "post",
+            success: function (data) {
+                if (data != "SUCCESS") {
+                    myApp.alert("删除失败");
+                } else {
+                    myApp.alert("删除成功");
+                }
+            }
+        });
+    });
+});
+//Admin_EditSalesEvent 超级管理员活动需求更改
+$$(document).on("pageInit", ".page[data-page='admin-task-eventedit']", function () {
+
+    currentTextAreaLength("manager-task-eventedit", "EventDetails", 500, "eventcontent_length");
+    var calendarDefault = myApp.calendar({
+        input: "#EndDate",
+        monthNames: monthNames,
+        monthNamesShort: monthNamesShort,
+        dayNames: dayNames,
+        dayNamesShort: dayNamesShort,
+        closeOnSelect: true
+    });
+    var calendarDefault = myApp.calendar({
+        input: "#StartDate",
+        monthNames: monthNames,
+        monthNamesShort: monthNamesShort,
+        dayNames: dayNames,
+        dayNamesShort: dayNamesShort,
+        closeOnSelect: true
+    });
+    $$.ajax({
+        url: "/Seller/Manager_StoreListByStoreSystemId",
+        type: "post",
+        data: {
+            storesystemId: $$("#Off_StoreSystem_Id").val()
+        },
+        success: function (data) {
+            data = JSON.parse(data);
+            if (data.result == "SUCCESS") {
+                var s = $$("#smart-select-m .item-after").html().trim();
+                var newstr = s.substring(0, s.length - 1);
+                var arr = newstr.split(",");
+                for (var i = 0; i < data.storelist.length; i++) {
+                    for (var j = 0; j < arr.length; j++) {
+                        if (data.storelist[i].StoreName == arr[j].trim()) {
+                            $$("#storelist").append("<option value=\"" + data.storelist[i].Id + "\" selected>" + data.storelist[i].StoreName + "</option>");
+                        } else {
+                            $$("#storelist").append("<option value=\"" + data.storelist[i].Id + "\">" + data.storelist[i].StoreName + "</option>");
+                        }
+                    }
+
+                }
+            }
+        }
+
+    })
+    $$("#Off_StoreSystem_Id").on("change", function () {
+        $$("#storelist").html("");
+        $$("#manager-task-eventedit .smart-select-value").html("- 请选择 -")
+        if ($$(this).val() != "") {
+            $$.ajax({
+                url: "/Seller/Manager_StoreListByStoreSystemId",
+                type: "post",
+                data: {
+                    storesystemId: $$("#Off_StoreSystem_Id").val()
+                },
+                success: function (data) {
+                    data = JSON.parse(data);
+                    if (data.result == "SUCCESS") {
+                        for (var i = 0; i < data.storelist.length; i++) {
+                            $$("#storelist").append("<option value=\"" + data.storelist[i].Id + "\">" + data.storelist[i].StoreName + "</option>");
+                        }
+                    }
+                }
+
+            })
+        }
+    })
+    $("#editsaleevent-form").validate({
+        debug: false,
+        //调试模式取消submit的默认提交功能   
+        errorClass: "custom-error",
+        //默认为错误的样式类为：error   
+        focusInvalid: false,
+        //当为false时，验证无效时，没有焦点响应
+        onkeyup: false,
+        submitHandler: function (form) {
+            $("#editsaleevent-form").ajaxSubmit(function (data) {
+                if (data == "SUCCESS") {
+                    myApp.hideIndicator();
+                    mainView.router.back();
+                    myApp.addNotification({
+                        title: "通知",
+                        message: "表单提交成功"
+                    });
+                    setTimeout(function () {
+                        myApp.closeNotification(".notifications");
+                    }, 2e3);
+                    $$.ajax({
+                        url: "/Seller/Manager_SalesEventListPartial",
+                        success: function (data) {
+                            $$("#manager-eventlist").html(data);
+                        }
+
+                    })
+                } else {
+                    myApp.hideIndicator();
+                    myApp.addNotification({
+                        title: "通知",
+                        message: "表单提交失败"
+                    });
+                    $("#eventedit-btn").prop("disabled", false).removeClass("color-gray");
+                    setTimeout(function () {
+                        myApp.closeNotification(".notifications");
+                    }, 2e3);
+                }
+            });
+        },
+        errorPlacement: function (error, element) {
+            myApp.hideIndicator();
+            $("#eventedit-btn").prop("disabled", false).removeClass("color-gray");
+            element.attr("placeholder", error.text());
+        }
+    });
+    $$("#eventedit-btn").click(function () {
+        myApp.showIndicator();
+        $("#eventedit-btn").prop("disabled", true).addClass("color-gray");
+        setTimeout(function () {
+            $("#editsaleevent-form").submit();
+        }, 500);
+    });
+});
+//Manager_SalesEventList 管理员个人活动签呈操作列表
+$$(document).on("pageInit", ".page[data-page='manager-event-list']", function () {
+    $$.ajax({
+        url: "/Seller/Manager_SalesEventListPartial",
+        success: function (data) {
+            $$("#manager-eventlist").html(data);
+        }
+
+    })
+    $$("#manager-eventlist").on("deleted", ".swipeout", function (e) {
+        $$.ajax({
+            url: "Manager_DeleteSalesEvent",
+            data: {
+                id: $$(e.target).attr("data-url")
+            },
+            method: "post",
+            success: function (data) {
+                if (data!= "SUCCESS") {
+                    myApp.alert("删除失败");
+                }
+            }
+        });
+    });
+});
+//Manager_EditSalesEvent 管理员活动需求更改
+$$(document).on("pageInit", ".page[data-page='manager-task-eventedit']", function () {
+
+    currentTextAreaLength("manager-task-eventedit", "EventDetails", 500, "eventcontent_length");
+    var calendarDefault = myApp.calendar({
+        input: "#EndDate",
+        monthNames: monthNames,
+        monthNamesShort: monthNamesShort,
+        dayNames: dayNames,
+        dayNamesShort: dayNamesShort,
+        closeOnSelect: true
+    });
+    var calendarDefault = myApp.calendar({
+        input: "#StartDate",
+        monthNames: monthNames,
+        monthNamesShort: monthNamesShort,
+        dayNames: dayNames,
+        dayNamesShort: dayNamesShort,
+        closeOnSelect: true
+    });
+    $$.ajax({
+        url: "/Seller/Manager_StoreListByStoreSystemId",
+        type: "post",
+        data: {
+            storesystemId: $$("#Off_StoreSystem_Id").val()
+        },
+        success: function (data) {
+            data = JSON.parse(data);
+            if (data.result == "SUCCESS") {
+                var s = $$("#smart-select-m .item-after").html().trim();
+                var newstr = s.substring(0, s.length-1);
+                var arr = newstr.split(",");           
+                for (var i = 0; i < data.storelist.length; i++) {
+                    for (var j = 0; j < arr.length; j++) {
+                        if (data.storelist[i].StoreName == arr[j].trim()) {
+                            $$("#storelist").append("<option value=\"" + data.storelist[i].Id + "\" selected>" + data.storelist[i].StoreName + "</option>");
+                        } else {
+                            $$("#storelist").append("<option value=\"" + data.storelist[i].Id + "\">" + data.storelist[i].StoreName + "</option>");
+                        }
+                    }
+                   
+                }
+            }
+        }
+
+    })
+    $$("#Off_StoreSystem_Id").on("change", function () {
+        $$("#storelist").html("");
+        $$("#manager-task-eventedit .smart-select-value").html("- 请选择 -")
+        if ($$(this).val() != "") {
+            $$.ajax({
+                url: "/Seller/Manager_StoreListByStoreSystemId",
+                type: "post",
+                data: {
+                    storesystemId: $$("#Off_StoreSystem_Id").val()
+                },
+                success: function (data) {
+                    data = JSON.parse(data);
+                    if (data.result == "SUCCESS") {
+                        for (var i = 0; i < data.storelist.length; i++) {
+                            $$("#storelist").append("<option value=\"" + data.storelist[i].Id + "\">" + data.storelist[i].StoreName + "</option>");
+                        }
+                    }
+                }
+
+            })
+        }
+    })
+    $("#editsaleevent-form").validate({
+        debug: false,
+        //调试模式取消submit的默认提交功能   
+        errorClass: "custom-error",
+        //默认为错误的样式类为：error   
+        focusInvalid: false,
+        //当为false时，验证无效时，没有焦点响应
+        onkeyup: false,
+        submitHandler: function (form) {
+            $("#editsaleevent-form").ajaxSubmit(function (data) {
+                if (data == "SUCCESS") {
+                    myApp.hideIndicator();
+                    mainView.router.back();
+                    myApp.addNotification({
+                        title: "通知",
+                        message: "表单提交成功"
+                    });
+                    setTimeout(function () {
+                        myApp.closeNotification(".notifications");
+                    }, 2e3);
+                    $$.ajax({
+                        url: "/Seller/Manager_SalesEventListPartial",
+                        success: function (data) {
+                            $$("#manager-eventlist").html(data);
+                        }
+
+                    })
+                } else {
+                    console.log(data);
+                    myApp.hideIndicator();
+                    myApp.addNotification({
+                        title: "通知",
+                        message: "表单提交失败"
+                    });
+                    $("#eventedit-btn").prop("disabled", false).removeClass("color-gray");
+                    setTimeout(function () {
+                        myApp.closeNotification(".notifications");
+                    }, 2e3);
+                }
+            });
+        },
+        errorPlacement: function (error, element) {
+            myApp.hideIndicator();
+            $("#eventedit-btn").prop("disabled", false).removeClass("color-gray");
+            element.attr("placeholder", error.text());
+        }
+    });
+    $$("#eventedit-btn").click(function () {
+        myApp.showIndicator();
+        $("#eventedit-btn").prop("disabled", true).addClass("color-gray");
+        setTimeout(function () {
+            $("#editsaleevent-form").submit();
+        }, 500);
+    });
+});
 //Manager_TaskSellerDetails 销量详情
 $$(document).on("pageInit", ".page[data-page='manager-tasksellerdetails']", function () {
     //查看签到图片
@@ -1268,6 +1671,44 @@ $$(document).on("pageInit", ".page[data-page='manager-addschedule']", function (
         value: [endtime[0], endtime[1]],
         cols: col
     });
+    $$.ajax({
+        url: "/Seller/Manager_StoreListByStoreSystemId",
+        type: "post",
+        data: {
+            storesystemId: $$("#Off_StoreSystem_id").val()
+        },
+        success: function (data) {
+            data = JSON.parse(data);
+            if (data.result == "SUCCESS") {
+                for (var i = 0; i < data.storelist.length; i++) {
+                    $$("#actStore").append("<option value=\"" + data.storelist[i].Id + "\">" + data.storelist[i].StoreName + "</option>");
+                }
+            }
+        }
+
+    })
+    $$("#Off_StoreSystem_id").on("change", function () {
+        $$("#actStore").html("");
+        $$("#createevent-form  .smart-select-value2").html("- 请选择 -")
+        if ($$(this).val() != "") {
+            $$.ajax({
+                url: "/Seller/Manager_StoreListByStoreSystemId",
+                type: "post",
+                data: {
+                    storesystemId: $$("#Off_StoreSystem_id").val()
+                },
+                success: function (data) {
+                    data = JSON.parse(data);
+                    if (data.result == "SUCCESS") {
+                        for (var i = 0; i < data.storelist.length; i++) {
+                            $$("#actStore").append("<option value=\"" + data.storelist[i].Id + "\">" + data.storelist[i].StoreName + "</option>");
+                        }
+                    }
+                }
+
+            })
+        }
+    })
     //表单提交
     $("#createevent-form").validate({
         debug: false,

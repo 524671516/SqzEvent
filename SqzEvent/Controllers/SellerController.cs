@@ -1820,11 +1820,15 @@ namespace SqzEvent.Controllers
             var user = UserManager.FindById(User.Identity.GetUserId());
             var manager = offlineDB.Off_StoreManager.SingleOrDefault(m => m.UserName == user.UserName && m.Off_System_Id == user.DefaultSystemId);
             var storelist = manager.Off_Store;
-            ViewBag.StoreList = storelist;
+            /*ViewBag.StoreList = storelist;
             var grouplist = from m in storelist
                             group m by m.Off_StoreSystem into g
                             select g.Key.SystemName;
-            ViewBag.GroupList = grouplist;
+            ViewBag.GroupList = grouplist;*/
+            var storesystem = from m in offlineDB.Off_Store
+                              group m by m.Off_StoreSystem into g
+                              select g.Key;
+            ViewBag.StoreSystem = new SelectList(storesystem, "Id", "SystemName");
             Off_Checkin_Schedule model = new Off_Checkin_Schedule();
             model.Off_System_Id = user.DefaultSystemId;
             return PartialView(model);
@@ -2595,19 +2599,28 @@ namespace SqzEvent.Controllers
                 Off_SalesEvent item = new Off_SalesEvent();
                 if (TryUpdateModel(item))
                 {
-                    string[] storelist = form["StoreList"].Split(','); 
-                    item.Status = 0;
-                    item.CommitUserName = User.Identity.Name;
-                    item.CommitDateTime = DateTime.Now;
-                    foreach(var singlestore in storelist)
+                    try {
+                        string[] storelist = form["StoreList"].Split(',');
+                        item.Status = 0;
+                        item.CreateUserName = User.Identity.Name;
+                        item.CreateDateTime = DateTime.Now;
+                        List<int> storelistIds = new List<int>();
+                        foreach(string v in storelist)
+                        {
+                            storelistIds.Add(Convert.ToInt32(v));
+                        }
+                        var stores = offlineDB.Off_Store.Where(m=> storelistIds.Contains(m.Id));
+                        foreach(var store in stores)
+                        {
+                            store.Off_SalesEvent.Add(item);
+                        }                      
+                        offlineDB.Off_SalesEvent.Add(item);
+                        await offlineDB.SaveChangesAsync();
+                        return Content("SUCCESS");
+                    }catch(Exception e)
                     {
-                        int _storeId = Convert.ToInt32(singlestore);
-                        var _store = offlineDB.Off_Store.SingleOrDefault(m => m.Id == _storeId);
-                        item.Off_Store.Add(_store);
+                        return Content(e.Message);
                     }
-                    offlineDB.Off_SalesEvent.Add(item);
-                    await offlineDB.SaveChangesAsync();
-                    return Content("SUCCESS");
                 }
                 return Content("FAIL");
             }
@@ -2625,7 +2638,7 @@ namespace SqzEvent.Controllers
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
             var list = from m in offlineDB.Off_SalesEvent
-                       where m.Off_StoreSystem_Id == user.DefaultSystemId
+                       where m.Off_StoreSystem.Off_System_Id== user.DefaultSystemId
                        && m.CreateUserName == User.Identity.Name
                        && m.Status >= 0
                        select m;
@@ -2635,11 +2648,11 @@ namespace SqzEvent.Controllers
         public PartialViewResult Manager_EditSalesEvent(int id)
         {
             var model = offlineDB.Off_SalesEvent.SingleOrDefault(m => m.Id == id);
-            var user = UserManager.FindById(User.Identity.Name);
+            var user = UserManager.FindById(User.Identity.GetUserId());
             var storesystem = from m in offlineDB.Off_StoreSystem
                               where m.Off_System_Id == user.DefaultSystemId
                               select m;
-            ViewBag.StoreSystemList = new SelectList(storesystem, "Id", "SystemName");
+            ViewBag.StoreSystemList = new SelectList(storesystem, "Id", "SystemName", model.Off_StoreSystem_Id);
             return PartialView(model);
         }
         [HttpPost, ValidateAntiForgeryToken]
@@ -2650,20 +2663,33 @@ namespace SqzEvent.Controllers
                 Off_SalesEvent item = new Off_SalesEvent();
                 if (TryUpdateModel(item))
                 {
-                    string[] storelist = form["StoreList"].Split(',');
-                    item.Status = 0;
-                    item.CommitUserName = User.Identity.Name;
-                    item.CommitDateTime = DateTime.Now;
-                    item.Off_Store = null;
-                    foreach (var singlestore in storelist)
+                    try
                     {
-                        int _storeId = Convert.ToInt32(singlestore);
-                        var _store = offlineDB.Off_Store.SingleOrDefault(m => m.Id == _storeId);
-                        item.Off_Store.Add(_store);
+                        string[] storelist = form["StoreList"].Split(',');
+                        item.Status = 0;
+                        item.CreateUserName = User.Identity.Name;
+                        item.CreateDateTime = DateTime.Now;
+                        item.Off_Store = null;
+                        List<int> storelistIds = new List<int>();
+                        foreach (string v in storelist)
+                        {
+                            storelistIds.Add(Convert.ToInt32(v));
+                        }
+                        var stores = offlineDB.Off_Store.Where(m => storelistIds.Contains(m.Id));
+                        foreach (var store in stores)
+                        {
+                            store.Off_SalesEvent.Add(item);
+                            //item.Off_Store.Add(store);
+                            offlineDB.Entry(store).State = System.Data.Entity.EntityState.Modified;
+                        }
+                        offlineDB.Entry(item).State = System.Data.Entity.EntityState.Modified;
+                        await offlineDB.SaveChangesAsync();
+                        return Content("SUCCESS");
                     }
-                    offlineDB.Entry(item).State = System.Data.Entity.EntityState.Modified;
-                    await offlineDB.SaveChangesAsync();
-                    return Content("SUCCESS");
+                    catch (Exception e)
+                    {
+                        return Content(e.Message);
+                    }
                 }
                 return Content("FAIL");
             }
