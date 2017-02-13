@@ -72,17 +72,17 @@
                         </li>
                         <li>
                             <a href="#" class="item-link smart-select" data-back-text="返回" data-back-on-select="true" data-searchbar="true" data-searchbar-placeholder="店铺名称" data-searchbar-cancel="取消" id="smart-select-m">
-                                <select multiple id="storelist" name="storelist" required="required" maxlength="20">
+                                <select id="storelist" name="storelist" required="required" maxlength="20" multiple>
                                 </select>
                                 <div class="item-content">
                                     <div class="item-inner">
                                         <div class="item-title">选择店铺</div>
                                         <div class="item-after smart-select-value"> 
-                                            @foreach (var p in Model.Off_Store)
+                                            @foreach (var item in Model.Off_Store)
                                             {
-                                                @Html.Encode(@p.StoreName.ToString()+",")
-                                              
-                                            }                                
+                                                    @Html.Encode(@item.StoreName.ToString() + ",")
+                                            }
+
                                         </div>
                                     </div>
                                 </div>
@@ -93,7 +93,7 @@
                                 <div class="item-inner">
                                     <div class="item-title label">活动经费</div>
                                     <div class="item-input">
-                                        @Html.TextBoxFor(m => m.CostAmount, new { placeholder = "请输入活动经费", @class = "item-input-right", @required = "required", @maxlength = "20" })
+                                        @Html.TextBoxFor(m => m.CostAmount, new { placeholder = "请输入活动经费", @class = "item-input-right", @required = "required", @maxlength = "20", @number=true })
                                     </div>
                                 </div>
                             </div>

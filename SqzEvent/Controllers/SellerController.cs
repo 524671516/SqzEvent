@@ -2666,9 +2666,6 @@ namespace SqzEvent.Controllers
                     try
                     {
                         string[] storelist = form["StoreList"].Split(',');
-                        item.Status = 0;
-                        item.CreateUserName = User.Identity.Name;
-                        item.CreateDateTime = DateTime.Now;
                         item.Off_Store = null;
                         List<int> storelistIds = new List<int>();
                         foreach (string v in storelist)
@@ -2679,8 +2676,6 @@ namespace SqzEvent.Controllers
                         foreach (var store in stores)
                         {
                             store.Off_SalesEvent.Add(item);
-                            //item.Off_Store.Add(store);
-                            offlineDB.Entry(store).State = System.Data.Entity.EntityState.Modified;
                         }
                         offlineDB.Entry(item).State = System.Data.Entity.EntityState.Modified;
                         await offlineDB.SaveChangesAsync();
