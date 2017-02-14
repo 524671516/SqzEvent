@@ -363,13 +363,6 @@ namespace SqzEvent.Models
 
     public partial class Off_Store
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Off_Store()
-        {
-            Off_SalesInfo_Daily = new HashSet<Off_SalesInfo_Daily>();
-            Off_SalesInfo_Month = new HashSet<Off_SalesInfo_Month>();
-        }
-
         public int Id { get; set; }
 
         [Required]
@@ -1252,7 +1245,7 @@ namespace SqzEvent.Models
         public string CommitUserName { get; set; }
 
         public DateTime? CommitDateTime { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        
         public virtual ICollection<Off_Store> Off_Store { get; set; }
     }
     

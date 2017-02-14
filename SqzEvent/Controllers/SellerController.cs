@@ -2669,20 +2669,22 @@ namespace SqzEvent.Controllers
                         item.Status = 0;
                         item.CreateUserName = User.Identity.Name;
                         item.CreateDateTime = DateTime.Now;
-                        item.Off_Store = null;
+                        //item.Off_Store.Clear();
                         List<int> storelistIds = new List<int>();
                         foreach (string v in storelist)
                         {
                             storelistIds.Add(Convert.ToInt32(v));
                         }
                         var stores = offlineDB.Off_Store.Where(m => storelistIds.Contains(m.Id));
+                        item.Off_Store = null;
+                        offlineDB.Entry(item).State = System.Data.Entity.EntityState.Modified;
+                        await offlineDB.SaveChangesAsync();
+                        var eventitem = offlineDB.Off_SalesEvent.SingleOrDefault(m => m.Id == item.Id);
                         foreach (var store in stores)
                         {
-                            store.Off_SalesEvent.Add(item);
-                            //item.Off_Store.Add(store);
-                            offlineDB.Entry(store).State = System.Data.Entity.EntityState.Modified;
+                            eventitem.Off_Store.Add(store);
                         }
-                        offlineDB.Entry(item).State = System.Data.Entity.EntityState.Modified;
+                        offlineDB.Entry(eventitem).State = System.Data.Entity.EntityState.Modified;
                         await offlineDB.SaveChangesAsync();
                         return Content("SUCCESS");
                     }
