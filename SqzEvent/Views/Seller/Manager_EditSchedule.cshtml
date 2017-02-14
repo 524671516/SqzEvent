@@ -7,7 +7,7 @@
                 <span>返回</span>
             </a>
         </div>
-        <div class="center sliding"><strong>修改活动日程</strong></div>
+        <div class="center sliding"><strong>修改促销员日程</strong></div>
     </div>
 </div>
 <div class="pages">
@@ -37,9 +37,9 @@
                         <li>
                             <div class="item-content">
                                 <div class="item-inner">
-                                    <div class="item-title label">标准上班时间</div>
+                                    <div class="item-title label">上班时间</div>
                                     <div class="item-input">
-                                        <input id="Standard_CheckIn" name="Standard_CheckIn" type="text" placeholder="请输入时间" value="@Model.Standard_CheckIn">
+                                        <input id="Standard_CheckIn" name="Standard_CheckIn" type="text" placeholder="请输入时间" value="@Model.Standard_CheckIn" class="item-input-right">
                                     </div>
                                 </div>
                             </div>
@@ -47,30 +47,19 @@
                         <li>
                             <div class="item-content">
                                 <div class="item-inner">
-                                    <div class="item-title label">标准下班时间</div>
+                                    <div class="item-title label">下班时间</div>
                                     <div class="item-input">
-                                        <input id="Standard_CheckOut" name="Standard_CheckOut" type="text" placeholder="请输入时间" value="@Model.Standard_CheckOut">
+                                        <input id="Standard_CheckOut" name="Standard_CheckOut" type="text" placeholder="请输入时间" value="@Model.Standard_CheckOut" class="item-input-right">
                                     </div>
                                 </div>
                             </div>
-                        </li>
-                        <li>
-                            <a href="#" class="item-link smart-select" data-back-text="返回" data-back-on-select="true" data-searchbar="true" data-searchbar-placeholder="选择模板" data-searchbar-cancel="取消">
-                                @Html.DropDownListFor(m=>m.Off_Template_Id, ViewBag.TemplateList as SelectList)
-                                <div class="item-content">
-                                    <div class="item-inner">
-                                        <div class="item-title">选择模板</div>
-                                        <div class="item-after"></div>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
+                        </li>                      
                         <li>
                             <div class="item-content">
                                 <div class="item-inner">
                                     <div class="item-title label">标准薪资</div>
                                     <div class="item-input">
-                                        <input id="Standard_Salary" name="Standard_Salary" type="number" placeholder="请输入标准薪资" value="@Model.Standard_Salary">
+                                        <input id="Standard_Salary" name="Standard_Salary" type="number" placeholder="请输入标准薪资" value="@Model.Standard_Salary" class="item-input-right">
                                     </div>
                                 </div>
                             </div>
