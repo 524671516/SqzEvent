@@ -11,8 +11,19 @@
 </div>
 <div class="pages">
     <div class="page" data-page="manager-event-list">
+        <form class="searchbar">
+            <div class="searchbar-input">
+                <input type="search" placeholder="搜索">
+                <a href="#" class="searchbar-clear"></a>
+            </div>
+            <a href="#" class="searchbar-cancel">取消</a>
+        </form>
+        <div class="searchbar-overlay"></div>
         <div class="page-content">
-            <div class="list-block media-list" id="manager-eventlist">
+            <div class="content-block searchbar-not-found">
+                无结果
+            </div>
+            <div class="list-block media-list list-block-search searchbar-found" id="manager-eventlist">
 
             </div>
         </div>

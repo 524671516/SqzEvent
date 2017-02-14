@@ -1199,6 +1199,10 @@ $$(document).on("pageAfterAnimation", ".page[data-page='manager-reportlist']", f
 });
 //Admin_SalesEventList 超级管理员个人活动签呈操作列表
 $$(document).on("pageInit", ".page[data-page='admin-event-list']", function () {
+    var mySearchbar = myApp.searchbar(".searchbar", {
+        searchList: ".list-block-search",
+        searchIn: ".item-content"
+    });
     $$.ajax({
         url: "/Seller/Admin_SalesEventListPartial",
         success: function (data) {
@@ -1286,6 +1290,10 @@ $$(document).on("pageInit", ".page[data-page='admin-task-eventconfirm']", functi
 });
 //Manager_SalesEventList 管理员个人活动签呈操作列表
 $$(document).on("pageInit", ".page[data-page='manager-event-list']", function () {
+    var mySearchbar = myApp.searchbar(".searchbar", {
+        searchList: ".list-block-search",
+        searchIn: ".item-content"
+    });
     $$.ajax({
         url: "/Seller/Manager_SalesEventListPartial",
         success: function (data) {
