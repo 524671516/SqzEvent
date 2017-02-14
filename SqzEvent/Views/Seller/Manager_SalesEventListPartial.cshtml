@@ -21,9 +21,19 @@ else
                     </div>
                 </a>
             </div>
-            <div class="swipeout-actions-right">
-                <a href="#" class="swipeout-delete" data-confirm="是否确认作废" data-confirm-title="寿全斋" data-close-on-cancel="true" data-url="@item.Id">作废</a>
-            </div>
+            @if (item.Status == 0)
+            {
+                <div class="swipeout-actions-right">
+                    <a href="#" class="swipeout-delete" data-confirm="是否确认作废" data-confirm-title="寿全斋" data-close-on-cancel="true" data-url="@item.Id">作废</a>
+                </div>
+            }
+            else
+            {
+                <div class="swipeout-actions-right">
+                    <a href="javascript">作废</a>
+                </div>
+            }
+            
         </li>
         }
 

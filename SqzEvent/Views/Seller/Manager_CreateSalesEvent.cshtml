@@ -26,6 +26,7 @@
                 @Html.HiddenFor(m =>m.SerialNo)
                 @Html.HiddenFor(m =>m.EventTypeName)
                 @Html.HiddenFor(m => m.OrderAmount)
+                @Html.HiddenFor(m=>m.CostAmount)
                 <div class="list-block">
                     <ul>
                         <li>
@@ -80,17 +81,7 @@
                                         </div>
                                     </div>
 </a>
-                        </li>
-                        <li>
-                            <div class="item-content">
-                                <div class="item-inner">
-                                    <div class="item-title label">活动经费</div>
-                                    <div class="item-input">
-                                        @Html.TextBoxFor(m => m.CostAmount, new { placeholder = "请输入活动经费", @class = "item-input-right", @required = "required", @maxlength = "20", @number=true })
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
+                        </li>                      
                         <li>
                             <div class="item-content middle-content">
                                 @Html.TextAreaFor(m => m.EventDetails, new { placeholder = "请输入需求详细信息", @class = "", @required = "required", @maxlength = "500" })

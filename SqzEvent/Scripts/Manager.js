@@ -1230,74 +1230,8 @@ $$(document).on("pageInit", ".page[data-page='admin-event-list']", function () {
     });
 });
 //Admin_EditSalesEvent 超级管理员活动需求更改
-$$(document).on("pageInit", ".page[data-page='admin-task-eventedit']", function () {
-
-    currentTextAreaLength("manager-task-eventedit", "EventDetails", 500, "eventcontent_length");
-    var calendarDefault = myApp.calendar({
-        input: "#EndDate",
-        monthNames: monthNames,
-        monthNamesShort: monthNamesShort,
-        dayNames: dayNames,
-        dayNamesShort: dayNamesShort,
-        closeOnSelect: true
-    });
-    var calendarDefault = myApp.calendar({
-        input: "#StartDate",
-        monthNames: monthNames,
-        monthNamesShort: monthNamesShort,
-        dayNames: dayNames,
-        dayNamesShort: dayNamesShort,
-        closeOnSelect: true
-    });
-    $$.ajax({
-        url: "/Seller/Manager_StoreListByStoreSystemId",
-        type: "post",
-        data: {
-            storesystemId: $$("#Off_StoreSystem_Id").val()
-        },
-        success: function (data) {
-            data = JSON.parse(data);
-            if (data.result == "SUCCESS") {
-                var s = $$("#smart-select-m .item-after").html().trim();
-                var newstr = s.substring(0, s.length - 1);
-                var arr = newstr.split(",");
-                for (var i = 0; i < data.storelist.length; i++) {
-                    for (var j = 0; j < arr.length; j++) {
-                        if (data.storelist[i].StoreName == arr[j].trim()) {
-                            $$("#storelist").append("<option value=\"" + data.storelist[i].Id + "\" selected>" + data.storelist[i].StoreName + "</option>");
-                        } else {
-                            $$("#storelist").append("<option value=\"" + data.storelist[i].Id + "\">" + data.storelist[i].StoreName + "</option>");
-                        }
-                    }
-
-                }
-            }
-        }
-
-    })
-    $$("#Off_StoreSystem_Id").on("change", function () {
-        $$("#storelist").html("");
-        $$("#manager-task-eventedit .smart-select-value").html("- 请选择 -")
-        if ($$(this).val() != "") {
-            $$.ajax({
-                url: "/Seller/Manager_StoreListByStoreSystemId",
-                type: "post",
-                data: {
-                    storesystemId: $$("#Off_StoreSystem_Id").val()
-                },
-                success: function (data) {
-                    data = JSON.parse(data);
-                    if (data.result == "SUCCESS") {
-                        for (var i = 0; i < data.storelist.length; i++) {
-                            $$("#storelist").append("<option value=\"" + data.storelist[i].Id + "\">" + data.storelist[i].StoreName + "</option>");
-                        }
-                    }
-                }
-
-            })
-        }
-    })
-    $("#editsaleevent-form").validate({
+$$(document).on("pageInit", ".page[data-page='admin-task-eventconfirm']", function () {   
+    $("#adminconfirm-form").validate({
         debug: false,
         //调试模式取消submit的默认提交功能   
         errorClass: "custom-error",
@@ -1306,7 +1240,7 @@ $$(document).on("pageInit", ".page[data-page='admin-task-eventedit']", function 
         //当为false时，验证无效时，没有焦点响应
         onkeyup: false,
         submitHandler: function (form) {
-            $("#editsaleevent-form").ajaxSubmit(function (data) {
+            $("#adminconfirm-form").ajaxSubmit(function (data) {
                 if (data == "SUCCESS") {
                     myApp.hideIndicator();
                     mainView.router.back();
@@ -1318,11 +1252,10 @@ $$(document).on("pageInit", ".page[data-page='admin-task-eventedit']", function 
                         myApp.closeNotification(".notifications");
                     }, 2e3);
                     $$.ajax({
-                        url: "/Seller/Manager_SalesEventListPartial",
+                        url: "/Seller/Admin_SalesEventListPartial",
                         success: function (data) {
-                            $$("#manager-eventlist").html(data);
+                            $$("#admin-eventlist").html(data);
                         }
-
                     })
                 } else {
                     myApp.hideIndicator();
@@ -1330,7 +1263,7 @@ $$(document).on("pageInit", ".page[data-page='admin-task-eventedit']", function 
                         title: "通知",
                         message: "表单提交失败"
                     });
-                    $("#eventedit-btn").prop("disabled", false).removeClass("color-gray");
+                    $("#eventconfirm-btn").prop("disabled", false).removeClass("color-gray");
                     setTimeout(function () {
                         myApp.closeNotification(".notifications");
                     }, 2e3);
@@ -1339,15 +1272,15 @@ $$(document).on("pageInit", ".page[data-page='admin-task-eventedit']", function 
         },
         errorPlacement: function (error, element) {
             myApp.hideIndicator();
-            $("#eventedit-btn").prop("disabled", false).removeClass("color-gray");
+            $("#eventconfirm-btn").prop("disabled", false).removeClass("color-gray");
             element.attr("placeholder", error.text());
         }
     });
-    $$("#eventedit-btn").click(function () {
+    $$("#eventconfirm-btn").click(function () {
         myApp.showIndicator();
-        $("#eventedit-btn").prop("disabled", true).addClass("color-gray");
+        $("#eventconfirm-btn").prop("disabled", true).addClass("color-gray");
         setTimeout(function () {
-            $("#editsaleevent-form").submit();
+            $("#adminconfirm-form").submit();
         }, 500);
     });
 });
@@ -1368,13 +1301,13 @@ $$(document).on("pageInit", ".page[data-page='manager-event-list']", function ()
             },
             method: "post",
             success: function (data) {
-                if (data!= "SUCCESS") {
+                if (data != "SUCCESS") {
                     myApp.alert("删除失败");
                 } else {
                     $$.ajax({
                         url: "/Seller/Manager_SalesEventListPartial",
                         success: function (data) {
-                            $$("#manager-eventlist").html(data);
+                            $$("#Manager-eventlist").html(data);
                         }
 
                     })

@@ -13,8 +13,50 @@
 <div class="pages">
     <div class="page" data-page="manager-task-eventdetail" id="manager-task-eventdetail">
         <div class="page-content">
+            @if (Model.SerialNo != null)
+            {
+
+                <div class="content-block-title">审核信息</div>
                 <div class="list-block">
                     <ul>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title label">活动编号</div>
+                                    <div class="item-after">
+                                        @Html.Encode(Model.SerialNo)
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title">活动订单数</div>
+                                    <div class="item-after">
+                                        @Html.Encode(Model.OrderAmount)
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title label">活动经费</div>
+                                    <div class="item-after">
+                                        @Html.Encode(Model.CostAmount)
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                                        
+            }
+            <div class="content-block-title">申报信息</div>
+                <div class="list-block">
+                    <ul>              
                         <li>
                             <div class="item-content">
                                 <div class="item-inner">
@@ -64,7 +106,7 @@
                                         </div>
                                     </div>
                                 </div>
-                        </li>
+                        </li>                       
                         <li class="accordion-item">
                             <a href="#" class="item-content item-link">
                                 <div class="item-inner">
@@ -84,17 +126,7 @@
                                     </p>
                                 </div>
                             </div>
-                        </li>
-                        <li>
-                            <div class="item-content">
-                                <div class="item-inner">
-                                    <div class="item-title label">活动经费</div>
-                                    <div class="item-after">
-                                        @Html.Encode(Model.CostAmount)
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
+                        </li>                      
                         <li>
                             <div class="item-content">
                                 @Html.TextAreaFor(m => m.EventDetails, new { placeholder = "请输入需求详细信息", @class = "", @required = "required", @maxlength = "500" ,@readonly = "readonly"})

@@ -2735,6 +2735,7 @@ namespace SqzEvent.Controllers
                        && m.EndDate >= currentDate
                        orderby m.StartDate
                        select m;
+            ViewBag.ImgUrl = user.ImgUrl == null ? null : user.ImgUrl.Replace("http://", "//");
             return PartialView(list);
         }
 

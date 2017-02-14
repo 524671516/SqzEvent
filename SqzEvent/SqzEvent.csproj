@@ -599,6 +599,7 @@
     <Content Include="Views\WeekendBreak\WeekendBreak_EditRecord.cshtml" />
     <Content Include="Views\QualityControl\Manager_ProductionDetails.cshtml" />
     <Content Include="Views\Seller\Manager_SalesEventListPartial.cshtml" />
+    <Content Include="Views\Seller\Admin_ConfirmSalesEvent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

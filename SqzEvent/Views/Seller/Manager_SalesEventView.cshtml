@@ -20,24 +20,29 @@
                 }
                 else
                 {
-                    <ul>
 
-                        @foreach (var item in Model)
+                        foreach (var item in Model)
                         {
-                            <li data-url="@item.Id">
-                                    <a href="/Seller/Manager_SalesEventDetails?id=@item.Id" class="item-link item-content random-param">
-                                        <div class="item-inner">
-                                            <div class="item-title-row">
-                                                <div class="item-title">@Html.Encode(item.EventTitle)</div>
-                                                <div class="item-after">@Html.Encode(item.Off_StoreSystem.SystemName)</div>
-                                            </div>
-                                            <div class="item-subtitle color-gray"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;@Html.Encode(item.StartDate.ToString("yyyy/MM/dd") + "-" + item.EndDate.ToString("yyyy/MM/dd"))&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-paperclip" aria-hidden="true"></i>&nbsp;@Html.ManagerRequestStatus(item.Status)</div>
-                                        </div>
-                                    </a>
-                            </li>
+                            <div class="card facebook-card">
+                                <div class="card-header">
+                                    <div class="facebook-avatar"><img src="@ViewBag.ImgUrl" width="34" height="34" class="img-responsive"></div>
+                                    <div class="facebook-name">@item.CreateUserName</div>
+                                    <div class="facebook-date">@item.CreateDateTime</div>
+                                </div>
+                                <div class="card-content">
+                                    <div class="card-content-inner">
+                                        <p>@item.EventDetails</p>
+                                        <p class="color-gray"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;@Html.Encode(item.StartDate.ToString("yyyy/MM/dd") + "-" + item.EndDate.ToString("yyyy/MM/dd"))&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-paperclip" aria-hidden="true"></i>&nbsp;@Html.ManagerRequestStatus(item.Status)</p>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <a href="#" class="link"></a>
+                                    <a href="#" class="link"></a>
+                                    <a href="/Seller/Manager_SalesEventDetails?Id=@item.Id" class="link">更多</a>
+                                </div>
+                            </div>
                         }
 
-                    </ul>
                 }
 
             </div>
