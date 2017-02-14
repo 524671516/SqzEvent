@@ -2753,6 +2753,43 @@ namespace SqzEvent.Controllers
             return PartialView(list);
         }
 
+        // 审核签呈
+        public PartialViewResult Admin_ConfirmSalesEvent(int Id)
+        {
+            var model = offlineDB.Off_SalesEvent.SingleOrDefault(m => m.Id == Id);
+            if (model != null)
+            {
+                return PartialView(model);
+            }
+            return PartialView("NotFound");
+        }
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<ContentResult> Admin_ConfirmSalesEvent(Off_SalesEvent model)
+        {
+            if (ModelState.IsValid)
+            {
+                Off_SalesEvent item = offlineDB.Off_SalesEvent.SingleOrDefault(m => m.Id == model.Id);
+                if (TryUpdateModel(item))
+                {
+                    try
+                    {
+                        item.Status = 1;
+                        item.CommitUserName = User.Identity.Name;
+                        item.CommitDateTime = DateTime.Now;
+                        offlineDB.Entry(item).State = System.Data.Entity.EntityState.Modified;
+                        await offlineDB.SaveChangesAsync();
+                        return Content("SUCCESS");
+                    }
+                    catch
+                    {
+                        return Content("Error");
+                    }
+                }
+                return Content("FAIL");
+            }
+            return Content("FAIL");
+        }
+
         /************ 促销员 ************/
         // 首页
         public ActionResult Seller_Home()
