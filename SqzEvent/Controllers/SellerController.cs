@@ -2610,9 +2610,11 @@ namespace SqzEvent.Controllers
                             storelistIds.Add(Convert.ToInt32(v));
                         }
                         var stores = offlineDB.Off_Store.Where(m=> storelistIds.Contains(m.Id));
+                        List<Off_Store> tempstorelist = new List<Off_Store>();
+                        item.Off_Store = tempstorelist;
                         foreach(var store in stores)
                         {
-                            store.Off_SalesEvent.Add(item);
+                            item.Off_Store.Add(store);
                         }                      
                         offlineDB.Off_SalesEvent.Add(item);
                         await offlineDB.SaveChangesAsync();
@@ -2660,28 +2662,26 @@ namespace SqzEvent.Controllers
         {
             if (ModelState.IsValid)
             {
-                Off_SalesEvent item = new Off_SalesEvent();
+                Off_SalesEvent item = offlineDB.Off_SalesEvent.SingleOrDefault(m => m.Id == model.Id);
                 if (TryUpdateModel(item))
                 {
                     try
                     {
                         string[] storelist = form["StoreList"].Split(',');
-                        item.Off_Store = null;
+                        //foreach(var existstore in item.st)
+                        item.Off_Store.Clear();
                         List<int> storelistIds = new List<int>();
                         foreach (string v in storelist)
                         {
                             storelistIds.Add(Convert.ToInt32(v));
                         }
                         var stores = offlineDB.Off_Store.Where(m => storelistIds.Contains(m.Id));
-                        item.Off_Store = null;
-                        offlineDB.Entry(item).State = System.Data.Entity.EntityState.Modified;
-                        await offlineDB.SaveChangesAsync();
-                        var eventitem = offlineDB.Off_SalesEvent.SingleOrDefault(m => m.Id == item.Id);
                         foreach (var store in stores)
                         {
-                            eventitem.Off_Store.Add(store);
+                            item.Off_Store.Add(store);
+                            //store.Off_SalesEvent.Add(item);
                         }
-                        offlineDB.Entry(eventitem).State = System.Data.Entity.EntityState.Modified;
+                        offlineDB.Entry(item).State = System.Data.Entity.EntityState.Modified;
                         await offlineDB.SaveChangesAsync();
                         return Content("SUCCESS");
                     }

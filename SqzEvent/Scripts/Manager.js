@@ -1489,7 +1489,6 @@ $$(document).on("pageInit", ".page[data-page='manager-task-eventedit']", functio
 
                             })
                         } else {
-                            console.log(data);
                             myApp.hideIndicator();
                             myApp.addNotification({
                                 title: "通知",
@@ -1512,7 +1511,6 @@ $$(document).on("pageInit", ".page[data-page='manager-task-eventedit']", functio
         }
     });
     $$("#eventedit-btn").click(function () {
-        console.log($("#storelist").val());
         myApp.showIndicator();
         $("#eventedit-btn").prop("disabled", true).addClass("color-gray");
         setTimeout(function () {
