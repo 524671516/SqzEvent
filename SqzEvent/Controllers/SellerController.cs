@@ -2666,10 +2666,7 @@ namespace SqzEvent.Controllers
                     try
                     {
                         string[] storelist = form["StoreList"].Split(',');
-                        item.Status = 0;
-                        item.CreateUserName = User.Identity.Name;
-                        item.CreateDateTime = DateTime.Now;
-                        //item.Off_Store.Clear();
+                        item.Off_Store = null;
                         List<int> storelistIds = new List<int>();
                         foreach (string v in storelist)
                         {

@@ -407,29 +407,35 @@ $$(document).on("pageInit", ".page[data-page='manager-task-eventcreate']", funct
                 myApp.hideIndicator();
                 $("#eventcreate-btn").prop("disabled", false).removeClass("color-gray");
             } else {
-                $("#createsaleevent-form").ajaxSubmit(function (data) {
-                    if (data == "SUCCESS") {
-                        myApp.hideIndicator();
-                        mainView.router.back();
-                        myApp.addNotification({
-                            title: "通知",
-                            message: "表单提交成功"
-                        });
-                        setTimeout(function () {
-                            myApp.closeNotification(".notifications");
-                        }, 2e3);
-                    } else {
-                        myApp.hideIndicator();
-                        myApp.addNotification({
-                            title: "通知",
-                            message: "表单提交失败"
-                        });
-                        $("#eventcreate-btn").prop("disabled", false).removeClass("color-gray");
-                        setTimeout(function () {
-                            myApp.closeNotification(".notifications");
-                        }, 2e3);
-                    }
-                });
+                if ($$("#StartDate").val() > $$("#EndDate").val()) {
+                    myApp.alert("开始时间不能大于结束时间")
+                    myApp.hideIndicator();
+                    $("#eventcreate-btn").prop("disabled", false).removeClass("color-gray");
+                } else {
+                    $("#createsaleevent-form").ajaxSubmit(function (data) {
+                        if (data == "SUCCESS") {
+                            myApp.hideIndicator();
+                            mainView.router.back();
+                            myApp.addNotification({
+                                title: "通知",
+                                message: "表单提交成功"
+                            });
+                            setTimeout(function () {
+                                myApp.closeNotification(".notifications");
+                            }, 2e3);
+                        } else {
+                            myApp.hideIndicator();
+                            myApp.addNotification({
+                                title: "通知",
+                                message: "表单提交失败"
+                            });
+                            $("#eventcreate-btn").prop("disabled", false).removeClass("color-gray");
+                            setTimeout(function () {
+                                myApp.closeNotification(".notifications");
+                            }, 2e3);
+                        }
+                    });
+                }
             }
         },
         errorPlacement: function (error, element) {
@@ -1211,7 +1217,13 @@ $$(document).on("pageInit", ".page[data-page='admin-event-list']", function () {
                 if (data != "SUCCESS") {
                     myApp.alert("删除失败");
                 } else {
-                    myApp.alert("删除成功");
+                    $$.ajax({
+                        url: "/Seller/Admin_SalesEventListPartial",
+                        success: function (data) {
+                            $$("#admin-eventlist").html(data);
+                        }
+
+                    })
                 }
             }
         });
@@ -1358,6 +1370,14 @@ $$(document).on("pageInit", ".page[data-page='manager-event-list']", function ()
             success: function (data) {
                 if (data!= "SUCCESS") {
                     myApp.alert("删除失败");
+                } else {
+                    $$.ajax({
+                        url: "/Seller/Manager_SalesEventListPartial",
+                        success: function (data) {
+                            $$("#manager-eventlist").html(data);
+                        }
+
+                    })
                 }
             }
         });
@@ -1390,19 +1410,19 @@ $$(document).on("pageInit", ".page[data-page='manager-task-eventedit']", functio
             storesystemId: $$("#Off_StoreSystem_Id").val()
         },
         success: function (data) {
+            
             data = JSON.parse(data);
             if (data.result == "SUCCESS") {
                 var s = $$("#smart-select-m .item-after").html().trim();
+                $$("#smart-select-m .smart-select-value").html(s);
                 var newstr = s.substring(0, s.length-1);
-                var arr = newstr.split(",");           
+                var arr = newstr.split(",");          
                 for (var i = 0; i < data.storelist.length; i++) {
-                    for (var j = 0; j < arr.length; j++) {
-                        if (data.storelist[i].StoreName == arr[j].trim()) {
-                            $$("#storelist").append("<option value=\"" + data.storelist[i].Id + "\" selected>" + data.storelist[i].StoreName + "</option>");
+                    if (arr.indexOf(data.storelist[i].StoreName)!=-1) {
+                            $$("#smart-select-m select").append("<option value=\"" + data.storelist[i].Id + "\" selected>" + data.storelist[i].StoreName + "</option>");
                         } else {
-                            $$("#storelist").append("<option value=\"" + data.storelist[i].Id + "\">" + data.storelist[i].StoreName + "</option>");
+                            $$("#smart-select-m select").append("<option value=\"" + data.storelist[i].Id + "\">" + data.storelist[i].StoreName + "</option>");
                         }
-                    }
                    
                 }
             }
@@ -1440,37 +1460,50 @@ $$(document).on("pageInit", ".page[data-page='manager-task-eventedit']", functio
         //当为false时，验证无效时，没有焦点响应
         onkeyup: false,
         submitHandler: function (form) {
-            $("#editsaleevent-form").ajaxSubmit(function (data) {
-                if (data == "SUCCESS") {
+            if ($$("#storelist").val() == "") {
+                myApp.alert("请选择店铺")
+                myApp.hideIndicator();
+                $("#eventedit-btn").prop("disabled", false).removeClass("color-gray");
+            } else {
+                if ($$("#StartDate").val() > $$("#EndDate").val()) {
+                    myApp.alert("开始时间不能大于结束时间")
                     myApp.hideIndicator();
-                    mainView.router.back();
-                    myApp.addNotification({
-                        title: "通知",
-                        message: "表单提交成功"
-                    });
-                    setTimeout(function () {
-                        myApp.closeNotification(".notifications");
-                    }, 2e3);
-                    $$.ajax({
-                        url: "/Seller/Manager_SalesEventListPartial",
-                        success: function (data) {
-                            $$("#manager-eventlist").html(data);
-                        }
-
-                    })
-                } else {
-                    console.log(data);
-                    myApp.hideIndicator();
-                    myApp.addNotification({
-                        title: "通知",
-                        message: "表单提交失败"
-                    });
                     $("#eventedit-btn").prop("disabled", false).removeClass("color-gray");
-                    setTimeout(function () {
-                        myApp.closeNotification(".notifications");
-                    }, 2e3);
+                } else {
+                    $("#editsaleevent-form").ajaxSubmit(function (data) {
+                        if (data == "SUCCESS") {
+                            myApp.hideIndicator();
+                            mainView.router.back();
+                            myApp.addNotification({
+                                title: "通知",
+                                message: "表单提交成功"
+                            });
+                            setTimeout(function () {
+                                myApp.closeNotification(".notifications");
+                            }, 2e3);
+                            $$.ajax({
+                                url: "/Seller/Manager_SalesEventListPartial",
+                                success: function (data) {
+                                    $$("#manager-eventlist").html(data);
+                                }
+
+                            })
+                        } else {
+                            console.log(data);
+                            myApp.hideIndicator();
+                            myApp.addNotification({
+                                title: "通知",
+                                message: "表单提交失败"
+                            });
+                            $("#eventedit-btn").prop("disabled", false).removeClass("color-gray");
+                            setTimeout(function () {
+                                myApp.closeNotification(".notifications");
+                            }, 2e3);
+                        }
+                    });
                 }
-            });
+
+            }
         },
         errorPlacement: function (error, element) {
             myApp.hideIndicator();
@@ -1479,6 +1512,7 @@ $$(document).on("pageInit", ".page[data-page='manager-task-eventedit']", functio
         }
     });
     $$("#eventedit-btn").click(function () {
+        console.log($("#storelist").val());
         myApp.showIndicator();
         $("#eventedit-btn").prop("disabled", true).addClass("color-gray");
         setTimeout(function () {
@@ -2692,7 +2726,7 @@ function datepicker_refresh(url) {
             date: date
         },
         success: function (data) {
-            $$(".list-content").html(data);
+            $$(".list-block-partial").html(data);
         }
     });
     $$(".check-date").on("change", function () {
@@ -2703,7 +2737,7 @@ function datepicker_refresh(url) {
                 date: date
             },
             success: function (data) {
-                $$(".list-content").html(data);
+                $$(".list-block-partial").html(data);
             }
         });
     });

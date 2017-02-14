@@ -29,9 +29,9 @@
                                         <div class="item-inner">
                                             <div class="item-title-row">
                                                 <div class="item-title">@Html.Encode(item.EventTitle)</div>
-                                                <div class="item-after">@Html.Encode(item.StartDate.ToString("yyyy-MM-dd"))</div>
+                                                <div class="item-after">@Html.Encode(item.Off_StoreSystem.SystemName)</div>
                                             </div>
-                                            <div class="item-subtitle color-gray"><i class="fa fa-tag" aria-hidden="true"></i>&nbsp;@Html.Encode(item.Status)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-paperclip" aria-hidden="true"></i>&nbsp;@Html.ManagerRequestStatus(item.Status)</div>
+                                            <div class="item-subtitle color-gray"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;@Html.Encode(item.StartDate.ToString("yyyy/MM/dd") + "-" + item.EndDate.ToString("yyyy/MM/dd"))&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-paperclip" aria-hidden="true"></i>&nbsp;@Html.ManagerRequestStatus(item.Status)</div>
                                         </div>
                                     </a>
                             </li>
