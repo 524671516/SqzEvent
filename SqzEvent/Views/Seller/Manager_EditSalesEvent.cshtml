@@ -28,6 +28,47 @@
                 @Html.HiddenFor(m => m.EventTypeName)
                 @Html.HiddenFor(m => m.OrderAmount)
                 @Html.HiddenFor(m=>m.CostAmount)
+                if (Model.SerialNo != null)
+                {
+                    <div class="content-block-title">审核信息</div>
+                    <div class="list-block">
+                        <ul>
+                            <li>
+                                <div class="item-content">
+                                    <div class="item-inner">
+                                        <div class="item-title label">活动编号</div>
+                                        <div class="item-after">
+                                            @Html.Encode(Model.SerialNo)
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li>
+                                <div class="item-content">
+                                    <div class="item-inner">
+                                        <div class="item-title">活动订单数</div>
+                                        <div class="item-after">
+                                            @Html.Encode(Model.OrderAmount)
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="item-content">
+                                    <div class="item-inner">
+                                        <div class="item-title label">活动经费</div>
+                                        <div class="item-after">
+                                            @Html.Encode(Model.CostAmount)
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                }
+                <div class="content-block-title">申报信息</div>
                 <div class="list-block">
                     <ul>
                         <li>
@@ -106,7 +147,14 @@
                     </ul>
                 </div>
                 <div class="content-block">
-                    <a href="javascript:;" class="button button-big button-fill" id="eventedit-btn">提交</a>
+                    @if (Model.SerialNo != null)
+                    {
+                        <a href="javascript:;" class="button button-big button-fill" id="eventedit-btn2" disabled="disabled">无法操作</a>
+                    }
+                    else
+                    {
+                        <a href="javascript:;" class="button button-big button-fill" id="eventedit-btn">提交</a>
+                    }
                 </div>
             }
         </div>

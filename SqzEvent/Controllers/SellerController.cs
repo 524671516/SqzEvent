@@ -670,9 +670,9 @@ namespace SqzEvent.Controllers
         {
             var today = Convert.ToDateTime(DateTime.Now.ToShortDateString());
             ViewBag.Weekly = today.AddDays(1 - (int)today.DayOfWeek).ToString("MM/dd") + " - " + today.AddDays(7 - (int)today.DayOfWeek).ToString("MM/dd");
-            ViewBag.AnnounceCount = (from m in offlineDB.Off_Manager_Announcement
-                                     where m.ManagerUserName.Contains(User.Identity.Name)
-                                     && today >= m.StartTime && today < m.FinishTime
+            ViewBag.AnnounceCount = (from m in offlineDB.Off_SalesEvent
+                                     where m.Status>=1
+                                     && today >= m.StartDate && today < m.EndDate
                                      select m).Count();
             return View();
         }

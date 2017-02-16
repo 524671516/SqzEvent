@@ -418,7 +418,7 @@ $$(document).on("pageInit", ".page[data-page='manager-task-eventcreate']", funct
                             mainView.router.back();
                             myApp.addNotification({
                                 title: "通知",
-                                message: "表单提交成功"
+                                message: "活动提交成功"
                             });
                             setTimeout(function () {
                                 myApp.closeNotification(".notifications");
@@ -427,7 +427,7 @@ $$(document).on("pageInit", ".page[data-page='manager-task-eventcreate']", funct
                             myApp.hideIndicator();
                             myApp.addNotification({
                                 title: "通知",
-                                message: "表单提交失败"
+                                message: "活动提交成功失败"
                             });
                             $("#eventcreate-btn").prop("disabled", false).removeClass("color-gray");
                             setTimeout(function () {
@@ -1250,7 +1250,7 @@ $$(document).on("pageInit", ".page[data-page='admin-task-eventconfirm']", functi
                     mainView.router.back();
                     myApp.addNotification({
                         title: "通知",
-                        message: "表单提交成功"
+                        message: "审核信息提交成功"
                     });
                     setTimeout(function () {
                         myApp.closeNotification(".notifications");
@@ -1265,7 +1265,7 @@ $$(document).on("pageInit", ".page[data-page='admin-task-eventconfirm']", functi
                     myApp.hideIndicator();
                     myApp.addNotification({
                         title: "通知",
-                        message: "表单提交失败"
+                        message: "审核信息提交失败"
                     });
                     $("#eventconfirm-btn").prop("disabled", false).removeClass("color-gray");
                     setTimeout(function () {
@@ -1417,7 +1417,7 @@ $$(document).on("pageInit", ".page[data-page='manager-task-eventedit']", functio
                             mainView.router.back();
                             myApp.addNotification({
                                 title: "通知",
-                                message: "表单提交成功"
+                                message: "活动信息修改成功"
                             });
                             setTimeout(function () {
                                 myApp.closeNotification(".notifications");
@@ -1433,7 +1433,7 @@ $$(document).on("pageInit", ".page[data-page='manager-task-eventedit']", functio
                             myApp.hideIndicator();
                             myApp.addNotification({
                                 title: "通知",
-                                message: "表单提交失败"
+                                message: "活动信息修改失败"
                             });
                             $("#eventedit-btn").prop("disabled", false).removeClass("color-gray");
                             setTimeout(function () {
