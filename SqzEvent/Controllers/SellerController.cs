@@ -2736,6 +2736,7 @@ namespace SqzEvent.Controllers
                        orderby m.StartDate
                        select m;
             ViewBag.ImgUrl = user.ImgUrl == null ? null : user.ImgUrl.Replace("http://", "//");
+            ViewBag.SystemId = user.DefaultSystemId;
             return PartialView(list);
         }
 

@@ -1234,7 +1234,7 @@ namespace SqzEvent.Models
         public decimal? CostAmount { get; set; }
 
         [StringLength(256)]
-        public string OrderDetials { get; set; }
+        public string OrderDetails { get; set; }
 
         [StringLength(32)]
         public string CreateUserName { get; set; }

@@ -26,13 +26,13 @@
                             <div class="card facebook-card">
                                 <div class="card-header">
                                     <div class="facebook-avatar"><img src="@ViewBag.ImgUrl" width="34" height="34" class="img-responsive"></div>
-                                    <div class="facebook-name">@item.CreateUserName</div>
+                                    <div class="facebook-name">@Html.ManagerNickName(item.CreateUserName,(int)ViewBag.SystemId)</div>
                                     <div class="facebook-date">@item.CreateDateTime</div>
                                 </div>
                                 <div class="card-content">
                                     <div class="card-content-inner">
                                         <p>@item.EventDetails</p>
-                                        <p class="color-gray"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;@Html.Encode(item.StartDate.ToString("yyyy/MM/dd") + "-" + item.EndDate.ToString("yyyy/MM/dd"))&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-paperclip" aria-hidden="true"></i>&nbsp;@Html.ManagerRequestStatus(item.Status)</p>
+                                        <p class="color-gray"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;@Html.Encode(item.StartDate.ToString("MM/dd") + " - " + item.EndDate.ToString("MM/dd"))&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-paperclip" aria-hidden="true"></i>&nbsp;@Html.ManagerRequestStatus(item.Status)</p>
                                     </div>
                                 </div>
                                 <div class="card-footer">
