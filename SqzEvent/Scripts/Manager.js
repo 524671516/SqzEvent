@@ -427,7 +427,7 @@ $$(document).on("pageInit", ".page[data-page='manager-task-eventcreate']", funct
                             myApp.hideIndicator();
                             myApp.addNotification({
                                 title: "通知",
-                                message: "活动提交成功失败"
+                                message: "活动提交失败"
                             });
                             $("#eventcreate-btn").prop("disabled", false).removeClass("color-gray");
                             setTimeout(function () {
