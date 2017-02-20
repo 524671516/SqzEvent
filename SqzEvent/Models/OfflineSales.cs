@@ -1186,7 +1186,6 @@ namespace SqzEvent.Models
 
         public bool RequiredAmount { get; set; }
 
-        [Required]
         public string ProductList { get; set; }
 
         public int Off_System_Id { get; set; }

@@ -16,7 +16,7 @@ using Newtonsoft.Json;
 
 namespace SqzEvent.Controllers
 {
-    [Authorize(Roles = "Manager")]
+    [Authorize(Roles = "Supervisor,Manager")]
     public class WeekendBreakController : Controller
     {
         OfflineSales offlineDB = new OfflineSales();
@@ -393,12 +393,12 @@ namespace SqzEvent.Controllers
                 return View("Error");
             }
         }
-        [Authorize(Roles ="Senior")]
+        [Authorize(Roles ="Administrator")]
         public ActionResult WeekendBreak_OverView()
         {
             return View();
         }
-        [Authorize(Roles = "Senior")]
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public async Task<ActionResult> WeekendBreak_DeleteStore(int breakId)
         {
@@ -407,7 +407,7 @@ namespace SqzEvent.Controllers
             await offlineDB.SaveChangesAsync();
             return Content("SUCCESS");
         }
-        [Authorize(Roles = "Senior")]
+        [Authorize(Roles = "Administrator")]
         public ActionResult WeekendBreak_StoreViewPartial(string date)
         {
             var today = Convert.ToDateTime(date);
@@ -419,13 +419,13 @@ namespace SqzEvent.Controllers
             
             return PartialView(list);
         }
-        [Authorize(Roles = "Senior")]
+        [Authorize(Roles = "Administrator")]
         public ActionResult WeekendBreak_StoreViewDetails(int breakId)
         {
             var item = offlineDB.Off_WeekendBreak.SingleOrDefault(m => m.Id == breakId);
             return View(item);
         }
-        [Authorize(Roles = "Senior")]
+        [Authorize(Roles = "Administrator")]
         public FileResult WeekendBreak_ReportStatistic(string date)
         {
             MemoryStream stream = new MemoryStream();
@@ -460,15 +460,7 @@ namespace SqzEvent.Controllers
                 //csv.WriteField(sequence);
                 csv.WriteField(wb_item.Off_Checkin_Schedule.Off_Store.StoreName);
                 csv.WriteField(wb_item.Off_StoreManager.NickName);
-                /*List<Wx_WeekendBreakItem> itemlist = new List<Wx_WeekendBreakItem>();
-                foreach(var details in wb_item.Off_WeekendBreakRecord)
-                {
-                    itemlist.AddRange(Newtonsoft.Json.JsonConvert.DeserializeObject<List<Wx_WeekendBreakItem>>(details.SalesDetails));
-                }
-                var ProductSum = from m in itemlist
-                                 group m by m.ProductId into g
-                                 select new { PId = g.Key, SalesCount = g.Sum(m => m.SalesCount) };*/
-                var checkin = wb_item.Off_Checkin_Schedule.Off_Checkin.FirstOrDefault();
+                var checkin = wb_item.Off_Checkin_Schedule.Off_Checkin.Where(m=>m.Status>=3).FirstOrDefault();
                 int product_count = 0;
                 if (checkin != null)
                 {
