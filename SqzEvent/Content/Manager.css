@@ -196,19 +196,13 @@ html.ios-gt-8 .list-block li.media-item .item-title, html.ios-gt-8 .list-block.m
     display: block;
     padding: 10px;
   }
-  .facebook-card .facebook-avatar {
-    float: left;
-  }
   .facebook-card .facebook-name {
-    margin-left: 44px;
-    font-size: 14px;
+    width:50%;
     font-weight: 500;
     float:left;
   }
   .facebook-card .facebook-date {
-    margin-left: 44px;
-    font-size: 13px;
-    color: #8e8e93;
+    width:50%;
     float:left;
     text-align: right;
   }
@@ -223,4 +217,7 @@ html.ios-gt-8 .list-block li.media-item .item-title, html.ios-gt-8 .list-block.m
   }
   .facebook-card .card-content-inner {
     padding: 15px 10px;
-  }  
+  }
+  .facebook-card .card-content-subinfo{
+      padding:5px 10px;
+  }

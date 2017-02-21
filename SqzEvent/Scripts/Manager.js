@@ -458,7 +458,7 @@ $$(document).on("pageInit", ".page[data-page='manager-task-addcheckin']", functi
     // 获取当前备注文本长度
     currentTextAreaLength("manager-task-addcheckin", "Remark", 50, "checkin-currentlength");
     // 显示所有的已上传图片
-    uploadCheckinFile("manager-task-addcheckin", "manager-imglist", "Photo", "current_image", 3);
+    uploadCheckinFile("manager-task-addcheckin", "manager-imglist", "Photo", "current_image",9);
     uploadLocationWithDetails("location-btn", "Location", "Location_Desc");
     $("#addcheckin_form").validate({
         debug: false,

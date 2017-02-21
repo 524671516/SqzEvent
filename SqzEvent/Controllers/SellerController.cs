@@ -670,13 +670,15 @@ namespace SqzEvent.Controllers
         [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_Task()
         {
-            var today = Convert.ToDateTime(DateTime.Now.ToShortDateString());
+            /*var today = Convert.ToDateTime(DateTime.Now.ToShortDateString());
             ViewBag.Weekly = today.AddDays(1 - (int)today.DayOfWeek).ToString("MM/dd") + " - " + today.AddDays(7 - (int)today.DayOfWeek).ToString("MM/dd");
             ViewBag.AnnounceCount = (from m in offlineDB.Off_SalesEvent
                                      where m.Status>=1
                                      && today >= m.StartDate && today < m.EndDate
                                      select m).Count();
+                                     */
             return View();
+
         }
         // 当前个人签到数量
         [SettingFilter(SettingName = "MANAGER_ATTENDANCE")]
@@ -2744,10 +2746,10 @@ namespace SqzEvent.Controllers
             var currentDate = DateTime.Now.Date;
             var list = from m in offlineDB.Off_SalesEvent
                        where m.Off_StoreSystem.Off_System_Id == user.DefaultSystemId
-                       && m.EndDate >= currentDate
+                       && m.EndDate >= currentDate && m.Status>=0
                        orderby m.StartDate
                        select m;
-            ViewBag.ImgUrl = user.ImgUrl == null ? null : user.ImgUrl.Replace("http://", "//");
+            //ViewBag.ImgUrl = user.ImgUrl == null ? null : user.ImgUrl.Replace("http://", "//");
             ViewBag.SystemId = user.DefaultSystemId;
             return PartialView(list);
         }

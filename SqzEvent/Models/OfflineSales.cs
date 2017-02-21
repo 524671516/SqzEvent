@@ -881,7 +881,7 @@ namespace SqzEvent.Models
         [StringLength(128)]
         public string Location_Desc { get; set; }
 
-        [StringLength(128)]
+        [StringLength(256)]
         public string Photo { get; set; }
 
         [StringLength(64)]
