@@ -1,0 +1,75 @@
+﻿@model SqzEvent.Models.Off_Recruit
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="left">
+            <a href="#" class="back link">
+                <i class="icon icon-back" aria-hidden="true"></i>
+                <span>返回</span>
+            </a>
+        </div>
+        <div class="center sliding"><strong>人员信息</strong></div>
+        <div class="right">
+            <a href="/Seller/Manager_RecruitBind?rid=@Model.Id" class="link" id="recruitdetails-submit">绑定</a>
+        </div>
+    </div>
+</div>
+<div class="pages">
+    <div class="page" data-page="manager-recruitdetails">
+        <div class="page-content">
+            @Html.HiddenFor(m => m.WorkType)
+            <div class="content-block-title">基本资料</div>
+            <div class="list-block">
+                <ul>
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">注册时间</div>
+                            <div class="item-after">@Html.Encode(Model.ApplyTime)</div>
+                        </div>
+                    </li>
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">姓名</div>
+                            <div class="item-after">@Html.Encode(Model.Name)</div>
+                        </div>
+                    </li>
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">电话号码</div>
+                            <div class="item-after">@Html.Encode(Model.Mobile)</div>
+                        </div>
+                    </li>
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">地区</div>
+                            <div class="item-after">@Html.Encode(Model.Area)</div>
+                        </div>
+                    </li>
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">时间</div>
+                            <div class="item-after">
+                                <input type="checkbox" name="my-checkbox" disabled data-checked="" id="weekend">周末
+                                <input type="checkbox" name="my-checkbox" disabled data-checked="" id="holiday">节假日
+                                <input type="checkbox" name="my-checkbox" disabled data-checked="" id="weekday">工作日
+                            </div>
+                        </div>
+                    </li>
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">身份证号码</div>
+                            <div class="item-after">@Html.Encode(Model.IdNumber)</div>
+                        </div>
+                    </li>
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">推荐码</div>
+                            <div class="item-after">@Html.Encode(ViewBag.RecommandName)</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+   

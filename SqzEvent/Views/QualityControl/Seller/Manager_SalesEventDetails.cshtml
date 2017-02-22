@@ -1,0 +1,154 @@
+﻿@model SqzEvent.Models.Off_SalesEvent
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Manager_SalesEventDetails</title>
+</head>
+<body>
+    <div>
+        <h4>Off_SalesEvent</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Status)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Status)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.StartDate)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.StartDate)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.EndDate)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.EndDate)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.SerialNo)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.SerialNo)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Off_StoreSystem_Id)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Off_StoreSystem_Id)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.EventType)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.EventType)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.EventTypeName)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.EventTypeName)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.EventTitle)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.EventTitle)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.EventDetails)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.EventDetails)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.OrderAmount)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.OrderAmount)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.CostAmount)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.CostAmount)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.OrderDetials)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.OrderDetials)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.CreateUserName)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.CreateUserName)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.CreateDateTime)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.CreateDateTime)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.CommitUserName)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.CommitUserName)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.CommitDateTime)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.CommitDateTime)
+            </dd>
+    
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</body>
+</html>
