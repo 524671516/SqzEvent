@@ -881,7 +881,7 @@ namespace SqzEvent.Models
         [StringLength(128)]
         public string Location_Desc { get; set; }
 
-        [StringLength(128)]
+        [StringLength(256)]
         public string Photo { get; set; }
 
         [StringLength(64)]
@@ -1186,7 +1186,6 @@ namespace SqzEvent.Models
 
         public bool RequiredAmount { get; set; }
 
-        [Required]
         public string ProductList { get; set; }
 
         public int Off_System_Id { get; set; }

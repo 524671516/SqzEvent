@@ -606,7 +606,7 @@ namespace SqzEvent.Controllers
         }
 
         /************ 新版本界面 ************/
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_Home()
         {
             WeChatUtilities utilities = new WeChatUtilities();
@@ -619,6 +619,7 @@ namespace SqzEvent.Controllers
             ViewBag.Signature = utilities.generateWxJsApiSignature(_nonce, utilities.getJsApiTicket(), _timeStamp, _url);
             return View();
         }
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public PartialViewResult Manager_UserPanel()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -636,6 +637,7 @@ namespace SqzEvent.Controllers
                 return PartialView();
             }
         }
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_UpdateUserInfo()
         {
             string redirectUri = Url.Encode("https://event.shouquanzhai.cn/Seller/Manager_Authorize");
@@ -643,7 +645,7 @@ namespace SqzEvent.Controllers
             string url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=" + redirectUri + "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect";
             return Redirect(url);
         }
-        
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_Authorize(string code, string state)
         {
             WeChatUtilities wechat = new WeChatUtilities();
@@ -665,20 +667,22 @@ namespace SqzEvent.Controllers
         /************ 签到 ************/
         // 首页
         [SettingFilter(SettingName = "MANAGER_ATTENDANCE")]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_Task()
         {
-            var today = Convert.ToDateTime(DateTime.Now.ToShortDateString());
+            /*var today = Convert.ToDateTime(DateTime.Now.ToShortDateString());
             ViewBag.Weekly = today.AddDays(1 - (int)today.DayOfWeek).ToString("MM/dd") + " - " + today.AddDays(7 - (int)today.DayOfWeek).ToString("MM/dd");
             ViewBag.AnnounceCount = (from m in offlineDB.Off_SalesEvent
                                      where m.Status>=1
                                      && today >= m.StartDate && today < m.EndDate
                                      select m).Count();
+                                     */
             return View();
+
         }
         // 当前个人签到数量
         [SettingFilter(SettingName = "MANAGER_ATTENDANCE")]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         [HttpPost]
         public JsonResult Manager_RefreshTaskCount()
         {
@@ -698,7 +702,7 @@ namespace SqzEvent.Controllers
 
         // 主要工作列表
         [SettingFilter(SettingName = "MANAGER_ATTENDANCE")]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_AnnouncementList()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -713,7 +717,7 @@ namespace SqzEvent.Controllers
 
         // 添加督导签到
         [SettingFilter(SettingName = "MANAGER_ATTENDANCE")]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public async Task<ActionResult> Manager_AddCheckin()
         {
             var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
@@ -743,7 +747,7 @@ namespace SqzEvent.Controllers
             }
         }
         [SettingFilter(SettingName = "MANAGER_ATTENDANCE")]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<ActionResult> Manager_AddCheckIn(Off_Manager_CheckIn model)
         {
@@ -771,7 +775,7 @@ namespace SqzEvent.Controllers
 
         // 督导日报
         [SettingFilter(SettingName = "MANAGER_ATTENDANCE")]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_TaskReport(int? id)
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -791,14 +795,14 @@ namespace SqzEvent.Controllers
             return PartialView();
         }
         [SettingFilter(SettingName = "MANAGER_ATTENDANCE")]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_TaskReportPartial(int id)
         {
             var item = offlineDB.Off_Manager_Task.SingleOrDefault(m => m.Id == id);
             return PartialView(item);
         }
         [SettingFilter(SettingName = "MANAGER_ATTENDANCE")]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Manager_TaskReportPartial(Off_Manager_Task model)
         {
@@ -822,7 +826,7 @@ namespace SqzEvent.Controllers
 
         // 督导个人签到查询
         [SettingFilter(SettingName = "MANAGER_ATTENDANCE")]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_CheckInView()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -841,7 +845,7 @@ namespace SqzEvent.Controllers
             return View();
         }
         [SettingFilter(SettingName = "MANAGER_ATTENDANCE")]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_CheckInViewPartial(int id)
         {
             var list = from m in offlineDB.Off_Manager_CheckIn
@@ -854,7 +858,7 @@ namespace SqzEvent.Controllers
 
         // 作废签到位置
         [SettingFilter(SettingName = "MANAGER_ATTENDANCE")]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         [HttpPost]
         public JsonResult Manager_CancelManagerCheckin(int id)
         {
@@ -871,7 +875,7 @@ namespace SqzEvent.Controllers
 
         // 查看全部督导签到信息
         [SettingFilter(SettingName = "MANAGER_ATTENDANCE")]
-        [Authorize(Roles = "Senior")]
+        [Authorize(Roles = "Administrator")]
         public ActionResult Manager_AllCheckInList()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -891,7 +895,7 @@ namespace SqzEvent.Controllers
             return PartialView();
         }
         [SettingFilter(SettingName = "MANAGER_ATTENDANCE")]
-        [Authorize(Roles = "Senior")]
+        [Authorize(Roles = "Administrator")]
         public ActionResult Manager_AllCheckInListPartial(string date)
         {
             var _date = Convert.ToDateTime(date);
@@ -904,7 +908,7 @@ namespace SqzEvent.Controllers
         }
         // 督导签到详情
         [SettingFilter(SettingName = "MANAGER_ATTENDANCE")]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_CheckInDetails(int id)
         {
             var item = offlineDB.Off_Manager_Task.SingleOrDefault(m => m.Id == id);
@@ -913,7 +917,7 @@ namespace SqzEvent.Controllers
 
         // 添加需求
         [SettingFilter(SettingName = "MANAGER_ATTENDANCE")]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_RequestCreate()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -931,7 +935,7 @@ namespace SqzEvent.Controllers
             return PartialView(request);
         }
         [SettingFilter(SettingName = "MANAGER_ATTENDANCE")]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Manager_RequestCreate(Off_Manager_Request model)
         {
@@ -966,7 +970,7 @@ namespace SqzEvent.Controllers
 
         // 修改需求
         [SettingFilter(SettingName = "MANAGER_ATTENDANCE")]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_RequestEdit(int id)
         {
             var item = offlineDB.Off_Manager_Request.SingleOrDefault(m => m.Id == id);
@@ -986,7 +990,7 @@ namespace SqzEvent.Controllers
             return PartialView("Error");
         }
         [SettingFilter(SettingName = "MANAGER_ATTENDANCE")]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Manager_RequestEdit(Off_Manager_Request model)
         {
@@ -1021,17 +1025,17 @@ namespace SqzEvent.Controllers
 
         // 需求列表
         [SettingFilter(SettingName = "MANAGER_ATTENDANCE")]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_RequestList()
         {
             return PartialView();
         }
         [SettingFilter(SettingName = "MANAGER_ATTENDANCE")]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_RequestListPartial()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
-            if (User.IsInRole("Senior"))
+            if (User.IsInRole("Administrator"))
             {
                 var list = from m in offlineDB.Off_Manager_Request
                            where m.Status >= 0 && m.Off_Store.Off_StoreSystem.Off_System_Id == user.DefaultSystemId
@@ -1050,7 +1054,7 @@ namespace SqzEvent.Controllers
         }
         // 作废需求内容
         [SettingFilter(SettingName = "MANAGER_ATTENDANCE")]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         [HttpPost]
         public JsonResult Manager_CancelRequestJson(int id)
         {
@@ -1063,7 +1067,7 @@ namespace SqzEvent.Controllers
 
         // 需求查看
         [SettingFilter(SettingName = "MANAGER_ATTENDANCE")]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_RequestView(int id)
         {
             var item = offlineDB.Off_Manager_Request.SingleOrDefault(m => m.Id == id);
@@ -1071,14 +1075,14 @@ namespace SqzEvent.Controllers
         }
 
         /************ 巡店 ************/
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_Tools()
         {
             return View();
         }
 
         // 刷新店铺数量
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         [HttpPost]
         public JsonResult Manager_RefreshAllCount()
         {
@@ -1107,12 +1111,12 @@ namespace SqzEvent.Controllers
         }
 
         // 未签到列表
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_UnCheckInList()
         {
             return PartialView();
         }
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_UnCheckInListPartial(string date)
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -1129,7 +1133,7 @@ namespace SqzEvent.Controllers
         }
 
         // 门店促销员列表
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_ScheduleSeller(int id)
         {
             var schedule = offlineDB.Off_Checkin_Schedule.SingleOrDefault(m => m.Id == id);
@@ -1139,12 +1143,12 @@ namespace SqzEvent.Controllers
         }
 
         // 未签退列表
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_UnCheckOutList()
         {
             return PartialView();
         }
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_UnCheckOutListPartial(string date)
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -1160,12 +1164,12 @@ namespace SqzEvent.Controllers
             return PartialView(checkin);
         }
         // 未提报销量列表
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_UnReportList()
         {
             return PartialView();
         }
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_UnReportListPartial(string date)
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -1182,12 +1186,12 @@ namespace SqzEvent.Controllers
         }
 
         // 待确认销量列表
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_UnConfirmList()
         {
             return PartialView();
         }
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_UnConfirmListPartial()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -1211,7 +1215,7 @@ namespace SqzEvent.Controllers
         }
 
         // 作废签到信息
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         [HttpPost]
         public ActionResult Manager_DeleteCheckIn(int id)
         {
@@ -1227,7 +1231,7 @@ namespace SqzEvent.Controllers
         }
 
         // 代签到
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager,Administrator")]
         public ActionResult Manager_CreateCheckIn(int id)
         {
             var schedule = offlineDB.Off_Checkin_Schedule.SingleOrDefault(m => m.Id == id);
@@ -1244,7 +1248,7 @@ namespace SqzEvent.Controllers
             ViewBag.SellerDropDown = new SelectList(sellerlist, "Id", "Name");
             return PartialView(item);
         }
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager,Administrator")]
         [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Manager_CreateCheckIn(Off_Checkin model, FormCollection form)
         {
@@ -1321,7 +1325,7 @@ namespace SqzEvent.Controllers
                 return View(model);
             }
         }
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public PartialViewResult Manager_EditReport_Item(int id, int ScheduleId)
         {
             Off_Checkin item = null;
@@ -1387,7 +1391,7 @@ namespace SqzEvent.Controllers
         }
 
         // 查看并修改签到信息
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_EditCheckin(int id)
         {
             var item = offlineDB.Off_Checkin.SingleOrDefault(m => m.Id == id);
@@ -1398,7 +1402,7 @@ namespace SqzEvent.Controllers
             ViewBag.StatusSelectList = new SelectList(status_list, "Key", "Value", item.Status);
             return PartialView(item);
         }
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Manager_EditCheckin(Off_Checkin model, FormCollection form)
         {
@@ -1491,14 +1495,14 @@ namespace SqzEvent.Controllers
         }
 
         // 审核签到信息
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager,Administrator")]
         public ActionResult Manager_CheckinConfirm(int id)
         {
             var item = offlineDB.Off_Checkin.SingleOrDefault(m => m.Id == id);
             return PartialView(item);
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Manager_CheckinConfirm(Off_Checkin model)
         {
@@ -1523,7 +1527,7 @@ namespace SqzEvent.Controllers
         }
 
         // 查看销量明细列表
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public PartialViewResult Manager_ViewReport_Item(int id)
         {
 
@@ -1566,7 +1570,7 @@ namespace SqzEvent.Controllers
         }
 
         // 查看促销信息详细信息
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_ViewConfirm(int id)
         {
             var item = offlineDB.Off_Checkin.SingleOrDefault(m => m.Id == id);
@@ -1576,7 +1580,7 @@ namespace SqzEvent.Controllers
         /************ 工具 ************/
 
         // 销量排名
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_ReportList()
         {
             ViewBag.today = DateTime.Now;
@@ -1592,7 +1596,7 @@ namespace SqzEvent.Controllers
             return PartialView();
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_ReportListPartial(string date, int storesystemId)
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -1637,7 +1641,7 @@ namespace SqzEvent.Controllers
                             };
             return PartialView(finallist);
         }
-        [Authorize(Roles ="Manager")]
+        [Authorize(Roles = "Manager,Administrator")]
         public FileResult Manager_ReportStatistic(string date, int storesystemId)
         {
             MemoryStream stream = new MemoryStream();
@@ -1708,12 +1712,12 @@ namespace SqzEvent.Controllers
         }
 
         // 活动门店列表
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_EventList()
         {
             return PartialView();
         }
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_EventListPartial(string date)
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -1729,7 +1733,7 @@ namespace SqzEvent.Controllers
         }
 
         // 查看活动门店
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_ViewSchedule(int id)
         {
             var schedule = offlineDB.Off_Checkin_Schedule.SingleOrDefault(m => m.Id == id);
@@ -1737,7 +1741,7 @@ namespace SqzEvent.Controllers
         }
 
         // 编辑活动门店
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_EditSchedule(int id)
         {
             var schedule = offlineDB.Off_Checkin_Schedule.SingleOrDefault(m => m.Id == id);
@@ -1754,7 +1758,7 @@ namespace SqzEvent.Controllers
             ViewBag.StoreName = schedule.Off_Store.StoreName;
             return PartialView(model);
         }
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Manager_EditSchedule(FormCollection form)
         {
@@ -1790,7 +1794,7 @@ namespace SqzEvent.Controllers
         }
 
         // 删除活动记录
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         [HttpPost]
         public ActionResult Manager_DeleteEvent(int id)
         {
@@ -1814,7 +1818,7 @@ namespace SqzEvent.Controllers
         }
 
         // 添加日程记录
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_CreateEvent()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -1833,7 +1837,7 @@ namespace SqzEvent.Controllers
             model.Off_System_Id = user.DefaultSystemId;
             return PartialView(model);
         }
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Manager_CreateEvent(FormCollection form)
         {
@@ -1888,7 +1892,7 @@ namespace SqzEvent.Controllers
 
 
         // 管辖门店列表
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_StoreList()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -1898,7 +1902,7 @@ namespace SqzEvent.Controllers
         }
 
         // 管辖促销员列表
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_SellerList()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -1911,14 +1915,14 @@ namespace SqzEvent.Controllers
             return PartialView(sellerlist);
         }
         // 促销红包填写
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager,Administrator")]
         public ActionResult Manager_CheckinBonusRemark(int id)
         {
             var checkin = offlineDB.Off_Checkin.SingleOrDefault(m => m.Id == id);
             return PartialView(checkin);
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager,Administrator")]
         [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Manager_CheckinBonusRemark(Off_Checkin model)
         {
@@ -1975,7 +1979,7 @@ namespace SqzEvent.Controllers
             }
         }
         // 查看促销员详细信息
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_SellerDetails(int id)
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -1983,7 +1987,7 @@ namespace SqzEvent.Controllers
             return PartialView(seller);
         }
         // 修改促销员信息
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_EditSellerInfo(int id)
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -2002,7 +2006,7 @@ namespace SqzEvent.Controllers
             }
             return PartialView("Error");
         }
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Manager_EditSellerInfo(Off_Seller model)
         {
@@ -2027,14 +2031,14 @@ namespace SqzEvent.Controllers
 
 
         // 红包信息列表
-        [Authorize(Roles = "Senior")]
+        [Authorize(Roles = "Administrator")]
         [SettingFilter(SettingName = "BONUS")]
         public ActionResult Manager_BonusList()
         {
             return PartialView();
         }
         // 未发红包列表
-        [Authorize(Roles = "Senior")]
+        [Authorize(Roles = "Administrator")]
         [SettingFilter(SettingName = "BONUS")]
         public ActionResult Manager_BonusList_UnSendPartial()
         {
@@ -2047,7 +2051,7 @@ namespace SqzEvent.Controllers
             return PartialView(list);
         }
         // 确认审核红包
-        [Authorize(Roles = "Senior")]
+        [Authorize(Roles = "Administrator")]
         [SettingFilter(SettingName = "BONUS")]
         [HttpPost]
         public ActionResult Manager_BonusConfirm(int id)
@@ -2091,7 +2095,7 @@ namespace SqzEvent.Controllers
         }
 
         // 作废红包
-        [Authorize(Roles = "Senior")]
+        [Authorize(Roles = "Administrator")]
         [SettingFilter(SettingName = "BONUS")]
         [HttpPost]
         public ActionResult Manager_BonusDismiss(int id)
@@ -2117,7 +2121,7 @@ namespace SqzEvent.Controllers
         }
 
         // 历史红包信息
-        [Authorize(Roles = "Senior")]
+        [Authorize(Roles = "Administrator")]
         [SettingFilter(SettingName = "BONUS")]
         public ActionResult Manager_BonusList_HistoryPartial()
         {
@@ -2130,7 +2134,7 @@ namespace SqzEvent.Controllers
             return PartialView(list);
         }
 
-        [Authorize(Roles = "Senior")]
+        [Authorize(Roles = "Administrator")]
         [SettingFilter(SettingName = "BONUS")]
         [HttpPost]
         public async Task<ActionResult> Manager_BonusList_HistoryRefresh()
@@ -2175,14 +2179,14 @@ namespace SqzEvent.Controllers
         }
 
         // 竞品信息列表
-        [Authorize(Roles = "Senior")]
+        [Authorize(Roles = "Administrator")]
         [SettingFilter(SettingName = "BONUS")]
         public ActionResult Manager_CompetitionInfoList()
         {
             return PartialView();
         }
-        // 未发红包列表
-        [Authorize(Roles = "Senior")]
+        // 竞品未发红包列表
+        [Authorize(Roles = "Administrator")]
         [SettingFilter(SettingName = "BONUS")]
         public ActionResult Manager_CompetitionInfoList_UnSendPartial()
         {
@@ -2194,8 +2198,8 @@ namespace SqzEvent.Controllers
                        select m;
             return PartialView(list);
         }
-        // 确认审核红包
-        [Authorize(Roles = "Senior")]
+        // 竞品确认审核红包
+        [Authorize(Roles = "Administrator")]
         [SettingFilter(SettingName = "BONUS")]
         [HttpPost]
         public ActionResult Manager_CompetitionInfoConfirm(int id)
@@ -2239,8 +2243,8 @@ namespace SqzEvent.Controllers
             }
         }
 
-        // 作废红包
-        [Authorize(Roles = "Senior")]
+        // 作废竞品提报红包
+        [Authorize(Roles = "Administrator")]
         [SettingFilter(SettingName = "BONUS")]
         [HttpPost]
         public ActionResult Manager_CompetitionInfoDismiss(int id)
@@ -2261,8 +2265,8 @@ namespace SqzEvent.Controllers
             }
         }
 
-        // 历史红包信息
-        [Authorize(Roles = "Senior")]
+        // 竞品历史红包信息
+        [Authorize(Roles = "Administrator")]
         [SettingFilter(SettingName = "BONUS")]
         public ActionResult Manager_CompetitionInfoList_HistoryPartial()
         {
@@ -2274,8 +2278,7 @@ namespace SqzEvent.Controllers
                         select m).Take(30);
             return PartialView(list);
         }
-
-        [Authorize(Roles = "Senior")]
+        [Authorize(Roles = "Administrator")]
         [SettingFilter(SettingName = "BONUS")]
         [HttpPost]
         public async Task<ActionResult> Manager_CompetitionInfoList_HistoryRefresh()
@@ -2319,7 +2322,8 @@ namespace SqzEvent.Controllers
             offlineDB.SaveChanges();
             return Json(new { result = "SUCCESS" });
         }
-
+        // 竞品信息明细
+        [Authorize(Roles = "Administrator")]
         public ActionResult Manager_CompetitionInfoDetails(int id)
         {
             var item = offlineDB.Off_CompetitionInfo.SingleOrDefault(m => m.Id == id);
@@ -2328,7 +2332,7 @@ namespace SqzEvent.Controllers
 
         /************ 暗促 ************/
         // 暗促首页
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_SellerTaskHome()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -2351,7 +2355,7 @@ namespace SqzEvent.Controllers
         }
 
         // 暗促签到查看
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_SellerTaskMonthStatistic()
         {
             var startDate = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-01"));
@@ -2366,7 +2370,7 @@ namespace SqzEvent.Controllers
             return PartialView();
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_SellerTaskMonthStatisticPartial(string querydate)
         {
             // 获取督导的门店列表
@@ -2396,14 +2400,14 @@ namespace SqzEvent.Controllers
         }
 
         // 暗促促销员信息
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_SellerTaskSeller(int id)
         {
             ViewBag.SellerId = id;
             return PartialView();
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_SellerTaskSellerPartial(int id, int? page)
         {
             // 第一页为1
@@ -2422,7 +2426,7 @@ namespace SqzEvent.Controllers
         }
 
         // 暗促详情
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_SellerTaskDetails(int id)
         {
             var item = offlineDB.Off_SellerTask.SingleOrDefault(m => m.Id == id);
@@ -2430,7 +2434,7 @@ namespace SqzEvent.Controllers
         }
 
         // 库存预警
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_SellerTaskStorageAlert()
         {
             // 最新的库存预紧
@@ -2454,7 +2458,7 @@ namespace SqzEvent.Controllers
         }
 
         // 暗促信息查询
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_SellerTaskQuery()
         {
             // 获取督导的门店列表
@@ -2470,7 +2474,7 @@ namespace SqzEvent.Controllers
         }
 
         // 查看招募促销员
-        [Authorize(Roles ="Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_RecruitList()
         {
             return PartialView();
@@ -2501,7 +2505,7 @@ namespace SqzEvent.Controllers
         }
 
         // 招募促销员详细信息
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_RecruitDetails(int rid)
         {
             var recruit = offlineDB.Off_Recruit.SingleOrDefault(m => m.Id == rid);
@@ -2516,7 +2520,7 @@ namespace SqzEvent.Controllers
         }
 
         // 绑定招募的促销员
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_RecruitBind(int rid)
         {
             var recruit = offlineDB.Off_Recruit.SingleOrDefault(m => m.Id == rid);
@@ -2534,7 +2538,7 @@ namespace SqzEvent.Controllers
             return PartialView(model);
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         [ValidateAntiForgeryToken, HttpPost]
         public async Task<ContentResult> Manager_RecruitBind(Wx_ManagerRecruitBindViewModel model)
         {
@@ -2573,6 +2577,7 @@ namespace SqzEvent.Controllers
         }
 
         // 活动签呈提报页面
+        [Authorize(Roles = "Manager,Administrator")]
         public PartialViewResult Manager_CreateSalesEvent()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -2584,6 +2589,7 @@ namespace SqzEvent.Controllers
             return PartialView(model);
         }
         [HttpPost]
+        [Authorize(Roles = "Manager,Administrator")]
         public JsonResult Manager_StoreListByStoreSystemId(int storesystemId)
         {
             var storelist = from m in offlineDB.Off_Store
@@ -2592,6 +2598,7 @@ namespace SqzEvent.Controllers
             return Json(new { result = "SUCCESS", storelist = storelist });
         }
         [HttpPost, ValidateAntiForgeryToken]
+        [Authorize(Roles = "Manager,Administrator")]
         public async Task<ContentResult> Manager_CreateSalesEvent(Off_SalesEvent model, FormCollection form)
         {
             if (ModelState.IsValid)
@@ -2632,10 +2639,12 @@ namespace SqzEvent.Controllers
             }
         }
         // 个人签呈列表
+        [Authorize(Roles = "Manager,Administrator")]
         public PartialViewResult Manager_SalesEventList()
         {
             return PartialView();
         }
+        [Authorize(Roles = "Manager,Administrator")]
         public PartialViewResult Manager_SalesEventListPartial()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -2647,6 +2656,7 @@ namespace SqzEvent.Controllers
             return PartialView(list);
         }
         // 修改签呈
+        [Authorize(Roles = "Manager,Administrator")]
         public PartialViewResult Manager_EditSalesEvent(int id)
         {
             var model = offlineDB.Off_SalesEvent.SingleOrDefault(m => m.Id == id);
@@ -2657,6 +2667,7 @@ namespace SqzEvent.Controllers
             ViewBag.StoreSystemList = new SelectList(storesystem, "Id", "SystemName", model.Off_StoreSystem_Id);
             return PartialView(model);
         }
+        [Authorize(Roles = "Manager,Administrator")]
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<ContentResult> Manager_EditSalesEvent(Off_SalesEvent model, FormCollection form)
         {
@@ -2698,6 +2709,7 @@ namespace SqzEvent.Controllers
             }
         }
         // 下架签呈
+        [Authorize(Roles = "Manager,Administrator")]
         [HttpPost]
         public async Task<ContentResult> Manager_DeleteSalesEvent(int id)
         {
@@ -2715,6 +2727,7 @@ namespace SqzEvent.Controllers
             }
         }
         // 签呈详细信息
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public PartialViewResult Manager_SalesEventDetails(int id)
         {
             var item = offlineDB.Off_SalesEvent.SingleOrDefault(m => m.Id == id);
@@ -2726,25 +2739,28 @@ namespace SqzEvent.Controllers
         }
 
         // 对所有人显示当前可用签呈列表
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public PartialViewResult Manager_SalesEventView()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
             var currentDate = DateTime.Now.Date;
             var list = from m in offlineDB.Off_SalesEvent
                        where m.Off_StoreSystem.Off_System_Id == user.DefaultSystemId
-                       && m.EndDate >= currentDate
+                       && m.EndDate >= currentDate && m.Status>=0
                        orderby m.StartDate
                        select m;
-            ViewBag.ImgUrl = user.ImgUrl == null ? null : user.ImgUrl.Replace("http://", "//");
+            //ViewBag.ImgUrl = user.ImgUrl == null ? null : user.ImgUrl.Replace("http://", "//");
             ViewBag.SystemId = user.DefaultSystemId;
             return PartialView(list);
         }
 
         // 待审核签呈列表
+        [Authorize(Roles = "Administrator")]
         public PartialViewResult Admin_SalesEventList()
         {
             return PartialView();
         }
+        [Authorize(Roles = "Administrator")]
         public PartialViewResult Admin_SalesEventListPartial()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -2756,6 +2772,7 @@ namespace SqzEvent.Controllers
         }
 
         // 审核签呈
+        [Authorize(Roles = "Administrator")]
         public PartialViewResult Admin_ConfirmSalesEvent(int Id)
         {
             var model = offlineDB.Off_SalesEvent.SingleOrDefault(m => m.Id == Id);
@@ -2765,6 +2782,7 @@ namespace SqzEvent.Controllers
             }
             return PartialView("NotFound");
         }
+        [Authorize(Roles = "Administrator")]
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<ContentResult> Admin_ConfirmSalesEvent(Off_SalesEvent model)
         {
@@ -2794,6 +2812,7 @@ namespace SqzEvent.Controllers
 
         /************ 促销员 ************/
         // 首页
+        [Authorize(Roles = "Seller")]
         public ActionResult Seller_Home()
         {
             // 判断当前是否有默认店铺
@@ -2848,6 +2867,7 @@ namespace SqzEvent.Controllers
         }
 
         // 首页页面更新信息
+        [Authorize(Roles = "Seller")]
         [HttpPost]
         public JsonResult Seller_HomeJson()
         {
@@ -2890,6 +2910,7 @@ namespace SqzEvent.Controllers
         }
 
         // 用户页面
+        [Authorize(Roles = "Seller")]
         public PartialViewResult Seller_Panel()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -2907,6 +2928,7 @@ namespace SqzEvent.Controllers
         }
 
         // 更换账户（商家以及店铺的切换）
+        [Authorize(Roles = "Seller")]
         public PartialViewResult Seller_ChangeAccount()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -2940,6 +2962,7 @@ namespace SqzEvent.Controllers
 
         // 下拉列表切换更新
         [HttpPost]
+        [Authorize(Roles = "Seller")]
         public PartialViewResult Seller_RefreshBindListAjax(int id)
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -2950,6 +2973,7 @@ namespace SqzEvent.Controllers
         }
 
         // 促销员签到，id为scheduleid
+        [Authorize(Roles = "Seller")]
         public ActionResult Seller_CheckIn(int sid)
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -2986,6 +3010,7 @@ namespace SqzEvent.Controllers
             }
             return View("Error");
         }
+        [Authorize(Roles = "Seller")]
         [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Seller_CheckIn(FormCollection form)
         {
@@ -3025,6 +3050,7 @@ namespace SqzEvent.Controllers
         }
 
         // 促销员签退，id为checkin-id
+        [Authorize(Roles = "Seller")]
         public ActionResult Seller_CheckOut(int id)
         {
             var item = offlineDB.Off_Checkin.SingleOrDefault(m => m.Id == id);
@@ -3035,6 +3061,7 @@ namespace SqzEvent.Controllers
             return View("Error");
         }
         [HttpPost, ValidateAntiForgeryToken]
+        [Authorize(Roles = "Seller")]
         public ActionResult Seller_CheckOut(FormCollection form)
         {
             Off_Checkin checkin = new Off_Checkin();
@@ -3057,6 +3084,7 @@ namespace SqzEvent.Controllers
         }
 
         // 修改促销信息（时间列表）
+        [Authorize(Roles = "Seller")]
         public ActionResult Seller_Report()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -3080,6 +3108,7 @@ namespace SqzEvent.Controllers
             return PartialView();
         }
         // 修改促销信息表单
+        [Authorize(Roles = "Seller")]
         public ActionResult Seller_ReportPartial(int id)
         {
             var item = offlineDB.Off_Checkin.SingleOrDefault(m => m.Id == id);
@@ -3088,6 +3117,7 @@ namespace SqzEvent.Controllers
             return PartialView("Error");
         }
         [HttpPost, ValidateAntiForgeryToken]
+        [Authorize(Roles = "Seller")]
         public ActionResult Seller_ReportPartial(FormCollection form)
         {
             if (ModelState.IsValid)
@@ -3171,6 +3201,7 @@ namespace SqzEvent.Controllers
         }
 
         // 修改表单内的产品列表
+        [Authorize(Roles = "Seller")]
         public PartialViewResult Seller_EditReport_Item(int id)
         {
             var item = offlineDB.Off_Checkin.SingleOrDefault(m => m.Id == id);
@@ -3212,6 +3243,7 @@ namespace SqzEvent.Controllers
 
 
         // 排班表
+        [Authorize(Roles = "Seller")]
         public ActionResult Seller_ScheduleList()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -3220,6 +3252,7 @@ namespace SqzEvent.Controllers
             return PartialView();
         }
         // page从0开始
+        [Authorize(Roles = "Seller")]
         public ActionResult Seller_ScheduleListPartial(int page)
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -3239,6 +3272,7 @@ namespace SqzEvent.Controllers
         }
 
         // 已确认工资情况
+        [Authorize(Roles = "Seller")]
         public ActionResult Seller_ConfirmedData()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -3251,6 +3285,7 @@ namespace SqzEvent.Controllers
             ViewBag.MonthSelect = new SelectList(monthlist, "Key", "Value", monthlist.FirstOrDefault().Key);
             return View();
         }
+        [Authorize(Roles = "Seller")]
         public ActionResult Seller_ConfirmedDataPartial(string month)
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -3264,6 +3299,7 @@ namespace SqzEvent.Controllers
                              select m;
             return PartialView(SalaryList);
         }
+        [Authorize(Roles = "Seller")]
         public ActionResult Seller_ConfirmedDetails(int id)
         {
             var item = offlineDB.Off_SalesInfo_Daily.SingleOrDefault(m => m.Id == id);
@@ -3274,6 +3310,7 @@ namespace SqzEvent.Controllers
             return PartialView("Error");
         }
         // 修改账户信息
+        [Authorize(Roles = "Seller")]
         public ActionResult Seller_CreditInfo()
         {
 
@@ -3310,6 +3347,7 @@ namespace SqzEvent.Controllers
             return PartialView("Error");
         }
         [HttpPost, ValidateAntiForgeryToken]
+        [Authorize(Roles = "Seller")]
         public ActionResult Seller_CreditInfo(Wx_SellerCreditViewModel model)
         {
             if (ModelState.IsValid)
@@ -3337,11 +3375,12 @@ namespace SqzEvent.Controllers
             return Content("FAIL");
         }
         // 竞品信息提报
+        [Authorize(Roles = "Seller")]
         public ActionResult Seller_CompetitionInfoList()
         {
             return View();
         }
-
+        [Authorize(Roles = "Seller")]
         public ActionResult Seller_CompetitionInfoListPartial(int? page)
         {
             int _page = page ?? 0;
@@ -3363,7 +3402,7 @@ namespace SqzEvent.Controllers
             else
                 return Content("FAIL");
         }
-
+        [Authorize(Roles = "Seller")]
         public ActionResult Seller_CreateCompetitionInfo()
         {
             Off_CompetitionInfo model = new Off_CompetitionInfo();
@@ -3375,6 +3414,7 @@ namespace SqzEvent.Controllers
             model.StoreId = seller.StoreId;
             return PartialView(model);
         }
+        [Authorize(Roles = "Seller")]
         [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Seller_CreateCompetitionInfo(FormCollection form)
         {
@@ -3407,7 +3447,7 @@ namespace SqzEvent.Controllers
                 return Content("FAIL");
             }
         }
-
+        [Authorize(Roles = "Seller")]
         [HttpPost]
         public ActionResult Seller_DeleteCompetitionInfo(int id)
         {
@@ -3421,7 +3461,7 @@ namespace SqzEvent.Controllers
             else
                 return Json(new { result = "FAIL" });
         }
-        
+
         // 页面测试
         public ActionResult Seller_APITest()
         {
@@ -3438,7 +3478,7 @@ namespace SqzEvent.Controllers
             bool isRecruit = confirmCount > 4 ? false : true;
             return Json(new { result = "SUCCESS", recruit = isRecruit });
         }
-
+        [Authorize(Roles = "Seller")]
         public ActionResult Seller_UpdateUserInfo()
         {
             string redirectUri = Url.Encode("https://event.shouquanzhai.cn/Seller/Seller_Authorize");
@@ -3446,7 +3486,7 @@ namespace SqzEvent.Controllers
             string url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=" + redirectUri + "&response_type=code&scope=snsapi_userinfo&state=" + "1" + "#wechat_redirect";
             return Redirect(url);
         }
-
+        [Authorize(Roles = "Seller")]
         public ActionResult Seller_Authorize(string code, string state)
         {
             WeChatUtilities wechat = new WeChatUtilities();
@@ -3656,7 +3696,7 @@ namespace SqzEvent.Controllers
                 return View(model);
             }
         }
-        
+        [Authorize(Roles = "Staff")]
         public ActionResult SellerTask_ForceRegister(int systemid)
         {
             Wx_SellerRegisterViewModel model = new Wx_SellerRegisterViewModel();
@@ -3664,6 +3704,7 @@ namespace SqzEvent.Controllers
             return View(model);
         }
         [ValidateAntiForgeryToken, HttpPost]
+        [Authorize(Roles = "Staff")]
         public async Task<ActionResult> SellerTask_ForceRegister(FormCollection form, Wx_SellerRegisterViewModel model)
         {
             if (ModelState.IsValid)
@@ -3698,6 +3739,7 @@ namespace SqzEvent.Controllers
                 return View(model);
             }
         }
+        [Authorize(Roles = "Staff")]
         public ActionResult SellerTask_Home()
         {
             var binduser = offlineDB.Off_Membership_Bind.SingleOrDefault(m => m.UserName == User.Identity.Name && m.Type == 2);
@@ -3728,6 +3770,7 @@ namespace SqzEvent.Controllers
                 return RedirectToAction("SellerTask_Register", new { systemid = user.DefaultSystemId });
             }
         }
+        [Authorize(Roles = "Staff")]
         public ActionResult SellerTask_UpdateUserInfo()
         {
             string redirectUri = Url.Encode("https://event.shouquanzhai.cn/Seller/SellerTask_Authorize");
@@ -3735,7 +3778,7 @@ namespace SqzEvent.Controllers
             string url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=" + redirectUri + "&response_type=code&scope=snsapi_userinfo&state=" + "1" + "#wechat_redirect";
             return Redirect(url);
         }
-
+        [Authorize(Roles = "Staff")]
         public ActionResult SellerTask_Authorize(string code, string state)
         {
             WeChatUtilities wechat = new WeChatUtilities();
@@ -3754,6 +3797,7 @@ namespace SqzEvent.Controllers
             return RedirectToAction("SellerTask_Home");
         }
         [HttpPost]
+        [Authorize(Roles = "Staff")]
         public JsonResult SellerTask_Panel(int id)
         {
             var seller = offlineDB.Off_Seller.SingleOrDefault(m => m.Id == id);
@@ -3777,7 +3821,7 @@ namespace SqzEvent.Controllers
             }
             return Json(new { result = "SUCCESS", data = new { StoreName = StoreName, Score = Score, Status = finished, ApplyDate = ApplyDate.ToString("yyyy-MM-dd"), Notify = notify } });
         }
-        
+        [Authorize(Roles = "Staff")]
         [HttpPost]
         public ActionResult SellerTask_UserInfoPartial()
         {
@@ -3796,7 +3840,7 @@ namespace SqzEvent.Controllers
                 return PartialView();
             }
         }
-
+        [Authorize(Roles = "Staff")]
         public ActionResult SellerTask_UpdateAccountInfo(int id)
         {
 
@@ -3832,6 +3876,7 @@ namespace SqzEvent.Controllers
             }
             return View("Error");
         }
+        [Authorize(Roles = "Staff")]
         [HttpPost, ValidateAntiForgeryToken]
         public ActionResult SellerTask_UpdateAccountInfo(Wx_SellerCreditViewModel model)
         {
@@ -3877,7 +3922,7 @@ namespace SqzEvent.Controllers
                     return View("Error");
             }
         }
-
+        [Authorize(Roles = "Staff")]
         public ActionResult SellerTask_CreateSellerReport(int id)
         {
             var seller = offlineDB.Off_Seller.SingleOrDefault(m => m.Id == id);
@@ -3898,7 +3943,7 @@ namespace SqzEvent.Controllers
                 return View(item);
             }
         }
-
+        [Authorize(Roles = "Staff")]
         [HttpPost, ValidateAntiForgeryToken]
         public ActionResult SellerTask_CreateSellerReport(int id, FormCollection form)
         {
@@ -3981,6 +4026,7 @@ namespace SqzEvent.Controllers
                 return Content("FAIL");
             }
         }
+        [Authorize(Roles = "Staff")]
         public ActionResult SellerTask_ProductPartial(int? taskid)
         {
             int _id = taskid ?? 0;
@@ -4074,6 +4120,7 @@ namespace SqzEvent.Controllers
                 return PartialView(model);
             }
         }
+        [Authorize(Roles = "Staff")]
         public ActionResult SellerTask_EditSellerTask(int id)
         {
             var sellertask = offlineDB.Off_SellerTask.SingleOrDefault(m => m.Id == id);
@@ -4089,6 +4136,7 @@ namespace SqzEvent.Controllers
             }
             return PartialView("TaskError");
         }
+        [Authorize(Roles = "Staff")]
         [HttpPost, ValidateAntiForgeryToken]
         public ActionResult SellerTask_EditSellerTask(int id, FormCollection form)
         {
@@ -4217,7 +4265,7 @@ namespace SqzEvent.Controllers
             }
             return PartialView();
         }
-
+        [Authorize(Roles = "Staff")]
         public PartialViewResult SellerTask_Details(int id)
         {
             var sellertask = offlineDB.Off_SellerTask.SingleOrDefault(m => m.Id == id);

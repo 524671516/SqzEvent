@@ -7,7 +7,7 @@
                 <span>返回</span>
             </a>
         </div>
-        <div class="center sliding">本周活动</div>
+        <div class="center sliding">当前活动签呈列表</div>
     </div>
 </div>
 <div class="pages">
@@ -25,20 +25,18 @@
                         {
                             <div class="card facebook-card">
                                 <div class="card-header">
-                                    <div class="facebook-avatar"><img src="@ViewBag.ImgUrl" width="34" height="34" class="img-responsive"></div>
-                                    <div class="facebook-name">@Html.ManagerNickName(item.CreateUserName,(int)ViewBag.SystemId)</div>
-                                    <div class="facebook-date">@item.CreateDateTime</div>
+                                    <div class="facebook-name">@Html.Encode(item.Off_StoreSystem.SystemName)</div>
+                                    <div class="facebook-date color-gray"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;@Html.Encode(item.StartDate.ToString("MM/dd") + " - " + item.EndDate.ToString("MM/dd"))</div>
                                 </div>
                                 <div class="card-content">
                                     <div class="card-content-inner">
-                                        <p>@item.EventDetails</p>
-                                        <p class="color-gray"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;@Html.Encode(item.StartDate.ToString("MM/dd") + " - " + item.EndDate.ToString("MM/dd"))&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-paperclip" aria-hidden="true"></i>&nbsp;@Html.ManagerRequestStatus(item.Status)</p>
+                                        <p>@Html.Encode(item.EventTitle)</p>
                                     </div>
                                 </div>
                                 <div class="card-footer">
-                                    <a href="#" class="link"></a>
-                                    <a href="#" class="link"></a>
-                                    <a href="/Seller/Manager_SalesEventDetails?Id=@item.Id" class="link">更多</a>
+                                    <div><i class="fa fa-paperclip" aria-hidden="true"></i>&nbsp;&nbsp;@Html.ManagerRequestStatus(item.Status)</div>
+                                    <div><i class="fa fa-user" aria-hidden="true"></i>&nbsp;&nbsp;@Html.ManagerNickName(item.CreateUserName, (int)ViewBag.SystemId)</div>
+                                    <a href="/Seller/Manager_SalesEventDetails?Id=@item.Id" class="link">查看更多</a>
                                 </div>
                             </div>
                         }
