@@ -1293,6 +1293,7 @@ $$(document).on("pageInit", ".page[data-page='manager-event-list']", function ()
     var mySearchbar = myApp.searchbar(".searchbar", {
         searchList: ".list-block-search",
         searchIn: ".item-content"
+
     });
     $$.ajax({
         url: "/Seller/Manager_SalesEventListPartial",
