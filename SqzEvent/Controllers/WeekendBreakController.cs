@@ -378,7 +378,7 @@ namespace SqzEvent.Controllers
                 var user = UserManager.FindByEmail(jat.openid);
                 if (user != null)
                 {
-                    if (UserManager.IsInRole(user.Id, "Senior"))
+                    if (UserManager.IsInRole(user.Id, "Administrator"))
                     {
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                         return RedirectToAction("WeekendBreak_OverView");
