@@ -3063,7 +3063,7 @@ namespace SqzEvent.Controllers
             var item = offlineDB.Off_Checkin.SingleOrDefault(m => m.Id == id);
             if (item != null)
             {
-                ViewBag.datecode = Convert.ToInt32(GenerateDailyCode())-Convert.ToInt32(DateTime.Now.ToString("dd"));
+                ViewBag.datecode = Convert.ToInt32(GenerateDailyCode())-Convert.ToInt32(DateTime.Now.ToString("dd"))+ Convert.ToInt32(DateTime.Now.ToString("MM"));
                 return View(item);
             }
             return View("Error");
