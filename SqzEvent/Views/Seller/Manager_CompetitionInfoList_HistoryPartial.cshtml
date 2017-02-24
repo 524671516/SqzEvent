@@ -7,7 +7,7 @@
             <div class="item-inner">
                 <div class="item-title-row">
                     <div class="item-title">
-                        <span>@Html.Encode(item.ApplicationDate.ToString("MM-dd"))</span>:@Html.Encode(item.Off_Store.StoreName)
+                        <span>@Html.Encode(item.ApplicationDate.ToString("MM-dd"))</span>:@Html.Encode(item.Off_Store.Off_StoreSystem.SystemName+"-"+item.Off_Store.StoreName)
                     </div>
                 </div>
                 <div class="subtitle color-gray margin-top-7 text-font-1">
