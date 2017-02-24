@@ -2993,10 +2993,12 @@ namespace SqzEvent.Controllers
                     var checkitem = offlineDB.Off_Checkin.SingleOrDefault(m => m.Off_Schedule_Id == item.Id && m.Off_Seller_Id == seller.Id && m.Status != -1);
                     if (checkitem != null)
                     {
+                        ViewBag.datecode = GenerateDailyCode();
                         return PartialView(checkitem);
                     }
                     else
                     {
+                        ViewBag.datecode = GenerateDailyCode();
                         checkitem = new Off_Checkin()
                         {
                             Off_Seller_Id = seller.Id,
@@ -3056,6 +3058,7 @@ namespace SqzEvent.Controllers
             var item = offlineDB.Off_Checkin.SingleOrDefault(m => m.Id == id);
             if (item != null)
             {
+                ViewBag.datecode = Convert.ToInt32(GenerateDailyCode())-Convert.ToInt32(DateTime.Now.ToString("dd"));
                 return View(item);
             }
             return View("Error");
@@ -4597,5 +4600,11 @@ namespace SqzEvent.Controllers
             Array.Copy(array, 0, outBuffer, 3, array.Length);
             return outBuffer;
         }
+        public string GenerateDailyCode()
+        {
+            TimeSpan ts = DateTime.Now.Date.AddSeconds(135816).ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            var datecode = ts.TotalSeconds.ToString();
+            return "" + datecode[7] + datecode[6] + datecode[5] + datecode[4];
+        }      
     }
 }
