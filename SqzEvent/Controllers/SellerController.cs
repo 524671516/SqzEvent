@@ -1113,7 +1113,7 @@ namespace SqzEvent.Controllers
         // 未签到列表
         [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_UnCheckInList()
-        {
+        {          
             return PartialView();
         }
         [Authorize(Roles = "Supervisor,Manager,Administrator")]
@@ -1127,7 +1127,7 @@ namespace SqzEvent.Controllers
                                  where storelist.Contains(m.Off_Store_Id)
                                  && m.Subscribe == _date
                                  && m.Off_Checkin.Count(p => p.Status >= 0) == 0
-                                 orderby m.Off_Store.StoreName
+                                 orderby m.Off_Store.Off_StoreSystem.SystemName, m.Off_Store.StoreName
                                  select m;
             return PartialView(today_schedule);
         }
