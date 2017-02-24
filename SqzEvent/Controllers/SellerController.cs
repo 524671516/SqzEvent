@@ -196,7 +196,7 @@ namespace SqzEvent.Controllers
                 int systemid = Convert.ToInt32(state);
                 if (user != null)
                 {
-                    if (UserManager.IsInRole(user.Id, "Manager"))
+                    if (UserManager.IsInRole(user.Id, "Manager") || UserManager.IsInRole(user.Id, "Supervisor") || UserManager.IsInRole(user.Id, "Administrator"))
                     {
                         if (user.OffSalesSystem != null)
                         {
@@ -1585,13 +1585,16 @@ namespace SqzEvent.Controllers
         {
             ViewBag.today = DateTime.Now;
             var user = UserManager.FindById(User.Identity.GetUserId());
-            //var manager = offlineDB.Off_StoreManager.SingleOrDefault(m => m.UserName == user.UserName && m.Off_System_Id == user.DefaultSystemId);
+            var manager = offlineDB.Off_StoreManager.SingleOrDefault(m => m.UserName == user.UserName && m.Off_System_Id == user.DefaultSystemId);
+            var storesystem = from m in manager.Off_Store
+                              group m by m.Off_StoreSystem into g
+                              select new { Id = g.Key.Id, SystemName = g.Key.SystemName };
             /*var storelist = from m in manager.Off_Store
                             group m by m.StoreSystem into g
                             select new { Key = g.Key };*/
-            var storesystem = from m in offlineDB.Off_StoreSystem
+            /*var storesystem = from m in offlineDB.Off_StoreSystem
                               where m.Off_System_Id == user.DefaultSystemId
-                              select m;
+                              select m;*/
             ViewBag.StoreSystem = new SelectList(storesystem, "Id", "SystemName", storesystem.FirstOrDefault().Id);
             return PartialView();
         }
@@ -1728,6 +1731,7 @@ namespace SqzEvent.Controllers
             var schedulelist = from m in offlineDB.Off_Checkin_Schedule
                                where m.Subscribe == today
                                && storelist.Contains(m.Off_Store_Id)
+                               orderby m.Off_Store.Off_StoreSystem.SystemName, m.Off_Store.StoreName
                                select m;
             return PartialView(schedulelist);
         }
@@ -1829,7 +1833,7 @@ namespace SqzEvent.Controllers
                             group m by m.Off_StoreSystem into g
                             select g.Key.SystemName;
             ViewBag.GroupList = grouplist;*/
-            var storesystem = from m in offlineDB.Off_Store
+            var storesystem = from m in manager.Off_Store
                               group m by m.Off_StoreSystem into g
                               select g.Key;
             ViewBag.StoreSystem = new SelectList(storesystem, "Id", "SystemName");
@@ -1897,7 +1901,7 @@ namespace SqzEvent.Controllers
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
             var manager = offlineDB.Off_StoreManager.SingleOrDefault(m => m.UserName == user.UserName && m.Off_System_Id == user.DefaultSystemId);
-            var storelist = manager.Off_Store.OrderBy(m => m.StoreName);
+            var storelist = manager.Off_Store.OrderBy(m => m.Off_StoreSystem.SystemName).ThenBy(m => m.StoreName);
             return PartialView(storelist);
         }
 
@@ -2594,6 +2598,7 @@ namespace SqzEvent.Controllers
         {
             var storelist = from m in offlineDB.Off_Store
                             where m.Off_StoreSystemId == storesystemId
+                            orderby m.StoreName
                             select new { Id = m.Id, StoreName = m.StoreName};
             return Json(new { result = "SUCCESS", storelist = storelist });
         }
