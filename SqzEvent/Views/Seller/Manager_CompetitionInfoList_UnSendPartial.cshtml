@@ -6,7 +6,7 @@
         <div class="swipeout-content">
             <a href="/Seller/Manager_CompetitionInfoDetails?id=@item.Id" class="item-content item-link">
                 <div class="item-inner" style="background: url('../../fonts/right.svg') no-repeat; background-position:calc(100% - 15px) center;background-size:10px 20px">
-                    <div class="item-title"><span>@Html.Encode(item.ApplicationDate.ToString("MM-dd"))</span>:@Html.Encode(item.Off_Store.StoreName)</div>
+                    <div class="item-title"><span>@Html.Encode(item.ApplicationDate.ToString("MM-dd"))</span>:@Html.Encode(item.Off_Store.Off_StoreSystem.SystemName+"-"+item.Off_Store.StoreName)</div>
                     <div class="item-subtitle color-gray padding-right-20 h6">信息状态：<span>@Html.Encode(Html.CompetitionInfoStatus(item.Status))</span></div>
                     <div class="item-subtitle color-gray h6">@Html.Encode(item.Remark)</div>
                 </div>
