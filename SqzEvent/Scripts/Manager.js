@@ -859,6 +859,11 @@ $$(document).on("pageAfterAnimation", ".page[data-page='manager-uncheckinlist']"
     var url = "/Seller/Manager_UnCheckInListPartial";
     datepicker_refresh(url);
 });
+//
+$$(document).on("pageAfterAnimation", ".page[data-page='manager-checkcodelist']", function () {
+    var url = "/Seller/Manager_CheckCodePartial";
+    datepicker_refresh(url);
+});
 
 myApp.onPageBack("manager-uncheckinlist", function (e) {
     var ptrContent = $$("#home-refresh");
@@ -869,10 +874,11 @@ myApp.onPageBack("manager-uncheckinlist", function (e) {
 $$(document).on("pageAfterAnimation", ".page[data-page='manager-uncheckoutlist']", function () {
     var url = "/Seller/Manager_UnCheckOutListPartial";
     datepicker_refresh(url);
-    $$(".list-content").on("deleted", ".swipeout", function (e) {
-        var url = "/Seller/Manager_DeleteCheckIn";
+    $$(".list-block-partial").on("deleted", ".swipeout", function (e) {
+        var _url = "/Seller/Manager_DeleteCheckIn";
         var Id = $$(e.target).attr("data-url");
-        swipe_deleted(url, Id);
+        swipe_deleted(_url, Id);
+        datepicker_refresh(url);   
     });
 });
 
@@ -885,10 +891,11 @@ myApp.onPageBack("manager-uncheckoutlist", function (e) {
 $$(document).on("pageAfterAnimation", ".page[data-page='manager-unreportlist']", function () {
     var url = "/Seller/Manager_UnReportListPartial";
     datepicker_refresh(url);
-    $$(".list-content").on("deleted", ".swipeout", function (e) {
-        var url = "/Seller/Manager_DeleteCheckIn";
+    $$(".list-block-partial").on("deleted", ".swipeout", function (e) {
+        var _url = "/Seller/Manager_DeleteCheckIn";
         var Id = $$(e.target).attr("data-url");
-        swipe_deleted(url, Id);
+        swipe_deleted(_url, Id);
+        datepicker_refresh(url);
     });
 });
 
