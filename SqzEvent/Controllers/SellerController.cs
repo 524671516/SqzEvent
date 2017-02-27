@@ -903,7 +903,7 @@ namespace SqzEvent.Controllers
             var list = from m in offlineDB.Off_Manager_Task
                        where m.TaskDate == _date && m.Status >= 0
                        && m.Off_System_Id == user.DefaultSystemId
-                       select m;
+                       select m;        
             return PartialView(list);
         }
         // 督导签到详情
@@ -1114,6 +1114,19 @@ namespace SqzEvent.Controllers
         [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_UnCheckInList()
         {          
+            return PartialView();
+        }
+        //编码查询
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
+        public ActionResult Manager_CheckCode()
+        {
+            return PartialView();
+        }
+        public ActionResult Manager_CheckCodePartial(string date)
+        {
+            DateTime _date = Convert.ToDateTime(date);
+            ViewBag.QD = GetCheckInCode(_date);
+            ViewBag.QT = GetCheckOutCode(_date);
             return PartialView();
         }
         [Authorize(Roles = "Supervisor,Manager,Administrator")]
@@ -2998,12 +3011,12 @@ namespace SqzEvent.Controllers
                     var checkitem = offlineDB.Off_Checkin.SingleOrDefault(m => m.Off_Schedule_Id == item.Id && m.Off_Seller_Id == seller.Id && m.Status != -1);
                     if (checkitem != null)
                     {
-                        ViewBag.datecode = GenerateDailyCode();
+                        ViewBag.datecode = GetCheckInCode(DateTime.Now.Date);
                         return PartialView(checkitem);
                     }
                     else
                     {
-                        ViewBag.datecode = GenerateDailyCode();
+                        ViewBag.datecode = GetCheckInCode(DateTime.Now.Date);
                         checkitem = new Off_Checkin()
                         {
                             Off_Seller_Id = seller.Id,
@@ -3061,9 +3074,17 @@ namespace SqzEvent.Controllers
         public ActionResult Seller_CheckOut(int id)
         {
             var item = offlineDB.Off_Checkin.SingleOrDefault(m => m.Id == id);
+            var schedule = offlineDB.Off_Checkin_Schedule.SingleOrDefault(m => m.Id == item.Off_Schedule_Id);
             if (item != null)
             {
-                ViewBag.datecode = Convert.ToInt32(GenerateDailyCode())-Convert.ToInt32(DateTime.Now.ToString("dd"))+ Convert.ToInt32(DateTime.Now.ToString("MM"));
+                if (DateTime.Now.AddMinutes(30) >= schedule.Standard_CheckOut)
+                {
+                    ViewBag.datecode = GetCheckOutCode(DateTime.Now.Date);
+                }
+                else
+                {
+                    ViewBag.datecode = "编码将在临近下班前呈现";
+                }
                 return View(item);
             }
             return View("Error");
@@ -4605,11 +4626,17 @@ namespace SqzEvent.Controllers
             Array.Copy(array, 0, outBuffer, 3, array.Length);
             return outBuffer;
         }
-        public string GenerateDailyCode()
+        public string GetCheckInCode(DateTime a)
         {
-            TimeSpan ts = DateTime.Now.Date.AddSeconds(135816).ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+                TimeSpan ts =a.AddSeconds(135816).ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+                var datecode = ts.TotalSeconds.ToString();
+                return "" + datecode[7] + datecode[6] + datecode[5] + datecode[4];
+        }  
+        public string GetCheckOutCode(DateTime a)
+        {
+            TimeSpan ts =a.AddSeconds(5816).ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0, 0);
             var datecode = ts.TotalSeconds.ToString();
             return "" + datecode[7] + datecode[6] + datecode[5] + datecode[4];
-        }      
+        }  
     }
 }

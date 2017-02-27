@@ -600,6 +600,8 @@
     <Content Include="Views\QualityControl\Manager_ProductionDetails.cshtml" />
     <Content Include="Views\Seller\Manager_SalesEventListPartial.cshtml" />
     <Content Include="Views\Seller\Admin_ConfirmSalesEvent.cshtml" />
+    <Content Include="Views\Seller\Manager_CheckCode.cshtml" />
+    <Content Include="Views\Seller\Manager_CheckCodePartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
