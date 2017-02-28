@@ -3725,7 +3725,7 @@ namespace SqzEvent.Controllers
                 return View(model);
             }
         }
-        [Authorize(Roles = "Staff")]
+        [Authorize]
         public ActionResult SellerTask_ForceRegister(int systemid)
         {
             Wx_SellerRegisterViewModel model = new Wx_SellerRegisterViewModel();
@@ -3733,7 +3733,7 @@ namespace SqzEvent.Controllers
             return View(model);
         }
         [ValidateAntiForgeryToken, HttpPost]
-        [Authorize(Roles = "Staff")]
+        [Authorize]
         public async Task<ActionResult> SellerTask_ForceRegister(FormCollection form, Wx_SellerRegisterViewModel model)
         {
             if (ModelState.IsValid)
@@ -3760,6 +3760,8 @@ namespace SqzEvent.Controllers
                 await offlineDB.SaveChangesAsync();
                 WeChatUtilities wechat = new WeChatUtilities();
                 wechat.setUserToGroup(user.OpenId, 103);
+                // 重新登陆，重置角色
+                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 return RedirectToAction("SellerTask_Home");
             }
             else

@@ -16,7 +16,7 @@ using Newtonsoft.Json;
 
 namespace SqzEvent.Controllers
 {
-    [Authorize(Roles = "Supervisor,Manager")]
+    [Authorize(Roles = "Supervisor,Manager,Administrator")]
     public class WeekendBreakController : Controller
     {
         OfflineSales offlineDB = new OfflineSales();
@@ -85,7 +85,7 @@ namespace SqzEvent.Controllers
                 var user = UserManager.FindByEmail(jat.openid);
                 if (user != null)
                 {
-                    if (UserManager.IsInRole(user.Id, "Manager"))
+                    if (UserManager.IsInRole(user.Id, "Supervisor") || UserManager.IsInRole(user.Id, "Manager"))
                     {
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                         return RedirectToAction("Weekend_Redirect");
