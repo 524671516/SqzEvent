@@ -1392,10 +1392,14 @@ $$(document).on("pageInit", ".page[data-page='manager-task-eventedit']", functio
             if (data.result == "SUCCESS") {
                 var s = $$("#smart-select-m .item-after").html().trim();
                 $$("#smart-select-m .smart-select-value").html(s);
-                var newstr = s.substring(0, s.length-1);
-                var arr = newstr.split(",");          
+                if (s.indexOf(",") == -1) {
+                    var newstr = s;
+                } else {
+                    var newstr = s.substring(0, s.length - 1);
+                }
+                var arr = newstr.split(",");
                 for (var i = 0; i < data.storelist.length; i++) {
-                    if (arr.indexOf(data.storelist[i].StoreName)!=-1) {
+                    if (arr.indexOf(data.storelist[i].StoreName) != -1) {
                             $$("#smart-select-m select").append("<option value=\"" + data.storelist[i].Id + "\" selected>" + data.storelist[i].StoreName + "</option>");
                         } else {
                             $$("#smart-select-m select").append("<option value=\"" + data.storelist[i].Id + "\">" + data.storelist[i].StoreName + "</option>");

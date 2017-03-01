@@ -167,11 +167,20 @@
                                         <div class="item-inner">
                                             <div class="item-title">选择店铺</div>
                                             <div class="item-after smart-select-value">
-                                                @foreach (var item in Model.Off_Store)
-                                                {
+                                               @if (Model.Off_Store.Count() == 1)
+                                               {
+                                                   foreach (var item in Model.Off_Store)
+                                                   {
+                                                    @Html.Encode(@item.StoreName.ToString())
+                                                   }
+                                               }
+                                               else
+                                               {
+                                                   foreach (var item in Model.Off_Store)
+                                                   {
                                                     @Html.Encode(@item.StoreName.ToString() + ",")
-                                                }
-
+                                                   }
+                                               }
                                             </div>
                                         </div>
                                     </div>
