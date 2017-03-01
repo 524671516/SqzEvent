@@ -79,14 +79,21 @@
                                         </div>
                                     </a>
                                 </li>
-                                <li>
-                                    <a href="/Seller/Manager_UnConfirmList" class="item-link item-content">
-                                        <div class="item-inner">
-                                            <div class="item-title">销量待确认</div>
-                                            <div class="item-after" id="unconfirm-count">N/A</div>
-                                        </div>
-                                    </a>
-                                </li>
+                                @if (User.IsInRole("Supervisor"))
+                                {
+
+                                }
+                                else
+                                {
+                                    <li>
+                                        <a href="/Seller/Manager_UnConfirmList" class="item-link item-content">
+                                            <div class="item-inner">
+                                                <div class="item-title">销量待确认</div>
+                                                <div class="item-after" id="unconfirm-count">N/A</div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                }                              
                             </ul>
                         </div>
                     </div>
@@ -131,6 +138,6 @@
     <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript"></script>
     <script charset="utf-8" src="https://apis.map.qq.com/api/js?v=2.exp&key=WRRBZ-PHV3K-KWOJ5-AMKPV-PASC3-GSFQU"></script>
     <script src="~/Scripts/my-validate.js"></script>
-    <script src="~/Scripts/manager.min.js?v=1.7.8"></script>
+    <script src="~/Scripts/manager.js?v=1.7.7"></script>
 </body>
 </html>

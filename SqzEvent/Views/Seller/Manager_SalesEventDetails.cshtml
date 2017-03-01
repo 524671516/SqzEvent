@@ -78,10 +78,21 @@
                             <div class="accordion-item-content">
                                 <div class="content-block">
                                     <p>
-                                        @foreach (var item in Model.Off_Store)
+                                        @if (Model.Off_Store.Count() == 1)
                                         {
-                                            @Html.Encode(@item.StoreName.ToString()+",")
+                                            foreach (var item in Model.Off_Store)
+                                            {
+                                                @Html.Encode(@item.StoreName.ToString())
+                                            }
                                         }
+                                        else
+                                        {
+                                            foreach (var item in Model.Off_Store)
+                                            {
+                                                @Html.Encode(@item.StoreName.ToString() + ",")
+                                            }
+                                        }
+                                       
                                     </p>
                                 </div>
                             </div>
