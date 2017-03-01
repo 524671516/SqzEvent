@@ -112,24 +112,72 @@
                                 </div>
                             </a>
                         </li>
-                        <li>
-                            <a href="#" class="item-link smart-select" data-back-text="返回" data-back-on-select="true" data-searchbar="true" data-searchbar-placeholder="店铺名称" data-searchbar-cancel="取消" id="smart-select-m">
-                                <select id="storelist" name="storelist" required="required" maxlength="20" multiple>
-                                </select>
+                        @if (Model.Off_Store.Count() == Model.Off_StoreSystem.Off_Store.Count())
+                        {
+                            <li>
                                 <div class="item-content">
                                     <div class="item-inner">
-                                        <div class="item-title">选择店铺</div>
-                                        <div class="item-after smart-select-value"> 
-                                            @foreach (var item in Model.Off_Store)
-                                            {
-                                                    @Html.Encode(@item.StoreName.ToString() + ",")
-                                            }
-
+                                        <div class="item-title label">全选店铺</div>
+                                        <div class="item-input item-input-right">
+                                            <label class="label-switch">
+                                                <input type="checkbox" id="allcheck" name="allcheck" checked>
+                                                <div class="checkbox"></div>
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
-                            </a>
-                        </li>
+                            </li>
+                            <li id="store-smart" class="hidden">
+                                <a href="#" class="item-link smart-select" data-back-text="返回" data-back-on-select="true" data-searchbar="true" data-searchbar-placeholder="店铺名称" data-searchbar-cancel="取消" id="smart-select-m">
+                                    <select id="storelist" name="storelist" multiple></select>
+                                    <div class="item-content">
+                                        <div class="item-inner">
+                                            <div class="item-title">选择店铺</div>
+                                            <div class="item-after smart-select-value">
+                                                @foreach (var item in Model.Off_Store)
+                                                {
+                                                    @Html.Encode(@item.StoreName.ToString() + ",")
+                                                }
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+                                <div class="item-content">
+                                    <div class="item-inner">
+                                        <div class="item-title label">全选店铺</div>
+                                        <div class="item-input item-input-right">
+                                            <label class="label-switch">
+                                                <input type="checkbox" id="allcheck" name="allcheck">
+                                                <div class="checkbox"></div>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li id="store-smart">
+                                <a href="#" class="item-link smart-select" data-back-text="返回" data-back-on-select="true" data-searchbar="true" data-searchbar-placeholder="店铺名称" data-searchbar-cancel="取消" id="smart-select-m">
+                                    <select id="storelist" name="storelist" multiple></select>
+                                    <div class="item-content">
+                                        <div class="item-inner">
+                                            <div class="item-title">选择店铺</div>
+                                            <div class="item-after smart-select-value">
+                                                @foreach (var item in Model.Off_Store)
+                                                {
+                                                    @Html.Encode(@item.StoreName.ToString() + ",")
+                                                }
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        }                       
                         <li>
                             <div class="item-content middle-content">
                                 @Html.TextAreaFor(m => m.EventDetails, new { placeholder = "请输入需求详细信息", @class = "", @required = "required", @maxlength = "500" })

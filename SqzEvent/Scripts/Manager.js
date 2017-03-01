@@ -355,6 +355,16 @@ $$(document).on("pageInit", ".page[data-page='manager-task-eventcreate']", funct
         dayNamesShort: dayNamesShort,
         closeOnSelect: true
     });
+    $$("#allcheck").on("change", function () {
+        if ($(this).is(':checked')) {
+            $("#StoreList option").prop("selected", "selected");
+            $("#store-smart").hide();
+        } else {
+            $("#store-smart").show();
+            $("#store-smart .smart-select-value").html("- 请选择 -")
+            $("#StoreList option").prop("selected", false);
+        }
+    });
     $$.ajax({
         url: "/Seller/Manager_StoreListByStoreSystemId",
         type: "post",
@@ -372,8 +382,10 @@ $$(document).on("pageInit", ".page[data-page='manager-task-eventcreate']", funct
 
     })
     $$("#Off_StoreSystem_Id").on("change", function () {
+        $("#allcheck").attr("checked", false);
         $$("#StoreList").html("");
-        $$("#manager-task-eventcreate .smart-select-value").html("- 请选择 -")
+        $("#store-smart").show();
+        $("#store-smart .smart-select-value").html("- 请选择 -")
         if ($$(this).val() != "") {
             $$.ajax({
                 url: "/Seller/Manager_StoreListByStoreSystemId",
@@ -402,14 +414,20 @@ $$(document).on("pageInit", ".page[data-page='manager-task-eventcreate']", funct
         //当为false时，验证无效时，没有焦点响应
         onkeyup: false,
         submitHandler: function (form) {
-            if ($$("#StoreList").val() == "") {
-                myApp.alert("请选择店铺")
+            if ($$("#StoreList").val() == "" && $$("#allcheck").is(':checked')==false) {
                 myApp.hideIndicator();
+                myApp.addNotification({
+                    title: "通知",
+                    message: "必须选择一个门店"
+                });
                 $("#eventcreate-btn").prop("disabled", false).removeClass("color-gray");
             } else {
-                if ($$("#StartDate").val() > $$("#EndDate").val()) {
-                    myApp.alert("开始时间不能大于结束时间")
+                if ($$("#StartDate").val() > $$("#EndDate").val()) {                   
                     myApp.hideIndicator();
+                    myApp.addNotification({
+                        title: "通知",
+                        message: "开始时间不能大于结束时间"
+                    });
                     $("#eventcreate-btn").prop("disabled", false).removeClass("color-gray");
                 } else {
                     $("#createsaleevent-form").ajaxSubmit(function (data) {
@@ -914,9 +932,9 @@ $$(document).on("pageAfterAnimation", ".page[data-page='manager-unconfirmlist']"
         }
     });
     $$(".list-content").on("deleted", ".swipeout", function (e) {
-        var url = "/Seller/Manager_DeleteCheckIn";
+        var _url = "/Seller/Manager_DeleteCheckIn";
         var Id = $$(e.target).attr("data-url");
-        swipe_deleted(url, Id);
+        swipe_deleted(_url, Id);
     });
 });
 
@@ -1352,6 +1370,16 @@ $$(document).on("pageInit", ".page[data-page='manager-task-eventedit']", functio
         dayNamesShort: dayNamesShort,
         closeOnSelect: true
     });
+    $$("#allcheck").on("change", function () {
+        if ($(this).is(':checked')) {
+            $("#storelist option").prop("selected", "selected");
+            $("#store-smart").hide();
+        } else {
+            $("#store-smart").show();
+            $("#store-smart .smart-select-value").html("- 请选择 -")
+            $("#storelist option").prop("selected", false);
+        }
+    });
     $$.ajax({
         url: "/Seller/Manager_StoreListByStoreSystemId",
         type: "post",
@@ -1379,8 +1407,10 @@ $$(document).on("pageInit", ".page[data-page='manager-task-eventedit']", functio
 
     })
     $$("#Off_StoreSystem_Id").on("change", function () {
+        $("#allcheck").attr("checked", false);
+        $("#store-smart").show();
+        $("#store-smart .smart-select-value").html("- 请选择 -")
         $$("#storelist").html("");
-        $$("#manager-task-eventedit .smart-select-value").html("- 请选择 -")
         if ($$(this).val() != "") {
             $$.ajax({
                 url: "/Seller/Manager_StoreListByStoreSystemId",
@@ -1409,14 +1439,20 @@ $$(document).on("pageInit", ".page[data-page='manager-task-eventedit']", functio
         //当为false时，验证无效时，没有焦点响应
         onkeyup: false,
         submitHandler: function (form) {
-            if ($$("#storelist").val() == "") {
-                myApp.alert("请选择店铺")
+            if ($$("#storelist").val() == "" && $$("#allcheck").is(':checked')==false) {
                 myApp.hideIndicator();
+                myApp.addNotification({
+                    title: "通知",
+                    message: "必须选择一个门店"
+                });
                 $("#eventedit-btn").prop("disabled", false).removeClass("color-gray");
             } else {
                 if ($$("#StartDate").val() > $$("#EndDate").val()) {
-                    myApp.alert("开始时间不能大于结束时间")
                     myApp.hideIndicator();
+                    myApp.addNotification({
+                        title: "通知",
+                        message: "开始时间不能大于结束时间"
+                    });
                     $("#eventedit-btn").prop("disabled", false).removeClass("color-gray");
                 } else {
                     $("#editsaleevent-form").ajaxSubmit(function (data) {
@@ -1652,6 +1688,16 @@ $$(document).on("pageInit", ".page[data-page='manager-addschedule']", function (
         value: [endtime[0], endtime[1]],
         cols: col
     });
+    $$("#allcheck").on("change", function () {
+        if ($(this).is(':checked')) {
+            $("#actStore option").prop("selected", "selected");
+            $("#store-smart").hide();
+        } else {
+            $("#store-smart").show();
+            $("#store-smart .smart-select-value").html("- 请选择 -")
+            $("#actStore option").prop("selected", false);
+        }
+    });
     $$.ajax({
         url: "/Seller/Manager_StoreListByStoreSystemId",
         type: "post",
@@ -1669,8 +1715,10 @@ $$(document).on("pageInit", ".page[data-page='manager-addschedule']", function (
 
     })
     $$("#Off_StoreSystem_id").on("change", function () {
+        $("#allcheck").attr("checked", false);
+        $("#store-smart").show();
+        $("#store-smart .smart-select-value").html("- 请选择 -")
         $$("#actStore").html("");
-        $$("#createevent-form  .smart-select-value2").html("- 请选择 -")
         if ($$(this).val() != "") {
             $$.ajax({
                 url: "/Seller/Manager_StoreListByStoreSystemId",
@@ -1713,7 +1761,7 @@ $$(document).on("pageInit", ".page[data-page='manager-addschedule']", function (
                 setTimeout(function () {
                     myApp.closeNotification(".notifications");
                 }, 2e3);
-            } else if (/Invalid|NaN|undefined/.test(store) || store == "") {
+            } else if ($$("#actStore").val() == "" && $$("#allcheck").is(':checked') == false) {
                 myApp.hideIndicator();
                 myApp.addNotification({
                     title: "通知",
