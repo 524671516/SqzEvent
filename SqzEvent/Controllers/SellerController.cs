@@ -3009,14 +3009,13 @@ namespace SqzEvent.Controllers
                 if (item.Subscribe == today && item.Off_Store_Id == storeId)
                 {
                     var checkitem = offlineDB.Off_Checkin.SingleOrDefault(m => m.Off_Schedule_Id == item.Id && m.Off_Seller_Id == seller.Id && m.Status != -1);
+                    ViewBag.datecode = GetCheckInCode(DateTime.Now.Date);
                     if (checkitem != null)
                     {
-                        ViewBag.datecode = GetCheckInCode(DateTime.Now.Date);
                         return PartialView(checkitem);
                     }
                     else
                     {
-                        ViewBag.datecode = GetCheckInCode(DateTime.Now.Date);
                         checkitem = new Off_Checkin()
                         {
                             Off_Seller_Id = seller.Id,
@@ -4636,7 +4635,7 @@ namespace SqzEvent.Controllers
         }  
         public string GetCheckOutCode(DateTime a)
         {
-            TimeSpan ts =a.AddSeconds(5816).ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            TimeSpan ts =a.AddSeconds(5816).ToUniversalTime() - new DateTime(1980, 1, 1, 0, 0, 0, 0);
             var datecode = ts.TotalSeconds.ToString();
             return "" + datecode[7] + datecode[6] + datecode[5] + datecode[4];
         }  
