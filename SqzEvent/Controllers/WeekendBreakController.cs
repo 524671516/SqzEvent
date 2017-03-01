@@ -434,6 +434,7 @@ namespace SqzEvent.Controllers
             var user = UserManager.FindById(User.Identity.GetUserId());
             DateTime today = Convert.ToDateTime(date);
             // 填充表头
+            csv.WriteField("渠道");
             csv.WriteField("店名");
             csv.WriteField("督导姓名");
             // 填充产品表头
@@ -458,6 +459,7 @@ namespace SqzEvent.Controllers
             foreach (var wb_item in weekendbreaklist)
             {
                 //csv.WriteField(sequence);
+                csv.WriteField(wb_item.Off_Checkin_Schedule.Off_Store.Off_StoreSystem.SystemName);
                 csv.WriteField(wb_item.Off_Checkin_Schedule.Off_Store.StoreName);
                 csv.WriteField(wb_item.Off_StoreManager.NickName);
                 var checkin = wb_item.Off_Checkin_Schedule.Off_Checkin.Where(m=>m.Status>=3).FirstOrDefault();
