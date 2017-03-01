@@ -2748,9 +2748,11 @@ namespace SqzEvent.Controllers
         [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public PartialViewResult Manager_SalesEventDetails(int id)
         {
+            var user = UserManager.FindById(User.Identity.GetUserId());
             var item = offlineDB.Off_SalesEvent.SingleOrDefault(m => m.Id == id);
             if (item != null)
             {
+                ViewBag.SystemId = user.DefaultSystemId;
                 return PartialView(item);
             }
             return PartialView("NotFound");
