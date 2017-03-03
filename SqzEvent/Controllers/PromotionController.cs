@@ -187,6 +187,63 @@ namespace SqzEvent.Controllers
                 return PartialView(question);
             return PartialView("NotFound");
         }
-        
+        // 春糖会 登陆
+        public ActionResult Tjh_UserAttendanceStart(int type)
+        {
+            int _type = type == 1? 1 : 0;
+            string redirectUri = Url.Encode("https://event.shouquanzhai.cn/Promotion/Tjh_UserAttendance_Authorize");
+            string appId = WeChatUtilities.getConfigValue(WeChatUtilities.APP_ID);
+            string url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=" + redirectUri + "&response_type=code&scope=snsapi_userinfo&state=" + _type + "#wechat_redirect";
+            return Redirect(url);
+        }
+
+        public ActionResult Tjh_UserAttendance_Authorize(string code, string state)
+        {
+
+            int type = Convert.ToInt32(state);
+            WeChatUtilities wechat = new WeChatUtilities();
+            var jat = wechat.getWebOauthAccessToken(code);
+            // 报名模式
+            if (type == 1)
+            {
+                return RedirectToAction("Tjh_UserAttendance_Register", new { openid = jat.openid });
+            }
+            else
+            {
+                // 签到模式
+                return RedirectToAction("Tjh_UserAttendance_Signup", new { openid = jat.openid });
+            }
+        }
+
+        // 春糖会 报名
+        public ActionResult Tjh_UserAttendance_Register(string openid)
+        {
+            // 待添加
+            Tjh_UserAttendance model = new Tjh_UserAttendance();
+            model.openid = openid;
+            return View(model);
+        }
+        [HttpPost, ValidateAntiForgeryToken]
+        public ActionResult Tjh_UserAttendance_Register(Tjh_UserAttendance model, FormCollection form)
+        {
+            // 待添加
+            return View(model);
+        }
+        public ActionResult Tjh_UserAttendance_Register_Done()
+        {
+            return View();
+        }
+
+        // 春糖会 参会确认
+        public ActionResult Tjh_UserAttendance_Signup(string openid)
+        {
+            // 待添加
+            return View();
+        }
+
+        public ActionResult Tjh_UserAttendance_Signup_Fail()
+        {
+            return View();
+        }
     }
 }

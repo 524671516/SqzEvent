@@ -15,6 +15,7 @@ namespace SqzEvent.Models
         public virtual DbSet<Result> Result { get; set; }
         public virtual DbSet<SurveyedUser> SurveyedUser { get; set; }
         public virtual DbSet<UserResult> UserResult { get; set; }
+        public virtual DbSet<Tjh_UserAttendance> Tjh_UserAttendance { get; set; }
         public QuestionModels() : base("PromotionConnection")
         {
 
@@ -129,5 +130,39 @@ namespace SqzEvent.Models
         public string QuestionTitle { get; set; }
         public string AnswerContent { get; set; }
         public virtual SurveyedUser SurveyedUser { get; set; }
+    }
+
+    // 2017糖酒会活动
+    [Table("Tjh_UserAttendance")]
+    public partial class Tjh_UserAttendance
+    {
+        public int Id { get; set; }
+
+        [Required, StringLength(32)]
+        public string openid { get; set; }
+
+        public int Status { get; set; }
+
+        [Required, StringLength(8)]
+        public string Name { get; set; }
+
+        [Required, StringLength(16)]
+        [RegularExpression("(^\\d{18}$)|(^\\d{15}$)|(^\\d{17}(\\d|X|x))", ErrorMessage = "格式错误")]
+        public string Mobile { get; set; }
+
+        [Required, StringLength(64)]
+        public string Area { get; set; }
+
+        [StringLength(16)]
+        public string SalesChannel { get; set; }
+
+        [StringLength(16)]
+        public string RecommandUser { get; set; }
+
+        public DateTime SignupDatetime { get; set; }
+
+        public bool Confirmed { get; set; }
+
+        public DateTime? ConfirmedDatetime { get; set; }
     }
 }
