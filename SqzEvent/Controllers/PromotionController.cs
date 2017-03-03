@@ -226,7 +226,25 @@ namespace SqzEvent.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Tjh_UserAttendance_Register(Tjh_UserAttendance model, FormCollection form)
         {
-            // 待添加
+            if (ModelState.IsValid)
+            {
+                Tjh_UserAttendance tjh = new Tjh_UserAttendance();
+                if (TryUpdateModel(tjh))
+                {
+                    tjh.ConfirmedDatetime = DateTime.Now;
+                    tjh.SignupDatetime = DateTime.Now;
+                    tjh.Status = 1;
+
+                }
+                else
+                {
+                    return View(model);
+                }
+            }
+            else
+            {
+                return View(model);
+            }
             return View(model);
         }
         public ActionResult Tjh_UserAttendance_Register_Done()
