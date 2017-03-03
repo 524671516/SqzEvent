@@ -1,0 +1,280 @@
+﻿@model SqzEvent.Models.Tjh_UserAttendance
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>Tjh_UserAttendance_Register</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <style>
+
+        .container {
+            display: table;
+            height: 100%;    
+        }
+        .input-group-md{
+            margin-bottom:0.5rem;
+        }
+        .well h1,.well small{
+            color:#fff;
+        }
+        .well{
+            background-color:rgba(0,0,0,.2) !important;
+        }
+        #qudaoid{
+           color: #555;
+           text-align: center;
+           background-color: #eee;
+           border: 1px solid #ccc;
+           border-radius: 4px;
+           cursor:none;
+               display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+        }
+     .selectwrap {
+            padding: 0;
+        }
+        .input-group-md label{
+            margin-left:15px;
+        }
+        select{
+            -webkit-appearance: none; /*for chrome*/
+        }
+        .btn-disabled{
+            color:#ccc !important;
+        }
+          .select.form-control {           
+            appearance: none;
+            -moz-appearance: none;
+            -webkit-appearance: none;
+            padding:0 0 0 15px;
+            outline: none;
+            text-decoration: none;
+            background-color: #fff;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+        }
+         .btn-gary.active, .btn-gary:active {
+            color: #fff;
+            background-color:#4cae4c;
+            outline: none;
+        }
+         .btn-gary {
+            border: 1px solid #ccc;
+            background-color: #fff;
+            color: #000;
+        }
+         .border-error{
+             border-color: #a94442 !important;
+         }
+         .border-success{
+             border-color:#4cae4c;
+         }
+        ul{
+            padding:0;
+            margin:0;
+            width:100%;
+            position:fixed;
+            z-index:-999;
+            height:100%;
+            overflow:hidden;
+        }
+        ul li{
+            width:100%;
+            height:100%;
+        }
+  
+    </style>
+
+</head>
+<body>  
+    <ul>
+        <li style="background-color:#FFF68F"></li>
+        <li style="background-color:red"></li>
+        <li style="background-color:red"></li>
+    </ul>
+        <div class="container">
+            <div class="row col-md-12">               
+                <div class="col-xs-12 well">
+                    <div class="col-xs-12">
+                        <div class="col-xs-3"></div>
+                        <div class="col-xs-6"><img src="~/Content/images/logo_new.png" class="img-responsive" /></div>
+                        <div class="col-xs-3"></div>
+                    </div>
+                        <h1>春糖会<small>报名</small></h1>
+                    @using (Html.BeginForm("Tjh_UserAttendance_Register", "Promotion", FormMethod.Post, new { @class = "validate-form", id = "create-form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m=>m.Id)
+                        @Html.HiddenFor(m=>m.openid)    
+                        @Html.HiddenFor(m=>m.SignupDatetime)
+                        @Html.HiddenFor(m=>m.Confirmed)
+                        @Html.HiddenFor(m=>m.ConfirmedDatetime)
+                        <div class="input-group input-group-md">
+                            <span class="input-group-addon">姓名</span>
+                            @Html.TextBoxFor(m => m.Name, new { @class = "form-control", @placeholder = "请输入" })
+                        </div>
+                        <div class="input-group input-group-md">
+                            <span class="input-group-addon">手机</span>
+                            @Html.TextBoxFor(m => m.Mobile, new { @class = "form-control", @placeholder = "请输入", @type = "tel" })
+                        </div>                       
+                        <div class="input-group input-group-md col-xs-12">
+                            <div class="col-xs-3" style="padding-left:0"><span id="qudaoid">区域</span></div>
+                            <div class="col-xs-9">
+                                <div class="row">
+                                    <div class="col-xs-6 selectwrap">
+                                        <select id="AreaProvince" name="AreaProvince" class="form-control select border-none">
+                                            <option>请选择</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-xs-6 selectwrap">
+                                        <select id="AreaCity" name="AreaCity" class="form-control select border-none">
+                                            <option>请选择</option>
+                                        </select>
+                                    </div>                                  
+                                </div>
+                            </div>
+
+                        </div>
+                                                   
+                        <div class="input-group input-group-md col-xs-12">
+                            <div class="col-xs-3" style="padding-left:0"><span id="qudaoid">渠道</span></div>
+                            <div class="col-xs-9">
+                                <div class="row">
+                                    <div class="btn-group col-xs-12 selectwrap active" data-toggle="buttons">
+                                        <label class="btn  btn-gary col-xs-6 text-center">
+                                            <input type="checkbox" id="1" name="SalesChannel" value="1"/>KA
+                                        </label>
+                                        <label class="btn  btn-gary col-xs-6 text-center">
+                                            <input type="checkbox" id="2" name="SalesChannel" value="2"/>流通
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group input-group-md">
+                            <span class="input-group-addon">推荐人</span>
+                            @Html.TextBoxFor(m => m.RecommandUser, new { @class = "form-control", @placeholder = "请输入" })
+                        </div>
+                    }
+                    
+                    <br />
+                    <a  class="btn btn-success btn-block" id="register-btn">立即报名</a>
+                </div>
+            </div>
+        </div>
+</body>
+</html>
+<script>
+    var recommend_type = /^(13[0-9]|14[0-9]|15[0-9]|18[0-9])\d{8}$|^\d{0}$/   //推荐码正则
+    var verification_type = /^\d{4,6}$/                                       //验证码正则
+    var word_type = /^[\u4e00-\u9fa5]{1,6}$/                                  //输入姓名正则
+    var tel_type = /^(13[0-9]|14[0-9]|15[0-9]|18[0-9])\d{8}$/                 //电话号码正则
+    $.ajax({
+        url: "/Seller/GetRegion",
+        data: {
+            level: 1
+        },
+        success: function (data) {
+            var data = JSON.parse(data);
+            for (i = 0; i < data.response.regions.length; i++) {
+                var province = unescape(data.response.regions[i].name);
+                var province_val = data.response.regions[i].id;
+                $("#AreaProvince").append("<option target-id=\"" + province_val + "\" value=\"" + province + "\">" + province + "</option>");
+            }
+        }
+    });
+    /*选择省后获取对应市级信息*/
+    $("#AreaProvince").on("change", function () {
+        $("#AreaCity").html("<option>请选择</option>");
+        $.ajax({
+            url: "/Seller/GetRegion",
+            data: {
+                parentid: $("#AreaProvince").find("option:selected").attr("target-id"),
+                level: 2
+            },
+            success: function (data) {
+                var data = JSON.parse(data);
+                if ($("#AreaProvince").find("option:selected").attr("target-id") > 0) {
+                    for (i = 0; i < data.response.regions.length; i++) {
+                        var city = unescape(data.response.regions[i].name);
+                        var city_val = data.response.regions[i].id;
+                        $("#AreaCity").append("<option target-id=\"" + city_val + "\" value=\"" + city + "\">" + city + "</option>");
+                    }
+                }
+            }
+        });
+    });
+    $("#register-btn").on("click", function () {
+        var bool=true;
+        var check=false;
+        if (!$(this).hasClass("btn-disabled")) {
+            $(this).addClass("btn-disabled");
+            if (!word_type.test($("#Name").val())){
+                $("#Name").parent().addClass("has-error");
+                $(this).removeClass("btn-disabled");
+                bool = false;
+            } else {
+                $("#Name").parent().removeClass("has-error");
+                $("#Name").parent().addClass("has-success");
+            }
+            if (!tel_type.test($("#Mobile").val())) {
+                $("#Mobile").parent().addClass("has-error");
+                $(this).removeClass("btn-disabled");
+                bool = false;
+                
+            } else {
+                $("#Mobile").parent().removeClass("has-error");
+                $("#Mobile").parent().addClass("has-success");
+            }
+            $("select").each(function () {
+                if ($(this).val() == "请选择") {
+                    $(this).parent().addClass("has-error");
+                    $("#register-btn").removeClass("btn-disabled");
+                    bool = false;
+                } else {
+                    $(this).parent().removeClass("has-error");
+                    $(this).parent().addClass("has-success");
+                }
+            })
+            $("input[type='checkbox']").each(function () {
+                if ($(this).is(":checked")) {
+                    check = true;
+                }
+            });
+            if (check == false) {
+                $("input[type='checkbox']").parent().addClass("border-error");
+            } else {
+                $("input[type='checkbox']").parent().removeClass("border-error");
+                $("input[type='checkbox']").parent().addClass("border-success");
+            }
+            if (!recommend_type.test($("#RecommandUser").val())) {
+                $("#RecommandUser").parent().addClass("has-error");
+                $(this).removeClass("btn-disabled");
+                bool = false;
+            } else {
+                $(this).parent().removeClass("has-error");
+                $(this).parent().addClass("has-success");
+            }
+            if (bool) {
+                //提交
+            }
+        } else {
+            $(this).addClass("btn-disabled");
+        }
+    })
+</script>

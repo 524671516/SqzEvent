@@ -602,6 +602,7 @@
     <Content Include="Views\Seller\Admin_ConfirmSalesEvent.cshtml" />
     <Content Include="Views\Seller\Manager_CheckCode.cshtml" />
     <Content Include="Views\Seller\Manager_CheckCodePartial.cshtml" />
+    <Content Include="Views\Promotion\Tjh_UserAttendance_Register.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
