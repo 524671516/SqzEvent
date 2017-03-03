@@ -13,7 +13,7 @@ namespace SqzEvent.Controllers
 {
     public class PromotionController : Controller
     {
-        private QuestionModels db = new QuestionModels();
+        private PromotionModels db = new PromotionModels();
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         public PromotionController()

@@ -5,14 +5,14 @@ namespace SqzEvent.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<SqzEvent.Models.QuestionModels>
+    internal sealed class Configuration : DbMigrationsConfiguration<SqzEvent.Models.PromotionModels>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(SqzEvent.Models.QuestionModels context)
+        protected override void Seed(SqzEvent.Models.PromotionModels context)
         {
             //  This method will be called after migrating to the latest version.
 

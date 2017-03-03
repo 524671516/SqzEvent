@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace SqzEvent.Models
 {
-    public class QuestionModels : DbContext
+    public class PromotionModels : DbContext
     {
 
         public virtual DbSet<Question> Question { get; set; }
@@ -16,7 +16,7 @@ namespace SqzEvent.Models
         public virtual DbSet<SurveyedUser> SurveyedUser { get; set; }
         public virtual DbSet<UserResult> UserResult { get; set; }
         public virtual DbSet<Tjh_UserAttendance> Tjh_UserAttendance { get; set; }
-        public QuestionModels() : base("PromotionConnection")
+        public PromotionModels() : base("PromotionConnection")
         {
 
         }

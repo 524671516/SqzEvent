@@ -241,7 +241,7 @@
     <Compile Include="Models\PeriodAidViewModels.cs" />
     <Compile Include="Models\QualityControlModels.cs" />
     <Compile Include="Models\QualityControlViewModels.cs" />
-    <Compile Include="Models\QuestionModels.cs" />
+    <Compile Include="Models\PromotionModels.cs" />
     <Compile Include="Models\WxAcountViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
