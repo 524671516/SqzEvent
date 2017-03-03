@@ -102,6 +102,11 @@
 
 </head>
 <body>  
+    <ul>
+        <li style="background-color:#FFF68F"></li>
+        <li style="background-color:red"></li>
+        <li style="background-color:red"></li>
+    </ul>
         <div class="container">
             <div class="row col-md-12">               
                 <div class="col-xs-12 well">
@@ -264,6 +269,9 @@
             } else {
                 $(this).parent().removeClass("has-error");
                 $(this).parent().addClass("has-success");
+            }
+            if (bool) {
+                //提交
             }
         } else {
             $(this).addClass("btn-disabled");
