@@ -76,7 +76,7 @@ namespace System.Web.Mvc
                 case 5:
                     return "已结算";
                 default:
-                    return "位置状态";
+                    return "位置未知";
             }
         }
         public static string BonusStatus(this HtmlHelper helper, int status)

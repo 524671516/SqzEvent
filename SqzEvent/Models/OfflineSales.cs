@@ -35,13 +35,17 @@ namespace SqzEvent.Models
         public virtual DbSet<Off_Checkin_Product> Off_Checkin_Product { get; set; }
         public virtual DbSet<Off_Product> Off_Product { get; set; }
         public virtual DbSet<Off_Daily_Product> Off_Daily_Product { get; set; }
-        public virtual DbSet<Off_Sales_Template> Off_Sales_Template { get; set; }
         public virtual DbSet<Off_AVG_Info> Off_AVG_Info { get; set; }
         public virtual DbSet<Off_System_Setting> Off_System_Setting { get; set; }
         public virtual DbSet<Off_SellerTask> Off_SellerTask { get; set; }
         public virtual DbSet<Off_SellerTaskProduct> Off_SellerTaskProduct { get; set; }
         public virtual DbSet<Off_CompetitionInfo> Off_CompetitionInfo { get; set; }
         public virtual DbSet<Off_Recruit> Off_Recruit { get; set; }
+        public virtual DbSet<Off_WeekendBreak> Off_WeekendBreak { get; set; }
+        public virtual DbSet<Off_WeekendBreakRecord> Off_WeekendBreakRecord { get; set; }
+
+        public virtual DbSet<Off_StoreSystem> Off_StoreSystem { get; set; }
+        public virtual DbSet<Off_SalesEvent> Off_SalesEvent { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -81,6 +85,12 @@ namespace SqzEvent.Models
                 .WithRequired(e => e.Off_Checkin_Schedule)
                 .HasForeignKey(e => e.Off_Schedule_Id)
                 .WillCascadeOnDelete(true);
+
+            modelBuilder.Entity<Off_Checkin_Schedule>()
+                .HasMany(e => e.Off_WeekendBreak)
+                .WithRequired(e => e.Off_Checkin_Schedule)
+                .HasForeignKey(e => e.ScheduleId)
+                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Off_Checkin>()
                 .HasMany(e => e.Off_BonusRequest)
@@ -149,7 +159,7 @@ namespace SqzEvent.Models
                 .WillCascadeOnDelete(true);
 
             modelBuilder.Entity<Off_System>()
-                .HasMany(e => e.Off_Store)
+                .HasMany(e => e.Off_StoreSystem)
                 .WithRequired(e => e.Off_System)
                 .HasForeignKey(e => e.Off_System_Id)
                 .WillCascadeOnDelete(false);
@@ -201,13 +211,7 @@ namespace SqzEvent.Models
                 .WithRequired(e => e.Off_System)
                 .HasForeignKey(e => e.Off_System_Id)
                 .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Off_System>()
-                .HasMany(e => e.Off_Sales_Template)
-                .WithRequired(e => e.Off_System)
-                .HasForeignKey(e => e.Off_System_Id)
-                .WillCascadeOnDelete(false);
-
+            
             modelBuilder.Entity<Off_System>()
                 .HasMany(e => e.Off_System_Setting)
                 .WithRequired(e => e.Off_System)
@@ -220,12 +224,8 @@ namespace SqzEvent.Models
                 .HasForeignKey(e => e.Off_System_Id)
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<Off_Sales_Template>()
-                .HasMany(e => e.Off_Checkin_Schedule)
-                .WithRequired(e => e.Off_Sales_Template)
-                .HasForeignKey(e => e.TemplateId)
-                .WillCascadeOnDelete(false);
-
+            modelBuilder.Entity<Off_StoreManager>()
+                .HasMany(e => e.Off_WeekendBreak).WithRequired(e => e.Off_StoreManager).HasForeignKey(e => e.StoreManagerId).WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Off_Product>()
                 .HasMany(e => e.Off_Checkin_Product)
@@ -268,6 +268,12 @@ namespace SqzEvent.Models
                 .WithRequired(e => e.Off_SellerTask)
                 .HasForeignKey(e => e.SellerTaskId)
                 .WillCascadeOnDelete(true);
+
+            modelBuilder.Entity<Off_WeekendBreak>().HasMany(e => e.Off_WeekendBreakRecord).WithRequired(e => e.Off_WeekendBreak).HasForeignKey(e => e.WeekendBreakId).WillCascadeOnDelete(true);
+
+            modelBuilder.Entity<Off_StoreSystem>().HasMany(e => e.Off_Store).WithRequired(e => e.Off_StoreSystem).HasForeignKey(e => e.Off_StoreSystemId).WillCascadeOnDelete(false);
+            modelBuilder.Entity<Off_StoreSystem>()
+                .HasMany(e => e.Off_SalesEvent).WithRequired(e => e.Off_StoreSystem).HasForeignKey(e => e.Off_StoreSystem_Id).WillCascadeOnDelete(false);
         }
     }
     public partial class Off_System
@@ -284,7 +290,7 @@ namespace SqzEvent.Models
         public virtual ICollection<Off_Seller> Off_Seller { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Off_Store> Off_Store { get; set; }
+        public virtual ICollection<Off_StoreSystem> Off_StoreSystem { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Off_StoreManager> Off_StoreManager { get; set; }
@@ -303,9 +309,6 @@ namespace SqzEvent.Models
         
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Off_Product> Off_Product { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Off_Sales_Template> Off_Sales_Template { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Off_System_Setting> Off_System_Setting { get; set; }
@@ -360,27 +363,11 @@ namespace SqzEvent.Models
 
     public partial class Off_Store
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Off_Store()
-        {
-            Off_SalesInfo_Daily = new HashSet<Off_SalesInfo_Daily>();
-            Off_SalesInfo_Month = new HashSet<Off_SalesInfo_Month>();
-        }
-
         public int Id { get; set; }
-
-        [StringLength(50)]
-        public string StoreSystem { get; set; }
 
         [Required]
         [StringLength(255)]
         public string StoreName { get; set; }
-
-        [StringLength(20)]
-        public string Region { get; set; }
-
-        [StringLength(50)]
-        public string Distributor { get; set; }
 
         [StringLength(255)]
         public string Address { get; set; }
@@ -425,9 +412,12 @@ namespace SqzEvent.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Off_CompetitionInfo> Off_CompetitionInfo { get; set; }
 
-        public int Off_System_Id { get; set; }
+        public int Off_StoreSystemId { get; set; }
 
-        public virtual Off_System Off_System { get; set; }
+        public virtual Off_StoreSystem Off_StoreSystem { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Off_SalesEvent> Off_SalesEvent { get; set; }
     }
 
     public partial class Off_Seller
@@ -500,16 +490,6 @@ namespace SqzEvent.Models
 
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime Date { get; set; }
-
-        public int? Item_Brown { get; set; }
-
-        public int? Item_Black { get; set; }
-
-        public int? Item_Lemon { get; set; }
-
-        public int? Item_Honey { get; set; }
-
-        public int? Item_Dates { get; set; }
 
         public int? SellerId { get; set; }
 
@@ -700,30 +680,7 @@ namespace SqzEvent.Models
 
         public int Type { get; set; }
     }
-    public partial class Off_Sales_Template
-    {
-        public int Id { get; set; }
-
-        [Required]
-        [StringLength(128)]
-        public string TemplateName { get; set; }
-
-        public int Status { get; set; }
-
-        public bool RequiredStorage { get; set; }
-
-        public bool RequiredAmount { get; set; }
-
-        [Required]
-        public string ProductList { get; set; }
-
-        public int Off_System_Id { get; set; }
-
-        public virtual Off_System Off_System { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Off_Checkin_Schedule> Off_Checkin_Schedule { get; set; }
-    }
+    
     public partial class Off_Checkin_Schedule
     {
         public int Id { get; set; }
@@ -747,8 +704,8 @@ namespace SqzEvent.Models
 
         public virtual Off_System Off_System { get; set; }
 
-        public int TemplateId { get; set; }
-        public virtual Off_Sales_Template Off_Sales_Template { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Off_WeekendBreak> Off_WeekendBreak { get; set; }
     }
     public partial class Off_Checkin
     {
@@ -777,18 +734,6 @@ namespace SqzEvent.Models
 
         [StringLength(64)]
         public string CheckoutLocation { get; set; }
-
-        public int? Rep_Brown { get; set; }
-
-        public int? Rep_Black { get; set; }
-
-        public int? Rep_Honey { get; set; }
-
-        public int? Rep_Lemon { get; set; }
-
-        public int? Rep_Dates { get; set; }
-
-        public int? Rep_Other { get; set; }
 
         [StringLength(512, ErrorMessage ="²»³¬¹ý512¸ö×Ö·û")]
         public string Rep_Image { get; set; }
@@ -870,6 +815,9 @@ namespace SqzEvent.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Off_Store> Off_Store { get; set; }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Off_WeekendBreak> Off_WeekendBreak { get; set; }
+
         public int Off_System_Id { get; set; }
 
         public virtual Off_System Off_System { get; set; }
@@ -933,7 +881,7 @@ namespace SqzEvent.Models
         [StringLength(128)]
         public string Location_Desc { get; set; }
 
-        [StringLength(128)]
+        [StringLength(256)]
         public string Photo { get; set; }
 
         [StringLength(64)]
@@ -1175,6 +1123,129 @@ namespace SqzEvent.Models
         public int Off_System_Id { get; set; }
 
         public virtual Off_System Off_System { get; set; }
+    }
+
+    public partial class Off_WeekendBreak
+    {
+        public int Id { get; set; }
+
+        public int StoreManagerId { get; set; }
+
+        public int ScheduleId { get; set; }
+
+        public DateTime Subscribe { get; set; }
+
+        public DateTime SignInTime { get; set; }
+
+        [StringLength(32)]
+        public string UserName { get; set; }
+
+        public DateTime? LastUploadTime { get; set; }
+
+        public int? TrailDefault { get; set; }
+
+        public virtual Off_StoreManager Off_StoreManager { get; set; }
+
+        public virtual Off_Checkin_Schedule Off_Checkin_Schedule { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Off_WeekendBreakRecord> Off_WeekendBreakRecord { get; set; }
+    }
+
+    public partial class Off_WeekendBreakRecord
+    {
+        public int Id { get; set; }
+
+        public int WeekendBreakId { get; set; }
+
+        public DateTime UploadTime { get; set; }
+
+        public int SalesCount { get; set; }
+
+        public int TrailCount { get; set; }
+
+        public string SalesDetails { get; set; }
+
+        public virtual Off_WeekendBreak Off_WeekendBreak { get;set;}
+    }
+
+    public partial class Off_StoreSystem
+    {
+        public int Id { get; set; }
+
+        [StringLength(16)]
+        public string SystemName { get; set; }
+
+        [StringLength(32)]
+        public string Distributor { get; set; }
+
+        [StringLength(8)]
+        public string Region { get; set; }
+
+        public bool RequiredStorage { get; set; }
+
+        public bool RequiredAmount { get; set; }
+
+        public string ProductList { get; set; }
+
+        public int Off_System_Id { get; set; }
+
+        public virtual Off_System Off_System { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Off_Store> Off_Store { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Off_SalesEvent> Off_SalesEvent { get; set; }
+    }
+
+    public partial class Off_SalesEvent
+    {
+        public int Id { get; set; }
+
+        public int Status { get; set; }
+
+        public DateTime StartDate { get; set; }
+
+        public DateTime EndDate { get; set; }
+
+        [StringLength(32)]
+        public string SerialNo { get; set; }
+
+        public int Off_StoreSystem_Id { get; set; }
+
+        public virtual Off_StoreSystem Off_StoreSystem { get; set; }
+
+        [StringLength(16)]
+        public string EventType { get; set; }
+
+        [StringLength(32)]
+        public string EventTypeName { get; set; }
+
+        [StringLength(64)]
+        public string EventTitle { get; set; }
+
+        [StringLength(256)]
+        public string EventDetails { get; set; }
+
+        public decimal? OrderAmount { get; set; }
+
+        public decimal? CostAmount { get; set; }
+
+        [StringLength(256)]
+        public string OrderDetails { get; set; }
+
+        [StringLength(32)]
+        public string CreateUserName { get; set; }
+
+        public DateTime CreateDateTime { get; set; }
+
+        [StringLength(32)]
+        public string CommitUserName { get; set; }
+
+        public DateTime? CommitDateTime { get; set; }
+        
+        public virtual ICollection<Off_Store> Off_Store { get; set; }
     }
     
 }

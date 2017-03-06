@@ -177,3 +177,47 @@ html.ios-gt-8 .list-block li.media-item .item-title, html.ios-gt-8 .list-block.m
 .contacts-content {
     background: none;
 }
+/*无限滚动结束文字样式*/
+.no-more{
+    text-align:center;
+    padding:20px;
+    margin:0;
+    background-color:#efeff4;
+}
+/*input居右样式*/
+.item-input-right {
+    text-align: right;
+}
+.middle-content {
+    padding: 0 15px 0 10px;
+}
+/*卡片样式*/
+ .facebook-card .card-header {
+    display: block;
+    padding: 10px;
+  }
+  .facebook-card .facebook-name {
+    width:50%;
+    font-weight: 500;
+    float:left;
+  }
+  .facebook-card .facebook-date {
+    width:50%;
+    float:left;
+    text-align: right;
+  }
+  .facebook-card .card-footer {
+    background: #fafafa;
+  }
+  .facebook-card .card-footer a {
+    font-weight: 500;
+  }
+  .facebook-card .card-content img {
+    display: block;
+  }
+  .facebook-card .card-content-inner {
+    padding: 15px 10px;
+  }
+  .facebook-card .card-content-subinfo{
+      padding:5px 10px;
+  }

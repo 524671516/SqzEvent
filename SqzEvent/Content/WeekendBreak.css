@@ -1,0 +1,54 @@
+﻿.topbar{
+    font-size:20px;
+    padding:10px 20px;
+    background-color:#000;
+    color:#fff;
+    margin-bottom:15px;
+    font-size:17px;
+}
+.table-responsive ul,.table-responsive li{
+    list-style:none;
+    padding:0;
+    text-align:center;
+}
+.border{
+    border:1px solid #ccc;
+    border-radius:5px;
+}
+.padding-10{
+    padding:10px;
+}
+.list td{
+    line-height:2.5 !important;
+}
+span.add:hover,span.reduce:hover{
+    background-color:#ccc;
+}
+.input-prepend {
+    margin:0 auto;
+    width:240px;
+}
+#over-partial{
+    margin-top:10px;
+}
+.padding-8{
+    padding:8px 15px;
+}
+.padding-5{
+    padding:5px 15px;
+}
+div.daterangepicker{
+    left:10px !important;
+    right:10px !important;
+}
+.daterangepicker.opensright:before{
+    display:none;
+}
+.daterangepicker.opensright:after{
+    display:none;
+}
+#iosActionsheetEdit{
+    color:green;
+}
+
+
