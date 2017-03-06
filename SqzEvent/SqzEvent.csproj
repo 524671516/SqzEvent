@@ -257,6 +257,21 @@
     <Content Include="Content\framework7.ios.colors.min.css" />
     <Content Include="Content\framework7.ios.min.css" />
     <Content Include="Content\images\background_pc.png" />
+    <Content Include="Content\images\bg004%282%29.png" />
+    <Content Include="Content\images\bg0041.png" />
+    <Content Include="Content\images\bg0041f.png" />
+    <Content Include="Content\images\bg0041h.png" />
+    <Content Include="Content\images\bg0042.png" />
+    <Content Include="Content\images\bg004.jpg" />
+    <Content Include="Content\images\bg1.jpg" />
+    <Content Include="Content\images\bg2.jpg" />
+    <Content Include="Content\images\bg3.jpg" />
+    <Content Include="Content\images\bg4.jpg" />
+    <Content Include="Content\images\bg5.jpg" />
+    <Content Include="Content\images\example.png" />
+    <Content Include="Content\images\example2.png" />
+    <Content Include="Content\images\flowers.mp4" />
+    <Content Include="Content\images\fullPage.png" />
     <Content Include="Content\images\logo-white.png" />
     <Content Include="Content\images\logo.png" />
     <Content Include="Content\images\logo_new.png" />
@@ -292,6 +307,7 @@
     <Content Include="Content\images\serveybg2.png" />
     <Content Include="Content\images\share-pic.png" />
     <Content Include="Content\images\title_bc.png" />
+    <Content Include="Content\jquery.fullPage.css" />
     <Content Include="Content\Manager.css" />
     <Content Include="Content\normalize.css" />
     <Content Include="Content\Promotion.css" />
@@ -304,6 +320,8 @@
     <Content Include="Content\weui.min.css" />
     <Content Include="Scripts\daterangepicker.js" />
     <Content Include="Scripts\example.js" />
+    <Content Include="Scripts\jquery.fullPage.js" />
+    <Content Include="Scripts\jquery.fullPage.min.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
@@ -337,6 +355,7 @@
     <Content Include="fonts\Framework7Icons-Regular.ttf" />
     <Content Include="fonts\Framework7Icons-Regular.woff" />
     <Content Include="fonts\Framework7Icons-Regular.woff2" />
+    <Content Include="Content\images\flowers.webm" />
     <None Include="Properties\PublishProfiles\Test.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.7.2.min.js" />
@@ -357,6 +376,7 @@
     <Content Include="Scripts\qualitycontrol_manager.js" />
     <Content Include="Scripts\qualitycontrol.min.js" />
     <Content Include="Scripts\qualitycontrol_manager.min.js" />
+    <Content Include="Scripts\scrolloverflow.min.js" />
     <Content Include="Scripts\SellerTask.js" />
     <Content Include="Scripts\my-validate.js" />
     <Content Include="Scripts\respond.js" />
