@@ -106,7 +106,7 @@ namespace SqzEvent.Controllers
                 CommonUtilities.writeLog(ex.Message);
                 return View("Error");
             }
-        }
+        }  
         
         // 注册
         [AllowAnonymous]
@@ -377,12 +377,22 @@ namespace SqzEvent.Controllers
         public PartialViewResult ProductPlanPartial(string date)
         {
             DateTime _subscribe = Convert.ToDateTime(date);
+            DateTime fom = new DateTime(_subscribe.Year, _subscribe.Month, 1);
+            DateTime lom = fom.AddMonths(1);
             QCStaff staff = getStaff(User.Identity.Name);
             var factoryIdList = staff.Factory.Select(m => m.Id);
-            var model = from m in _qcdb.ProductionSchedule
-                           where factoryIdList.Contains(m.FactoryId) && m.Subscribe == _subscribe
-                           select m;
-            return PartialView(model);
+            var factorylist = from m in _qcdb.Factory
+                              select m;
+            var monthlist = _qcdb.Database.SqlQuery<MonthSchedule>("select T3.ProductId, Product.SimpleName as ProductName, T3.FactoryId, Factory.Name as FactoryName, T3.ProductionPlan, T3.Qty from " +
+                "(select ISNULL(ProductionPlan, 0) as ProductionPlan, ISNULL(Qty, 0) as Qty, ISNULL(ISNULL(T1.ProductId, T2.ProductId),0) as ProductId, ISNULL(ISNULL(T1.FactoryId, T2.FactoryId),0) as FactoryId " +
+                "from(select Factory.Id as FactoryId,Product.Id as ProductId,sum(ProductionSchedules.ProductionPlan) as ProductionPlan from Factory left join ProductFactories on Factory.Id = ProductFactories.Factory_Id " +
+                "left join Product on Product.Id = ProductFactories.Product_Id left join QCStaffFactories on QCStaffFactories.Factory_Id = Factory.Id left join ProductionSchedules on Factory.Id = ProductionSchedules.FactoryId and Product.Id = ProductionSchedules.ProductId " +
+                "where QCStaff_Id = " + staff.Id + " and ProductionSchedules.Subscribe >= '" + fom.ToString("yyyy-MM-dd") + "' and ProductionSchedules.Subscribe < '" + lom.ToString("yyyy-MM-dd") + "' " +
+                "group by Product.Id, Factory.Id) as T1 full join (select QCAgenda.FactoryId, ProductionDetails.ProductId, SUM(ProductionDetails.ProductionQty) as Qty from QCAgenda " +
+                "left join ProductionDetails on ProductionDetails.QCAgendaId = QCAgenda.Id where QCAgenda.Subscribe >= '" + fom.ToString("yyyy-MM-dd") + "' and QCAgenda.Subscribe < '" + lom.ToString("yyyy-MM-dd") + "' " +
+                "group by QCAgenda.FactoryId, ProductionDetails.ProductId) as T2 on T1.FactoryId = T2.FactoryId and T1.ProductId = T2.ProductId) as T3 left join Product on T3.ProductId = Product.Id left join Factory on T3.FactoryId = Factory.Id");
+            ViewBag.fl = factorylist;
+            return PartialView(monthlist);
         }
 
         // 签到页面
@@ -717,7 +727,6 @@ namespace SqzEvent.Controllers
             if (agenda != null)
             {
                 var _productlist = from m in agenda.Factory.Product
-                                   where m.QCProduct
                                    select m;
                 ViewBag.ProductList = _productlist;
                 return PartialView(agenda);
@@ -754,10 +763,11 @@ namespace SqzEvent.Controllers
                                 };
                                 _qcdb.ProductionDetails.Add(details);
                             }
-                            ProductionSchedule schedule = _qcdb.ProductionSchedule.SingleOrDefault(m => m.Subscribe == agenda.Subscribe && m.FactoryId == agenda.FactoryId && m.ProductId == p.Id);
+                            var month = new DateTime(agenda.Subscribe.Year, agenda.Subscribe.Month, 1);
+                            var next_month = month.AddMonths(1);
+                            ProductionSchedule schedule = _qcdb.ProductionSchedule.SingleOrDefault(m => m.Subscribe == month && m.FactoryId == agenda.FactoryId && m.ProductId == p.Id);
                             if (schedule != null)
                             {
-                                schedule.ProductionQty = qty;
                                 schedule.Status = true;
                                 _qcdb.Entry(schedule).State = System.Data.Entity.EntityState.Modified;
                             }
@@ -810,6 +820,7 @@ namespace SqzEvent.Controllers
         {
             QCStaff staff = getStaff(User.Identity.Name);
             ViewBag.FactoryList = new SelectList(staff.Factory, "Id", "SimpleName");
+           
             RegularTest model = new RegularTest();
             return PartialView(model);
         }
@@ -933,14 +944,6 @@ namespace SqzEvent.Controllers
                     {
                         var _date = DateTime.Now.Date;
                         var schedule = _qcdb.ProductionSchedule.SingleOrDefault(m => m.FactoryId == item.FactoryId && m.Subscribe == _date && m.ProductId == item.ProductId);
-                        if (schedule != null && schedule.ProductionQty!=0)
-                        {
-                            item.CompleteRate = (decimal)item.ProductionQty / (decimal)schedule.ProductionPlan;
-                        }
-                        else
-                        {
-                            item.CompleteRate = 0;
-                        }
                     }
                     catch
                     {
@@ -1135,7 +1138,7 @@ namespace SqzEvent.Controllers
         {
             return View();
         }
-        [HttpPost]
+        /*[HttpPost]
         public JsonResult Manager_MonthChange(int year, int month)
         {
             var _month_start = new DateTime(year, month, 1);
@@ -1145,21 +1148,38 @@ namespace SqzEvent.Controllers
                     group m by m.Subscribe into g
                     orderby g.Key
                     select new { g.Key, result = g.All(m=> m.ProductionQty >= m.ProductionPlan) };
-            return Json(new { result = t });
-        }
+            var mlist = from m in _qcdb.ProductionSchedule
+                    where m.Subscribe >= _month_start && m.Subscribe < _month_end
+                    group m by new { c_Product = m.Product, c_Factory = m.Factory } into g
+                    select new {
+                        plan = g.Sum(m => m.ProductionPlan),
+                        qty = g.Sum(m => m.ProductionQty),
+                        fn =g.Key.c_Factory.SimpleName,
+                        pn =g.Key.c_Product.SimpleName
+                    };
+            return Json(new { result = t,fp=mlist });
+        }*/
         public ActionResult Manager_ScheduleDetails(string date)
         {
             DateTime _pickdate = Convert.ToDateTime(date);
+            DateTime nextmonth = _pickdate.AddMonths(1);
             var list = from m in _qcdb.ProductionSchedule
                        where m.Subscribe == _pickdate
                        orderby m.FactoryId
                        select m;
-            var factoryGroup = from m in list
-                               group m by m.Factory into g
-                               select new FactoryGroup{ FactoryId = g.Key.Id, FactoryName = g.Key.Name };
+            var factoryGroup = from m in _qcdb.Factory
+                               select new FactoryGroup{ FactoryId = m.Id, FactoryName = m.Name };
             ViewBag.FG = factoryGroup;
-            return PartialView(list);
-            //return Json(new { result = factoryGroup}, JsonRequestBehavior.AllowGet);
+            // 当月累计表
+            var monthlist = _qcdb.Database.SqlQuery<MonthSchedule>("select T3.ProductId, Product.SimpleName as ProductName, T3.FactoryId, Factory.Name as FactoryName, T3.ProductionPlan, T3.Qty from " +
+                "(select ISNULL(ProductionPlan, 0) as ProductionPlan, ISNULL(Qty, 0) as Qty, ISNULL(ISNULL(T1.ProductId, T2.ProductId),0) as ProductId, ISNULL(ISNULL(T1.FactoryId,T2.FactoryId),0) as FactoryId " +
+                "from(select Factory.Id as FactoryId,Product.Id as ProductId,sum(ProductionSchedules.ProductionPlan) as ProductionPlan from Factory left join ProductFactories on Factory.Id = ProductFactories.Factory_Id " +
+                "left join Product on Product.Id = ProductFactories.Product_Id left join ProductionSchedules on Factory.Id = ProductionSchedules.FactoryId and Product.Id = ProductionSchedules.ProductId " +
+                "where ProductionSchedules.Subscribe >= '" + _pickdate.ToString("yyyy-MM-dd") + "' and ProductionSchedules.Subscribe < '" + nextmonth.ToString("yyyy-MM-dd") + "' " +
+                "group by Product.Id, Factory.Id) as T1 full join (select QCAgenda.FactoryId, ProductionDetails.ProductId, SUM(ProductionDetails.ProductionQty) as Qty from QCAgenda " +
+                "left join ProductionDetails on ProductionDetails.QCAgendaId = QCAgenda.Id where QCAgenda.Subscribe >= '" + _pickdate.ToString("yyyy-MM-dd") + "' and QCAgenda.Subscribe < '" + nextmonth.ToString("yyyy-MM-dd") + "' " +
+                "group by QCAgenda.FactoryId, ProductionDetails.ProductId) as T2 on T1.FactoryId = T2.FactoryId and T1.ProductId = T2.ProductId) as T3 left join Product on T3.ProductId = Product.Id left join Factory on T3.FactoryId = Factory.Id");
+            return PartialView(monthlist);
         }
         public ActionResult Manager_AddSchedule()
         {
@@ -1221,10 +1241,22 @@ namespace SqzEvent.Controllers
             }
         }
 
-        public ActionResult Manager_AddSchedulePartial(int fid)
+        public ActionResult Manager_AddSchedulePartial(int fid, string date)
         {
+            DateTime currentMonth = Convert.ToDateTime(date);
             var template = _qcdb.Factory.SingleOrDefault(m => m.Id == fid).Product;
+            ViewBag.ScheduleList = _qcdb.ProductionSchedule.Where(m => m.FactoryId == fid && m.Subscribe == currentMonth);
             return PartialView(template);
+        }
+
+        public ActionResult Manager_ProductionDetails(int fid, string date)
+        {
+            DateTime currentMonth = Convert.ToDateTime(date);
+            DateTime nextMonth = currentMonth.AddMonths(1);
+            var list = from m in _qcdb.QCAgenda
+                       where m.FactoryId == fid && m.Subscribe >= currentMonth && m.Subscribe < nextMonth
+                       select m;
+            return PartialView(list);
         }
         //定期检测查询列表
         public ActionResult Manager_QualityRegularTest()
