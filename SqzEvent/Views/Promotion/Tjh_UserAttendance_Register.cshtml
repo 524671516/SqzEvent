@@ -404,27 +404,31 @@
 <script src="~/Scripts/jquery.fullPage.min.js"></script>
 <script src="~/Scripts/bootstrap.min.js"></script>
 <script>
-    var currentwidth = "";
+    var initwidth = "";
     var _clientheight = $(window).height();
     var _clientwidth = $(window).width();
     if (_clientheight < _clientwidth) {
         $(".ui-content").css("z-index", "999");
-        currentwidth = _clientheight;
+        initwidth = _clientheight;
     } else {
         $(".ui-content").css("z-index", "-1");
-        currentwidth = _clientwidth;
+        initwidth = _clientwidth;
     }
     $(window).resize(function () {
         var clientheight = $(window).height();
-        var clientweidth = $(window).width();
-        if (clientweidth != currentwidth) {
-            if (clientheight < clientweidth) {
-                $(".ui-content").css("z-index", "999");
-            } else {
-                $(".ui-content").css("z-index", "-1");
-            }
+        var clientwidth = $(window).width();
+        if (clientwidth == initwidth) {
+            $(".ui-content").css("z-index", "-1");       
         } else {
-            $(".ui-content").css("z-index", "-1");
+            if (_clientwidth < clientheight && _clientwidth < clientwidth) {
+                $(".ui-content").css("z-index", "-1");
+            } else {
+                if (clientheight < clientwidth) {
+                    $(".ui-content").css("z-index", "999");
+                } else {
+                    $(".ui-content").css("z-index", "-1");
+                }
+            }          
         }
     });
     $(document).ready(function () {
