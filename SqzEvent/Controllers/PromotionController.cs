@@ -194,7 +194,7 @@ namespace SqzEvent.Controllers
             int _type = type == 1? 1 : 0;
             string redirectUri = Url.Encode("https://event.shouquanzhai.cn/Promotion/Tjh_UserAttendance_Authorize");
             string appId = WeChatUtilities.getConfigValue(WeChatUtilities.APP_ID);
-            string url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=" + redirectUri + "&response_type=code&scope=snsapi_userinfo&state=" + _type + "#wechat_redirect";
+            string url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=" + redirectUri + "&response_type=code&scope=snsapi_base&state=" + _type + "#wechat_redirect";
             return Redirect(url);
         }
 
