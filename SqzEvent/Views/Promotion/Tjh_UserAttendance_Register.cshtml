@@ -10,7 +10,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimum-scale=1.0,maximum-scale=1.0" />
     <meta name="keywords" content="fullpage,jquery,demo,screen,fullscreen,backgrounds,full-screen" />
-    <title>Tjh_UserAttendance_Register</title>
+    <title>寿全斋</title>
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
     <link href="~/Content/jquery.fullPage.css" rel="stylesheet" />
     <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
@@ -276,7 +276,7 @@
            color:#fff;
            font-size:2rem;
            top:0;
-           background-color: rgba(0, 0, 0, 0.2);
+           background-color: rgba(0, 0, 0, 0.8);
            display:block;
            position:fixed;
            left:0;
@@ -344,6 +344,7 @@
                 <div class="col-xs-12" id="register">
                     @using (Html.BeginForm("Tjh_UserAttendance_Register", "Promotion", FormMethod.Post, new { @class = "form-horizontal", id = "create-form" }))
                     {
+                        @Html.ValidationSummary()
                         @Html.AntiForgeryToken()
                         @Html.HiddenFor(m => m.Id)
                         @Html.HiddenFor(m => m.openid)
@@ -447,7 +448,7 @@
             }
         })
     })
-    var recommend_type = /^(13[0-9]|14[0-9]|15[0-9]|18[0-9])\d{8}$|^\d{0}$/   //推荐码正则
+    //var recommend_type = /^(13[0-9]|14[0-9]|15[0-9]|18[0-9])\d{8}$|^\d{0}$/   //推荐码正则
     var verification_type = /^\d{4,6}$/                                       //验证码正则
     var word_type = /^[\u4e00-\u9fa5]{1,6}$/                                  //输入姓名正则
     var tel_type = /^(13[0-9]|14[0-9]|15[0-9]|18[0-9])\d{8}$/                 //电话号码正则
@@ -511,16 +512,7 @@
                 $("#Mobile").parent().removeClass("has-error");
                 $("#Mobile").parent().addClass("has-success");
             }
-            if (!recommend_type.test($("#RecommandUser").val())) {
-                $("#RecommandUser").parent().addClass("has-error");
-                $("#RecommandUser").val("");
-                $("#RecommandUser").attr("placeholder", "请输入正确的推荐码(选填)");
-                $(this).removeClass("btn-disabled");
-                bool = false;
-            } else {
-                $("#RecommandUser").parent().removeClass("has-error");
-                $("#RecommandUser").parent().addClass("has-success");
-            }
+            
             $("select").each(function () {
                 if ($(this).val() == "请选择市" || $(this).val() == "请选择省") {
                     $(this).parent().addClass("has-error");
