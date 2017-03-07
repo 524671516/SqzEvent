@@ -247,6 +247,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\images\bg0041c.png" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -257,21 +258,15 @@
     <Content Include="Content\framework7.ios.colors.min.css" />
     <Content Include="Content\framework7.ios.min.css" />
     <Content Include="Content\images\background_pc.png" />
-    <Content Include="Content\images\bg004%282%29.png" />
-    <Content Include="Content\images\bg0041.png" />
     <Content Include="Content\images\bg0041f.png" />
     <Content Include="Content\images\bg0041h.png" />
     <Content Include="Content\images\bg0042.png" />
-    <Content Include="Content\images\bg004.jpg" />
     <Content Include="Content\images\bg1.jpg" />
     <Content Include="Content\images\bg2.jpg" />
     <Content Include="Content\images\bg3.jpg" />
     <Content Include="Content\images\bg4.jpg" />
     <Content Include="Content\images\bg5.jpg" />
-    <Content Include="Content\images\example.png" />
-    <Content Include="Content\images\example2.png" />
     <Content Include="Content\images\flowers.mp4" />
-    <Content Include="Content\images\fullPage.png" />
     <Content Include="Content\images\logo-white.png" />
     <Content Include="Content\images\logo.png" />
     <Content Include="Content\images\logo_new.png" />

@@ -8,57 +8,75 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimum-scale=1.0,maximum-scale=1.0" />
     <meta name="keywords" content="fullpage,jquery,demo,screen,fullscreen,backgrounds,full-screen" />
     <title>Tjh_UserAttendance_Register</title>
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
     <link href="~/Content/jquery.fullPage.css" rel="stylesheet" />
     <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
     <style>
-        /*hudong*/
-.down a {
-	position: absolute;
-	bottom: 0;
-	left: 50%;
-	z-index: 2;
-	display: inline-block;
-	-webkit-transform: translate(0, -50%);
-	transform: translate(0, -50%);
-	color: #fff;
-	font : normal 400 20px/1 'Josefin Sans', sans-serif;
-	letter-spacing: .1em;
-	text-decoration: none;
-	transition: opacity .3s;
-	padding-top: 60px;
-}
-.down a:hover {
-	opacity: .5;
-}
-.down a span {
-	position: absolute;
-	top: 0;
-	left: 50%;
-	width: 30px;
-	height: 50px;
-	margin-left: -15px;
-	border: 2px solid #fff;
-	border-radius: 50px;
-	box-sizing: border-box;
-}
-.down a span::before {
-	position: absolute;
-	top: 10px;
-	left: 50%;
-	content: '';
-	width: 6px;
-	height: 6px;
-	margin-left: -3px;
-	background-color: #fff;
-	border-radius: 100%;
-	-webkit-animation: sdb10 2s infinite;
-	animation: sdb10 2s infinite;
-	box-sizing: border-box;
-}
+        /*全局*/
+           img{
+            -webkit-transition: all 5s ease-out;
+		    -moz-transition: all 5s ease-out;
+		    -o-transition: all 5s ease-out;
+		    transition: all 5s ease-out;
+            display:block;
+           }
+           select {
+               -webkit-appearance: none;
+           }
+           h1{
+             margin:0;
+             padding:0;
+           }
+          label{
+             line-height: 2.234;
+        }
+     /*滑动块*/
+         .down a {
+	        position: absolute;
+	        bottom: 0;
+            left: 50%;
+	        z-index: 2;
+	        display: inline-block;
+	        -webkit-transform: translate(0, -50%);
+	        transform: translate(0, -50%);
+	        color: #fff;
+	        font : normal 400 20px/1 'Josefin Sans', sans-serif;
+	        letter-spacing: .1em;
+	        text-decoration: none;
+	        transition: opacity .3s;
+	        padding-top: 60px;
+        }
+         .down a:hover {
+	        opacity: .5;
+        }
+         .down a span {
+	        position: absolute;
+	        top: 0;
+	        left: 50%;
+	        width: 30px;
+	        height: 50px;
+	        margin-left: -15px;
+	        border: 2px solid #fff;
+	        border-radius: 50px;
+	        box-sizing: border-box;
+         }
+         .down a span::before {
+	        position: absolute;
+	        top: 10px;
+	        left: 50%;
+	        content: '';
+	        width: 6px;
+	        height: 6px;
+	        margin-left: -3px;
+	        background-color: #fff;
+	        border-radius: 100%;
+	        -webkit-animation: sdb10 2s infinite;
+	       animation: sdb10 2s infinite;
+	       box-sizing: border-box;
+         }
 @@-webkit-keyframes sdb10 {
 	0% {
 		-webkit-transform: translate(0, 20px);
@@ -91,19 +109,12 @@
 		opacity: 0;
 	}
 }
-        h1{
-            margin:0;
-            padding:0;
-        }
-        label{
-             line-height: 2.234;
+    /*表单*/
+        .container{
+            width:auto !important;
         }
         .selectwrap {
             padding: 0;
-        }
-
-        select {
-            -webkit-appearance: none;
         }
         #AreaProvince{
             border-right:none;
@@ -124,22 +135,29 @@
             -webkit-box-shadow: none;
             box-shadow: none;
         }
-        .pass::after{
+        .nopass::before{
+            content:"\f096";
+            font: normal normal normal 14px/1 FontAwesome;
+            text-rendering: auto;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .pass::before{
             font: normal normal normal 14px/1 FontAwesome;
             text-rendering: auto;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             content:"\f046";
         }
-
+       .btn-default.active.focus, .btn-default.active:focus, .btn-default.active:hover, .btn-default:active.focus, .btn-default:active:focus, .btn-default:active:hover, .open>.dropdown-toggle.btn-default.focus, .open>.dropdown-toggle.btn-default:focus, .open>.dropdown-toggle.btn-default:hover,.btn-default.active.focus, .btn-default.active:focus, .btn-default.active:hover, .btn-primary:active.focus, .btn-default:active:focus, .btn-primary:active:hover, .open>.dropdown-toggle.btn-default.focus, .open>.dropdown-toggle.btn-default:focus, .open>.dropdown-toggle.btn-default:hover,.btn-default.active, .btn-default:active, .open>.dropdown-toggle.btn-default{
+            color:#fff !important;
+            background-color:#4cae4c !important;
+            border-color: #4cae4c !important;
+        }
         .border-error {
             border-color: #a94442 !important;
         }
-        .btn-primary.active.focus, .btn-primary.active:focus, .btn-primary.active:hover, .btn-primary:active.focus, .btn-primary:active:focus, .btn-primary:active:hover, .open>.dropdown-toggle.btn-primary.focus, .open>.dropdown-toggle.btn-primary:focus, .open>.dropdown-toggle.btn-primary:hover{
-            color: #000;
-    background-color: #5cb85c;
-    border-color: #5cb85c;
-        }
+      
 
         .border-success {
             border-color: #4cae4c;
@@ -147,23 +165,66 @@
         .inputwrap {
             padding-left: 0;
         }
-     /*123*/
+        @@media screen and (max-width: 320px) {
+            .container{
+                padding-top:2%;
+            }
+            .container .form-group{
+                margin-bottom:5%;
+            }
+        }
+        @@media screen and (min-width:321px)and (max-width: 375px) {
+            .container {
+                padding-top: 8%;
+            }
+
+           .container .form-group {
+               margin-bottom: 10%;
+           }
+        }
+       @@media screen and (min-width:376px)and (max-width: 480px) {
+            .container{
+                padding-top:5%;
+            }
+            .container .form-group{
+                margin-bottom:9%
+            }
+        }
+     /*fullpage*/
+     #footer_pic.active{
+        -webkit-transform: translate3d(0px, 80%, 0px);
+		-moz-transform: translate3d(0px, 80%, 0px);
+		-ms-transform:translate3d(0px, 80%, 0px);
+		transform: translate3d(0px, 80%, 0px);
+     }
+     #header_pic.active{
+        -webkit-transform: translate3d(0px, 500%, 0px);
+		-moz-transform: translate3d(0px, 500%, 0px);
+		-ms-transform:translate3d(0px, 500%, 0px);
+		transform: translate3d(0px, 500%, 0px);
+     }
+     .container.active{
+        -webkit-transform: translate3d(200%, 0px, 0px);
+		-moz-transform: translate3d(200%, 0px, 0px);
+		-ms-transform:translate3d(200%,0px, 0px);
+		transform: translate3d(200%, 0px, 0px);
+     }
+     #footer_pic{
+        padding:0px 6px 0 6px;
+     }
+     #header_pic{
+        padding:10% 6px 0 6px;
+     }
      #fp-nav.right{
          right:0 !important;
      }
      #fp-nav ul li a span, .fp-slidesNav ul li a span{
          border: 1px solid #AAA;
-    background: rgba(0, 0, 0, 0)
+         background: rgba(0, 0, 0, 0)
      }
 	.section{
 		text-align:center;
-	}
-
-	.section{
-		background-size: cover;
-	}
-	.slide{
-		background-size: cover;
+        background-size: cover;
 	}
 	#section0{
 		background-image: url(../../Content/images/bg1.jpg);
@@ -174,16 +235,49 @@
 	#section2{
 		background-image: url(../../Content/images/bg3.jpg);
 	}
-        #section3 {
+    #section3 {
             background: url('../../Content/images/bg0042.png') repeat;
-        }
-        .logo-warp{
-            width:100%;
-         }
-        .section .container{
-            width:95%;
-        }
+    }
+   .logo-warp{
+           width:100%;
+    }
+   .section .container {
+          margin:0 6px;
+          background: url('../../Content/images/bg0041c.png');
+          background-size:100%;
+    }
+   @@media all and (orientation : landscape) {
+       .ui-content{
+           color:#fff;
+           font-size:2rem;
+           top:0;
+           background-color: rgba(0, 0, 0, 0.8);
+           display:block;
+           position:fixed;
+           left:0;
+           vertical-align:middle;
+           width:100%;
+           height:100%;
+           text-align:center;
+           margin:0 auto;
+           z-index:99999;
+           font-weight:700;
+       }
+       .ui-content div{
+           width:90%;
+           left:0;
+           right:0;
+           margin:0 auto;
+           position:absolute;
+           top:20%;
+       }
+   }
 
+  @@media all and (orientation : portrait){
+       .ui-content{
+           display:none;
+       }
+  }
 	</style>
 
 	<!--[if IE]>
@@ -194,6 +288,13 @@
 
 </head>
 <body>
+    <div data-role="main" class="ui-content">
+        <div>
+            <i>请试着旋转您的设备！</i>
+            <br />
+            <p><b>注意</b>请在竖屏状态下观看</p>
+        </div>
+    </div>
     <div id="fullpage">
         <div class="section " id="section0">
             <div id="huadong" class="down">
@@ -210,8 +311,8 @@
                 <a href="javascript:;"><span></span></a>
             </div>
         </div>
-        <div class="section ft-table" id="section3">
-            <div style="padding:30px 10px;" id="header_pic"> 
+        <div class="section" id="section3">
+            <div id="header_pic"> 
                 <img src="~/Content/images/bg0041h.png" class="logo-warp" />
             </div>
             <div class="container">
@@ -254,10 +355,10 @@
                                 <div class="col-xs-12">
                                     <div class="row">
                                         <div class="btn-group col-xs-12 selectwrap active" data-toggle="buttons">
-                                            <label class="btn btn-lg btn-primary  col-xs-6">
+                                            <label class="btn btn-lg btn-default  col-xs-6 nopass">
                                                 <input type="checkbox" autocomplete="off">KA
                                             </label>
-                                            <label class="btn btn-lg btn-primary col-xs-6">
+                                            <label class="btn btn-lg btn-default col-xs-6 nopass">
                                                 <input type="checkbox" autocomplete="off">流通
                                             </label>
                                         </div>
@@ -272,12 +373,12 @@
                     }
                     <div class="form-group">
                         <div class="col-xs-2"></div>
-                        <div class="col-xs-8"><a class="btn btn-success btn-block" id="register-btn">立即报名</a></div>
+                        <div class="col-xs-8"><a class="btn btn-success btn-block btn-lg" id="register-btn">立即报名</a></div>
                         <div class="col-xs-2"></div>
                     </div>
                 </div>
             </div>
-            <div style="padding:10px;" id="footer_pic">
+            <div id="footer_pic">
                 <img src="~/Content/images/bg0041f.png" class="logo-warp" />
             </div>
         </div>
@@ -299,6 +400,11 @@
             navigationTooltips: ['第一页', '第二页', '第三页', '第四页'],
             afterResponsive: function (isResponsive) {
 
+            },
+            afterLoad: function (anchorLink, index) {
+                if (index == 3) {
+                    
+                }
             },
         });
     });
@@ -336,7 +442,7 @@
     });
     /*选择省后获取对应市级信息*/
     $("#AreaProvince").on("change", function () {
-        $("#AreaCity").html("<option>请选择</option>");
+        $("#AreaCity").html("<option>请选择省</option>");
         $.ajax({
             url: "/Seller/GetRegion",
             data: {
@@ -391,7 +497,7 @@
                 $("#RecommandUser").parent().addClass("has-success");
             }
             $("select").each(function () {
-                if ($(this).val() == "请选择") {
+                if ($(this).val() == "请选择市" || $(this).val() == "请选择省") {
                     $(this).parent().addClass("has-error");
                     $("#register-btn").removeClass("btn-disabled");
                     bool = false;
