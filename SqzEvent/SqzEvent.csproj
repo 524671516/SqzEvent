@@ -257,6 +257,9 @@
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\framework7.ios.colors.min.css" />
     <Content Include="Content\framework7.ios.min.css" />
+    <Content Include="Content\images\0306-H5-1.jpg" />
+    <Content Include="Content\images\0306-H5-2.jpg" />
+    <Content Include="Content\images\0306-H5-3.jpg" />
     <Content Include="Content\images\background_pc.png" />
     <Content Include="Content\images\bg0041f.png" />
     <Content Include="Content\images\bg0041h.png" />
@@ -301,6 +304,7 @@
     <Content Include="Content\images\sellertask-guide-08.jpg" />
     <Content Include="Content\images\serveybg2.png" />
     <Content Include="Content\images\share-pic.png" />
+    <Content Include="Content\images\test4.jpg" />
     <Content Include="Content\images\title_bc.png" />
     <Content Include="Content\jquery.fullPage.css" />
     <Content Include="Content\Manager.css" />
@@ -618,6 +622,10 @@
     <Content Include="Views\Seller\Manager_CheckCode.cshtml" />
     <Content Include="Views\Seller\Manager_CheckCodePartial.cshtml" />
     <Content Include="Views\Promotion\Tjh_UserAttendance_Register.cshtml" />
+    <Content Include="Views\Promotion\Tjh_UserAttendance_Register_Done.cshtml" />
+    <Content Include="Views\Promotion\Tjh_UserAttendance_Signup.cshtml" />
+    <Content Include="Views\Promotion\Tjh_UserAttendance_Signup_Fail.cshtml" />
+    <Content Include="Views\Promotion\Tjh_UserAttendance_Error.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

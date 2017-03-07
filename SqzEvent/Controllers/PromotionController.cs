@@ -187,6 +187,7 @@ namespace SqzEvent.Controllers
                 return PartialView(question);
             return PartialView("NotFound");
         }
+
         // 春糖会 登陆
         public ActionResult Tjh_UserAttendanceStart(int type)
         {
@@ -218,34 +219,52 @@ namespace SqzEvent.Controllers
         // 春糖会 报名
         public ActionResult Tjh_UserAttendance_Register(string openid)
         {
-            // 待添加
-            Tjh_UserAttendance model = new Tjh_UserAttendance();
-            model.openid = openid;
-            return View(model);
+            // 确认报名是否存在
+            int exist_count = db.Tjh_UserAttendance.Count(m => m.openid == openid);
+            if (exist_count > 0)
+            {
+                return RedirectToAction("Tjh_UserAttendance_Register_Done");
+            }
+            else
+            {
+                // 添加页面
+                Tjh_UserAttendance model = new Tjh_UserAttendance();
+                model.openid = openid;
+                return View(model);
+            }
         }
         [HttpPost, ValidateAntiForgeryToken]
-        public ActionResult Tjh_UserAttendance_Register(Tjh_UserAttendance model, FormCollection form)
+        public async Task<ActionResult> Tjh_UserAttendance_Register(Tjh_UserAttendance model, FormCollection form)
         {
             if (ModelState.IsValid)
             {
-                Tjh_UserAttendance tjh = new Tjh_UserAttendance();
-                if (TryUpdateModel(tjh))
+                // 确认报名是否存在
+                int exist_count = db.Tjh_UserAttendance.Count(m => m.openid == model.openid);
+                if (exist_count > 0)
                 {
-                    tjh.ConfirmedDatetime = DateTime.Now;
-                    tjh.SignupDatetime = DateTime.Now;
-                    tjh.Status = 1;
-
+                    return RedirectToAction("Tjh_UserAttendance_Register_Done");
+                }
+                // 添加报名
+                Tjh_UserAttendance item = new Tjh_UserAttendance();
+                if (TryUpdateModel(item))
+                {
+                    //item.ConfirmedDatetime = DateTime.Now;
+                    item.SignupDatetime = DateTime.Now;
+                    item.Confirmed = false;
+                    item.Status = 1;
+                    db.Tjh_UserAttendance.Add(item);
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Tjh_UserAttendance_Register_Done");
                 }
                 else
                 {
-                    return View(model);
+                    return View("Tjh_UserAttendance_Error");
                 }
             }
             else
             {
                 return View(model);
             }
-            return View(model);
         }
         public ActionResult Tjh_UserAttendance_Register_Done()
         {
@@ -253,10 +272,23 @@ namespace SqzEvent.Controllers
         }
 
         // 春糖会 参会确认
-        public ActionResult Tjh_UserAttendance_Signup(string openid)
+        public async Task<ActionResult> Tjh_UserAttendance_Signup(string openid)
         {
             // 待添加
-            return View();
+            var item = db.Tjh_UserAttendance.SingleOrDefault(m => m.openid == openid);
+            if (item !=null)
+            {
+                item.Status = 2;
+                item.Confirmed = true;
+                item.ConfirmedDatetime = DateTime.Now;
+                db.Entry(item).State = System.Data.Entity.EntityState.Modified;
+                await db.SaveChangesAsync();
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Tjh_UserAttendance_Signup_Fail");
+            }
         }
 
         public ActionResult Tjh_UserAttendance_Signup_Fail()
