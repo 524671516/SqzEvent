@@ -2,15 +2,67 @@
 @{
     Layout = null;
 }
-
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimum-scale=1.0,maximum-scale=1.0" />
     <title>春糖会 报名完成</title>
+    <style>
+        img{
+            display:block;
+            width:100%;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            background: url('../../Content/images/bg0042.png') repeat;
+        }
+        html, body {
+            height: 100%;
+            width: 100%;
+        }
+        #header_pic{
+            padding:6% 6px 0 6px;
+        }
+        #footer_pic{
+            padding:0 6px 10% 6px;
+        }
+        .finish {
+            position:relative;
+            height:80%;
+            margin:0 6px;
+            background: url('../../Content/images/bg0041c.png') repeat-y;
+            background-size:100%;
+            color: #fff;
+            font-weight: 700;
+            text-align: center;
+            vertical-align:middle;
+        }
+        .finish-box{
+            top:35%;
+            left:0;
+            right:0;
+            vertical-align:middle;
+            position:absolute;
+            margin:auto;
+            width:80%;
+        }
+    </style>
 </head>
 <body>
-    <div> 
+    <div id="header_pic">
+        <img src="~/Content/images/bg0041h.png" />
+    </div>
+    <div class="finish"> 
+        <div class="finish-box">
+            恭喜你完成报名
+        </div>
+    </div>
+    <div id="footer_pic">
+        <img src="~/Content/images/bg0041f.png" />
     </div>
 </body>
 </html>

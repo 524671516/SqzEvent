@@ -264,11 +264,6 @@
     <Content Include="Content\images\bg0041f.png" />
     <Content Include="Content\images\bg0041h.png" />
     <Content Include="Content\images\bg0042.png" />
-    <Content Include="Content\images\bg1.jpg" />
-    <Content Include="Content\images\bg2.jpg" />
-    <Content Include="Content\images\bg3.jpg" />
-    <Content Include="Content\images\bg4.jpg" />
-    <Content Include="Content\images\bg5.jpg" />
     <Content Include="Content\images\flowers.mp4" />
     <Content Include="Content\images\H50201.png" />
     <Content Include="Content\images\H50202.png" />
