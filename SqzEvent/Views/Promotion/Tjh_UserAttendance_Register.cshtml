@@ -17,6 +17,7 @@
     <style>
         /*全局*/
            img{
+            width:100%;
             display:block;
            }
            select {
@@ -254,16 +255,22 @@
 		background-image: url(/Content/images/0306-H5-3.jpg);
 	}
     #section3 {
-            background: url('../../Content/images/bg0042.png') repeat;
-    }
-   .logo-warp{
-           width:100%;
+        background: url('../../Content/images/bg0042.png') repeat;
     }
    .section .container {
           margin:0 6px;
           background: url('../../Content/images/bg0041c.png');
           background-size:100%;
     }
+    .finish {
+          font-weight:700;
+          color:#fff;
+          padding:20% 0;
+          width: 100%;
+          height: 100%;
+          z-index: 999;
+          background: url('../../Content/images/bg0042.png') repeat-x;
+        }
    @@media all and (orientation : landscape) {
        .ui-content{
            color:#fff;
@@ -331,10 +338,10 @@
         </div>
         <div class="section" id="section3">
             <div id="header_pic"> 
-                <img src="~/Content/images/bg0041h.png" class="logo-warp" />
+                <img src="~/Content/images/bg0041h.png" />
             </div>
             <div class="container">
-                <div class="col-xs-12">
+                <div class="col-xs-12" id="register">
                     @using (Html.BeginForm("Tjh_UserAttendance_Register", "Promotion", FormMethod.Post, new { @class = "form-horizontal", id = "create-form" }))
                     {
                         @Html.AntiForgeryToken()
@@ -357,12 +364,12 @@
                             <div class="col-xs-12">
                                 <div class="row">
                                     <div class="col-xs-6 selectwrap">
-                                        <select id="AreaProvince" name="AreaProvince" class="form-control select border-none input-lg">
+                                        <select id="AreaProvince" name="Area" class="form-control select border-none input-lg">
                                             <option>请选择省</option>
                                         </select>
                                     </div>
                                     <div class="col-xs-6 selectwrap">
-                                        <select id="AreaCity" name="AreaCity" class="form-control select border-none input-lg">
+                                        <select id="AreaCity" name="Area" class="form-control select border-none input-lg">
                                             <option>请选择市</option>
                                         </select>
                                     </div>
@@ -374,10 +381,10 @@
                                     <div class="row">
                                         <div class="btn-group col-xs-12 selectwrap active" data-toggle="buttons">
                                             <label class="btn btn-lg btn-default  col-xs-6 nopass">
-                                                <input type="checkbox" autocomplete="off">KA
+                                                <input type="checkbox" value="KA" name="SalesChannel">KA
                                             </label>
                                             <label class="btn btn-lg btn-default col-xs-6 nopass">
-                                                <input type="checkbox" autocomplete="off">流通
+                                                <input type="checkbox" value="流通" name="SalesChannel">流通
                                             </label>
                                         </div>
                                     </div>
@@ -397,7 +404,7 @@
                 </div>
             </div>
             <div id="footer_pic">
-                <img src="~/Content/images/bg0041f.png" class="logo-warp" />
+                <img src="~/Content/images/bg0041f.png" />
             </div>
         </div>
     </div>
@@ -531,6 +538,7 @@
             });
             if (check == false) {
                 $("input[type='checkbox']").parent().addClass("border-error");
+                alert("请选择渠道");
             } else {
                 $("input[type='checkbox']").parent().removeClass("border-error");
             }
