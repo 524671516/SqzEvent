@@ -247,27 +247,30 @@
 	}
 	#section0{
 		background-image: url(/Content/images/0306-H5-1.jpg);
+        background-size:80% contain;
 	}
     #section1{
 		background-image: url(/Content/images/0306-H5-2.jpg);
+        background-size:100% contain;
 	}
 	#section2{
 		background-image: url(/Content/images/0306-H5-3.jpg);
+        background-size:100% contain;
 	}
     #section3 {
         background: url('../../Content/images/bg0042.png') repeat;
+        background-size:100%;
     }
    .section .container {
           margin:0 6px;
           background: url('../../Content/images/bg0041c.png');
           background-size:100%;
     }
-   @@media all and (orientation : landscape) {
        .ui-content{
            color:#fff;
            font-size:2rem;
            top:0;
-           background-color: rgba(0, 0, 0, 0.2);
+           background-color: rgba(0, 0, 0, 0.5);
            display:block;
            position:fixed;
            left:0;
@@ -276,7 +279,7 @@
            height:100%;
            text-align:center;
            margin:0 auto;
-           z-index:99999;
+           z-index:-1;
            font-weight:700;
        }
        .ui-content div{
@@ -287,13 +290,6 @@
            position:absolute;
            top:20%;
        }
-   }
-
-  @@media all and (orientation : portrait){
-       .ui-content{
-           display:none;
-       }
-  }
 	</style>
 
 	<!--[if IE]>
@@ -406,6 +402,29 @@
 <script src="~/Scripts/jquery.fullPage.min.js"></script>
 <script src="~/Scripts/bootstrap.min.js"></script>
 <script>
+    var currentwidth = "";
+    var _clientheight = $(window).height();
+    var _clientwidth = $(window).width();
+    if (_clientheight < _clientwidth) {
+        $(".ui-content").css("z-index", "999");
+        currentwidth = _clientheight;
+    } else {
+        $(".ui-content").css("z-index", "-1");
+        currentwidth = _clientwidth;
+    }
+    $(window).resize(function () {
+        var clientheight = $(window).height();
+        var clientweidth = $(window).width();
+        if (clientweidth != currentwidth) {
+            if (clientheight < clientweidth) {
+                $(".ui-content").css("z-index", "999");
+            } else {
+                $(".ui-content").css("z-index", "-1");
+            }
+        } else {
+            $(".ui-content").css("z-index", "-1");
+        }
+    });
     $(document).ready(function () {
         $('#fullpage').fullpage({
             autoScrolling:true,
