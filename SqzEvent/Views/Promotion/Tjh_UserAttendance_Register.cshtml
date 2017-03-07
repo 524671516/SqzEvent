@@ -17,10 +17,6 @@
     <style>
         /*全局*/
            img{
-            -webkit-transition: all 5s ease-out;
-		    -moz-transition: all 5s ease-out;
-		    -o-transition: all 5s ease-out;
-		    transition: all 5s ease-out;
             display:block;
            }
            select {
@@ -167,6 +163,8 @@
         }
         @@media screen and (max-width: 320px) {
             .container{
+                position:relative;
+                left:1000px;
                 padding-top:2%;
             }
             .container .form-group{
@@ -175,6 +173,8 @@
         }
         @@media screen and (min-width:321px)and (max-width: 375px) {
             .container {
+                position:relative;
+                left:1000px;
                 padding-top: 8%;
             }
 
@@ -184,6 +184,8 @@
         }
        @@media screen and (min-width:376px)and (max-width: 480px) {
             .container{
+                position:relative;
+                left:1000px;
                 padding-top:5%;
             }
             .container .form-group{
@@ -192,27 +194,43 @@
         }
      /*fullpage*/
      #footer_pic.active{
-        -webkit-transform: translate3d(0px, 80%, 0px);
-		-moz-transform: translate3d(0px, 80%, 0px);
-		-ms-transform:translate3d(0px, 80%, 0px);
-		transform: translate3d(0px, 80%, 0px);
+        -webkit-transform: translate3d(0px, -800px, 0px);
+		-moz-transform: translate3d(0px, -800px, 0px);
+		-ms-transform:translate3d(0px, -800px, 0px);
+		transform: translate3d(0px, -800px, 0px);
+        -webkit-transition: all 1.5s ease-out;
+		-moz-transition: all 1.5s ease-out;
+		-o-transition: all 1.5s ease-out;
+		transition: all 1.5s ease-out;
      }
      #header_pic.active{
-        -webkit-transform: translate3d(0px, 500%, 0px);
-		-moz-transform: translate3d(0px, 500%, 0px);
-		-ms-transform:translate3d(0px, 500%, 0px);
-		transform: translate3d(0px, 500%, 0px);
+        -webkit-transform: translate3d(0px, 8999px, 0px);
+		-moz-transform: translate3d(0px, 8999px, 0px);
+		-ms-transform:translate3d(0px, 8999px, 0px);
+		transform: translate3d(0px, 8999px, 0px);
+        -webkit-transition: all 0.5s ease-out;
+		-moz-transition: all 0.5s ease-out;
+		-o-transition: all 0.5s ease-out;
+		transition: all 0.5s ease-out;
      }
      .container.active{
-        -webkit-transform: translate3d(200%, 0px, 0px);
-		-moz-transform: translate3d(200%, 0px, 0px);
-		-ms-transform:translate3d(200%,0px, 0px);
-		transform: translate3d(200%, 0px, 0px);
+        -webkit-transform: translate3d(-1000px, 0px, 0px);
+		-moz-transform: translate3d(-1000px, 0px, 0px);
+		-ms-transform:translate3d(-1000px,0px, 0px);
+		transform: translate3d(-1000px, 0px, 0px);
+        -webkit-transition: all 1s ease-out;
+		-moz-transition: all 1s ease-out;
+		-o-transition: all 1s ease-out;
+		transition: all 1s ease-out;
      }
      #footer_pic{
+        position:relative;
+        bottom:-800px;
         padding:0px 6px 0 6px;
      }
      #header_pic{
+        position:relative;
+        top:-8999px;
         padding:10% 6px 0 6px;
      }
      #fp-nav.right{
@@ -251,7 +269,7 @@
            color:#fff;
            font-size:2rem;
            top:0;
-           background-color: rgba(0, 0, 0, 0.8);
+           background-color: rgba(0, 0, 0, 0.2);
            display:block;
            position:fixed;
            left:0;
@@ -402,8 +420,8 @@
 
             },
             afterLoad: function (anchorLink, index) {
-                if (index == 3) {
-                    
+                if (index == 4) {
+                    $('#header_pic, #footer_pic, .container').addClass('active');
                 }
             },
         });
