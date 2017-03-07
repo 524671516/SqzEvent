@@ -337,6 +337,8 @@
                         @Html.HiddenFor(m => m.SignupDatetime)
                         @Html.HiddenFor(m => m.Confirmed)
                         @Html.HiddenFor(m => m.ConfirmedDatetime)
+                        <input type="hidden" value="" name="Area" id="Area"/>
+                        <input type="hidden" value="" name="SalesChannel" id="SalesChannel"/>
                         <div class="form-group">
                             <div class="col-xs-12 selectwrap">
                                 @Html.TextBoxFor(m => m.Name, new { @class = "form-control input-lg", placeholder="姓名" })
@@ -351,12 +353,12 @@
                             <div class="col-xs-12">
                                 <div class="row">
                                     <div class="col-xs-6 selectwrap">
-                                        <select id="AreaProvince" name="Area" class="form-control select border-none input-lg">
+                                        <select id="AreaProvince" class="form-control select border-none input-lg area">
                                             <option>请选择省</option>
                                         </select>
                                     </div>
                                     <div class="col-xs-6 selectwrap">
-                                        <select id="AreaCity" name="Area" class="form-control select border-none input-lg">
+                                        <select id="AreaCity"  class="form-control select border-none input-lg area">
                                             <option>请选择市</option>
                                         </select>
                                     </div>
@@ -368,10 +370,10 @@
                                     <div class="row">
                                         <div class="btn-group col-xs-12 selectwrap active" data-toggle="buttons">
                                             <label class="btn btn-lg btn-default  col-xs-6 nopass">
-                                                <input type="checkbox" value="KA" name="SalesChannel">KA
+                                                <input type="checkbox" value="KA">KA
                                             </label>
                                             <label class="btn btn-lg btn-default col-xs-6 nopass">
-                                                <input type="checkbox" value="流通" name="SalesChannel">流通
+                                                <input type="checkbox" value="流通">流通
                                             </label>
                                         </div>
                                     </div>
@@ -449,6 +451,7 @@
         });
     });
     $(".selectwrap label").each(function () {
+
         $(this).on("click", function () {
             if ($(this).hasClass("pass")) {
                 $(this).removeClass("pass")
@@ -477,7 +480,8 @@
     });
     /*选择省后获取对应市级信息*/
     $("#AreaProvince").on("change", function () {
-        $("#AreaCity").html("<option>请选择省</option>");
+        $("#Area").val("");
+        $("#AreaCity").html("<option>请选择市</option>");
         $.ajax({
             url: "/Seller/GetRegion",
             data: {
@@ -496,7 +500,12 @@
             }
         });
     });
+    $("#AreaCity").on("change", function () {
+        $("#Area").val("");
+    });
     $("#register-btn").on("click", function () {
+        $("#SalesChannel").val("");
+        $("#Area").val("");
         var bool = true;
         var check = false;
         if (!$(this).hasClass("btn-disabled")) {
@@ -553,6 +562,16 @@
                 $("input[type='checkbox']").parent().removeClass("border-error");
             }
             if (bool) {
+                $(".area").each(function () {
+                    $("#Area").val($("#Area").val() + $(this).val()+",");
+                });
+                $("input[type=checkbox]").each(function () {
+                    if ($(this).is(":checked")) {
+                        $("#SalesChannel").val($("#SalesChannel").val() + $(this).val()+",");
+                    }
+                });
+                $("#SalesChannel").val(($("#SalesChannel").val()).substring(0, ($("#SalesChannel").val()).length - 1));
+                $("#Area").val(($("#Area").val()).substring(0, ($("#Area").val()).length - 1));
                 $("#create-form").submit();
             }
         } else {
