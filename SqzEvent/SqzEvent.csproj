@@ -265,7 +265,6 @@
     <Content Include="Content\images\bg0041f.png" />
     <Content Include="Content\images\bg0041h.png" />
     <Content Include="Content\images\bg0042.png" />
-    <Content Include="Content\images\flowers.mp4" />
     <Content Include="Content\images\logo-white.png" />
     <Content Include="Content\images\logo.png" />
     <Content Include="Content\images\logo_new.png" />
@@ -300,7 +299,6 @@
     <Content Include="Content\images\sellertask-guide-08.jpg" />
     <Content Include="Content\images\serveybg2.png" />
     <Content Include="Content\images\share-pic.png" />
-    <Content Include="Content\images\test4.jpg" />
     <Content Include="Content\images\title_bc.png" />
     <Content Include="Content\jquery.fullPage.css" />
     <Content Include="Content\Manager.css" />
@@ -350,7 +348,6 @@
     <Content Include="fonts\Framework7Icons-Regular.ttf" />
     <Content Include="fonts\Framework7Icons-Regular.woff" />
     <Content Include="fonts\Framework7Icons-Regular.woff2" />
-    <Content Include="Content\images\flowers.webm" />
     <None Include="Properties\PublishProfiles\Test.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.7.2.min.js" />
@@ -622,6 +619,8 @@
     <Content Include="Views\Promotion\Tjh_UserAttendance_Signup.cshtml" />
     <Content Include="Views\Promotion\Tjh_UserAttendance_Signup_Fail.cshtml" />
     <Content Include="Views\Promotion\Tjh_UserAttendance_Error.cshtml" />
+    <Content Include="Views\WeekendBreak\Weekend_NotAuthorized.cshtml" />
+    <Content Include="Views\WeekendBreak\Weekend_Error.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
