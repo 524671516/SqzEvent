@@ -248,6 +248,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\images\0306-H5-4.jpg" />
+    <Content Include="Content\images\0306-H5-finish.jpg" />
     <Content Include="Content\images\bg0041c.png" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
