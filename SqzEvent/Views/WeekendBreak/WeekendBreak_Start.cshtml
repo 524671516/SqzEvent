@@ -38,17 +38,18 @@
 }
 @section scripts{
     <script>
+        var submitting = false
         $("#start-submit").on("click", function () {
-            if (!$("#start-submit").hasClass("weui-btn_disabled")) {
+            if (!submitting) {
                 $("#start-submit").addClass("weui-btn_disabled");
-                //
-
+                submitting = true;
                 $("#start-form").ajaxSubmit(function (data) {
                     if (data == "SUCCESS") {
                         $("#toast").fadeIn(100);
                         setTimeout(function () {
                             $("#toast").fadeOut(100);
                             window.location.href = "/WeekendBreak/WeekendBreak_Home";
+                            submitting = false;
                         }, 2000);
                     }
                 });
