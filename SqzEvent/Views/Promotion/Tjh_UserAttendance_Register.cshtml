@@ -146,11 +146,16 @@
             -moz-osx-font-smoothing: grayscale;
             content:"\f046";
         }
-       .btn-default.active.focus, .btn-default.active:focus, .btn-default.active:hover, .btn-default:active.focus, .btn-default:active:focus, .btn-default:active:hover, .open>.dropdown-toggle.btn-default.focus, .open>.dropdown-toggle.btn-default:focus, .open>.dropdown-toggle.btn-default:hover,.btn-default.active.focus, .btn-default.active:focus, .btn-default.active:hover, .btn-primary:active.focus, .btn-default:active:focus, .btn-primary:active:hover, .open>.dropdown-toggle.btn-default.focus, .open>.dropdown-toggle.btn-default:focus, .open>.dropdown-toggle.btn-default:hover,.btn-default.active, .btn-default:active, .open>.dropdown-toggle.btn-default{
+     .btn-default:active:hover, .open>.dropdown-toggle.btn-default.focus, .open>.dropdown-toggle.btn-default:focus, .open>.dropdown-toggle.btn-default:hover, .btn-default.active:hover,  .btn-primary:active:hover, .open>.dropdown-toggle.btn-default.focus, .open>.dropdown-toggle.btn-default:focus, .open>.dropdown-toggle.btn-default:hover,.btn-default.active, .btn-default:active, .open>.dropdown-toggle.btn-default{
             color:#fff !important;
             background-color:#4cae4c !important;
             border-color: #4cae4c !important;
         }
+     .bg-g{
+            color:#fff !important;
+            background-color:#4cae4c !important;
+            border-color: #4cae4c !important;
+     }
         .border-error {
             border-color: #a94442 !important;
         }
@@ -164,8 +169,6 @@
         }
         @@media screen and (max-width: 320px) {
             .container{
-                position:relative;
-                left:1000px;
                 padding-top:2%;
             }
             .container .form-group{
@@ -174,8 +177,6 @@
         }
         @@media screen and (min-width:321px)and (max-width: 375px) {
             .container {
-                position:relative;
-                left:1000px;
                 padding-top: 8%;
             }
 
@@ -185,8 +186,6 @@
         }
        @@media screen and (min-width:376px)and (max-width: 480px) {
             .container{
-                position:relative;
-                left:1000px;
                 padding-top:5%;
             }
             .container .form-group{
@@ -194,44 +193,10 @@
             }
         }
      /*fullpage*/
-     #footer_pic.active{
-        -webkit-transform: translate3d(0px, -800px, 0px);
-		-moz-transform: translate3d(0px, -800px, 0px);
-		-ms-transform:translate3d(0px, -800px, 0px);
-		transform: translate3d(0px, -800px, 0px);
-        -webkit-transition: all 1.5s ease-out;
-		-moz-transition: all 1.5s ease-out;
-		-o-transition: all 1.5s ease-out;
-		transition: all 1.5s ease-out;
-     }
-     #header_pic.active{
-        -webkit-transform: translate3d(0px, 8999px, 0px);
-		-moz-transform: translate3d(0px, 8999px, 0px);
-		-ms-transform:translate3d(0px, 8999px, 0px);
-		transform: translate3d(0px, 8999px, 0px);
-        -webkit-transition: all 0.5s ease-out;
-		-moz-transition: all 0.5s ease-out;
-		-o-transition: all 0.5s ease-out;
-		transition: all 0.5s ease-out;
-     }
-     .container.active{
-        -webkit-transform: translate3d(-1000px, 0px, 0px);
-		-moz-transform: translate3d(-1000px, 0px, 0px);
-		-ms-transform:translate3d(-1000px,0px, 0px);
-		transform: translate3d(-1000px, 0px, 0px);
-        -webkit-transition: all 1s ease-out;
-		-moz-transition: all 1s ease-out;
-		-o-transition: all 1s ease-out;
-		transition: all 1s ease-out;
-     }
      #footer_pic{
-        position:relative;
-        bottom:-800px;
         padding:0px 6px 0 6px;
      }
      #header_pic{
-        position:relative;
-        top:-8999px;
         padding:10% 6px 0 6px;
      }
      #fp-nav.right{
@@ -247,17 +212,17 @@
 	}
 	#section0{
 		background-image: url(/Content/images/0306-H5-1.jpg);
-        background-size:80% contain;
 	}
     #section1{
 		background-image: url(/Content/images/0306-H5-2.jpg);
-        background-size:contain;
 	}
 	#section2{
 		background-image: url(/Content/images/0306-H5-3.jpg);
-        background-size:contain;
 	}
-    #section3 {
+    #section3{
+		background-image: url(/Content/images/0306-H5-4.jpg);
+	}
+    #section4{
         background: url('../../Content/images/bg0042.png') repeat;
         background-size:contain;
     }
@@ -267,6 +232,7 @@
           background-size:100%;
     }
        .ui-content{
+           display:none;
            color:#fff;
            font-size:2rem;
            top:0;
@@ -318,7 +284,17 @@
                 <a href="javascript:;"><span></span></a>
             </div>
         </div>
+        <div class="section" id="section2">
+            <div id="huadong" class="down">
+                <a href="javascript:;"><span></span></a>
+            </div>
+        </div>
         <div class="section" id="section3">
+            <div id="huadong" class="down">
+                <a href="javascript:;"><span></span></a>
+            </div>
+        </div>
+        <div class="section" id="section4">
             <div id="header_pic"> 
                 <img src="~/Content/images/bg0041h.png" />
             </div>
@@ -403,9 +379,11 @@
     var _clientheight = $(window).height();
     var _clientwidth = $(window).width();
     if (_clientheight < _clientwidth) {
+        $(".ui-content").css("display", "block");
         $(".ui-content").css("z-index", "999");
         initwidth = _clientheight;
     } else {
+        $(".ui-content").css("display", "none");
         $(".ui-content").css("z-index", "-1");
         initwidth = _clientwidth;
     }
@@ -413,14 +391,18 @@
         var clientheight = $(window).height();
         var clientwidth = $(window).width();
         if (clientwidth == initwidth) {
+            $(".ui-content").css("display", "none");
             $(".ui-content").css("z-index", "-1");       
         } else {
             if (_clientwidth < clientheight && _clientwidth < clientwidth) {
+                $(".ui-content").css("display", "none");
                 $(".ui-content").css("z-index", "-1");
             } else {
                 if (clientheight < clientwidth) {
+                    $(".ui-content").css("display", "block");
                     $(".ui-content").css("z-index", "999");
                 } else {
+                    $(".ui-content").css("display", "none");
                     $(".ui-content").css("z-index", "-1");
                 }
             }          
@@ -437,11 +419,6 @@
             afterResponsive: function (isResponsive) {
 
             },
-            afterLoad: function (anchorLink, index) {
-                if (index == 3) {
-                    $('#header_pic, #footer_pic, .container').addClass('active');
-                }
-            },
         });
     });
     $(document).ready(function () {
@@ -450,11 +427,12 @@
         });
     });
     $(".selectwrap label").each(function () {
-
         $(this).on("click", function () {
             if ($(this).hasClass("pass")) {
-                $(this).removeClass("pass")
+                $(this).removeClass("bg-g");
+                $(this).removeClass("pass");
             } else {
+                $(this).addClass("bg-g");
                 $(this).addClass("pass");
             }
         })
