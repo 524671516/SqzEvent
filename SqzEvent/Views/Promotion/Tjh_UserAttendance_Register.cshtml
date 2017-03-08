@@ -146,12 +146,9 @@
             -moz-osx-font-smoothing: grayscale;
             content:"\f046";
         }
-     .btn-default:active:hover, .open>.dropdown-toggle.btn-default.focus, .open>.dropdown-toggle.btn-default:focus, .open>.dropdown-toggle.btn-default:hover, .btn-default.active:hover,  .btn-primary:active:hover, .open>.dropdown-toggle.btn-default.focus, .open>.dropdown-toggle.btn-default:focus, .open>.dropdown-toggle.btn-default:hover,.btn-default.active, .btn-default:active, .open>.dropdown-toggle.btn-default{
-            color:#fff !important;
-            background-color:#4cae4c !important;
-            border-color: #4cae4c !important;
-        }
-     .bg-g{
+     .bg-bg{
+         border-left:none;
+         border-right:none;
             color:#fff !important;
             background-color:#4cae4c !important;
             border-color: #4cae4c !important;
@@ -323,12 +320,12 @@
                             <div class="form-group">
                                 <div class="col-xs-12">
                                     <div class="row">
-                                        <div class="btn-group col-xs-12 selectwrap active" data-toggle="buttons">
-                                            <label class="btn btn-lg btn-default  col-xs-6 nopass">
-                                                <input type="checkbox" value="KA">KA
+                                        <div class="btn-group col-xs-12 selectwrap">
+                                            <label class="btn btn-lg btn-default  col-xs-6 nopass" for="checkbox1">
+                                                <input type="checkbox" value="KA"  id="checkbox1" name="checkbox" class="hidden">KA
                                             </label>
-                                            <label class="btn btn-lg btn-default col-xs-6 nopass">
-                                                <input type="checkbox" value="流通">流通
+                                            <label class="btn btn-lg btn-default col-xs-6 nopass" for="checkbox2">
+                                                <input type="checkbox" value="流通"  id="checkbox2" name="checkbox" class="hidden">流通
                                             </label>
                                         </div>
                                     </div>
@@ -410,17 +407,6 @@
             window.location.href = $(this).find("option:selected").attr("id") + '.html';
         });
     });
-    $(".selectwrap label").each(function () {
-        $(this).on("click", function () {
-            if ($(this).hasClass("pass")) {
-                $(this).removeClass("bg-g");
-                $(this).removeClass("pass");
-            } else {
-                $(this).addClass("bg-g");
-                $(this).addClass("pass");
-            }
-        })
-    })
     //var recommend_type = /^(13[0-9]|14[0-9]|15[0-9]|18[0-9])\d{8}$|^\d{0}$/   //推荐码正则
     var verification_type = /^\d{4,6}$/                                       //验证码正则
     var word_type = /^[\u4e00-\u9fa5]{1,6}$/                                  //输入姓名正则
@@ -439,6 +425,20 @@
             }
         }
     });
+    $("label").on("click", function () {
+        if ($(this).hasClass("pass")) {
+            $(this).find("input").prop("checked", false);
+            $(this).removeClass("bg-bg");
+            $(this).removeClass("pass");
+            return false;
+        } else {
+            $(this).find("input").prop("checked", true);
+            $(this).addClass("bg-bg");
+            $(this).addClass("pass");
+            return false;
+        }
+    });
+
     /*选择省后获取对应市级信息*/
     $("#AreaProvince").on("change", function () {
         $("#Area").val("");

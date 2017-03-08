@@ -8,69 +8,338 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimum-scale=1.0,maximum-scale=1.0" />
+    <meta name="keywords" content="fullpage,jquery,demo,screen,fullscreen,backgrounds,full-screen" />
     <title>2017春糖会 报名完成</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/jquery.fullPage.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
     <style>
+        /*全局*/
         img {
-            display: block;
             width: 100%;
+            display: block;
         }
 
-        * {
+        select {
+            -webkit-appearance: none;
+        }
+
+        h1 {
             margin: 0;
             padding: 0;
         }
 
-        body {
-            background: url('../../Content/images/bg0042.png') repeat;
+        label {
+            line-height: 2.234;
+        }
+        /*滑动块*/
+        .down a {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            z-index: 2;
+            display: inline-block;
+            -webkit-transform: translate(0, -50%);
+            transform: translate(0, -50%);
+            color: #fff;
+            font: normal 400 20px/1 'Josefin Sans', sans-serif;
+            letter-spacing: .1em;
+            text-decoration: none;
+            transition: opacity .3s;
+            padding-top: 60px;
         }
 
-        html, body {
-            height: 100%;
-            width: 100%;
+            .down a:hover {
+                opacity: .5;
+            }
+
+            .down a span {
+                position: absolute;
+                top: 0;
+                left: 50%;
+                width: 30px;
+                height: 50px;
+                margin-left: -15px;
+                border: 2px solid #fff;
+                border-radius: 50px;
+                box-sizing: border-box;
+            }
+
+                .down a span::before {
+                    position: absolute;
+                    top: 10px;
+                    left: 50%;
+                    content: '';
+                    width: 6px;
+                    height: 6px;
+                    margin-left: -3px;
+                    background-color: #fff;
+                    border-radius: 100%;
+                    -webkit-animation: sdb10 2s infinite;
+                    animation: sdb10 2s infinite;
+                    box-sizing: border-box;
+                }
+
+        @@-webkit-keyframes sdb10 {
+            0% {
+                -webkit-transform: translate(0, 20px);
+                opacity: 0;
+            }
+
+            40% {
+                opacity: 1;
+            }
+
+            80% {
+                -webkit-transform: translate(0, 0);
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 0;
+            }
         }
 
-        #header_pic {
-            padding: 6% 6px 0 6px;
+        @@keyframes sdb10 {
+            0% {
+                transform: translate(0, 20px);
+                opacity: 0;
+            }
+
+            40% {
+                opacity: 1;
+            }
+
+            80% {
+                transform: translate(0, 0);
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+
+        @@media screen and (max-width: 320px) {
+            .container {
+                position: relative;
+                left: 1000px;
+                padding-top: 2%;
+            }
+
+                .container .form-group {
+                    margin-bottom: 5%;
+                }
+        }
+
+        @@media screen and (min-width:321px)and (max-width: 375px) {
+            .container {
+                position: relative;
+                left: 1000px;
+                padding-top: 8%;
+            }
+
+                .container .form-group {
+                    margin-bottom: 10%;
+                }
+        }
+
+        @@media screen and (min-width:376px)and (max-width: 480px) {
+            .container {
+                position: relative;
+                left: 1000px;
+                padding-top: 5%;
+            }
+
+                .container .form-group {
+                    margin-bottom: 9%;
+                }
+        }
+        /*fullpage*/
+        #footer_pic.active {
+            -webkit-transform: translate3d(0px, -800px, 0px);
+            -moz-transform: translate3d(0px, -800px, 0px);
+            -ms-transform: translate3d(0px, -800px, 0px);
+            transform: translate3d(0px, -800px, 0px);
+            -webkit-transition: all 1.5s ease-out;
+            -moz-transition: all 1.5s ease-out;
+            -o-transition: all 1.5s ease-out;
+            transition: all 1.5s ease-out;
+        }
+
+        #header_pic.active {
+            -webkit-transform: translate3d(0px, 8999px, 0px);
+            -moz-transform: translate3d(0px, 8999px, 0px);
+            -ms-transform: translate3d(0px, 8999px, 0px);
+            transform: translate3d(0px, 8999px, 0px);
+            -webkit-transition: all 0.5s ease-out;
+            -moz-transition: all 0.5s ease-out;
+            -o-transition: all 0.5s ease-out;
+            transition: all 0.5s ease-out;
+        }
+
+        .container.active {
+            -webkit-transform: translate3d(-1000px, 0px, 0px);
+            -moz-transform: translate3d(-1000px, 0px, 0px);
+            -ms-transform: translate3d(-1000px,0px, 0px);
+            transform: translate3d(-1000px, 0px, 0px);
+            -webkit-transition: all 1s ease-out;
+            -moz-transition: all 1s ease-out;
+            -o-transition: all 1s ease-out;
+            transition: all 1s ease-out;
         }
 
         #footer_pic {
-            padding: 0 6px 10% 6px;
-        }
-
-        .finish {
             position: relative;
-            height: 80%;
-            margin: 0 6px;
-            background: url('../../Content/images/bg0041c.png') repeat-y;
-            background-size: 100%;
-            color: #fff;
-            font-weight: 700;
-            text-align: center;
-            vertical-align: middle;
+            bottom: -800px;
+            padding: 0px 6px 0 6px;
         }
 
-        .finish-box {
-            top: 35%;
-            left: 0;
-            right: 0;
-            vertical-align: middle;
-            position: absolute;
-            margin: auto;
-            width: 80%;
+        #header_pic {
+            position: relative;
+            top: -8999px;
+            padding: 10% 6px 0 6px;
+        }
+
+        #fp-nav.right {
+            right: 0 !important;
+        }
+
+        #fp-nav ul li a span, .fp-slidesNav ul li a span {
+            border: 1px solid #AAA;
+            background: rgba(0, 0, 0, 0);
+        }
+
+        .section {
+            text-align: center;
+            background-size: cover;
+        }
+
+        #section0 {
+            background-image: url(/Content/images/0306-H5-1.jpg);
+        }
+
+        #section1 {
+            background-image: url(/Content/images/0306-H5-2.jpg);
+        }
+
+        #section2 {
+            background-image: url(/Content/images/0306-H5-3.jpg);
+        }
+
+        #section3 {
+            background-image: url(/Content/images/0306-H5-4.jpg);
+        }
+
+        .section .container {
+            margin: 0 6px;
+            background: url('../../Content/images/bg0041c.png');
+            background-size: 100%;
+        }
+
+        @@media all and (orientation : landscape) {
+            .ui-content {
+                color: #fff;
+                font-size: 2rem;
+                top: 0;
+                background-color: rgba(0, 0, 0, 0.8);
+                display: block;
+                position: fixed;
+                left: 0;
+                vertical-align: middle;
+                width: 100%;
+                height: 100%;
+                text-align: center;
+                margin: 0 auto;
+                z-index: 99999;
+                font-weight: 700;
+            }
+
+                .ui-content div {
+                    width: 90%;
+                    left: 0;
+                    right: 0;
+                    margin: 0 auto;
+                    position: absolute;
+                    top: 20%;
+                }
+        }
+
+        @@media all and (orientation : portrait) {
+            .ui-content {
+                display: none;
+            }
         }
     </style>
+
+    <!--[if IE]>
+        <script type="text/javascript">
+             var console = { log: function() {} };
+        </script>
+    <![endif]-->
+
 </head>
 <body>
-    <div id="header_pic">
-        <img src="~/Content/images/bg0041h.png" />
-    </div>
-    <div class="finish">
-        <div class="finish-box">
-            恭喜你完成报名
+    <div data-role="main" class="ui-content">
+        <div>
+            <i>请试着旋转您的设备！</i>
+            <br />
+            <p><b>注意</b>请在竖屏状态下观看</p>
         </div>
     </div>
-    <div id="footer_pic">
-        <img src="~/Content/images/bg0041f.png" />
+    <div id="fullpage">
+        <div class="section " id="section0">
+            <div id="huadong" class="down">
+                <a href="javascript:;"><span></span></a>
+            </div>
+        </div>
+        <div class="section" id="section1">
+            <div id="huadong" class="down">
+                <a href="javascript:;"><span></span></a>
+            </div>
+        </div>
+        <div class="section" id="section2">
+            <div id="huadong" class="down">
+                <a href="javascript:;"><span></span></a>
+            </div>
+        </div>
+        <div class="section" id="section3">
+        </div>
     </div>
 </body>
 </html>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/scrolloverflow.min.js"></script>
+<script src="~/Scripts/jquery.fullPage.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#fullpage').fullpage({
+            autoScrolling:true,
+            verticalCentered:false,
+            css3: true,
+            navigation: true,
+            navigationPosition: 'right',
+            navigationTooltips: ['第一页', '第二页'],
+            afterResponsive: function (isResponsive) {
+
+            },
+            afterLoad: function (anchorLink, index) {
+                if (index == 4) {
+                    $('#header_pic, #footer_pic, .container').addClass('active');
+                }
+            },
+        });
+    });
+
+    $(".selectwrap label").each(function () {
+        $(this).on("click", function () {
+            if ($(this).hasClass("pass")) {
+                $(this).removeClass("pass")
+            } else {
+                $(this).addClass("pass");
+            }
+        })
+    });
+</script>
