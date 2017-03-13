@@ -7,11 +7,118 @@
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>春糖会 确认参会</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimum-scale=1.0,maximum-scale=1.0" />
+    <meta name="keywords" content="fullpage,jquery,demo,screen,fullscreen,backgrounds,full-screen" />
+    <title>2017春糖会 确认参会</title>
+    <link href="~/Content/jquery.fullPage.css" rel="stylesheet" />
+    <style>
+        
+     #footer_pic{
+        padding:0px 6px 0 6px;
+     }
+     #header_pic{
+        padding:10% 6px 0 6px;
+     }
+     #fp-nav.right{
+         right:0 !important;
+     }
+     #fp-nav ul li a span, .fp-slidesNav ul li a span{
+         border: 1px solid #AAA;
+         background: rgba(0, 0, 0, 0)
+     }
+	.section{
+		text-align:center;
+        background-size: cover;
+	}
+	#section0{
+		background-image: url(/Content/images/0306-H5-finish.jpg);
+	}
+     .ui-content{
+           display:none;
+           color:#fff;
+           font-size:2rem;
+           top:0;
+           background-color: rgba(0, 0, 0, 0.9);
+           display:block;
+           position:fixed;
+           left:0;
+           vertical-align:middle;
+           width:100%;
+           height:100%;
+           text-align:center;
+           margin:0 auto;
+           z-index:-1;
+           font-weight:700;
+       }
+       .ui-content div{
+           width:90%;
+           left:0;
+           right:0;
+           margin:0 auto;
+           position:absolute;
+           top:20%;
+       }
+       .main-text{
+           font-size:1.2rem;
+           padding-top:33%;
+           color:#fff;
+           line-height:1.8rem;
+       }
+    </style>
+
 </head>
 <body>
-    <div> 
+    <div data-role="main" class="ui-content" style="display:none;">
+        <div>
+            <i>请试着旋转您的设备！</i>
+            <br />
+            <p><b>注意</b>请在竖屏状态下观看</p>
+        </div>
     </div>
+    <div id="fullpage">
+        <div class="section " id="section0">
+            <div class="main-text"><p>感谢您参加寿全斋2017成都糖酒会<br />期待与您的进一步合作</p></div>
+        </div>
+        </div>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/scrolloverflow.min.js"></script>
+    <script src="~/Scripts/jquery.fullPage.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#fullpage').fullpage({
+                autoScrolling: true,
+                verticalCentered: false,
+                css3: true,
+                navigation: true,
+                navigationPosition: 'right',
+                navigationTooltips: ['第一页'],
+                afterResponsive: function (isResponsive) {
+
+                },
+            });
+        });
+        $(window).resize(function () {
+            var clientheight = $(window).height();
+            var clientwidth = $(window).width();
+            if (clientwidth == initwidth) {
+                $(".ui-content").css("display", "none");
+                $(".ui-content").css("z-index", "-1");
+            } else {
+                if (_clientwidth < clientheight && _clientwidth < clientwidth) {
+                    $(".ui-content").css("display", "none");
+                    $(".ui-content").css("z-index", "-1");
+                } else {
+                    if (clientheight < clientwidth) {
+                        $(".ui-content").css("display", "block");
+                        $(".ui-content").css("z-index", "999");
+                    } else {
+                        $(".ui-content").css("display", "none");
+                        $(".ui-content").css("z-index", "-1");
+                    }
+                }
+            }
+        });
+    </script>
 </body>
 </html>
