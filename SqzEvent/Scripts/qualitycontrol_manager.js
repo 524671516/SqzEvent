@@ -136,131 +136,223 @@ myApp.onPageInit("Manager_agendadetails", function (page) {
     });
 });
 //设置页
-myApp.onPageInit('Setting', function (page) {
-    //var monthNames = ['1月', '2月', '3月', '4月 ', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
-    //var calendarInline = myApp.calendar({
-    //    rotateEffect: true,
-    //    container: '#calendar-inline-container',
-    //    value: [new Date()],
-    //    weekHeader: false,
-    //    toolbarTemplate:
-    //        '<div class="toolbar calendar-custom-toolbar">' +
-    //            '<div class="toolbar-inner">' +
-    //                '<div class="left">' +
-    //                    '<a href="#" class="link icon-only"><i class="icon icon-back"></i></a>' +
-    //                '</div>' +
-    //                '<div class="center"></div>' +
-    //                '<div class="right">' +
-    //                    '<a href="#" class="link icon-only"><i class="icon icon-forward"></i></a>' +
-    //                '</div>' +
-    //            '</div>' +
-    //        '</div>',
-    //    onOpen: function (p) {
-    //        $$('.calendar-custom-toolbar .center').text(p.currentYear + "年" + monthNames[p.currentMonth]);
-    //        $$('.calendar-custom-toolbar .left .link').on('click', function () {
-    //            calendarInline.prevMonth();
-    //        });
-    //        $$('.calendar-custom-toolbar .right .link').on('click', function () {
-    //            calendarInline.nextMonth();
-    //        });
-    //        $$.ajax({
-    //            url: "/QualityControl/Manager_MonthChange",
-    //            data: {
-    //                year: p.currentYear,
-    //                month: p.currentMonth + 1
-    //            }, type: "post",
-    //            success: function (e) {
-    //                var data = JSON.parse(e);
-    //                $(".list-month").html("");
-    //                for (var i = 0; i < data.fp.length; i++) {
-    //                    var qty = data.fp[i].qty == null ? 0 : data.fp[i].qty
-    //                    var plan = data.fp[i].plan == null ? 0 : data.fp[i].plan
-    //                    $(".list-month").append("<li class=\"item-content\">" + "<div class=\"item-inner\">" + "<div class=\"item-title\">" + data.fp[i].pn+"("+data.fp[i].fn+")" + "</div>" + "<div class=\"item-after\">" + qty + "/" + plan + "</div>" + "</div>" + "</li>")
-    //                }
-    //                for (var i = 0; i < data.result.length; i++) {                     
-    //                    var _date = ChangeDateFormat(data.result[i].Key);
-    //                    _date1 = data.result[i].Key.substring(data.result[i].Key.indexOf("(")+1, data.result[i].Key.indexOf(")"))
-    //                    if (data.result[i].result) {
-    //                        $(".picker-calendar-day[data-date='" + _date + "']").find("span").addClass("picker-calendar-day-green");
-    //                    }
-    //                    else {
-    //                        var _today = new Date().getTime();                         
-    //                        if (_today >= _date1) {
-    //                            $(".picker-calendar-day[data-date='" + _date + "']").find("span").addClass("picker-calendar-day-red");
-    //                        }
-    //                        else {
-    //                            $(".picker-calendar-day[data-date='" + _date + "']").find("span").addClass("picker-calendar-day-gray");
-    //                        }
-    //                    }
-    //                }
-    //                month = p.currentMonth + 1
-    //                day = new Date();
-    //                _day = day.getDate();
-    //                $$.ajax({
-    //                    url: "/QualityControl/Manager_ScheduleDetails",
-    //                    data: {
-    //                        date: p.currentYear + "-" + month + "-" + _day
-    //                    },
-    //                    success: function (data) {
-    //                        $$(".list-describe").html(data);
-    //                    }
-    //                });
-    //            }
-    //        });
-    //    },
-    //    onMonthYearChangeEnd: function (p) {
-    //        $$('.calendar-custom-toolbar .center').text(p.currentYear + "年" + monthNames[p.currentMonth]);
-    //        $$.ajax({
-    //            url: "/QualityControl/Manager_MonthChange",
-    //            data: {
-    //                year: p.currentYear,
-    //                month: p.currentMonth + 1
-    //            }, type: "post",
-    //            success: function (e) {
-    //                var data = JSON.parse(e);
-    //                $(".list-month").html("");
-    //                for (var i = 0; i < data.fp.length; i++) {
-    //                    var qty = data.fp[i].qty == null ? 0 : data.fp[i].qty
-    //                    var plan = data.fp[i].plan == null ? 0 : data.fp[i].plan
-    //                    $(".list-month").append("<li class=\"item-content\">" + "<div class=\"item-inner\">" + "<div class=\"item-title\">" + data.fp[i].pn + "(" + data.fp[i].fn + ")" + "</div>" + "<div class=\"item-after\">" + qty + "/" + plan + "</div>" + "</div>" + "</li>")
-    //                }
-    //                for (var i = 0; i < data.result.length; i++) {
-    //                    var _date = ChangeDateFormat(data.result[i].Key);
-    //                    _date1 = data.result[i].Key.substring(data.result[i].Key.indexOf("(") + 1, data.result[i].Key.indexOf(")"))
-    //                    if (data.result[i].result) {
-    //                        $(".picker-calendar-day[data-date='" + _date + "']").find("span").addClass("picker-calendar-day-green");
-    //                    }
-    //                    else {
-    //                        var _today = new Date().getTime();
-    //                        if (_today >= _date1) {
-    //                            $(".picker-calendar-day[data-date='" + _date + "']").find("span").addClass("picker-calendar-day-red");
-    //                        }
-    //                        else {
-    //                            $(".picker-calendar-day[data-date='" + _date + "']").find("span").addClass("picker-calendar-day-gray");
-    //                        }
-    //                    }
-    //                }
-    //            }
-    //        });
-    //    },
-    //    onDayClick: function (p, daycontainer, year, month, day) {
-    //        month = parseInt(month) + 1;
-    //        $$.ajax({
-    //            url: "/QualityControl/Manager_ScheduleDetails",
-    //            data: {
-    //                date: year + "-" + month + "-" + day
-    //            },
-    //            success: function (data) {
-    //                $$(".list-describe").html(data);
-    //            }
-    //        });
-    //    },
-    //});
+myApp.onPageInit('manager-equipment', function (page) {
+    $$('#manager-equipment').on('deleted',".swipeout", function (e) {
+        $$.ajax({
+            url: $(this).attr("data-url"),
+            type: "post",
+            success: function (data) {
+                var _data = JSON.parse(data);
+                if (_data.result == "SUCCESS") {
+                    myApp.alert("删除成功");
+                    if ($$("#equipment_fid").val() != "") {
+                        $$.ajax({
+                            url: "/QualityControl/Manager_QCEquipmentListPartial",
+                            data: {
+                                fid: $$("#equipment_fid").val()
+                            },
+                            success: function (data) {
+                                $$("#equipment-list").html(data);
+                            }
+                        })
+                    } else {
+                        $$("#equipment-list").html("");
+                    }
+                } else {
+                    myApp.alert("删除失败");
+                }
+            }
+        })
+    });
+    $$("#factory-select").on("change", function () {
+        if ($$("#equipment_fid").val() != "") {
+            $$.ajax({
+                url: "/QualityControl/Manager_QCEquipmentListPartial",
+                data: {
+                    fid: $$("#equipment_fid").val()
+                },
+                success: function (data) {
+                    $$("#equipment-list").html(data);
+                    $$("#equipmentbar .right a").prop("href", "/QualityControl/Manager_CreateEquipment" + "?fid=" + $$("#equipment_fid").val());
+                }
+            })
+        } else {
+            $$("#equipment-list").html("");
+            $$("#equipmentbar .right a").prop("href", "/QualityControl/Manager_CreateEquipment" + "?fid=" + $$("#equipment_fid").val());
+        }
+    });
+});
+//新增设备
+myApp.onPageInit('addequipment', function (page) {
+    //效验规则
+    $("#addequipment-form").validate({
+        //调试模式取消submit的默认提交功能
+        debug: false,
+        //错误处理
+        errorPlacement: function (error, element) {
+            myApp.hideIndicator();
+            $("#addequipment-submit").prop("disabled", false).removeClass("color-gray");
+        },
+        //错误样式
+        errorClass: "invalid-input",
+        submitHandler: function (form) {
+            CheckError("addequipment-submit", "addequipment-form")
+        }
+    });
+    //按钮点击事件
+    $("#addequipment-submit").on("click", function () {
+        if (!$("#addequipment-submit").prop("disabled")) {
+            $("#addequipment-submit").prop("disabled", true).addClass("color-gray");
+            setTimeout(function () {
+                $("#addequipment-form").submit();
+            }, 500);
+        }
+    });
+    //textarea字数计算
+    currentTextAreaLength("addequipment-form", "Subscribe", 200, "addequipment-currentlen");
+});
+//修改设备信息
+myApp.onPageInit('editequipment', function (page) {
+    //效验规则
+    $("#editequipment-form").validate({
+        //调试模式取消submit的默认提交功能
+        debug: false,
+        //错误处理
+        errorPlacement: function (error, element) {
+            myApp.hideIndicator();
+            $("#editequipment-submit").prop("disabled", false).removeClass("color-gray");
+        },
+        //错误样式
+        errorClass: "invalid-input",
+        submitHandler: function (form) {
+            CheckError("editequipment-submit", "editequipment-form")
+        }
+    });
+    //按钮点击事件
+    $("#editequipment-submit").on("click", function () {
+        if (!$("#editequipment-submit").prop("disabled")) {
+            $("#editequipment-submit").prop("disabled", true).addClass("color-gray");
+            setTimeout(function () {
+                $("#editequipment-form").submit();
+            }, 500);
+        }
+    });
+    //textarea字数计算
+    currentTextAreaLength("editequipment-form", "Subscribe", 200, "editequipment-currentlen");
+});
+//设备故障详情页
+myApp.onPageInit('manager_equipmentdetails', function (page) {
+    if ($$("#manager_equipmentdetails #Id").val() != "") {
+        $$.ajax({
+            url: "/QualityControl/Manager_EquipmentDetailsPartial",
+            data: {
+                Eid: $$("#manager_equipmentdetails #Id").val()
+            },
+            success: function (data) {
+                $("#manager_equipmentdetails  #breakdowm-list").html(data);
+            }
+        });
+    } else {
+        $("#breakdowm-list").html("<div class=\"content-block-title\">获取设备失败</div>");
+    }
+    $$('#manager_equipmentdetails').on('deleted', ".swipeout", function (e) {
+        $$.ajax({
+            url: $(this).attr("data-url"),
+            type: "post",
+            success: function (data) {
+                var _data = JSON.parse(data);
+                if (_data.result == "SUCCESS") {
+                    myApp.alert("删除成功");
+                    if ($$("#manager_equipmentdetails #Id").val() != "") {
+                        $$.ajax({
+                            url: "/QualityControl/Manager_EquipmentDetailsPartial",
+                            data: {
+                                Eid: $$("#manager_equipmentdetails #Id").val()
+                            },
+                            success: function (data) {
+                                $("#manager_equipmentdetails  #breakdowm-list").html(data);
+                            }
+                        })
+                    } else {
+                        $("#breakdowm-list").html("<div class=\"content-block-title\">获取设备失败</div>");
+                    }
+                } else {
+                    myApp.alert("删除失败");
+                }
+            }
+        })
+    });
+});
+//新增故障类型页
+myApp.onPageInit('addbreakdowntype', function (page) {
+    $$("#addbreakdowntype #factory-select").on("change", function () {
+        $$("#addbreakdowntype #EquipmentId").html("");
+        $$("#addbreakdowntype #EquipmentId").append("<option>- 请选择 -</option>");
+        $$("#addbreakdowntype #equipment-select .item-after").text("- 请选择 -");
+        if ($$("#addbreakdowntype #FactoryId").val() != "") {
+            $$.ajax({
+                url: "/QualityControl/RefreshEquipmentListAjax",
+                data: {
+                    factoryId: $$("#addbreakdowntype #FactoryId").val()
+                },
+                type: "post",
+                success: function (data) {
+                    data = JSON.parse(data);
+                    if (data.result == "SUCCESS") {
+                        for (var i = 0; i < data.content.length; i++) {
+                            $$("#addbreakdowntype #EquipmentId").append("<option value=\"" + data.content[i].Id + "\">" + data.content[i].Name + "</option>");
+                        }
+                    }
+                }
+            });
+        }
+    })
+    //效验规则
+    $("#addbreakdowntype-form").validate({
+        //调试模式取消submit的默认提交功能
+        debug: false,
+        //错误处理
+        errorPlacement: function (error, element) {
+            myApp.hideIndicator();
+            $("#addbreakdowntype-submit").prop("disabled", false).removeClass("color-gray");
+        },
+        //错误样式
+        errorClass: "invalid-input",
+        submitHandler: function (form) {
+            CheckError("addbreakdowntype-submit", "addbreakdowntype-form");
+        }
+    });
+    //按钮点击事件
+    $("#addbreakdowntype-submit").on("click", function () {
+        if (!$("#addbreakdowntype-submit").prop("disabled")) {
+            $("#addbreakdowntype-submit").prop("disabled", true).addClass("color-gray");
+            setTimeout(function () {
+                $("#addbreakdowntype-form").submit();
+            }, 500);
+        }
+    });
+    //textarea字数计算
+    currentTextAreaLength("addbreakdowntype-form", "Describe", 200, "addDescribe-currentlen");
+    currentTextAreaLength("addbreakdowntype-form", "Recommand", 200, "addRecommand-currentlen");
+});
+myApp.onPageAfterBack("Add-schedule", function (page) {
+    $$.ajax({
+        url: "/QualityControl/Manager_ScheduleDetails",
+        data: {
+            date: $$("#calendar-inline-container").val() + "-01"
+        },
+        success: function (data) {
+            $$(".list-month").html(data);
+        }
+    });
+});
+//添加产量计划页
+myApp.onPageInit('Plan', function (page) {
     //创建picker
     var today = new Date();
     var currentYear = today.getFullYear();
     var currentMonth = (today.getMonth() + 1) < 10 ? "0" + (today.getMonth() + 1) : (today.getMonth() + 1);
-    
+
     var pickerInline = myApp.picker({
         input: '#calendar-inline-container',
         formatValue: function (p, values, displayValues) {
@@ -284,7 +376,7 @@ myApp.onPageInit('Setting', function (page) {
             $$.ajax({
                 url: "/QualityControl/Manager_ScheduleDetails",
                 data: {
-                    date: $$("#calendar-inline-container").val()+"-01"
+                    date: $$("#calendar-inline-container").val() + "-01"
                 },
                 success: function (data) {
                     $$(".list-month").html(data);
@@ -298,18 +390,6 @@ myApp.onPageInit('Setting', function (page) {
         $$(this).attr("href", url);
     });
 });
-myApp.onPageAfterBack("Add-schedule", function (page) {
-    $$.ajax({
-        url: "/QualityControl/Manager_ScheduleDetails",
-        data: {
-            date: $$("#calendar-inline-container").val() + "-01"
-        },
-        success: function (data) {
-            $$(".list-month").html(data);
-        }
-    });
-});
-//添加产量计划页
 myApp.onPageInit('Add-schedule', function (page) {
     //createCalendar("DateList",true,false)
     var today = new Date();
@@ -501,7 +581,7 @@ function ChangeDateFormat(val) {
 function CheckError(SubmitBtn, SubmitForm) {
     var pass = true;
     // 先字段信息
-    $("input.required").each(function () {
+    $("#"+SubmitForm+" "+"input.required").each(function () {
         if ($(this).val() == "") {
             $(this).attr("placeholder", "请输入信息").addClass("invalid-input");
             pass = false;
@@ -509,7 +589,7 @@ function CheckError(SubmitBtn, SubmitForm) {
             $(this).removeClass("invalid-input");
         }
     });
-    $("input.isnumber").each(function () {
+    $("#"+SubmitForm+ " " + "input.isnumber").each(function () {
         if ($(this).val() != "") {
             if (!isPInt($(this).val())) {
                 $(this).attr("placeholder", "请输入合法数字").addClass("invalid-input");
@@ -519,13 +599,13 @@ function CheckError(SubmitBtn, SubmitForm) {
             $(this).val("0");
         }
     });
-    $("textarea.required").each(function () {
+    $("#" + SubmitForm + " " + "textarea.required").each(function () {
         if ($(this).val() == "") {
             $(this).attr("placeholder", "请输入备注信息").addClass("invalid-input");
             pass = false;
         }
     });
-    $("textarea.maxlength_200").each(function () {
+    $("#" + SubmitForm + " " + "textarea.maxlength_200").each(function () {
         if ($(this).length > 200) {
             $(this).attr("placeholder", "超过字数").addClass("invalid-input");
             pass = false;
@@ -533,15 +613,16 @@ function CheckError(SubmitBtn, SubmitForm) {
     });
     // 然后弹窗信息
     if (pass) {
-        $("select.required").each(function () {
+        $("#" + SubmitForm + " " + "select.required").each(function () {
             if ($(this).val() == "- 请选择 -" || $(this).val() == null || $(this).val() == "") {
                 myApp.alert($(this).next().find(".item-title").html() + " 未选择");
                 pass = false;
+                return false;
             }
         });
     }
     if (pass) {
-        $(".photos").each(function () {
+        $("#" + SubmitForm + " " + ".photos").each(function () {
             var photoList = splitArray($(this).val());
             if (photoList.length == 0) {
                 myApp.alert("至少上传一张照片");
@@ -593,6 +674,7 @@ function CheckError(SubmitBtn, SubmitForm) {
     } else {
         $("#" + SubmitBtn).prop("disabled", false).removeClass("color-gray");
     }
+
 }
 //判断是否是正整数
 function isPInt(str) {
@@ -696,6 +778,22 @@ function createCalendar(calinput, multiplebool, closeOnSelectbool) {
             '<i class="icon icon-next">' + '</i>' + '</a>' + '</div>' + '</div>' + '</div>'
     });
     return calendarMultiple;
+}
+// 当前字数更新
+function currentTextAreaLength(pagename, id_name, max_length, result_id) {
+    var tl_c = $$("#" + id_name).val().length;
+    $$("#" + result_id).text(tl_c);
+    $$("#" + pagename).on("change", "#" + id_name, function () {
+        var tl = $$("#" + id_name).val().length;
+        if (tl < max_length) {
+            $$("#" + result_id).text(tl);
+        } else {
+            myApp.alert("已超出最大值，请重新填写或删除部分信息");
+            var str = $$("#" + id_name).val();
+            $$("#" + id_name).val(str.slice(0, 50));
+            $$("#" + result_id).text(max_length);
+        }
+    });
 }
 var time_col = [
     {

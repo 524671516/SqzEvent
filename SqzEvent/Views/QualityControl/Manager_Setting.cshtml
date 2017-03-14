@@ -1,49 +1,41 @@
-﻿@{
-    Layout = null;
-}
-<div class="navbar">
+﻿<div class="navbar">
     <div class="navbar-inner">
         <!-- We have home navbar without left link-->
-        <div class="center sliding">当月生产计划</div>
-        <div class="right">
-            <a href="/QualityControl/Manager_AddSchedule" class="link">编辑</a>
-        </div>
+        <div class="center sliding">设置</div>
     </div>
 </div>
 <!-- Pages, because we need fixed-through navbar and toolbar, it has additional appropriate classes-->
 <div class="pages navbar-through toolbar-through">
     <!-- Page, data-page contains page name-->
-    <div data-page="Setting" class="page" id="Setting">
+    <div data-page="History" class="page" id="History">
         <!-- Scrollable page content-->
         <div class="page-content">
-            @*<div class="content-block date-content">
-                <div style="padding:0; margin-right:-15px; width:auto" class="content-block-inner">
-                    <div id="calendar-inline-container">
-
-                    </div>
-                </div>
-            </div>*@
-            <div class="list-block">
+            <div class="list-block top-list">
                 <ul>
                     <li>
-                        <div class="item-content">
+                        <a href="/QualityControl/Manager_QCEquipmentList" class="item-link item-content">
+                            <div class="item-media"><i class="fa fa-wrench icon-css" aria-hidden="true"></i></div>
                             <div class="item-inner">
-                                <div class="item-title label">选择时间</div>
-                                <div class="item-input">
-                                    <input type="text" class="item-input-right" id="calendar-inline-container" name="calendar-inline-container" placeholder="选择时间" value="@DateTime.Now.ToString("yyyy-MM")" />
-                                </div>
+                                <div class="item-title">设备列表</div>
+                                <div class="item-after"></div>
                             </div>
-                        </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/QualityControl/Manager_QualityRegularTest" class="item-link item-content">
+                            <div class="item-media"><i class="fa fa-retweet icon-css" aria-hidden="true"></i></div>
+                            <div class="item-inner">
+                                <div class="item-title">产品列表</div>
+                                <div class="item-after" id="qrt_count">@Html.Encode(ViewBag.QRT_Cnt)</div>
+                            </div>
+                        </a>
                     </li>
                 </ul>
-            </div>
-                <div class="list-month">
-                </div>
-            <div class="list-describe">
             </div>
         </div>
     </div>
 </div>
+
 
 
 
