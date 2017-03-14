@@ -136,6 +136,20 @@ myApp.onPageInit("Manager_agendadetails", function (page) {
     });
 });
 //设置页
+myApp.onPageAfterAnimation('manager-equipment', function () {
+    if ($$("#equipment_fid").val() != "") {
+        $$.ajax({
+            url: "/QualityControl/Manager_QCEquipmentListPartial",
+            data: {
+                fid: $$("#equipment_fid").val()
+            },
+            success: function (data) {
+                $$("#equipment-list").html(data);
+                $$("#equipmentbar .right a").prop("href", "/QualityControl/Manager_CreateEquipment" + "?fid=" + $$("#equipment_fid").val());
+            }
+        })
+    }
+})
 myApp.onPageInit('manager-equipment', function (page) {
     $$('#manager-equipment').on('deleted',".swipeout", function (e) {
         $$.ajax({
@@ -184,6 +198,7 @@ myApp.onPageInit('manager-equipment', function (page) {
 });
 //新增设备
 myApp.onPageInit('addequipment', function (page) {
+    createCalendar("ManufactureDate", false, true);
     //效验规则
     $("#addequipment-form").validate({
         //调试模式取消submit的默认提交功能
@@ -213,6 +228,7 @@ myApp.onPageInit('addequipment', function (page) {
 });
 //修改设备信息
 myApp.onPageInit('editequipment', function (page) {
+    createCalendar("ManufactureDate", false, true)
     //效验规则
     $("#editequipment-form").validate({
         //调试模式取消submit的默认提交功能
@@ -225,7 +241,7 @@ myApp.onPageInit('editequipment', function (page) {
         //错误样式
         errorClass: "invalid-input",
         submitHandler: function (form) {
-            CheckError("editequipment-submit", "editequipment-form")
+            CheckError("editequipment-submit", "editequipment-form");
         }
     });
     //按钮点击事件
@@ -240,54 +256,69 @@ myApp.onPageInit('editequipment', function (page) {
     //textarea字数计算
     currentTextAreaLength("editequipment-form", "Subscribe", 200, "editequipment-currentlen");
 });
-//设备故障详情页
-myApp.onPageInit('manager_equipmentdetails', function (page) {
-    if ($$("#manager_equipmentdetails #Id").val() != "") {
+//设备故障页
+myApp.onPageAfterAnimation('manager_breakdownlist', function () {
+    if ($$("#manager_breakdownlist #FactoryId").val() != "" && $$("#manager_breakdownlist #EquipmentId").val() != "") {
+        $$("#breakdownbar .right a").prop("href", "/QualityControl/Manager_CreateBreakdown" + "?Fid=" + $$("#manager_breakdownlist #FactoryId").val() + "&&Eid=" + $$("#manager_breakdownlist #EquipmentId").val());
         $$.ajax({
-            url: "/QualityControl/Manager_EquipmentDetailsPartial",
+            url: "/QualityControl/Manager_BreakdownListPartial",
             data: {
-                Eid: $$("#manager_equipmentdetails #Id").val()
+                Eid: $$("#manager_breakdownlist #EquipmentId").val()
             },
             success: function (data) {
-                $("#manager_equipmentdetails  #breakdowm-list").html(data);
-            }
-        });
-    } else {
-        $("#breakdowm-list").html("<div class=\"content-block-title\">获取设备失败</div>");
-    }
-    $$('#manager_equipmentdetails').on('deleted', ".swipeout", function (e) {
-        $$.ajax({
-            url: $(this).attr("data-url"),
-            type: "post",
-            success: function (data) {
-                var _data = JSON.parse(data);
-                if (_data.result == "SUCCESS") {
-                    myApp.alert("删除成功");
-                    if ($$("#manager_equipmentdetails #Id").val() != "") {
-                        $$.ajax({
-                            url: "/QualityControl/Manager_EquipmentDetailsPartial",
-                            data: {
-                                Eid: $$("#manager_equipmentdetails #Id").val()
-                            },
-                            success: function (data) {
-                                $("#manager_equipmentdetails  #breakdowm-list").html(data);
-                            }
-                        })
-                    } else {
-                        $("#breakdowm-list").html("<div class=\"content-block-title\">获取设备失败</div>");
-                    }
-                } else {
-                    myApp.alert("删除失败");
-                }
+                $$("#breakdowntype-list").html(data);
             }
         })
-    });
+    }
+})
+myApp.onPageInit('manager_breakdownlist', function (page) {
+    $$("#manager_breakdownlist #factory-select").on("change", function () {
+        $$("#breakdowntype-list").html("");
+        $$("#manager_breakdownlist #EquipmentId").html("");
+        $$("#manager_breakdownlist #EquipmentId").append("<option value=\"\">- 请选择 -</option>");
+        $$("#manager_breakdownlist #equipment-select .item-after").text("- 请选择 -");
+        if ($$("#manager_breakdownlist #FactoryId").val() != "") {
+            $$("#breakdownbar .right a").prop("href", "/QualityControl/Manager_CreateBreakdown");
+            $$.ajax({
+                url: "/QualityControl/RefreshEquipmentListAjax",
+                data: {
+                    factoryId: $$("#manager_breakdownlist #FactoryId").val()
+                },
+                type: "post",
+                success: function (data) {
+                    data = JSON.parse(data);
+                    if (data.result == "SUCCESS") {
+                        for (var i = 0; i < data.content.length; i++) {
+                            $$("#manager_breakdownlist #EquipmentId").append("<option value=\"" + data.content[i].Id + "\">" + data.content[i].Name + "</option>");
+                        }
+                    }
+                }
+            });
+        }
+    })
+    $$("#manager_breakdownlist #equipment-select").on("change", function () {
+        if ($$("#manager_breakdownlist #FactoryId").val() != "" && $$("#manager_breakdownlist #EquipmentId").val() != "") {
+            $$("#breakdownbar .right a").prop("href", "/QualityControl/Manager_CreateBreakdown" + "?Fid=" + $$("#manager_breakdownlist #FactoryId").val() + "&&Eid=" + $$("#manager_breakdownlist #EquipmentId").val());
+            $$.ajax({
+                url: "/QualityControl/Manager_BreakdownListPartial",
+                data:{
+                    Eid: $$("#manager_breakdownlist #EquipmentId").val()
+                },
+                success: function (data) {
+                    $$("#breakdowntype-list").html(data);
+                }
+            })
+        } else {
+            $$("#breakdowntype-list").html("");
+            myApp.alert("请选择工厂或设备")
+        }
+    })
 });
 //新增故障类型页
 myApp.onPageInit('addbreakdowntype', function (page) {
     $$("#addbreakdowntype #factory-select").on("change", function () {
         $$("#addbreakdowntype #EquipmentId").html("");
-        $$("#addbreakdowntype #EquipmentId").append("<option>- 请选择 -</option>");
+        $$("#addbreakdowntype #EquipmentId").append("<option value=\"\">- 请选择 -</option>");
         $$("#addbreakdowntype #equipment-select .item-after").text("- 请选择 -");
         if ($$("#addbreakdowntype #FactoryId").val() != "") {
             $$.ajax({
@@ -334,6 +365,35 @@ myApp.onPageInit('addbreakdowntype', function (page) {
     //textarea字数计算
     currentTextAreaLength("addbreakdowntype-form", "Describe", 200, "addDescribe-currentlen");
     currentTextAreaLength("addbreakdowntype-form", "Recommand", 200, "addRecommand-currentlen");
+});
+myApp.onPageInit('editbreakdown', function (page) {
+    //效验规则
+    $("#editbreakdown-form").validate({
+        //调试模式取消submit的默认提交功能
+        debug: false,
+        //错误处理
+        errorPlacement: function (error, element) {
+            myApp.hideIndicator();
+            $("#editbreakdown-submit").prop("disabled", false).removeClass("color-gray");
+        },
+        //错误样式
+        errorClass: "invalid-input",
+        submitHandler: function (form) {
+            CheckError("editbreakdown-submit", "editbreakdown-form");
+        }
+    });
+    //按钮点击事件
+    $("#editbreakdown-submit").on("click", function () {
+        if (!$("#editbreakdown-submit").prop("disabled")) {
+            $("#editbreakdown-submit").prop("disabled", true).addClass("color-gray");
+            setTimeout(function () {
+                $("#editbreakdown-form").submit();
+            }, 500);
+        }
+    });
+    //textarea字数计算
+    currentTextAreaLength("editbreakdown-form", "Describe", 200, "editDescribe-currentlen");
+    currentTextAreaLength("editbreakdown-form", "Recommand", 200, "editRecommand-currentlen");
 });
 myApp.onPageAfterBack("Add-schedule", function (page) {
     $$.ajax({

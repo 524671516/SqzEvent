@@ -64,6 +64,16 @@
                             </div>
                         </li>
                         <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title label">制造时间</div>
+                                    <div class="item-input">
+                                        <input type="text" class="item-input-right" id="ManufactureDate" name="ManufactureDate" placeholder="请输入制造时间" required  value="@Html.Encode(Convert.ToDateTime(Model.ManufactureDate).ToString("yyyy-MM-dd"))"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
                             <div class="item-content middle-content">
                                 @Html.TextAreaFor(m => m.Subscribe, new { placeholder = "请输入设备描述", required = "required", maxlength = "200" })
                             </div>

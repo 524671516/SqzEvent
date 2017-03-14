@@ -624,13 +624,15 @@
     <Content Include="Views\WeekendBreak\Weekend_Error.cshtml" />
     <Content Include="Views\QualityControl\Manager_Plan.cshtml" />
     <Content Include="Views\QualityControl\Manager_EditEquipment.cshtml" />
-    <Content Include="Views\QualityControl\Manager_CreateEquipment.cshtml" />
     <Content Include="Views\QualityControl\Manager_QCEquipmentListPartial.cshtml" />
     <Content Include="Views\QualityControl\Manager_QCEquipmentList.cshtml" />
     <Content Include="Views\QualityControl\Manager_EquipmentDetails.cshtml" />
-    <Content Include="Views\QualityControl\Manager_EquipmentDetailsPartial.cshtml" />
-    <Content Include="Views\QualityControl\Manager_CreateBreakdowm.cshtml" />
     <Content Include="Views\QualityControl\Manager_BreakDownTypeDetails.cshtml" />
+    <Content Include="Views\QualityControl\Manager_CreateBreakdown.cshtml" />
+    <Content Include="Views\QualityControl\Manager_BreakdownListPartial.cshtml" />
+    <Content Include="Views\QualityControl\Manager_BreakdownList.cshtml" />
+    <Content Include="Views\QualityControl\Manager_CreateEquipment.cshtml" />
+    <Content Include="Views\QualityControl\Manager_EditBreakDownType.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

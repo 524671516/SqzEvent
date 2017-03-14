@@ -7,14 +7,14 @@
 <!-- Pages, because we need fixed-through navbar and toolbar, it has additional appropriate classes-->
 <div class="pages navbar-through toolbar-through">
     <!-- Page, data-page contains page name-->
-    <div data-page="History" class="page" id="History">
+    <div data-page="Setting" class="page" id="Setting">
         <!-- Scrollable page content-->
         <div class="page-content">
             <div class="list-block top-list">
                 <ul>
                     <li>
                         <a href="/QualityControl/Manager_QCEquipmentList" class="item-link item-content">
-                            <div class="item-media"><i class="fa fa-wrench icon-css" aria-hidden="true"></i></div>
+                            <div class="item-media"><i class="fa fa-list-alt icon-css" aria-hidden="true"></i></div>
                             <div class="item-inner">
                                 <div class="item-title">设备列表</div>
                                 <div class="item-after"></div>
@@ -22,11 +22,10 @@
                         </a>
                     </li>
                     <li>
-                        <a href="/QualityControl/Manager_QualityRegularTest" class="item-link item-content">
-                            <div class="item-media"><i class="fa fa-retweet icon-css" aria-hidden="true"></i></div>
+                        <a href="/QualityControl/Manager_BreakdownList" class="item-link item-content">
+                            <div class="item-media"><i class="fa fa-list-alt icon-css" aria-hidden="true"></i></div>
                             <div class="item-inner">
-                                <div class="item-title">产品列表</div>
-                                <div class="item-after" id="qrt_count">@Html.Encode(ViewBag.QRT_Cnt)</div>
+                                <div class="item-title">设备故障列表</div>
                             </div>
                         </a>
                     </li>

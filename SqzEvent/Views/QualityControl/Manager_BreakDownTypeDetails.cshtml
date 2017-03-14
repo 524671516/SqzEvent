@@ -35,8 +35,27 @@
                         <div class="item-content">
                             <div class="item-inner">
                                 <div class="item-title">权重</div>
-                                <div class="item-after">@Model.Priority</div>
+                                    @switch (Model.Priority)
+                                    {
+                                        case 1:
+                                            <div class="item-after">
+                                                高
+                                            </div>
+                                            break;
+                                        case 2:
+                                            <div class="item-after">
+                                                中
+                                            </div>
+                                            break;
+                                        case 3:
+                                            <div class="item-after">
+                                                低
+                                            </div>
+                                            break;
+
+                                    }
                             </div>
+ 
                         </div>
                     </li>
                     <li>

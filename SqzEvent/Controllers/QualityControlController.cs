@@ -1405,7 +1405,7 @@ namespace SqzEvent.Controllers
         public ActionResult Manager_QCEquipmentListPartial(int fid)
         {
             var equipmentlist = from m in _qcdb.QCEquipment
-                                where m.FactoryId == fid
+                                where m.FactoryId == fid&&m.Status!=-1
                                 orderby m.FactoryId descending
                                 select m;
             return PartialView(equipmentlist);
@@ -1417,18 +1417,17 @@ namespace SqzEvent.Controllers
             var factorylist = from m in _qcdb.Factory
                               orderby m.Id descending
                               select m;
+            QCEquipment model = new QCEquipment();
             if (fid == null)
             {
                 ViewBag.fl = new SelectList(factorylist, "Id", "SimpleName");
-                return View();
+                return View(model);
             }
             else
             {
                 ViewBag.fl = new SelectList(factorylist, "Id", "SimpleName", fid);
-                return View();
-            }
-            
-
+                return View(model);
+            }        
         }
 
         //提交添加设备
@@ -1440,7 +1439,6 @@ namespace SqzEvent.Controllers
                 QCEquipment item = new QCEquipment();
                 if (TryUpdateModel(item))
                 {
-                    item.ManufactureDate = DateTime.Now;
                     _qcdb.QCEquipment.Add(item);
                     _qcdb.SaveChanges();
                     return Content("SUCCESS");
@@ -1487,7 +1485,6 @@ namespace SqzEvent.Controllers
                 var item = new QCEquipment();
                 if (TryUpdateModel(item))
                 {
-                    item.ManufactureDate = DateTime.Now;
                     _qcdb.Entry(item).State = System.Data.Entity.EntityState.Modified;
                     _qcdb.SaveChanges();
                     return Content("SUCCESS");
@@ -1514,7 +1511,12 @@ namespace SqzEvent.Controllers
             {
                 try
                 {
-                    _qcdb.QCEquipment.Remove(equipment);
+                    equipment.Status = -1;
+                    foreach(var item in equipment.BreakdownType)
+                    {
+                        item.Status = -1;
+                        _qcdb.SaveChanges();
+                    }
                    _qcdb.SaveChanges();
                     return Json(new { result = "SUCCESS" });
                 }
@@ -1532,18 +1534,27 @@ namespace SqzEvent.Controllers
             var Equipment = _qcdb.QCEquipment.SingleOrDefault(m => m.Id == Eid);
             return View(Equipment);
         }
-        //设备详情之故障列表
-        public ActionResult Manager_EquipmentDetailsPartial(int Eid)
+        //设备故障页面
+        public ActionResult Manager_BreakdownList()
+        {
+            var factorylist = from m in _qcdb.Factory
+                              orderby m.Id descending
+                              select m;
+            ViewBag.fl = new SelectList(factorylist, "Id", "SimpleName");
+            return View();
+        }
+        //设备故障列表
+        public ActionResult Manager_BreakdownListPartial(int Eid)
         {
             var breakdownlist = from m in _qcdb.BreakdownType
-                                where m.EquipmentId == Eid
+                                where m.EquipmentId == Eid && m.Status != -1
                                 orderby m.Id descending
                                 select m;
             return PartialView(breakdownlist);
         }
 
         //设备故障添加
-        public ActionResult Manager_CreateBreakdowm(int? Fid, int? Eid)
+        public ActionResult Manager_CreateBreakdown(int? Fid, int? Eid)
         {
             var factorylist = from m in _qcdb.Factory
                               orderby m.Id descending
@@ -1552,17 +1563,18 @@ namespace SqzEvent.Controllers
                                where m.FactoryId == Fid
                                orderby m.Id descending
                                select m;
+            BreakdownType model = new BreakdownType();
             if (Fid == null || Eid == null)
             {
                 ViewBag.fl = new SelectList(factorylist, "Id", "SimpleName");
                 ViewBag.el = new SelectList(euipmentlist, "Id", "SimpleName");
-                return View();
+                return View(model);
             }
             else
             {
                 ViewBag.fl = new SelectList(factorylist, "Id", "SimpleName", Fid);
                 ViewBag.el = new SelectList(euipmentlist, "Id", "SimpleName",Eid);
-                return View();
+                return View(model);
             }       
         }
 
@@ -1597,6 +1609,44 @@ namespace SqzEvent.Controllers
             var breakdowntype = _qcdb.BreakdownType.SingleOrDefault(m => m.Id == Bid);
             return View(breakdowntype);
         }
+
+        //修改故障页面
+        public ActionResult Manager_EditBreakDownType(int Bid)
+        {
+            var item = _qcdb.BreakdownType.SingleOrDefault(m => m.Id == Bid);
+            if (item == null)
+            {
+                return View("NotFound");
+            }
+            else
+            {
+                var breakdowntype = _qcdb.BreakdownType.SingleOrDefault(m => m.Id == Bid);
+                return View(breakdowntype);
+            }
+        }
+
+        //提交修改
+        [HttpPost, ValidateAntiForgeryToken]
+        public ActionResult Manager_EditBreakDownType(int id, BreakdownType model)
+        {
+            if (ModelState.IsValid)
+            {
+                var item = new BreakdownType();
+                if (TryUpdateModel(item))
+                {
+                    _qcdb.Entry(item).State = System.Data.Entity.EntityState.Modified;
+                    _qcdb.SaveChanges();
+                    return Content("SUCCESS");
+                }
+                return Content("FAIL");
+            }
+            else
+            {
+                return Content("FAIL");
+            }
+
+        }
+
         //删除故障
         [HttpPost]
         public ActionResult DelBreakDownType(int Bid)
@@ -1610,7 +1660,7 @@ namespace SqzEvent.Controllers
             {
                 try
                 {
-                    _qcdb.BreakdownType.Remove(breakdowntype);
+                    breakdowntype.Status = -1;
                     _qcdb.SaveChanges();
                     return Json(new { result = "SUCCESS" });
                 }
