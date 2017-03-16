@@ -361,9 +361,10 @@ namespace SqzEvent.Controllers
             ViewBag.OpenId = openid;
             return View();
         }
+   
         public ActionResult Tjh_WechatPay_Success(string package)
         {
-            return Content("SUCCESS");
+            return View();
         }
 
         [HttpPost, ValidateAntiForgeryToken]

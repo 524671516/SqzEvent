@@ -13,6 +13,7 @@
     <title>寿全斋红糖姜茶微信支付</title>
     <meta name="author" content="寿全斋电子商务有限公司">
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
     <style>
         body {
             background-image: url('../../Content/images/tjh_wechatpay_background.jpg');
@@ -32,7 +33,7 @@
             margin:40px 20px 0 20px;
             position:absolute;
             color:#000;
-            height:25rem;
+            height:27rem;
             border-radius:10px;
         }
         .num{
@@ -60,13 +61,13 @@
             color:#000 !important;
         }
        .btn{
+            width:120px;
             background-color:#a41b37;
             color:#fff;
         }
         h3{
             margin:0;
         }
-
     </style>
 </head>
 <body>
@@ -90,18 +91,9 @@
                 <h3 id="order-money"  style="padding:40px;">支付金额:&nbsp;<span>&yen;&nbsp;</span><span>200</span></h3>
             </div>
             <div class="btn-box">
-                <a class="btn" id="start_pay">立即支付</a>
+                <button class="btn btn-lg" id="start_pay" ><span>立即支付</span></button>
             </div>
         </div>
-        @*<div class="content text-center hidden" id="after-pay">
-            <div class="num">
-                <h3 id="order-id">订单号:&nbsp;<span>&yen;&nbsp;</span><span>13456785244</span></h3>
-                <h3 id="order-money" style="padding:20px 0px;">支付金额:&nbsp;<span>&yen;&nbsp;</span><span>200</span></h3>
-            </div>
-            <div class="btn-box">
-                <a class="btn" id="start_pay">立即支付</a>
-            </div>
-        </div>*@
     </div>
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script type="text/javascript">
@@ -133,28 +125,34 @@
                     },
                     type: "post",
                     success: function (data) {
-                        $.ajax({
-                            type: "get",
-                            url: "/Pay/createPay",
-                            data: {
-                                "prepay_id": data.prepay_id
-                            },
-                            success: function (data) {
-                                alert("3");
-                                if (data.result == "SUCCESS") {
-                                    var _appId = data.appid;
-                                    var _timeStamp = data.timeStamp;
-                                    var _nonceStr = data.nonceStr;
-                                    var _package = data.package;
-                                    var _paySign = data.paySign;
-                                    callpay(_appId, _timeStamp, _nonceStr, _package, _paySign);
-                                    result = true;
+                        $("#start_pay").html("<i class=\"fa fa-spinner fa-spin fa-1x fa-fw\" style=\"color:#fff;\"></i>");
+                        if ($("#start_pay").prop("disabled") == false) {
+                            $("#start_pay").prop("disabled", true);
+                            $.ajax({
+                                type: "get",
+                                url: "/Pay/createPay",
+                                data: {
+                                    "prepay_id": data.prepay_id
+                                },
+                                success: function (data) {
+                                    alert("3");
+                                    if (data.result == "SUCCESS") {
+                                        var _appId = data.appid;
+                                        var _timeStamp = data.timeStamp;
+                                        var _nonceStr = data.nonceStr;
+                                        var _package = data.package;
+                                        var _paySign = data.paySign;
+                                        callpay(_appId, _timeStamp, _nonceStr, _package, _paySign);
+                                        result = true;
+                                    }
+                                    else if (data.result == "FAIL") {
+                                        $("#start_pay").html("<span>立即支付</span>").attr("disabled", false);
+                                    }
                                 }
-                                else if (data.result == "FAIL") {
-                                    alert("false");
-                                }
-                            }
-                        });
+                            });
+                        } else {
+                            $("#start_pay").html("<span>立即支付</span>").attr("disabled", false);
+                        }
                     }
                 });
             });

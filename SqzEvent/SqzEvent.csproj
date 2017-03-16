@@ -291,6 +291,7 @@
     <Content Include="Content\images\new_sanxing.jpg" />
     <Content Include="Content\images\new_xiaomi.jpg" />
     <Content Include="Content\images\period-aid-logo.png" />
+    <Content Include="Content\images\res.gif" />
     <Content Include="Content\images\sellertask-guide-01.jpg" />
     <Content Include="Content\images\sellertask-guide-02.jpg" />
     <Content Include="Content\images\sellertask-guide-03.jpg" />
@@ -626,6 +627,7 @@
     <Content Include="Views\WeekendBreak\Weekend_Error.cshtml" />
     <Content Include="Views\Promotion\Tjh_UserAttendance_Register_Success.cshtml" />
     <Content Include="Views\Promotion\Tjh_WechatPay.cshtml" />
+    <Content Include="Views\Promotion\Tjh_WechatPay_Success.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
