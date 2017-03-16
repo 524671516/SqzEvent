@@ -1,0 +1,79 @@
+﻿@model SqzEvent.Models.QCEquipment
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="left">
+            <a href="#" class="back link">
+                <i class="icon icon-back" aria-hidden="true"></i>
+                <span>返回</span>
+            </a>
+        </div>
+        <div class="center sliding">@Html.Encode(Model.SimpleName)</div>
+    </div>
+</div>
+<div class="pages">
+    <div class="page" data-page="manager_equipmentdetails" id="manager_equipmentdetails">
+        <div class="page-content">
+                <div class="list-block">
+                    <ul>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title">设备编号</div>
+                                    <div class="item-after">@Html.Encode(Model.ModelNumber)</div>
+                                </div>
+                            </div>
+
+                        </li>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title">所属工厂</div>
+                                    <div class="item-after">@Html.Encode(Model.Factory.SimpleName)</div>
+                                </div>
+                            </div>
+
+                        </li>
+                        <li>
+
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title">设备名称</div>
+                                    <div class="item-after">@Html.Encode(Model.Name)</div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title">设备简称</div>
+                                    <div class="item-after">@Html.Encode(Model.SimpleName)</div>
+                                </div>
+                            </div>
+
+                        </li>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title">制造时间</div>
+                                    <div class="item-after">@Html.Encode(Convert.ToDateTime(Model.ManufactureDate).ToString("yyyy-MM-dd"))</div>
+                                </div>
+                            </div>
+                        </li>  
+                        <li>
+                            <div class="item-content middle-content">
+                                <textarea disabled>@Model.Subscribe</textarea>
+                            </div>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title"></div>
+                                    <div class="item-after"><span id="addSimpleDescribe-currentlen">设备描述</span></div>
+                                </div>
+                            </div>
+                        </li>                                           
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+

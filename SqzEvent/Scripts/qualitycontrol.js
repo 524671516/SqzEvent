@@ -336,6 +336,11 @@ myApp.onPageInit("qualityregulartest", function (page) {
 新增故障报告 
 =========*/
 myApp.onPageInit("addbreakdown", function (page) {
+    //获取当前时间
+    var _date = new Date();
+    var hor = (_date.getHours() < 10) ? "0" + _date.getHours().toString() : _date.getHours().toString();
+    var min = (_date.getMinutes() < 10) ? "0" + _date.getMinutes().toString() : _date.getMinutes().toString();
+    var realmin = min[0] + (min[1] < 5 ? 0 : 5);
     var $equipmentselect = $("#equipment-select")          //设备选择
     var $factoryselect = $("#factory-select")              //工厂选择
     var $addbreakdownsubmit = $("#addbreakdown-submit");   //提交按钮
@@ -347,7 +352,7 @@ myApp.onPageInit("addbreakdown", function (page) {
             return values[0] + ':' + values[1];           //文本框显示格式
         },
         toolbarCloseText: "关闭",
-        value: ["10", "00"],
+        value: [hor, realmin],
         cols: time_col
     });
     $factoryselect.on("change", function () {
@@ -372,9 +377,13 @@ myApp.onPageInit("addbreakdown", function (page) {
                         for (var i = 0; i < data.content.length; i++) {
                             $$("#QCEquipmentId").append("<option value=\"" + data.content[i].Id + "\">" + data.content[i].Name + "</option>");
                         }
+                        $("#QCEquipmentLi").removeClass("hidden");
                     }
                 }
             });
+        } else {
+            $("#BreakDownTypeLi").addClass("hidden");
+            $("#QCEquipmentLi").addClass("hidden");
         }
     });
     $equipmentselect.on("change", function () {
@@ -382,7 +391,7 @@ myApp.onPageInit("addbreakdown", function (page) {
         $$("#BreakDownTypeId").append("<option>- 请选择 -</option>");
         $$("#BreakDownTypeId").val("");
         $$("#breakdowntype-select .item-after").text("- 请选择 -");
-        if ($$("#QCEquipmentId").val() != "") {
+        if ($$("#QCEquipmentId").val() != "" && $$("#QCEquipmentId").val() != "- 请选择 -") {
             $$.ajax({
                 url: "/QualityControl/RefreshBreakdownTypeListAjax",
                 data: {
@@ -395,9 +404,12 @@ myApp.onPageInit("addbreakdown", function (page) {
                         for (var i = 0; i < data.content.length; i++) {
                             $$("#BreakDownTypeId").append("<option value=\"" + data.content[i].Id + "\">" + data.content[i].Name + "</option>");
                         }
+                        $("#BreakDownTypeLi").removeClass("hidden");
                     }
                 }
             });
+        } else {
+            $("#BreakDownTypeLi").addClass("hidden");
         }
     });
     $addbreakdownform.validate({
@@ -669,16 +681,19 @@ myApp.onPageInit("addqualitytest", function (page) {
                         for (var i = 0; i < data.content.length; i++) {
                             $$("#ProductId").append("<option value=\"" + data.content[i].Id + "\">" + data.content[i].Name + "</option>");
                         }
+                        $("#productli").removeClass("hidden");
                     }
                 }
             });
+        } else {
+            $("#productli").addClass("hidden");
         }
     });
     $productselect.on("change", function () {
         $$("#template-content").html("");
         $$(".info-content").addClass("hidden");
         $addqualitytestsubmit.prop("disabled", true).addClass("color-gray");
-        if ($$("#ProductId").val() != "") {
+        if ($$("#ProductId").val() != "" && $$("#ProductId").val() != "- 请选择 -") {
             $$.ajax({
                 url: "/QualityControl/AddQualityTestPartial",
                 data: {

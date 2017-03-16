@@ -1,0 +1,119 @@
+﻿@model SqzEvent.Models.BreakdownType
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="left">
+            <a href="#" class="back link">
+                <i class="icon icon-back" aria-hidden="true"></i>
+                <span>返回</span>
+            </a>
+        </div>
+        <div class="center sliding"><strong>修改故障</strong></div>
+        <div class="right">
+            <a href="javascript:;" class="link" id="editbreakdown-submit">提交</a>
+        </div>
+    </div>
+</div>
+<div class="pages">
+    <div class="page" data-page="editbreakdown" id="editbreakdown">
+        <div class="page-content">
+            @using (Html.BeginForm("Manager_EditBreakDownType", "QualityControl", FormMethod.Post, new { @id = "editbreakdown-form", @class = "validate-form" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(m => m.Id);
+                @Html.HiddenFor(m=>m.EquipmentId)
+                <div class="list-block">
+                    <ul>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title label">所属工厂</div>
+                                    <div class="item-after">
+                                        @Html.Encode(Model.QCEquipment.Factory.SimpleName)
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title label">所属设备</div>
+                                    <div class="item-after">
+                                       @Html.Encode(Model.QCEquipment.SimpleName)
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="#" class="item-link smart-select" data-back-text="返回" data-back-on-select="true" data-searchbar-placeholder="选择权重" data-searchbar-cancel="取消" id="priority-select">
+                                @switch (Model.Priority)
+                                            {
+                                                case 1:
+                                        <select name="Priority" id="Priority">
+                                            <option value="1">高</option>
+                                            <option value="2">中</option>
+                                            <option value="3">低</option>
+                                        </select>
+                                        break;
+                                    case 2:
+                                        <select>
+                                            <option value="2">中</option>
+                                            <option value="1">高</option>
+                                            <option value="3">低</option>
+                                        </select>
+                                        break;
+                                    case 3:
+                                        <select>
+                                            <option value="3">低</option>
+                                            <option value="1">高</option>
+                                            <option value="2">中</option>
+                                        </select>
+                                        break;
+                                }
+                                <div class="item-content">
+                                    <div class="item-inner">
+                                        <div class="item-title">选择权重</div>
+                                        <div class="item-after">- 请选择 -</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>                                               
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title label">故障简称</div>
+                                    <div class="item-input">
+                                        <input type="text" class="item-input-right" id="SimpleDescribe" name="SimpleDescribe" placeholder="请输入故障简称" required  value="@Model.SimpleDescribe"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content middle-content">
+                                @Html.TextAreaFor(m => m.Describe, new { placeholder = "请输入故障描述", required = "required", maxlength = "200" })
+                            </div>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title"></div>
+                                    <div class="item-after"><span id="editDescribe-currentlen">0</span>/<span>200</span></div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content middle-content">
+                                @Html.TextAreaFor(m => m.Recommand, new { placeholder = "请输入故障修复方案", required = "required", maxlength = "200" })
+                            </div>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title"></div>
+                                    <div class="item-after"><span id="editRecommand-currentlen">0</span>/<span>200</span></div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+

@@ -1,0 +1,35 @@
+﻿@model IEnumerable<SqzEvent.Models.BreakdownType>
+@if (Model.Count() != 0)
+{
+            <div class="list-block">
+                <ul>
+                    @foreach (var item in Model)
+                    {
+                        <li class="swipeout" data-url="/QualityControl/DelBreakDownType?Bid=@item.Id">
+                            <div class="swipeout-content">
+                                <a href="/QualityControl/Manager_BreakDownTypeDetails?Bid=@item.Id" class="item-link item-content">
+                                    <div class="item-inner">
+                                        <div class="item-title-row">
+                                            <div class="item-title">@item.SimpleDescribe</div>
+                                            <div class="item-after"></div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="swipeout-actions-right">
+                                <a href="/QualityControl/Manager_EditBreakDownType?Bid=@item.Id" class="bg-green">修改</a>
+                                <a href="#" class="swipeout-delete" data-confirm="是否确认删除" data-confirm-title="寿全斋" data-close-on-cancel="true">删除</a>
+                            </div>
+
+                        </li>
+                    }
+                </ul>
+            </div>
+}
+else
+{
+    <div class="content-block-title">此设备暂未上报故障</div>
+}
+
+
+

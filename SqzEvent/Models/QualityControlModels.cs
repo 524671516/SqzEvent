@@ -195,6 +195,8 @@
     [Table("QCEquipment")]
     public partial class QCEquipment
     {
+        public int Status { get; set; }
+
         public int Id { get; set; }
 
         public int FactoryId { get; set; }
@@ -230,6 +232,8 @@
     [Table("BreakdownType")]
     public partial class BreakdownType
     {
+        public int Status { get; set; }
+
         public int Id { get; set; }
 
         public int EquipmentId { get; set; }

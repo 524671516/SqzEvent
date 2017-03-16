@@ -1,0 +1,55 @@
+﻿<div class="navbar">
+    <div class="navbar-inner" id="breakdownbar">
+        <div class="left">
+            <a href="#" class="back link">
+                <i class="icon icon-back" aria-hidden="true"></i>
+                <span>返回</span>
+            </a>
+        </div>
+        <div class="center sliding">设备故障列表</div>
+        <div class="right">
+            <a href="/QualityControl/Manager_CreateBreakdown">
+                <span>新增故障</span>
+            </a>
+        </div>
+    </div>
+</div>
+<div class="pages">
+    <div class="page" data-page="manager_breakdownlist" id="manager_breakdownlist">
+        <div class="page-content">
+            <div class="list-block top-list-2">
+                <ul>
+                    <li>
+                        <a href="#" class="item-link smart-select" id="factory-select" data-back-text="返回" data-back-on-select="true" data-searchbar-placeholder="选择工厂" data-searchbar-cancel="取消">
+                            @Html.DropDownList("FactoryId", ViewBag.fl as SelectList, "- 请选择 -")
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title">选择工厂</div>
+                                    <div class="item-after">- 请选择 -</div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="item-link smart-select" id="equipment-select" data-back-text="返回" data-back-on-select="true" data-searchbar-placeholder="选择设备" data-searchbar-cancel="取消">
+                            <select id="EquipmentId">
+                                <option value="">- 请选择 -</option>
+                            </select>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title">选择设备</div>
+                                    <div class="item-after">- 请选择 -</div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="list-block" id="breakdowntype-list">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+

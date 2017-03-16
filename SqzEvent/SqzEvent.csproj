@@ -642,6 +642,17 @@
     <Content Include="Views\Promotion\Tjh_UserAttendance_Error.cshtml" />
     <Content Include="Views\WeekendBreak\Weekend_NotAuthorized.cshtml" />
     <Content Include="Views\WeekendBreak\Weekend_Error.cshtml" />
+    <Content Include="Views\QualityControl\Manager_Plan.cshtml" />
+    <Content Include="Views\QualityControl\Manager_EditEquipment.cshtml" />
+    <Content Include="Views\QualityControl\Manager_QCEquipmentListPartial.cshtml" />
+    <Content Include="Views\QualityControl\Manager_QCEquipmentList.cshtml" />
+    <Content Include="Views\QualityControl\Manager_EquipmentDetails.cshtml" />
+    <Content Include="Views\QualityControl\Manager_BreakDownTypeDetails.cshtml" />
+    <Content Include="Views\QualityControl\Manager_CreateBreakdown.cshtml" />
+    <Content Include="Views\QualityControl\Manager_BreakdownListPartial.cshtml" />
+    <Content Include="Views\QualityControl\Manager_BreakdownList.cshtml" />
+    <Content Include="Views\QualityControl\Manager_CreateEquipment.cshtml" />
+    <Content Include="Views\QualityControl\Manager_EditBreakDownType.cshtml" />
     <Content Include="Views\Promotion\Tjh_UserAttendance_Register_Success.cshtml" />
     <Content Include="Views\Promotion\Tjh_WechatPay.cshtml" />
     <Content Include="Views\Promotion\Tjh_Distribution.cshtml" />
