@@ -8,12 +8,14 @@ using Microsoft.AspNet.Identity.Owin;
 using SqzEvent.DAL;
 using Microsoft.AspNet.Identity;
 using System.Threading.Tasks;
+using SqzEvent.Filters;
 
 namespace SqzEvent.Controllers
 {
     public class PromotionController : Controller
     {
         private PromotionModels db = new PromotionModels();
+        private AppPay paydb = new AppPay();
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         public PromotionController()
@@ -188,6 +190,7 @@ namespace SqzEvent.Controllers
             return PartialView("NotFound");
         }
 
+        #region 春糖会 2017
         // 春糖会 登陆
         public ActionResult Tjh_UserAttendanceStart(int type)
         {
@@ -217,6 +220,7 @@ namespace SqzEvent.Controllers
         }
 
         // 春糖会 报名
+        [StatisticsFilter(PageName ="春糖会报名入口", PageURL = "/Promotion/Tjh_UserAttendance_Register")]
         public ActionResult Tjh_UserAttendance_Register(string openid)
         {
             // 确认报名是否存在
@@ -230,6 +234,14 @@ namespace SqzEvent.Controllers
                 // 添加页面
                 Tjh_UserAttendance model = new Tjh_UserAttendance();
                 model.openid = openid;
+                WeChatUtilities utilities = new WeChatUtilities();
+                string _url = ViewBag.Url = Request.Url.ToString();
+                ViewBag.AppId = utilities.getAppId();
+                string _nonce = CommonUtilities.generateNonce();
+                ViewBag.Nonce = _nonce;
+                string _timeStamp = CommonUtilities.generateTimeStamp().ToString();
+                ViewBag.TimeStamp = _timeStamp;
+                ViewBag.Signature = utilities.generateWxJsApiSignature(_nonce, utilities.getJsApiTicket(), _timeStamp, _url);
                 return View(model);
             }
         }
@@ -254,7 +266,7 @@ namespace SqzEvent.Controllers
                     item.Status = 1;
                     db.Tjh_UserAttendance.Add(item);
                     await db.SaveChangesAsync();
-                    return RedirectToAction("Tjh_UserAttendance_Register_Done");
+                    return RedirectToAction("Tjh_UserAttendance_Register_Success");
                 }
                 else
                 {
@@ -266,8 +278,20 @@ namespace SqzEvent.Controllers
                 return View(model);
             }
         }
+        public ActionResult Tjh_UserAttendance_Register_Success()
+        {
+            return View();
+        }
         public ActionResult Tjh_UserAttendance_Register_Done()
         {
+            WeChatUtilities utilities = new WeChatUtilities();
+            string _url = ViewBag.Url = Request.Url.ToString();
+            ViewBag.AppId = utilities.getAppId();
+            string _nonce = CommonUtilities.generateNonce();
+            ViewBag.Nonce = _nonce;
+            string _timeStamp = CommonUtilities.generateTimeStamp().ToString();
+            ViewBag.TimeStamp = _timeStamp;
+            ViewBag.Signature = utilities.generateWxJsApiSignature(_nonce, utilities.getJsApiTicket(), _timeStamp, _url);
             return View();
         }
 
@@ -283,6 +307,14 @@ namespace SqzEvent.Controllers
                 item.ConfirmedDatetime = DateTime.Now;
                 db.Entry(item).State = System.Data.Entity.EntityState.Modified;
                 await db.SaveChangesAsync();
+                WeChatUtilities utilities = new WeChatUtilities();
+                string _url = ViewBag.Url = Request.Url.ToString();
+                ViewBag.AppId = utilities.getAppId();
+                string _nonce = CommonUtilities.generateNonce();
+                ViewBag.Nonce = _nonce;
+                string _timeStamp = CommonUtilities.generateTimeStamp().ToString();
+                ViewBag.TimeStamp = _timeStamp;
+                ViewBag.Signature = utilities.generateWxJsApiSignature(_nonce, utilities.getJsApiTicket(), _timeStamp, _url);
                 return View();
             }
             else
@@ -293,7 +325,86 @@ namespace SqzEvent.Controllers
 
         public ActionResult Tjh_UserAttendance_Signup_Fail()
         {
+            WeChatUtilities utilities = new WeChatUtilities();
+            string _url = ViewBag.Url = Request.Url.ToString();
+            ViewBag.AppId = utilities.getAppId();
+            string _nonce = CommonUtilities.generateNonce();
+            ViewBag.Nonce = _nonce;
+            string _timeStamp = CommonUtilities.generateTimeStamp().ToString();
+            ViewBag.TimeStamp = _timeStamp;
+            ViewBag.Signature = utilities.generateWxJsApiSignature(_nonce, utilities.getJsApiTicket(), _timeStamp, _url);
             return View();
         }
+        #endregion
+
+        #region 通用微信登陆端口
+        public ActionResult Wechat_Redirect(string url, string state)
+        {
+            string redirectUri = Url.Encode(url);
+            string appId = WeChatUtilities.getConfigValue(WeChatUtilities.APP_ID);
+            string redirect_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + appId + "&redirect_uri=" + redirectUri + "&response_type=code&scope=snsapi_base&state=" + state + "#wechat_redirect";
+
+            return Redirect(redirect_url);
+        }
+        #endregion
+
+        #region 春糖会 5元领优惠券
+        public ActionResult Tjh_WechatPay_Start(string code, string state)
+        {
+            WeChatUtilities util = new WeChatUtilities();
+            Wx_WebOauthAccessToken token = util.getWebOauthAccessToken(code);
+            return RedirectToAction("Tjh_WechatPay", new { openid = token.openid });
+        }
+
+        public ActionResult Tjh_WechatPay(string openid) 
+        {
+            ViewBag.OpenId = openid;
+            return View();
+        }
+        public ActionResult Tjh_WechatPay_Success(string package)
+        {
+            return Content("SUCCESS");
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public JsonResult Tjh_WechatPay_SetMoney(string _openId, string body)
+        {
+            //随机数字，并且生成Prepay
+            string appid = WeChatUtilities.getConfigValue(WeChatUtilities.APP_ID);
+            string mch_id = WeChatUtilities.getConfigValue(WeChatUtilities.MCH_ID);
+            //先确认，之后做随机数
+            string nonce_str = CommonUtilities.generateNonce();
+            string out_trade_no = "WXJSAPI_" + DateTime.Now.Ticks;
+            int total_fee = 10;
+            try
+            {
+                AppPayUtilities pay = new AppPayUtilities();
+                Wx_OrderResult result = pay.createUnifiedOrder(_openId, body, out_trade_no, total_fee, WeChatUtilities.TRADE_TYPE_JSAPI, "");
+                if (result.Result == "SUCCESS")
+                {
+                    WxPaymentOrder order = new WxPaymentOrder()
+                    {
+                        Body = body,
+                        Time_Start = DateTime.Now,
+                        Mch_Id = mch_id,
+                        Open_Id = _openId,
+                        Trade_No = out_trade_no,
+                        Total_Fee = total_fee,
+                        Prepay_Id = result.PrepayId,
+                        Trade_Status = WeChatUtilities.TRADE_STATUS_CREATE,
+                        Trade_Type = WeChatUtilities.TRADE_TYPE_JSAPI
+                    };
+                    paydb.WxPaymentOrder.Add(order);
+                    paydb.SaveChanges();
+                    return Json(new { result = "SUCCESS", prepay_id = result.PrepayId, total_fee }, JsonRequestBehavior.AllowGet);
+                }
+                return Json(new { result = "FAIL", msg = result.Message }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return Json(new { result = "FAIL", msg = e.ToString() }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        #endregion
     }
 }
