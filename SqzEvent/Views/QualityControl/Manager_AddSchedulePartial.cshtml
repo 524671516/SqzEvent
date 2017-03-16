@@ -1,4 +1,8 @@
 ﻿@model IEnumerable<SqzEvent.Models.Product>
+@using SqzEvent.Models;
+@{ 
+    var schedule = ViewBag.ScheduleList as IEnumerable<ProductionSchedule>;
+}
 
 <div class="content-block-title">生产计划</div>
 <div class="list-block">
@@ -10,7 +14,18 @@
                 <div class="item-inner">
                     <div class="item-title label">@item.SimpleName</div>
                     <div class="item-input">
-                        <input type="digits" id="@item.ProductCode" name="@item.ProductCode" placeholder="请输入数量" class="item-input-right isnumber"/>
+                        @{
+                            var singleschedule = schedule.SingleOrDefault(m => m.ProductId == item.Id);
+                            if (singleschedule != null)
+                            {
+                                <input type="digits" id="@item.ProductCode" name="@item.ProductCode" placeholder="请输入数量" class="item-input-right isnumber" value="@singleschedule.ProductionPlan"/>
+                            }
+                            else
+                            {
+                                <input type="digits" id="@item.ProductCode" name="@item.ProductCode" placeholder="请输入数量" class="item-input-right isnumber" />
+                            }
+                        }
+                        
                     </div>
                     <div class="item-after unit">盒</div>
                 </div>

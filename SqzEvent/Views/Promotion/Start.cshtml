@@ -1,0 +1,39 @@
+﻿@model SqzEvent.Models.SurveyedUser
+@{
+    ViewBag.Title = "寿全斋问卷调查";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Titles</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/build.css" rel="stylesheet" />
+    <link href="~/Content/Site.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <div class="logo-content row">
+            <div class="col-xs-4"></div>
+            <div class="col-xs-4"><img class="img-responsive" src="~/Content/logo-white.png" /></div>
+            <div class="col-xs-4"></div>
+        </div>
+        <div class="row">
+            <div class="libtitle col-xs-12">感谢您参与寿全斋此次的问卷调查，在正式完成问卷前请您先填写真实的背景信息。</div>
+        </div>
+        <a id="next-submit" class="btn" href="https://event.shouquanzhai.cn/Promotion/Manager_UpdateUserInfo?libId=2"><strong>开始答题</strong></a>
+    </div>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/jquery.form.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+</body>
+</html>
+
+
+
+
+

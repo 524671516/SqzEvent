@@ -1,0 +1,32 @@
+﻿@model IEnumerable<SqzEvent.Models.Off_SalesEvent>
+@if (Model.Count() == 0)
+{
+    <div class="content-block-title">无活动签呈</div>
+}
+else
+{
+    <ul>
+     
+        @foreach (var item in Model)
+        {
+        <li class="swipeout" data-url="@item.Id">
+            <div class="swipeout-content">
+                <a href="/Seller/Manager_EditSalesEvent?id=@item.Id" class="item-link item-content random-param">
+                    <div class="item-inner">
+                        <div class="item-title-row">
+                            <div class="item-title">@Html.Encode(item.EventTitle)</div>
+                            <div class="item-after">@Html.Encode(item.Off_StoreSystem.SystemName)</div>
+                        </div>
+                        <div class="item-subtitle color-gray"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;@Html.Encode(item.StartDate.ToString("yyyy/MM/dd")+"-"+ item.EndDate.ToString("yyyy/MM/dd"))&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-paperclip" aria-hidden="true"></i>&nbsp;@Html.ManagerRequestStatus(item.Status)</div>
+                    </div>
+                </a>
+            </div>
+                <div class="swipeout-actions-right">
+                    <a href="#" class="swipeout-delete" data-confirm="是否确认作废" data-confirm-title="寿全斋" data-close-on-cancel="true" data-url="@item.Id">作废</a>
+                </div>          
+        </li>
+        }
+
+    </ul>
+}
+

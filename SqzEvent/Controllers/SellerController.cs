@@ -2071,12 +2071,11 @@ namespace SqzEvent.Controllers
         [Authorize(Roles = "Administrator")]
         [SettingFilter(SettingName = "BONUS")]
         [HttpPost]
-        public ActionResult Manager_BonusConfirm(int id)
+        public async Task<ActionResult> Manager_BonusConfirm(int id)
         {
             AppPayUtilities apppay = new AppPayUtilities();
             Random random = new Random();
             CommonUtilities.writeLog(DateTime.Now.ToShortTimeString() + "红包");
-
             try
             {
                 var item = offlineDB.Off_BonusRequest.SingleOrDefault(m => m.Id == id);
@@ -2092,7 +2091,7 @@ namespace SqzEvent.Controllers
                         item.CommitUserName = User.Identity.Name;
                         item.CommitTime = DateTime.Now;
                         offlineDB.Entry(item).State = System.Data.Entity.EntityState.Modified;
-                        offlineDB.SaveChanges();
+                        await offlineDB.SaveChangesAsync();
                         return Json(new { result = "SUCCESS" });
                     }
                     else

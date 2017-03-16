@@ -1,0 +1,119 @@
+﻿@model SqzEvent.Models.Off_SalesEvent
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="left">
+            <a href="#" class="back link">
+                <i class="icon icon-back" aria-hidden="true"></i>
+                <span>返回</span>
+            </a>
+        </div>
+        <div class="center sliding">活动详情</div>
+    </div>
+</div>
+<div class="pages">
+    <div class="page" data-page="manager-task-eventdetail" id="manager-task-eventdetail">
+        <div class="page-content">
+            <div class="content-block-title">申报信息</div>
+                <div class="list-block">
+                    <ul>              
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title label">活动标题</div>
+                                    <div class="item-after">                                   
+                                        @Html.Encode(Model.EventTitle)
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title label">申请人</div>
+                                    <div class="item-after">
+                                        @Html.ManagerNickName(Model.CreateUserName, (int)ViewBag.SystemId)
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title label">开始时间</div>
+                                    <div class="item-after">
+                                        @Html.Encode(Model.StartDate.ToString("yyyy-MM-dd"))
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title label">结束时间</div>
+                                    <div class="item-after">
+                                        @Html.Encode(Model.EndDate.ToString("yyyy-MM-dd"))
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>                                                        
+                                <div class="item-content">
+                                    <div class="item-inner">
+                                        <div class="item-title">渠道</div>
+                                        <div class="item-after">
+                                            @Html.Encode(Model.Off_StoreSystem.SystemName)
+                                        </div>
+                                    </div>
+                                </div>
+                        </li>                       
+                        <li class="accordion-item">
+                            <a href="#" class="item-content item-link">
+                                <div class="item-inner">
+                                    <div class="item-title">活动店铺</div>
+                                    <div class="item-after">
+                                        点击查看
+                                    </div>
+                                </div>
+                            </a>
+                            <div class="accordion-item-content">
+                                <div class="content-block">
+                                    <p>
+                                        @if (Model.Off_Store.Count() == 1)
+                                        {
+                                            foreach (var item in Model.Off_Store)
+                                            {
+                                                @Html.Encode(@item.StoreName.ToString())
+                                            }
+                                        }
+                                        else
+                                        {
+                                            foreach (var item in Model.Off_Store)
+                                            {
+                                                @Html.Encode(@item.StoreName.ToString() + ",")
+                                            }
+                                        }
+                                       
+                                    </p>
+                                </div>
+                            </div>
+                        </li>                      
+                        <li>
+                            <div class="item-content">
+                                @Html.TextAreaFor(m => m.EventDetails, new { placeholder = "请输入需求详细信息", @class = "", @required = "required", @maxlength = "500" ,@readonly = "readonly"})
+                            </div>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title"></div>
+                                    <div class="item-after">
+                                        活动备注
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+        </div>
+    </div>
+</div>
+

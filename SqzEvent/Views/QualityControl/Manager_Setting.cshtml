@@ -4,9 +4,9 @@
 <div class="navbar">
     <div class="navbar-inner">
         <!-- We have home navbar without left link-->
-        <div class="center sliding">设置</div>
+        <div class="center sliding">当月生产计划</div>
         <div class="right">
-            <a href="/QualityControl/Manager_AddSchedule" class="link">添加</a>
+            <a href="/QualityControl/Manager_AddSchedule" class="link">编辑</a>
         </div>
     </div>
 </div>
@@ -16,11 +16,29 @@
     <div data-page="Setting" class="page" id="Setting">
         <!-- Scrollable page content-->
         <div class="page-content">
-            <div class="content-block date-content">
+            @*<div class="content-block date-content">
                 <div style="padding:0; margin-right:-15px; width:auto" class="content-block-inner">
-                    <div id="calendar-inline-container"></div>
+                    <div id="calendar-inline-container">
+
+                    </div>
                 </div>
+            </div>*@
+            <div class="list-block">
+                <ul>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title label">选择时间</div>
+                                <div class="item-input">
+                                    <input type="text" class="item-input-right" id="calendar-inline-container" name="calendar-inline-container" placeholder="选择时间" value="@DateTime.Now.ToString("yyyy-MM")" />
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
             </div>
+                <div class="list-month">
+                </div>
             <div class="list-describe">
             </div>
         </div>

@@ -330,6 +330,68 @@ namespace SqzEvent.DAL
             }
             return "SUCCESS";
         }
+        #region 创建微信统一下单
+        /// <summary>
+        /// 创建微信统一下单
+        /// </summary>
+        /// <param name="openid"></param>
+        /// <param name="body"></param>
+        /// <param name="out_trade_no"></param>
+        /// <param name="total_fee"></param>
+        /// <param name="trade_type"></param>
+        public Wx_OrderResult createUnifiedOrder(string openid, string body, string out_trade_no, int total_fee, string trade_type, string device_no)
+        {
+            string appid = WeChatUtilities.getConfigValue(WeChatUtilities.APP_ID);
+            string mch_id = WeChatUtilities.getConfigValue(WeChatUtilities.MCH_ID);
+            //先确认，之后做随机数
+            string nonce_str = CommonUtilities.generateNonce();
+            //string out_trade_no = "WX" + CommonUtilities.generateTimeStamp();
+            string spbill_create_ip = WeChatUtilities.getConfigValue(WeChatUtilities.IP);
+            string notify_url = AppPayUtilities.notify_url;
+            List<QueryParameter> parameters = new List<QueryParameter>();
+            parameters.Add(new QueryParameter("appid", appid));
+            parameters.Add(new QueryParameter("mch_id", mch_id));
+            parameters.Add(new QueryParameter("nonce_str", nonce_str));
+            parameters.Add(new QueryParameter("body", body));
+            parameters.Add(new QueryParameter("out_trade_no", out_trade_no));
+            parameters.Add(new QueryParameter("total_fee", total_fee.ToString()));
+            parameters.Add(new QueryParameter("spbill_create_ip", spbill_create_ip));
+            parameters.Add(new QueryParameter("notify_url", notify_url));
+            parameters.Add(new QueryParameter("trade_type", trade_type));
+            parameters.Add(new QueryParameter("openid", openid));
+            if (device_no != "")
+            {
+                parameters.Add(new QueryParameter("device_info", device_no));
+            }
+            string sign = WeChatUtilities.createPaySign(parameters);
+            string xml_content = parseXml(parameters, sign);
+            string post_url = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+            var request = WebRequest.Create(post_url) as HttpWebRequest;
+            try
+            {
+
+                request.Method = "post";
+                StreamWriter streamWriter = new StreamWriter(request.GetRequestStream());
+                streamWriter.Write(xml_content);
+                streamWriter.Flush();
+                streamWriter.Close();
+                var response = (HttpWebResponse)request.GetResponse();
+                StreamReader reader = new StreamReader(response.GetResponseStream());
+                string result = reader.ReadToEnd();
+                XmlDocument doc = new XmlDocument();
+                doc.LoadXml(result);
+                string fromUser = doc.GetElementsByTagName("return_code")[0].InnerText;
+                string returnText = doc.GetElementsByTagName("return_msg")[0].InnerText;
+                string prepay_id = doc.GetElementsByTagName("prepay_id")[0].InnerText;
+                return new Wx_OrderResult("SUCCESS", prepay_id, "OK");
+
+            }
+            catch (Exception e)
+            {
+                return new Wx_OrderResult("FAIL", "", e.ToString());
+            }
+        }
+        #endregion
         private string parseXml(List<QueryParameter> parameters, string sign)
         {
             var list = parameters.OrderBy(m => m.Name).ToList();

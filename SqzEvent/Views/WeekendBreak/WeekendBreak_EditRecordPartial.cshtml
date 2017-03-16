@@ -1,0 +1,29 @@
+﻿@using SqzEvent.Models
+@model IEnumerable<SqzEvent.Models.Wx_WeekendBreakItem>
+@{
+    var recorditemlist = ViewBag.RecordList as List<Wx_WeekendBreakItem>;
+    var productlist = ViewBag.ProductList as IEnumerable<Off_Product>;
+}
+
+    @foreach (var p in productlist)
+    {
+        var currentSales = Model.SingleOrDefault(m => m.ProductId == p.Id) != null ? Model.SingleOrDefault(m => m.ProductId == p.Id).SalesCount : 0;
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <div class="item-title">@Html.Encode(p.SimpleName)</div>
+            </div>
+            <div class="weui-cell_hd" style="line-height:28px;">
+                <span class="sum-sale c_num" id="sales-sum_@p.Id">@Html.Encode(recorditemlist.Where(m => m.ProductId == p.Id).Sum(e => e.SalesCount))</span>
+                <span class="hidden" id="sales-org_@p.Id">@Html.Encode(recorditemlist.Where(m => m.ProductId == p.Id).Sum(e => e.SalesCount))</span>
+            </div>
+            <div class="weui-cell__ft">
+                <div class="input-group">
+                    <a class="input-group-addon reduce" data-step="1" href="javascript:reduce('sales_@p.Id',1)"><i class="fa fa-minus" aria-hidden="true"></i></a>
+                    <input type="tel" class="weui-input sale-input" id="sales_@p.Id" name="sales_@p.Id" value="@currentSales" onchange="javascript:salesChanges('sales-sum_@p.Id','sales-org_@p.Id', 'sales_@p.Id');">
+                    <a class="input-group-addon add" data-step="1" href="javascript:add('sales_@p.Id',1)"><i class="fa fa-plus" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+    }
+
+

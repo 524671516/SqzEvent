@@ -1,0 +1,16 @@
+﻿@using SqzEvent.Models
+@model SqzEvent.Models.Off_WeekendBreakRecord
+
+<div class="weui-flex weui-flex-table" onclick="javascript:showActionSheet(@Model.Id);" id="recorditem_@Model.Id">
+    <div class="weui-flex-time weui-flex-content"><div class="placeholder">@Model.UploadTime.ToString("HH:mm")</div></div>
+    <div class="weui-flex-num weui-flex-content"><div class="placeholder">@Model.SalesCount</div></div>
+    <div class="weui-flex-num weui-flex-content"><div class="placeholder">@Model.TrailCount</div></div>
+    <div class="weui-flex__item weui-flex-details">
+        <div class="placeholder">
+            @foreach (var item in ViewBag.ItemList as List<Wx_WeekendBreakItem>)
+            {
+                @Html.Encode(item.ProductName + ":" + item.SalesCount + " ")
+            }
+        </div>
+    </div>
+</div>

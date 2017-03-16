@@ -1,0 +1,74 @@
+﻿@model SqzEvent.Models.Off_SalesEvent
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="left">
+            <a href="#" class="back link">
+                <i class="icon icon-back" aria-hidden="true"></i>
+                <span>返回</span>
+            </a>
+        </div>
+        <div class="center sliding">活动审核</div>
+    </div>
+</div>
+<div class="pages">
+    <div class="page" data-page="admin-task-eventconfirm" id="admin-task-eventconfirm">
+        <div class="page-content">
+            @using (Html.BeginForm("Admin_ConfirmSalesEvent", "Seller", FormMethod.Post, new { @class = "validate-form", id = "adminconfirm-form" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(m => m.Status)
+                @Html.HiddenFor(m => m.Id)
+                @Html.HiddenFor(m => m.EventType)
+                @Html.HiddenFor(m => m.CommitDateTime)
+                @Html.HiddenFor(m => m.CommitUserName)
+                @Html.HiddenFor(m => m.CreateUserName)
+                @Html.HiddenFor(m => m.CreateDateTime)
+                @Html.HiddenFor(m => m.OrderDetails)
+                @Html.HiddenFor(m => m.EventTypeName)
+                @Html.HiddenFor(m=>m.Off_StoreSystem_Id)
+                @Html.HiddenFor(m=>m.EndDate)
+                @Html.HiddenFor(m=>m.EventDetails)
+                @Html.HiddenFor(m=>m.StartDate)
+                @Html.HiddenFor(m=>m.EventTitle)
+                <div class="list-block">
+                    <ul>                    
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title label">活动编号</div>
+                                    <div class="item-input">
+                                        @Html.TextBoxFor(m => m.SerialNo, new { placeholder = "请输入活动编号", @class = "item-input-right", @required = "required", @maxlength = "20" })
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title label">活动经费</div>
+                                    <div class="item-input">
+                                        @Html.TextBoxFor(m => m.CostAmount, new { placeholder = "请输入活动经费", @class = "item-input-right", @number=true })
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title label">活动订货数</div>
+                                    <div class="item-input">
+                                        @Html.TextBoxFor(m => m.OrderAmount, new { placeholder = "请输入订货数", @class = "item-input-right",  @number = true })
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="content-block">
+                    <a href="javascript:;" class="button button-big button-fill" id="eventconfirm-btn">提交</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,97 @@
+﻿@model SqzEvent.Models.Off_WeekendBreak
+@{
+    Layout = "~/Views/Shared/_WeekendBreak.cshtml";
+}
+<div class="page__header">数据汇总</div>
+<br />
+<div class="weui-cells">
+    <div class="weui-cell">
+        <div class="weui-cell__bd">
+            <p>@Html.Encode(Model.Off_Checkin_Schedule.Off_Store.StoreName)</p>
+        </div>
+        <div class="weui-cell__ft">@Html.Encode(@Model.Subscribe.ToString("yyyy-MM-dd"))</div>
+    </div>
+</div>
+<br />
+<div class="weui-flex weui-flex-table">
+    <div class="weui-flex-time weui-flex-header"><div class="placeholder">时间</div></div>
+    <div class="weui-flex-num weui-flex-header"><div class="placeholder">销量</div></div>
+    <div class="weui-flex-num weui-flex-header"><div class="placeholder">试饮</div></div>
+    <div class="weui-flex__item weui-flex-header"><div class="placeholder">明细</div></div>
+</div>
+@foreach (var item in Model.Off_WeekendBreakRecord.OrderByDescending(m=>m.UploadTime))
+{
+    Html.RenderAction("WeekendBreak_ViewRecordPartial", "WeekendBreak", new { recordId = item.Id });
+}
+<div style="border-top:1px solid #d9d9d9;">
+    </div>
+<div class="weui-btn-area">
+    <a class="weui-btn weui-btn_default" href="/WeekendBreak/WeekendBreak_Home">返回</a>
+</div>
+<br /><br />
+<div class="">
+    <div class="weui-mask hidden" id="iosMask" style="opacity: 1;"></div>
+    <div class="weui-actionsheet" id="iosActionsheet" >
+        <div class="weui-actionsheet__menu">
+            <div class="weui-actionsheet__cell" id="iosActionsheetEdit">修改</div>
+        </div>
+        <div class="weui-actionsheet__menu">
+            <div class="weui-actionsheet__cell" id="iosActionsheetDelete">删除</div>
+        </div>
+        <div class="weui-actionsheet__action">
+            <div class="weui-actionsheet__cell" id="iosActionsheetCancel">取消</div>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="currentid"/>
+<div id="toast" style="display:none;">
+    <div class="weui-mask_transparent"></div>
+    <div class="weui-toast">
+        <i class="weui-icon-success-no-circle weui-icon_toast"></i>
+        <p class="weui-toast__content">删除成功</p>
+    </div>
+</div>
+@section scripts{
+    <script>
+        $iosMask = $("#iosMask");
+        $iosActionsheet = $("#iosActionsheet");
+        function showActionSheet(recordId) {
+            $iosActionsheet.addClass('weui-actionsheet_toggle');
+            $iosMask.fadeIn(200);
+            $("#currentid").val(recordId);
+        }
+        
+        function hideActionSheet() {
+            $iosActionsheet.removeClass('weui-actionsheet_toggle');
+            $iosMask.fadeOut(200);
+        }
+        $iosMask.on('click', hideActionSheet);
+        $('#iosActionsheetCancel').on('click', hideActionSheet);
+        $("#showIOSActionSheet").on("click", function () {
+            $iosActionsheet.addClass('weui-actionsheet_toggle');
+            $iosMask.fadeIn(200);
+        });
+        $("#iosActionsheetDelete").click(function () {
+            $.ajax({
+                url: "/WeekendBreak/WeekendBreak_DeleteRecord",
+                data: {
+                    recordId: $("#currentid").val()
+                },
+                type: "post",
+                success: function (data) {
+                    if (data == "SUCCESS") {
+                        $("#toast").fadeIn(100);
+                        hideActionSheet();
+                        setTimeout(function () {
+                            $("#toast").fadeOut(100);
+                            $("#recorditem_" + $("#currentid").val()).remove();
+                        }, 2000);
+                    }
+                }
+            });
+        });
+        $("#iosActionsheetEdit").click(function () {
+            window.location.href = "WeekendBreak_EditRecord?recordid=" + $("#currentid").val();
+        });
+    </script>
+    }

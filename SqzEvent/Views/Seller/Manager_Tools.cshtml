@@ -12,7 +12,7 @@
         <div class="page-content">
             <div class="content-block-title">管理工具</div>
             <div class="list-block">
-                <ul>
+                <ul>                  
                     <li>
                         <a href="/Seller/Manager_ReportList" class="item-link item-content">
                             <div class="item-inner">
@@ -49,7 +49,7 @@
                             </div>
                         </a>
                     </li>
-                    @if (User.IsInRole("Senior"))
+                    @if (User.IsInRole("Administrator"))
                     {
                     <li>
                         <a href="/Seller/Manager_BonusList" class="item-link item-content">

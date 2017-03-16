@@ -137,123 +137,200 @@ myApp.onPageInit("Manager_agendadetails", function (page) {
 });
 //设置页
 myApp.onPageInit('Setting', function (page) {
-    var monthNames = ['1月', '2月', '3月', '4月 ', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
-    var calendarInline = myApp.calendar({
-        container: '#calendar-inline-container',
-        value: [new Date()],
-        weekHeader: false,
-        toolbarTemplate:
-            '<div class="toolbar calendar-custom-toolbar">' +
-                '<div class="toolbar-inner">' +
-                    '<div class="left">' +
-                        '<a href="#" class="link icon-only"><i class="icon icon-back"></i></a>' +
-                    '</div>' +
-                    '<div class="center"></div>' +
-                    '<div class="right">' +
-                        '<a href="#" class="link icon-only"><i class="icon icon-forward"></i></a>' +
-                    '</div>' +
-                '</div>' +
-            '</div>',
-        onOpen: function (p) {
-            $$('.calendar-custom-toolbar .center').text(p.currentYear + "年" + monthNames[p.currentMonth]);
-            $$('.calendar-custom-toolbar .left .link').on('click', function () {
-                calendarInline.prevMonth();
-            });
-            $$('.calendar-custom-toolbar .right .link').on('click', function () {
-                calendarInline.nextMonth();
-            });
-            $$.ajax({
-                url: "/QualityControl/Manager_MonthChange",
-                data: {
-                    year: p.currentYear,
-                    month: p.currentMonth + 1
-                }, type: "post",
-                success: function (e) {
-                    var data = JSON.parse(e);
-                    for (var i = 0; i < data.result.length; i++) {                     
-                        var _date = ChangeDateFormat(data.result[i].Key);
-                        _date1 = data.result[i].Key.substring(data.result[i].Key.indexOf("(")+1, data.result[i].Key.indexOf(")"))
-                        if (data.result[i].result) {
-                            $(".picker-calendar-day[data-date='" + _date + "']").find("span").addClass("picker-calendar-day-green");
-                        }
-                        else {
-                            var _today = new Date().getTime();                         
-                            if (_today >= _date1) {
-                                $(".picker-calendar-day[data-date='" + _date + "']").find("span").addClass("picker-calendar-day-red");
-                            }
-                            else {
-                                $(".picker-calendar-day[data-date='" + _date + "']").find("span").addClass("picker-calendar-day-gray");
-                            }
-                        }
-                    }
-                    month = p.currentMonth + 1
-                    day = new Date();
-                    _day = day.getDate();
-                    $$.ajax({
-                        url: "/QualityControl/Manager_ScheduleDetails",
-                        data: {
-                            date: p.currentYear + "-" + month + "-" + _day
-                        },
-                        success: function (data) {
-                            $$(".list-describe").html(data);
-                        }
-                    });
-                }
-            });
+    //var monthNames = ['1月', '2月', '3月', '4月 ', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+    //var calendarInline = myApp.calendar({
+    //    rotateEffect: true,
+    //    container: '#calendar-inline-container',
+    //    value: [new Date()],
+    //    weekHeader: false,
+    //    toolbarTemplate:
+    //        '<div class="toolbar calendar-custom-toolbar">' +
+    //            '<div class="toolbar-inner">' +
+    //                '<div class="left">' +
+    //                    '<a href="#" class="link icon-only"><i class="icon icon-back"></i></a>' +
+    //                '</div>' +
+    //                '<div class="center"></div>' +
+    //                '<div class="right">' +
+    //                    '<a href="#" class="link icon-only"><i class="icon icon-forward"></i></a>' +
+    //                '</div>' +
+    //            '</div>' +
+    //        '</div>',
+    //    onOpen: function (p) {
+    //        $$('.calendar-custom-toolbar .center').text(p.currentYear + "年" + monthNames[p.currentMonth]);
+    //        $$('.calendar-custom-toolbar .left .link').on('click', function () {
+    //            calendarInline.prevMonth();
+    //        });
+    //        $$('.calendar-custom-toolbar .right .link').on('click', function () {
+    //            calendarInline.nextMonth();
+    //        });
+    //        $$.ajax({
+    //            url: "/QualityControl/Manager_MonthChange",
+    //            data: {
+    //                year: p.currentYear,
+    //                month: p.currentMonth + 1
+    //            }, type: "post",
+    //            success: function (e) {
+    //                var data = JSON.parse(e);
+    //                $(".list-month").html("");
+    //                for (var i = 0; i < data.fp.length; i++) {
+    //                    var qty = data.fp[i].qty == null ? 0 : data.fp[i].qty
+    //                    var plan = data.fp[i].plan == null ? 0 : data.fp[i].plan
+    //                    $(".list-month").append("<li class=\"item-content\">" + "<div class=\"item-inner\">" + "<div class=\"item-title\">" + data.fp[i].pn+"("+data.fp[i].fn+")" + "</div>" + "<div class=\"item-after\">" + qty + "/" + plan + "</div>" + "</div>" + "</li>")
+    //                }
+    //                for (var i = 0; i < data.result.length; i++) {                     
+    //                    var _date = ChangeDateFormat(data.result[i].Key);
+    //                    _date1 = data.result[i].Key.substring(data.result[i].Key.indexOf("(")+1, data.result[i].Key.indexOf(")"))
+    //                    if (data.result[i].result) {
+    //                        $(".picker-calendar-day[data-date='" + _date + "']").find("span").addClass("picker-calendar-day-green");
+    //                    }
+    //                    else {
+    //                        var _today = new Date().getTime();                         
+    //                        if (_today >= _date1) {
+    //                            $(".picker-calendar-day[data-date='" + _date + "']").find("span").addClass("picker-calendar-day-red");
+    //                        }
+    //                        else {
+    //                            $(".picker-calendar-day[data-date='" + _date + "']").find("span").addClass("picker-calendar-day-gray");
+    //                        }
+    //                    }
+    //                }
+    //                month = p.currentMonth + 1
+    //                day = new Date();
+    //                _day = day.getDate();
+    //                $$.ajax({
+    //                    url: "/QualityControl/Manager_ScheduleDetails",
+    //                    data: {
+    //                        date: p.currentYear + "-" + month + "-" + _day
+    //                    },
+    //                    success: function (data) {
+    //                        $$(".list-describe").html(data);
+    //                    }
+    //                });
+    //            }
+    //        });
+    //    },
+    //    onMonthYearChangeEnd: function (p) {
+    //        $$('.calendar-custom-toolbar .center').text(p.currentYear + "年" + monthNames[p.currentMonth]);
+    //        $$.ajax({
+    //            url: "/QualityControl/Manager_MonthChange",
+    //            data: {
+    //                year: p.currentYear,
+    //                month: p.currentMonth + 1
+    //            }, type: "post",
+    //            success: function (e) {
+    //                var data = JSON.parse(e);
+    //                $(".list-month").html("");
+    //                for (var i = 0; i < data.fp.length; i++) {
+    //                    var qty = data.fp[i].qty == null ? 0 : data.fp[i].qty
+    //                    var plan = data.fp[i].plan == null ? 0 : data.fp[i].plan
+    //                    $(".list-month").append("<li class=\"item-content\">" + "<div class=\"item-inner\">" + "<div class=\"item-title\">" + data.fp[i].pn + "(" + data.fp[i].fn + ")" + "</div>" + "<div class=\"item-after\">" + qty + "/" + plan + "</div>" + "</div>" + "</li>")
+    //                }
+    //                for (var i = 0; i < data.result.length; i++) {
+    //                    var _date = ChangeDateFormat(data.result[i].Key);
+    //                    _date1 = data.result[i].Key.substring(data.result[i].Key.indexOf("(") + 1, data.result[i].Key.indexOf(")"))
+    //                    if (data.result[i].result) {
+    //                        $(".picker-calendar-day[data-date='" + _date + "']").find("span").addClass("picker-calendar-day-green");
+    //                    }
+    //                    else {
+    //                        var _today = new Date().getTime();
+    //                        if (_today >= _date1) {
+    //                            $(".picker-calendar-day[data-date='" + _date + "']").find("span").addClass("picker-calendar-day-red");
+    //                        }
+    //                        else {
+    //                            $(".picker-calendar-day[data-date='" + _date + "']").find("span").addClass("picker-calendar-day-gray");
+    //                        }
+    //                    }
+    //                }
+    //            }
+    //        });
+    //    },
+    //    onDayClick: function (p, daycontainer, year, month, day) {
+    //        month = parseInt(month) + 1;
+    //        $$.ajax({
+    //            url: "/QualityControl/Manager_ScheduleDetails",
+    //            data: {
+    //                date: year + "-" + month + "-" + day
+    //            },
+    //            success: function (data) {
+    //                $$(".list-describe").html(data);
+    //            }
+    //        });
+    //    },
+    //});
+    //创建picker
+    var today = new Date();
+    var currentYear = today.getFullYear();
+    var currentMonth = (today.getMonth() + 1) < 10 ? "0" + (today.getMonth() + 1) : (today.getMonth() + 1);
+    
+    var pickerInline = myApp.picker({
+        input: '#calendar-inline-container',
+        formatValue: function (p, values, displayValues) {
+            return values[0] + '-' + values[1];           //文本框显示格式
         },
-        onMonthYearChangeEnd: function (p) {
-            $$('.calendar-custom-toolbar .center').text(p.currentYear + "年" + monthNames[p.currentMonth]);
-            $$.ajax({
-                url: "/QualityControl/Manager_MonthChange",
-                data: {
-                    year: p.currentYear,
-                    month: p.currentMonth + 1
-                }, type: "post",
-                success: function (e) {
-                    var data = JSON.parse(e);
-                    for (var i = 0; i < data.result.length; i++) {
-                        var _date = ChangeDateFormat(data.result[i].Key);
-                        _date1 = data.result[i].Key.substring(data.result[i].Key.indexOf("(") + 1, data.result[i].Key.indexOf(")"))
-                        if (data.result[i].result) {
-                            $(".picker-calendar-day[data-date='" + _date + "']").find("span").addClass("picker-calendar-day-green");
-                        }
-                        else {
-                            var _today = new Date().getTime();
-                            if (_today >= _date1) {
-                                $(".picker-calendar-day[data-date='" + _date + "']").find("span").addClass("picker-calendar-day-red");
-                            }
-                            else {
-                                $(".picker-calendar-day[data-date='" + _date + "']").find("span").addClass("picker-calendar-day-gray");
-                            }
-                        }
-                    }
-                }
-            });
+        toolbarCloseText: "关闭",
+        value: [currentYear, currentMonth],
+        cols: time_col
+    });
+    $$.ajax({
+        url: "/QualityControl/Manager_ScheduleDetails",
+        data: {
+            date: $$("#calendar-inline-container").val() + "-01"
         },
-        onDayClick: function (p, daycontainer, year, month, day) {
-            month = parseInt(month) + 1;
+        success: function (data) {
+            $$(".list-month").html(data);
+        }
+    });
+    $$("#calendar-inline-container").on("change", function () {
+        if ($$("#calendar-inline-container").val() != "") {
             $$.ajax({
                 url: "/QualityControl/Manager_ScheduleDetails",
                 data: {
-                    date: year + "-" + month + "-" + day
+                    date: $$("#calendar-inline-container").val()+"-01"
                 },
                 success: function (data) {
-                    $$(".list-describe").html(data);
+                    $$(".list-month").html(data);
                 }
             });
-        },
+        }
     });
-
+    $$(document).on("touchstart", ".production-details", function () {
+        var date = $$("#calendar-inline-container").val() + "-01";
+        var url = $$(this).attr("href") + "&date=" + date;
+        $$(this).attr("href", url);
+    });
+});
+myApp.onPageAfterBack("Add-schedule", function (page) {
+    $$.ajax({
+        url: "/QualityControl/Manager_ScheduleDetails",
+        data: {
+            date: $$("#calendar-inline-container").val() + "-01"
+        },
+        success: function (data) {
+            $$(".list-month").html(data);
+        }
+    });
 });
 //添加产量计划页
 myApp.onPageInit('Add-schedule', function (page) {
-    createCalendar("DateList",true,false)
+    //createCalendar("DateList",true,false)
+    var today = new Date();
+    var currentYear = today.getFullYear();
+    var currentMonth = (today.getMonth() + 1) < 10 ? "0" + (today.getMonth() + 1) : (today.getMonth() + 1);
+    var pickerInline = myApp.picker({
+        input: '#DateList',
+        formatValue: function (p, values, displayValues) {
+            return values[0] + '-' + values[1];           //文本框显示格式
+        },
+        toolbarCloseText: "关闭",
+        value: [currentYear, currentMonth],
+        cols: time_col
+    });
     $$("#FactoryId").on("change", function () {
         if ($$("#FactoryId").val() != "") {
             $$.ajax({
                 url: "/QualityControl/Manager_AddSchedulePartial",
                 data: {
-                    fid: $$("#FactoryId").val()
+                    fid: $$("#FactoryId").val(),
+                    date: $$("#DateList").val()+"-01"
                 },
                 success: function (data) {
                     $$(".tempalate-content").html(data);
@@ -603,7 +680,6 @@ function createCalendar(calinput, multiplebool, closeOnSelectbool) {
     var calendarMultiple = myApp.calendar({
         input: '#'+calinput,
         dateFormat: 'yyyy-mm-dd',
-        multiple: multiplebool,
         closeOnSelect: closeOnSelectbool,
         monthNames: ['1月', '2月', '3月', '4月 ', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
         dayNamesShort: ['日', '一', '二', '三', '四', '五', '六'],
@@ -621,3 +697,20 @@ function createCalendar(calinput, multiplebool, closeOnSelectbool) {
     });
     return calendarMultiple;
 }
+var time_col = [
+    {
+        values: (function () {
+            var arr = [];
+            for (var i = 2000 ; i <= 2030; i++) { arr.push(i); }
+            return arr;
+        })(),
+    },
+    {
+        divider: true,
+        content: '-'
+    },
+     {
+         values: ('01 02 03 04 05 06 07 08 09 10 11 12').split(' '),
+         textAlign: 'right'
+     },
+]

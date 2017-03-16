@@ -9,7 +9,7 @@
                 <div class="swipeout-content">
                     <a href="/Seller/Manager_ViewSchedule?id=@item.Id" class="item-content item-link">
                         <div class="item-inner">
-                            <div class="item-title">@Html.Encode(item.Off_Store.StoreName)</div>
+                            <div class="item-title">@Html.Encode(item.Off_Store.Off_StoreSystem.SystemName + "-" + item.Off_Store.StoreName)</div>
                             <div class="item-after">
                                 <i class="fa fa-sign-in margin-top-3"></i>&nbsp;@Html.Encode(item.Off_Checkin.Count(m => m.Status >= 0 && m.Status < 4))&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-pencil-square-o margin-top-3"></i>&nbsp;@Html.Encode(item.Off_Checkin.Count(m => m.Status >= 4))
                             </div>

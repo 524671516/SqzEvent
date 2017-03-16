@@ -1,8 +1,5 @@
-﻿@model IEnumerable<SqzEvent.Models.ProductionSchedule>
+﻿@model IEnumerable<SqzEvent.Models.MonthSchedule>
 @using SqzEvent.Models;
-@{
-    Layout = null;
-}
 
 @foreach (FactoryGroup group in ViewBag.FG)
 {
@@ -10,14 +7,21 @@
     <div class="list-block">
         <ul>
             @foreach (var item in Model.Where(m => m.FactoryId == group.FactoryId))
-            {
-            <li class="item-content">
-                <div class="item-inner">
-                    <div class="item-title">@Html.Encode(item.Product.SimpleName)</div>
-                    <div class="item-after">@Html.Encode(item.ProductionQty ?? 0) / @Html.Encode(item.ProductionPlan)</div>
-                </div>
-            </li>
+                {
+                    if (item.ProductId != 0)
+                    {
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">@Html.Encode(item.ProductName)</div>
+                            <div class="item-after">@Html.Encode(item.Qty) / @Html.Encode(item.ProductionPlan)</div>
+                        </div>
+                    </li>
+                }
             }
         </ul>
+        <div class="list-block-label" style="text-align:right"><a href="/QualityControl/Manager_ProductionDetails?fid=@group.FactoryId" class="production-details">查看分日明细</a></div>
     </div>
+        <div></div>
 }
+
+

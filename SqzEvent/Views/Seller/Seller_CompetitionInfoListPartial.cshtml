@@ -8,7 +8,7 @@
         <div class="item-content swipeout-content">
             <div class="item-inner">
                 <div class="item-title-row">
-                    <div class="item-title">@Html.Encode(item.Off_Store.StoreName)</div>
+                    <div class="item-title">@Html.Encode(item.Off_Store.Off_StoreSystem.SystemName+"-"+item.Off_Store.StoreName)</div>
                     <div class="item-after">@Html.CompetitionInfoStatus(item.Status)</div>
                 </div>
                 <div class="item-subtitle">@Html.Encode(item.ApplicationDate.ToString("yyyy-MM-dd"))</div>

@@ -18,15 +18,14 @@
             @using (Html.BeginForm("Manager_AddSchedule", "QualityControl", FormMethod.Post, new { @id = "manager_addschedule-form", @class = "validate-form" }))
             {
                 @Html.AntiForgeryToken()
-                <div class="content-block-title">基本信息</div>
                 <div class="list-block">
                     <ul>
                         <li>
                             <div class="item-content">
                                 <div class="item-inner">
-                                    <div class="item-title label">选择日期</div>
+                                    <div class="item-title label">选择时间</div>
                                     <div class="item-input">
-                                        <input type="text" placeholder="- 请选择 -" id="DateList" name="DateList" class="item-input-right" required="required" minlength="1">
+                                        <input type="text" class="item-input-right" id="DateList" name="DateList" placeholder="选择时间" value="@DateTime.Now.ToString("yyyy-MM")"/>
                                     </div>
                                 </div>
                             </div>

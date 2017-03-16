@@ -10,17 +10,16 @@
 <div class="pages">
     <div class="page" data-page="manager-task">
         <div class="page-content">
-            <div class="content-block-title">督导重点工作</div>
+            <div class="content-block-title">门店活动</div>
             <div class="list-block media-list">
                 <ul>
                     <li>
-                        <a href="/Seller/Manager_AnnouncementList" class="item-content">
+                        <a href="/Seller/Manager_SalesEventView?" class="item-content random-param">
                             <div class="item-media img-box color-blue"><i class="fa fa-calendar-check-o"></i></div>
                             <div class="item-inner" style="background: url('../../fonts/right.svg') no-repeat; background-position:calc(100% - 15px) center;background-size:10px 20px">
                                 <div class="item-title-row">
-                                    <div class="item-title color-black">本周工作 (<span>@Html.Encode(ViewBag.Weekly)</span>)</div>
+                                    <div class="item-title color-black">查看活动签呈信息</div>
                                 </div>
-                                <div class="item-subtitle color-gray" style="padding:14px 0">当前重点工作项目: @Html.Encode(ViewBag.AnnounceCount)</div>
                             </div>
                         </a>
                     </li>
@@ -56,7 +55,7 @@
                             </div>
                         </a>
                     </li>
-                    @if (User.IsInRole("Senior"))
+                    @if (User.IsInRole("Administrator"))
                     {
                     <li>
                         <a href="/Seller/Manager_AllCheckInList" class="item-link item-content">
@@ -68,6 +67,31 @@
                     }
                 </ul>
             </div>
+            @if (User.IsInRole("Manager")||User.IsInRole("Administrator"))
+            {
+                <div class="content-block-title">活动签呈</div>
+                <div class="list-block">
+                    <ul>
+                        <li>
+                            <a href="/Seller/Manager_SalesEventList" class="item-link item-content">
+                                <div class="item-inner">
+                                    <div class="item-title">活动签呈列表</div>
+                                </div>
+                            </a>
+                        </li>
+                        @if (User.IsInRole("Administrator"))
+                        {
+                        <li>
+                            <a href="/Seller/Admin_SalesEventList" class="item-link item-content">
+                                <div class="item-inner">
+                                    <div class="item-title">活动签呈审核</div>
+                                </div>
+                            </a>
+                        </li>
+                        }
+                    </ul>
+                </div>
+            }
             <div class="content-block-title">需求提报</div>
             <div class="list-block">
                 <ul>

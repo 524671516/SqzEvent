@@ -91,13 +91,13 @@ namespace SqzEvent.Controllers
                         return RedirectToAction("Weekend_Redirect");
                     }
                 }
-                return View("NotAuthorized");
+                return View("Weekend_NotAuthorized");
             }
             catch (Exception ex)
             {
 
                 CommonUtilities.writeLog(ex.Message);
-                return View("Error");
+                return View("Weekend_Error");
             }
         }
 
@@ -117,6 +117,11 @@ namespace SqzEvent.Controllers
         {
             var manager = getOff_StoreManager(User.Identity.Name);
             var today = DateTime.Now.Date;
+            var breakitem = offlineDB.Off_WeekendBreak.SingleOrDefault(m => m.StoreManagerId == manager.Id && m.Subscribe == today);
+            if (breakitem != null)
+            {
+                return RedirectToAction("WeekendBreak_Home");
+            }
             var storelist = from m in manager.Off_Store
                             select m.Id;
             var scheduleList = from m in offlineDB.Off_Checkin_Schedule
@@ -130,6 +135,12 @@ namespace SqzEvent.Controllers
         public async Task<ActionResult> WeekendBreak_Start(FormCollection form)
         {
             var manager = getOff_StoreManager(User.Identity.Name);
+            var today = DateTime.Now.Date;
+            var breakitem = offlineDB.Off_WeekendBreak.SingleOrDefault(m => m.StoreManagerId == manager.Id && m.Subscribe == today);
+            if (breakitem != null)
+            {
+                return RedirectToAction("WeekendBreak_Home");
+            }
             Off_WeekendBreak model = new Off_WeekendBreak()
             {
                 TrailDefault = 300,

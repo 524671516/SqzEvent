@@ -207,7 +207,7 @@ namespace SqzEvent.Controllers
             string nonce_str = CommonUtilities.generateNonce();
             //string out_trade_no = "WX" + CommonUtilities.generateTimeStamp();
             string spbill_create_ip = WeChatUtilities.getConfigValue(WeChatUtilities.IP);
-            string notify_url = "http://webapp.shouquanzhai.cn/Pay/wx_pay_nofity";
+            string notify_url = "https://event.shouquanzhai.cn/Pay/wx_pay_nofity";
             List<QueryParameter> parameters = new List<QueryParameter>();
             parameters.Add(new QueryParameter("appid", appid));
             parameters.Add(new QueryParameter("mch_id", mch_id));
@@ -486,7 +486,7 @@ namespace SqzEvent.Controllers
         }
         #endregion
 
-
+        /*
         #region 摇一摇随机金额
         public ActionResult Gambling_Pay(string code, string state)
         {
@@ -613,7 +613,7 @@ namespace SqzEvent.Controllers
             {
                 return Json(new { result = "FAIL", msg = e.ToString() }, JsonRequestBehavior.AllowGet);
             }
-        }
+        }*/
 
         public string parseXml(List<QueryParameter> parameters, string sign)
         {
