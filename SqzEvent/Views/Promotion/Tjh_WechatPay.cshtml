@@ -13,6 +13,62 @@
     <title>寿全斋红糖姜茶微信支付</title>
     <meta name="author" content="寿全斋电子商务有限公司">
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background-image: url('../../Content/images/tjh_wechatpay_background.jpg');
+            background-size:100%;
+        }
+        .wrap{
+            margin-top:5.565rem;
+            position:relative;
+            padding-top:2rem;
+        }
+        .content{
+            background-color:rgba(249, 218,174,0.8);
+            padding:60px 0 0 0;
+            top:0;
+            left:0;
+            right:0;
+            margin:40px 20px 0 20px;
+            position:absolute;
+            color:#000;
+            height:27rem;
+            border-radius:10px;
+        }
+        .num{
+            height:16rem;
+        }
+        .btn-box{
+            height:4rem;
+        }
+        .logo img{
+            text-align:center;
+            width:80px;
+            height:80px;
+        }
+        .logo{          
+            text-align:center;
+            z-index:999;
+            margin:0 auto;
+            top:0;
+            left:0;
+            right:0;
+            position:absolute;
+            height:80px;
+        }
+        #start_pay:hover,#start_pay:focus{
+            color:#000 !important;
+        }
+       .btn{
+            width:120px;
+            background-color:#a41b37;
+            color:#fff;
+        }
+        h3{
+            margin:0;
+        }
+    </style>
 </head>
 <body>
     <div class="hidden">
@@ -20,11 +76,25 @@
         <span id="prepay_id"></span>
         @Html.AntiForgeryToken()
     </div>
-    <div>
-        <br />
-        <a class="btn btn-success" id="start_pay">立即支付</a>
+    <div class="container wrap">
+        <div class="row logo">
+            <div class="col-xs-12">
+                <div class="col-xs-4"></div>
+                <div class="logo col-xs-4">
+                    <img src="~/Content/images/logo_new.png" />
+                </div>
+                <div class="col-xs-4"></div>
+            </div>
+        </div>
+        <div class="content text-center" id="before-pay">
+            <div class="num">
+                <h3 id="order-money"  style="padding:40px;">支付金额:&nbsp;<span>&yen;&nbsp;</span><span>200</span></h3>
+            </div>
+            <div class="btn-box">
+                <button class="btn btn-lg" id="start_pay" ><span>立即支付</span></button>
+            </div>
+        </div>
     </div>
-
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script type="text/javascript">
         function callpay(appId, timeStamp, nonceStr, _package, paySign) {
@@ -55,28 +125,34 @@
                     },
                     type: "post",
                     success: function (data) {
-                        $.ajax({
-                            type: "get",
-                            url: "/Pay/createPay",
-                            data: {
-                                "prepay_id": data.prepay_id
-                            },
-                            success: function (data) {
-                                alert("3");
-                                if (data.result == "SUCCESS") {
-                                    var _appId = data.appid;
-                                    var _timeStamp = data.timeStamp;
-                                    var _nonceStr = data.nonceStr;
-                                    var _package = data.package;
-                                    var _paySign = data.paySign;
-                                    callpay(_appId, _timeStamp, _nonceStr, _package, _paySign);
-                                    result = true;
+                        $("#start_pay").html("<i class=\"fa fa-spinner fa-spin fa-1x fa-fw\" style=\"color:#fff;\"></i>");
+                        if ($("#start_pay").prop("disabled") == false) {
+                            $("#start_pay").prop("disabled", true);
+                            $.ajax({
+                                type: "get",
+                                url: "/Pay/createPay",
+                                data: {
+                                    "prepay_id": data.prepay_id
+                                },
+                                success: function (data) {
+                                    alert("3");
+                                    if (data.result == "SUCCESS") {
+                                        var _appId = data.appid;
+                                        var _timeStamp = data.timeStamp;
+                                        var _nonceStr = data.nonceStr;
+                                        var _package = data.package;
+                                        var _paySign = data.paySign;
+                                        callpay(_appId, _timeStamp, _nonceStr, _package, _paySign);
+                                        result = true;
+                                    }
+                                    else if (data.result == "FAIL") {
+                                        $("#start_pay").html("<span>立即支付</span>").attr("disabled", false);
+                                    }
                                 }
-                                else if (data.result == "FAIL") {
-                                    alert("false");
-                                }
-                            }
-                        });
+                            });
+                        } else {
+                            $("#start_pay").html("<span>立即支付</span>").attr("disabled", false);
+                        }
                     }
                 });
             });

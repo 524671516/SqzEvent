@@ -301,6 +301,7 @@
     <Content Include="Content\images\new_sanxing.jpg" />
     <Content Include="Content\images\new_xiaomi.jpg" />
     <Content Include="Content\images\period-aid-logo.png" />
+    <Content Include="Content\images\res.gif" />
     <Content Include="Content\images\sellertask-guide-01.jpg" />
     <Content Include="Content\images\sellertask-guide-02.jpg" />
     <Content Include="Content\images\sellertask-guide-03.jpg" />
@@ -326,6 +327,7 @@
     <Content Include="Content\SellerTask.css" />
     <Content Include="Content\PeriodAid.css" />
     <Content Include="Content\Seller.css" />
+    <Content Include="Content\images\tjh_wechatpay_background.jpg" />
     <Content Include="Content\WeekendBreak.css" />
     <Content Include="Content\weui.min.css" />
     <Content Include="Scripts\daterangepicker.js" />
@@ -652,6 +654,7 @@
     <Content Include="Views\Promotion\Tjh_UserAttendance_Register_Success.cshtml" />
     <Content Include="Views\Promotion\Tjh_WechatPay.cshtml" />
     <Content Include="Views\Promotion\Tjh_Distribution.cshtml" />
+    <Content Include="Views\Promotion\Tjh_WechatPay_Success.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
