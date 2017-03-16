@@ -311,6 +311,7 @@
     <Content Include="Content\SellerTask.css" />
     <Content Include="Content\PeriodAid.css" />
     <Content Include="Content\Seller.css" />
+    <Content Include="Content\images\tjh_wechatpay_background.jpg" />
     <Content Include="Content\WeekendBreak.css" />
     <Content Include="Content\weui.min.css" />
     <Content Include="Scripts\daterangepicker.js" />
