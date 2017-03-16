@@ -335,6 +335,11 @@ namespace SqzEvent.Controllers
             ViewBag.Signature = utilities.generateWxJsApiSignature(_nonce, utilities.getJsApiTicket(), _timeStamp, _url);
             return View();
         }
+
+        public ActionResult Tjh_Distribution()
+        {
+            return View();
+        }
         #endregion
 
         #region 通用微信登陆端口

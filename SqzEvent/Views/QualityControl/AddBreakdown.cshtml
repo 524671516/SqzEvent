@@ -26,7 +26,7 @@
                 <div class="content-block-title">新增故障报告</div>
                 <div class="list-block">
                     <ul>
-                        <li>
+                        <li id="FactoryLi">
                             <a href="#" class="item-link smart-select" data-back-text="返回" data-back-on-select="true" data-searchbar-placeholder="选择工厂" data-searchbar-cancel="取消" id="factory-select">
                                 @Html.DropDownList("FactoryId", ViewBag.FactoryDropDown as SelectList, "- 请选择 -", new { @class = "required" })
                                 <div class="item-content">
@@ -37,7 +37,7 @@
                                 </div>
                             </a>
                         </li>
-                        <li>
+                        <li id="QCEquipmentLi" class="hidden">
                             <a href="#" class="item-link smart-select" data-back-text="返回" data-back-on-select="true" data-searchbar-placeholder="选择设备" data-searchbar-cancel="取消" id="equipment-select">
                                 <select id="QCEquipmentId" name="QCEquipmentId" class="required">
                                     <option>- 请选择 -</option>
@@ -50,7 +50,7 @@
                                 </div>
                             </a>
                         </li>
-                        <li>
+                        <li id="BreakDownTypeLi" class="hidden">
                             <a href="#" class="item-link smart-select" data-back-text="返回" data-back-on-select="true" data-searchbar-placeholder="故障类型" data-searchbar-cancel="取消" id="breakdowntype-select">
                                 <select id="BreakDownTypeId" name="BreakDownTypeId" class="required">
                                     <option>- 请选择 -</option>

@@ -1138,6 +1138,10 @@ namespace SqzEvent.Controllers
         {
             return View();
         }
+        public ActionResult Manager_Plan()
+        {
+            return View();
+        }
         /*[HttpPost]
         public JsonResult Manager_MonthChange(int year, int month)
         {
@@ -1385,6 +1389,294 @@ namespace SqzEvent.Controllers
         {
             var item = _qcdb.BreadkdownReport.SingleOrDefault(m => m.Id == bdid);
             return PartialView(item);
+        }
+
+        //设备列表
+        public ActionResult Manager_QCEquipmentList()
+        {
+            var factorylist = from m in _qcdb.Factory
+                              orderby m.Id descending
+                              select m;
+            ViewBag.fl = new SelectList(factorylist, "Id", "SimpleName");
+            return View();
+        }
+
+        //设备列表ajax
+        public ActionResult Manager_QCEquipmentListPartial(int fid)
+        {
+            var equipmentlist = from m in _qcdb.QCEquipment
+                                where m.FactoryId == fid&&m.Status!=-1
+                                orderby m.FactoryId descending
+                                select m;
+            return PartialView(equipmentlist);
+        }
+
+        //添加设备页面
+        public ActionResult Manager_CreateEquipment(int?fid)
+        {
+            var factorylist = from m in _qcdb.Factory
+                              orderby m.Id descending
+                              select m;
+            QCEquipment model = new QCEquipment();
+            if (fid == null)
+            {
+                ViewBag.fl = new SelectList(factorylist, "Id", "SimpleName");
+                return View(model);
+            }
+            else
+            {
+                ViewBag.fl = new SelectList(factorylist, "Id", "SimpleName", fid);
+                return View(model);
+            }        
+        }
+
+        //提交添加设备
+        [HttpPost,ValidateAntiForgeryToken]
+        public ActionResult CreateEquipmentForFactory(FormCollection form,QCEquipment model)
+        {
+            if (ModelState.IsValid)
+            {
+                QCEquipment item = new QCEquipment();
+                if (TryUpdateModel(item))
+                {
+                    _qcdb.QCEquipment.Add(item);
+                    _qcdb.SaveChanges();
+                    return Content("SUCCESS");
+                }
+                else
+                {
+                    return Content("FAIL");
+                }             
+            }
+            else
+            {
+                return Content("FAIL");
+            }
+
+        }
+
+        //修改设备
+        public ActionResult Manager_EditEquipment(int Eid)
+        {
+            var equipment = _qcdb.QCEquipment.SingleOrDefault(m => m.Id == Eid);
+            if (equipment == null)
+            {
+                return View("NotFound");
+            }
+            else
+            {
+                var selectfactory = from m in _qcdb.QCEquipment
+                                    where m.Id == Eid
+                                    select m.FactoryId;
+                var factorylist = from m in _qcdb.Factory
+                    orderby m.Id descending
+                    select m;
+                ViewBag.fl = new SelectList(factorylist, "Id", "SimpleName", selectfactory);
+                return View(equipment);
+            }
+        }
+
+        //提交修改
+        [HttpPost, ValidateAntiForgeryToken]
+        public ActionResult Manager_EditEquipment(int id, QCEquipment model)
+        {
+            if (ModelState.IsValid)
+            {
+                var item = new QCEquipment();
+                if (TryUpdateModel(item))
+                {
+                    _qcdb.Entry(item).State = System.Data.Entity.EntityState.Modified;
+                    try
+                    {
+                        _qcdb.SaveChanges();
+                    }
+                    catch
+                    {
+                        return Content("提交数据异常");
+                    }
+                    return Content("SUCCESS");
+                }
+                return Content("FAIL");
+            }
+            else
+            {
+                return Content("FAIL");
+            }
+
+        }
+
+        //删除设备
+        [HttpPost]
+        public ActionResult DelEquipemntForFactory(int Eid)
+        {
+            var equipment = _qcdb.QCEquipment.SingleOrDefault(m => m.Id == Eid);
+            if (equipment == null)
+            {
+                return Json(new { result = "FAIL" });
+            }
+            else
+            {
+                try
+                {
+                    equipment.Status = -1;
+                    foreach(var item in equipment.BreakdownType)
+                    {
+                        item.Status = -1;
+                        _qcdb.SaveChanges();
+                    }
+                   _qcdb.SaveChanges();
+                    return Json(new { result = "SUCCESS" });
+                }
+                catch
+                {
+                    return Json(new { result = "FAIL" });
+                }
+            }
+
+        }
+        
+        //设备详情
+        public ViewResult Manager_EquipmentDetails(int Eid)
+        {
+            var Equipment = _qcdb.QCEquipment.SingleOrDefault(m => m.Id == Eid);
+            return View(Equipment);
+        }
+        //设备故障页面
+        public ActionResult Manager_BreakdownList()
+        {
+            var factorylist = from m in _qcdb.Factory
+                              orderby m.Id descending
+                              select m;
+            ViewBag.fl = new SelectList(factorylist, "Id", "SimpleName");
+            return View();
+        }
+        //设备故障列表
+        public ActionResult Manager_BreakdownListPartial(int Eid)
+        {
+            var breakdownlist = from m in _qcdb.BreakdownType
+                                where m.EquipmentId == Eid && m.Status != -1
+                                orderby m.Id descending
+                                select m;
+            return PartialView(breakdownlist);
+        }
+
+        //设备故障添加
+        public ActionResult Manager_CreateBreakdown(int? Fid, int? Eid)
+        {
+            var factorylist = from m in _qcdb.Factory
+                              orderby m.Id descending
+                              select m;
+            var euipmentlist = from m in _qcdb.QCEquipment
+                               where m.FactoryId == Fid
+                               orderby m.Id descending
+                               select m;
+            BreakdownType model = new BreakdownType();
+            if (Fid == null || Eid == null)
+            {
+                ViewBag.fl = new SelectList(factorylist, "Id", "SimpleName");
+                ViewBag.el = new SelectList(euipmentlist, "Id", "SimpleName");
+                return View(model);
+            }
+            else
+            {
+                ViewBag.fl = new SelectList(factorylist, "Id", "SimpleName", Fid);
+                ViewBag.el = new SelectList(euipmentlist, "Id", "SimpleName",Eid);
+                return View(model);
+            }       
+        }
+
+        //提交设备故障添加
+        [HttpPost, ValidateAntiForgeryToken]
+        public ActionResult CreateBreakdowmForEquipment(FormCollection form, BreakdownType model)
+        {
+            if (ModelState.IsValid)
+            {
+                BreakdownType item = new BreakdownType();
+                if (TryUpdateModel(item))
+                {
+                    _qcdb.BreakdownType.Add(item);
+                    _qcdb.SaveChanges();
+                    return Content("SUCCESS");
+                }
+                else
+                {
+                    return Content("FAIL");
+                }
+            }
+            else
+            {
+                return Content("FAIL");
+            }
+
+        }
+
+        //故障详情
+        public ViewResult Manager_BreakDownTypeDetails(int Bid)
+        {
+            var breakdowntype = _qcdb.BreakdownType.SingleOrDefault(m => m.Id == Bid);
+            return View(breakdowntype);
+        }
+
+        //修改故障页面
+        public ActionResult Manager_EditBreakDownType(int Bid)
+        {
+            var item = _qcdb.BreakdownType.SingleOrDefault(m => m.Id == Bid);
+            if (item == null)
+            {
+                return View("NotFound");
+            }
+            else
+            {
+                var breakdowntype = _qcdb.BreakdownType.SingleOrDefault(m => m.Id == Bid);
+                return View(breakdowntype);
+            }
+        }
+
+        //提交修改
+        [HttpPost, ValidateAntiForgeryToken]
+        public ActionResult Manager_EditBreakDownType(int id, BreakdownType model)
+        {
+            if (ModelState.IsValid)
+            {
+                var item = new BreakdownType();
+                if (TryUpdateModel(item))
+                {
+                    _qcdb.Entry(item).State = System.Data.Entity.EntityState.Modified;
+                    _qcdb.SaveChanges();
+                    return Content("SUCCESS");
+                }
+                return Content("FAIL");
+            }
+            else
+            {
+                return Content("FAIL");
+            }
+
+        }
+
+        //删除故障
+        [HttpPost]
+        public ActionResult DelBreakDownType(int Bid)
+        {
+            var breakdowntype = _qcdb.BreakdownType.SingleOrDefault(m => m.Id == Bid);
+            if (breakdowntype == null)
+            {
+                return Json(new { result = "FAIL" });
+            }
+            else
+            {
+                try
+                {
+                    breakdowntype.Status = -1;
+                    _qcdb.SaveChanges();
+                    return Json(new { result = "SUCCESS" });
+                }
+                catch
+                {
+                    return Json(new { result = "FAIL" });
+                }
+            }
+
         }
 
         public ActionResult Manager_Control()
