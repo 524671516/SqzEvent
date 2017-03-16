@@ -19,12 +19,12 @@
     @Html.HiddenFor(model => model.SummaryTime)
     @Html.HiddenFor(model => model.SummaryPhotos)
     @Html.HiddenFor(model => model.TemplateValues)
-    <div class="content-block-title">签退信息</div>
+    <div class="content-block-title">备注信息</div>
     <div class="list-block">
         <ul>
             <li>
                 <div class="item-content middle-content">
-                    @Html.TextAreaFor(m => m.CheckoutRemark, new { placeholder = "请输入签到备注", @class="required", maxlength = "200" })
+                    @Html.TextAreaFor(m => m.CheckoutRemark, new { placeholder = "请输入签退备注", @class="required", maxlength = "200" })
                 </div>
                 <div class="item-content">
                     <div class="item-inner">

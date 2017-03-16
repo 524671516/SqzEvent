@@ -1,0 +1,55 @@
+﻿@model SqzEvent.Models.Question
+@{
+    ViewBag.Title = "QusetionPartial";
+}
+<input name="QuestionType" id="QuestionType" value="@Html.DisplayFor(modelItem => Model.QuestionType)" type="hidden" />
+<input name="QuestionTitle" id="QuestionTitle" value="@Html.DisplayFor(modelItem => Model.QuestionTitle)" type="hidden" />
+<input name="QuestionId" id="QuestionId" value="@Model.Id" type="hidden" />
+<input name="DefaultRouterId" id="DefaultRouterId" value="@Model.DefaultRouter" type="hidden" />
+<div class="row">
+    <div class="col-xs-12" id="questiontitle">@Html.DisplayFor(modelItem => Model.QuestionTitle)<span class="hide" style="font-size:14px;"><i class="color-red">*&nbsp</i>请选择或者填写</span></div>
+</div>
+@switch (Model.QuestionType)
+{
+    case 1:
+        foreach (var answer in Model.Result)
+        {
+            <div class="radio result">
+                <input type="radio" value="@answer.AnswerContent" name="UserResult" date-url="@answer.DefaultRouter" id="@answer.Id" />
+                <label for="@answer.Id">
+                    @answer.AnswerContent
+                </label>
+            </div>
+        }
+        break;
+    case 2:
+        <div class="text result">
+            <input type="text" name="UserResult" id="UserResult" class="clear-input-style" />
+        </div>
+        break;
+    case 3:
+        foreach (var answer in Model.Result)
+        {
+            <div class="checkbox  result">
+                <input type="checkbox" name="UserResult" id="@answer.Id" date-url="@answer.DefaultRouter" value="@answer.AnswerContent" />
+                <label for="@answer.Id">@answer.AnswerContent</label>
+            </div>
+        }
+        break;
+    case 4:
+        foreach (var answer in Model.Result)
+        {
+            
+                @Html.Raw(answer.AnswerContent)
+        }
+        break;
+    case 8:
+        <div class="text result">
+            <input type="text" name="UserResult" id="UserResult" class="clear-input-style hidden"/>
+        </div>
+        break;
+    default:
+        break;
+}
+
+

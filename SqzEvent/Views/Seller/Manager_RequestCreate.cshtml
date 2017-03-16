@@ -19,7 +19,6 @@
                 @Html.HiddenFor(m => m.Status)
                 @Html.HiddenFor(m => m.ManagerUserName)
                 @Html.HiddenFor(m => m.Id)
-                <div class="content-block-title">添加需求信息</div>
                 <div class="list-block">
                     <ul>
                         <li>
@@ -51,13 +50,13 @@
                                 <div class="item-inner">
                                     <div class="item-title label">需求标题</div>
                                     <div class="item-input">
-                                        @Html.TextBoxFor(m => m.RequestRemark, new { placeholder = "请输入需求标题", @class= "{required:true,maxlength:20}" })
+                                        @Html.TextBoxFor(m => m.RequestRemark, new { placeholder = "请输入需求标题", @class= "{required:true,maxlength:20} item-input-right" })
                                     </div>
                                 </div>
                             </div>
                         </li>
                         <li>
-                            <div class="item-content">
+                            <div class="item-content middle-content">
                                 @Html.TextAreaFor(m => m.RequestContent, new { placeholder = "请输入需求详细信息", @class= "{required:true, maxlength:500}" })
                             </div>
                             <div class="item-content">

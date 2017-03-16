@@ -14,7 +14,7 @@
     </div>
 </div>
 <div class="pages">
-    <div class="page" data-page="qualityregulartest">
+    <div class="page" data-page="qualityregulartest" id="qualityregulartest">
         <div class="page-content">
             @using (Html.BeginForm("QualityRegularTest", "QualityControl", FormMethod.Post, new { @id = "qualityregulartest-form", @class = "validate-form" }))
             {
@@ -49,7 +49,9 @@
                         </li>
                         <li>
                             <a href="#" class="item-link smart-select" data-back-text="返回" data-back-on-select="true" data-searchbar-placeholder="选择产品" data-searchbar-cancel="取消" id="product-select">
-                                @Html.DropDownListFor(m => m.ProductId, ViewBag.FactoryList as SelectList, "- 请选择 -", new { @class = "required" })
+                                <select id="ProductId" name="ProductId" class="required">
+                                    <option>- 请选择 -</option>
+                                </select>
                                 <div class="item-content">
                                     <div class="item-inner">
                                         <div class="item-title">选择产品</div>

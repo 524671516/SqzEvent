@@ -21,7 +21,6 @@
                 @Html.HiddenFor(m => m.Location)
                 @Html.HiddenFor(m => m.Location_Desc)
                 @Html.HiddenFor(m => m.CheckIn_Time)
-                <div class="content-block-title">操作</div>
                 <div class="list-block">
                     <ul>
                         <li>
@@ -36,7 +35,7 @@
                             <div class="item-content">
                                 <div class="item-inner">
                                     <div class="item-title">上传照片</div>
-                                    <div class="item-after"><abbr id="current_image">0</abbr>/3</div>
+                                    <div class="item-after"><abbr id="current_image">0</abbr>/9</div>
                                 </div>
                             </div>
                             <div class="item-content" id="photo-list">
@@ -49,7 +48,7 @@
                             </div>
                         </li>
                         <li>
-                            <div class="item-content">
+                            <div class="item-content middle-content">
                                 @Html.TextAreaFor(m => m.Remark, new { placeholder = "请输入签到备注", @class = "required" })
                             </div>
                             <div class="item-content">

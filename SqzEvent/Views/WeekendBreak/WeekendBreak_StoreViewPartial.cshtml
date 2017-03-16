@@ -1,0 +1,12 @@
+﻿@model IEnumerable<SqzEvent.Models.Off_WeekendBreak>
+<div class="weui-cells">
+    @foreach (var p in Model)
+    {
+        <a class="weui-cell weui-cell_access" id="recorditem_@p.Id"  date-id="@p.Id">
+            <div class="weui-cell__bd">
+                <p>@Html.Encode(p.Off_Checkin_Schedule.Off_Store.StoreName)</p>
+            </div>
+            <div class="weui-cell__ft">@Html.Encode(p.Off_WeekendBreakRecord.Sum(m => m.SalesCount))/@Html.Encode(p.Off_WeekendBreakRecord.Sum(m=>m.TrailCount))</div>
+        </a>
+    }
+</div>

@@ -1,0 +1,49 @@
+﻿@model IEnumerable<SqzEvent.Models.Off_SalesEvent>
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="left">
+            <a href="#" class="back link">
+                <i class="icon icon-back" aria-hidden="true"></i>
+                <span>返回</span>
+            </a>
+        </div>
+        <div class="center sliding">当前活动签呈列表</div>
+    </div>
+</div>
+<div class="pages">
+    <div class="page" data-page="week-event-list">
+        <div class="page-content">
+            <div class="list-block media-list" id="week-eventlist">
+                @if (Model.Count() == 0)
+                {
+                    <div class="content-block-title">无活动签呈</div>
+                }
+                else
+                {
+
+                        foreach (var item in Model)
+                        {
+                            <div class="card facebook-card">
+                                <div class="card-header">
+                                    <div class="facebook-name">@Html.Encode(item.Off_StoreSystem.SystemName)</div>
+                                    <div class="facebook-date color-gray"><i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;@Html.Encode(item.StartDate.ToString("MM/dd") + " - " + item.EndDate.ToString("MM/dd"))</div>
+                                </div>
+                                <div class="card-content">
+                                    <div class="card-content-inner">
+                                        <p>@Html.Encode(item.EventTitle)</p>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <div><i class="fa fa-paperclip" aria-hidden="true"></i>&nbsp;&nbsp;@Html.ManagerRequestStatus(item.Status)</div>
+                                    <div><i class="fa fa-user" aria-hidden="true"></i>&nbsp;&nbsp;@Html.ManagerNickName(item.CreateUserName, (int)ViewBag.SystemId)</div>
+                                    <a href="/Seller/Manager_SalesEventDetails?Id=@item.Id" class="link">查看更多</a>
+                                </div>
+                            </div>
+                        }
+
+                }
+
+            </div>
+        </div>
+    </div>
+</div>

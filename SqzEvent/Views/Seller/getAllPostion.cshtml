@@ -1,0 +1,95 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>getAllPostion</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body class="container">
+    <table class="table table-bordered">
+        <tr>
+            <th>姓名</th>
+            <th>时间</th>
+            <th>距离(km)</th>
+        </tr>
+    </table>
+
+</body>
+</html>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script>
+    $.ajax({
+        url: "/Seller/getAllPosition",
+        type: "post",
+        success: function (data) {
+            var array = [];
+            for (i = 0; i < data.length; i++) {
+                array.push(data[i]);
+            };
+            var temparr = [];
+            var arrayarr = [];
+            for (j = 0; j < array.length; j++) {
+                var b = j + 1;
+                if (b == array.length) {
+                    temparr.push(array[j]);
+                    arrayarr.push(temparr.slice(0));
+                    temparr.length = 0;
+                } else {
+                    if (array[j].EventId == array[j + 1].EventId) {
+                        temparr.push(array[j]);
+                    } else {
+                        temparr.push(array[j]);
+                        arrayarr.push(temparr.slice(0));
+                        temparr.length = 0;
+                    }
+                }
+            }
+            console.log(arrayarr)
+            var sum = 0;
+            for (i = 0; i < arrayarr.length; i++) {
+                var result = 0;
+                for (j = 0; j < arrayarr[i].length; j++) {
+                    var next = j + 1;
+                    if (next== arrayarr[i].length) {
+                        result += 0;
+                        sum += result;
+                        $(".table").append("<tr>" + "<td>" + arrayarr[i][0].UserName + "</td><td>" + ChangeDateFormat(arrayarr[i][0].EventDate) + "</td><td>" + (result+10).toFixed(2) + "</td>" + "</tr>")
+                    } else {
+                        var EARTH_RADIUS = 6378.137;
+                        radLat1 = rad(arrayarr[i][j].Location.split(",")[1]);                     
+                        radLat2 = rad(arrayarr[i][next].Location.split(",")[1]);
+                        a = radLat1 - radLat2;
+                        b = rad(arrayarr[i][j].Location.split(",")[0]) - rad(arrayarr[i][next].Location.split(",")[0]);
+                        s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)));
+                        es = s * EARTH_RADIUS;
+                        result += es;
+                    }                 
+                }
+            }  
+            console.log(sum);
+        }
+    })
+   
+    function rad(d) {
+        var rad = d * Math.PI / 180.0;
+        return rad;
+    }
+    //日期转化
+    function ChangeDateFormat(val) {
+        if (val != null) {
+            var date = new Date(parseInt(val.replace("/Date(", "").replace(")/", ""), 10));
+            //月份为0-11，所以+1，月份小于10时补个0
+            var month = date.getMonth()+1;
+            var currentDate = date.getDate();
+            return date.getFullYear() + "-" + (month) + "-" + currentDate;
+        }
+        return "";
+    }
+
+</script>

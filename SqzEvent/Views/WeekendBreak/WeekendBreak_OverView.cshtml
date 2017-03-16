@@ -1,0 +1,165 @@
+﻿@model SqzEvent.Models.Off_WeekendBreakRecord
+@{
+    Layout = "~/Views/Shared/_WeekendBreak.cshtml";
+}
+<div class="page__header">
+    <div class="page__header_item"></div>
+    <div class="page__header_item">数据总览</div>
+    <div class="page__header_item" style="text-align:right" id="count-btn">
+        <a href="javascript:;" class="link" id="statistic_btn"><i class="fa fa-bar-chart" aria-hidden="true"></i><span>统计</span></a>
+    </div>
+</div>
+<br />
+<div class="control-group">
+    <div class="controls">
+        <div class="input-prepend input-group">
+            <span class="add-on input-group-addon"></span>
+        </div>
+    </div>
+</div>
+<div class="weui-cells">
+    <div class="weui-cell">
+        <div class="weui-cell__bd">
+            <p>日期</p>
+        </div>
+        <div class="weui-cell__ft"><input type="text" style="width: 200px" name="birthday" id="birthday" class="weui-input" readonly /></div>
+    </div>
+</div>
+<div id="over-partial">
+</div>
+<br /><br />
+<div class="">
+    <div class="weui-mask hidden" id="iosMask" style="opacity: 1;"></div>
+    <div class="weui-actionsheet" id="iosActionsheet">
+        <div class="weui-actionsheet__menu">
+            <div class="weui-actionsheet__cell" id="iosActionsheetDelete">删除</div>
+        </div>
+        <a class="weui-actionsheet__menu weui-actionsheet__href" style="display:block;color:#000" href="javascript:;">
+            <div class="weui-actionsheet__cell" id="iosActionsheetDetail">查看详情</div>
+        </a>
+        <div class="weui-actionsheet__action">
+            <div class="weui-actionsheet__cell" id="iosActionsheetCancel">取消</div>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="currentid" />
+<div id="toast" style="display:none;">
+    <div class="weui-mask_transparent"></div>
+    <div class="weui-toast">
+        <i class="weui-icon-success-no-circle weui-icon_toast"></i>
+        <p class="weui-toast__content">删除成功</p>
+    </div>
+</div>
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            var returndate = window.location.href;
+            if (returndate.indexOf("=") == -1) {
+                var _date = new Date();
+                var _year = parseInt(_date.getFullYear());
+                var _month = parseInt(_date.getMonth()) + 1;
+                var _day = parseInt(_date.getDate());
+                var date = _year + "-" + ((_month < 10) ? "0" + _month : _month) + "-" + ((_day < 10) ? "0" + _day : _day);
+                $("#birthday").val(date);
+            } else {
+                var date = returndate.substr(returndate.indexOf("=") + 1)
+                $("#birthday").val(date);
+            }          
+                $("#count-btn").on("click", function () {
+                    var _date = $("#birthday").val();
+                    var url = "/WeekendBreak/WeekendBreak_ReportStatistic" +"?"+ "date" + "=" + _date;
+                    window.location.href = url;
+                    return false;
+                    })
+                if ($("#birthday").val() != "") {
+                    $.ajax({
+                        url: "/WeekendBreak/WeekendBreak_StoreViewPartial",
+                        data: {
+                            date: $("#birthday").val()
+                        },
+                        success: function (data) {
+                            $("#over-partial").html(data);
+                            $(".weui-cell_access").each(function () {
+                                $(this).on("click", function () {
+                                    showActionSheet($(this).attr("date-id"));
+                                    $(".weui-actionsheet__href").attr("href", "/WeekendBreak/WeekendBreak_StoreViewDetails?" +"breakId="+ $(this).attr("date-id"))
+                                })
+                            })
+                            $('#birthday').daterangepicker({
+                                singleDatePicker: true,
+                                startDate: new Date,
+                                autoUpdateInput: true
+                            }, function (start, end, label) {
+                                if ($("#birthday").val() != "") {
+                                    $.ajax({
+                                        url: "/WeekendBreak/WeekendBreak_StoreViewPartial",
+                                        data: {
+                                            date: $("#birthday").val()
+                                        },
+                                        success: function (data) {
+                                            $("#over-partial").html(data);
+                                            $(".weui-cell_access").each(function () {
+                                                $(this).on("click", function () {
+                                                    showActionSheet($(this).attr("date-id"));
+                                                    $(".weui-actionsheet__href").attr("href", "/WeekendBreak/WeekendBreak_StoreViewDetails?" + "breakId=" + $(this).attr("date-id"))
+                                                })
+                                            })
+                                        }
+                                    })
+                                };
+                            });
+                        }
+                    });
+                }
+                $iosMask = $("#iosMask");
+                $iosActionsheet = $("#iosActionsheet");
+                function showActionSheet(recordId) {
+                    $iosActionsheet.addClass('weui-actionsheet_toggle');
+                    $iosMask.fadeIn(200);
+                    $("#currentid").val(recordId);
+                }
+
+                function hideActionSheet() {
+                    $iosActionsheet.removeClass('weui-actionsheet_toggle');
+                    $iosMask.fadeOut(200);
+                }
+                $iosMask.on('click', hideActionSheet);
+                $('#iosActionsheetCancel').on('click', hideActionSheet);
+                $("#showIOSActionSheet").on("click", function () {
+                    $iosActionsheet.addClass('weui-actionsheet_toggle');
+                    $iosMask.fadeIn(200);
+                });
+                $("#iosActionsheetDelete").click(function () {
+                    $.ajax({
+                        url: "/WeekendBreak/WeekendBreak_DeleteStore",
+                        data: {
+                            breakId: $("#currentid").val()
+                        },
+                        type: "post",
+                        success: function (data) {
+                            if (data == "SUCCESS") {
+                                $("#toast").fadeIn(100);
+                                hideActionSheet();
+                                setTimeout(function () {
+                                    $("#toast").fadeOut(100);
+                                    $("#recorditem_" + $("#currentid").val()).remove();
+                                }, 2000);
+                            }
+                        }
+                    });
+                });
+
+            });
+
+    </script>
+
+}
+
+
+
+
+
+
+
+  
+

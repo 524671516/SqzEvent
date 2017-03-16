@@ -12,7 +12,7 @@
                             <a href="/QualityControl/Manager_QualityTestDetail?qtid=@item.Id" class="item-link item-content random-param pass-border">
                                 <div class="item-inner">
                                     <div class="item-title-row">
-                                        <div class="item-title">@Html.Encode(item.Product.SimpleName) @Html.Encode(item.CompleteRate * 100)%</div>
+                                        <div class="item-title">@Html.Encode(item.Product.SimpleName) <span style="font-weight:100">(@Html.Encode(item.ProductionQty) 盒)</span></div>
                                         <div class="item-after">@Html.Encode(item.ApplyTime.ToString("HH:mm"))</div>
                                     </div>
                                 </div>
@@ -23,7 +23,7 @@
                             <a href="/QualityControl/Manager_QualityTestDetail?qtId=@item.Id" class="item-link item-content random-param fail-border">
                                 <div class="item-inner">
                                     <div class="item-title-row">
-                                        <div class="item-title">@Html.Encode(item.Product.SimpleName) @Html.Encode(item.CompleteRate * 100)%</div>
+                                        <div class="item-title">@Html.Encode(item.Product.SimpleName) <span style="font-weight:100">(@Html.Encode(item.ProductionQty) 盒)</span></div>
                                         <div class="item-after">@Html.Encode(item.ApplyTime.ToString("HH:mm"))</div>
                                     </div>
                                 </div>

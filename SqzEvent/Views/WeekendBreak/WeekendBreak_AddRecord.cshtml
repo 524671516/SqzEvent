@@ -1,0 +1,149 @@
+﻿@model SqzEvent.Models.Off_WeekendBreakRecord
+@{
+    Layout = "~/Views/Shared/_WeekendBreak.cshtml";
+    IEnumerable<SqzEvent.Models.Off_WeekendBreakRecord> records = ViewBag.OldRecord;
+}
+<div class="page__header">修改数据</div>
+<br />
+<div class="weui-flex weui-flex-home">
+    <div class="weui-flex__item">
+        <div class="placeholder">
+            <div>累计销量</div>
+            <div class="placeholder__content">
+                <span id="after-sale">@Html.Encode(records.Sum(m => m.SalesCount))</span>
+                <span id="before-sale" class="hidden">@Html.Encode(records.Sum(m => m.SalesCount))</span>
+            </div>
+        </div>
+    </div>
+    <div class="weui-flex__item">
+        <div class="placeholder">
+            <div>累计试饮</div>
+            <div class="placeholder__content">
+                <span id="after-try">@Html.Encode(records.Sum(m => m.TrailCount))</span>
+                <span id="before-try" class="hidden">@Html.Encode(records.Sum(m => m.TrailCount))</span>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+@using (Html.BeginForm("WeekendBreak_AddRecord", "WeekendBreak", FormMethod.Post, new { @class = "form", @role = "form", @id = "add-form" }))
+{
+    @Html.AntiForgeryToken()
+    <input value="@ViewBag.ScheduleId" type="hidden" id="ScheduleId" name="ScheduleId" />
+    @Html.HiddenFor(m => m.WeekendBreakId)
+    @Html.HiddenFor(m=>m.Id)
+    <div class="weui-cells__title">添加产品数据</div>
+    <div class="weui-cells partial"></div>
+    <div class="weui-cells__title">添加试饮数据</div>
+    <div class="weui-cells">
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <div class="item-title">试饮数</div>
+            </div>
+            <div class="weui-cell_hd" style="line-height:28px;">
+                <span class="c_num" id="trail_count">@Html.Encode(records.Sum(m => m.TrailCount))</span>
+                <span class="hidden" id="trail_org">@Html.Encode(records.Sum(m => m.TrailCount))</span>
+            </div>
+            <div class="weui-cell__ft">
+                <div class="input-group">
+                    <a class="input-group-addon reduce" data-step="10" href="javascript:reduce('TrailCount',10)"><i class="fa fa-minus" aria-hidden="true"></i></a>
+                    <input type="tel" class="weui-input try-input" id="TrailCount" name="TrailCount" value="0" onchange="javascript: trailChanges('trail_count', 'trail_org', 'TrailCount');">
+                    <a class="input-group-addon add" data-step="10" href="javascript:add('TrailCount',10)"><i class="fa fa-plus" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="weui-btn-area">
+        <a class="weui-btn weui-btn_primary" href="javascript:;" id="data-submit">提交</a>
+        <a class="weui-btn weui-btn_default" href="/WeekendBreak/WeekendBreak_Home">返回</a>
+    </div>
+    <div id="toast" style="display:none;">
+        <div class="weui-mask_transparent"></div>
+        <div class="weui-toast">
+            <i class="weui-icon-success-no-circle weui-icon_toast"></i>
+            <p class="weui-toast__content">提交成功</p>
+        </div>
+    </div>
+    <br /><br />
+}
+
+@section scripts{
+    <script>
+        $("#data-submit").on("click", function () {
+            if (!$("#data-submit").hasClass("weui-btn_disabled")) {
+                $("#data-submit").addClass("weui-btn_disabled");
+                $("#add-form").ajaxSubmit(function (data) {
+                    if (data == "SUCCESS") {
+                        $("#toast").fadeIn(100);
+                        setTimeout(function () {
+                            $("#toast").fadeOut(100);
+                            window.location.href = "/WeekendBreak/WeekendBreak_Home";
+                        }, 2000);
+                    }
+                });
+            };
+            return false;
+        });
+        $.ajax({
+            url: "/WeekendBreak/WeekendBreak_AddRecordPartial",
+            data: {
+                scheduleId: $("#ScheduleId").val()
+            },
+            success: function (data) {
+                $(".partial").html(data);
+            }
+        });
+        function salesChanges(targetsum, orgsum, inputid) {
+            current_sum = Number($("#" + orgsum).html());
+            current_input = Number($("#" + inputid).val());
+            if (isNaN(current_input)) {
+                current_input = 0;
+                $("#" + inputid).val(0);
+            }
+            $("#" + targetsum).html(current_sum + current_input);
+            sum_sales = 0;
+            $(".sum-sale").each(function () {
+                sum_sales += Number($(this).html());
+            });
+            $("#after-sale").html(sum_sales);
+        }
+        function trailChanges(targetsum, orgsum, inputid) {
+            current_sum = Number($("#" + orgsum).html());
+            current_input = Number($("#" + inputid).val());
+            if (isNaN(current_input)) {
+                current_input = 0;
+                $("#" + inputid).val(0);
+            }
+            $("#" + targetsum).html(current_sum + current_input);
+            $("#after-try").html(current_sum + current_input);
+        }
+        function reduce(inputid, step) {
+            current_input = Number($("#" + inputid).val());
+            if (isNaN(current_input)) {
+                $("#" + inputid).val(0);
+            } else {
+                if (current_input-step >= 0) {
+                    $("#" + inputid).val(current_input - step);
+                }
+                else {
+                    $("#" + inputid).val(0);
+                }
+            }
+            $("#" + inputid).trigger("change");
+        }
+        function add(inputid, step) {
+            current_input = Number($("#" + inputid).val());
+            if (isNaN(current_input)) {
+                $("#" + inputid).val(0);
+            } else {
+                if (current_input >= 0) {
+                    $("#" + inputid).val(current_input + step);
+                }
+            }
+            $("#" + inputid).trigger("change");
+        }
+    </script>
+
+}
+

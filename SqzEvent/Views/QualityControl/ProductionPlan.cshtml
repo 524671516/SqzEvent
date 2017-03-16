@@ -6,7 +6,7 @@
                 <span>返回</span>
             </a>
         </div>
-        <div class="center sliding">每日生产计划表</div>
+        <div class="center sliding">生产计划</div>
         <div class="right">
         </div>
     </div>
@@ -18,9 +18,11 @@
                 <ul>
                     <li>
                         <div class="item-content">
-                            <div class="item-title label">日期</div>
-                            <div class="item-input">
-                                <input id="productionplan-date" type="text" placeholder="日期" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                            <div class="item-inner">
+                                <div class="item-title label">选择时间</div>
+                                <div class="item-input">
+                                    <input type="text" class="item-input-right" id="productionplan-date" name="productionplan-date" placeholder="选择时间" value="@DateTime.Now.ToString("yyyy-MM")" />
+                                </div>
                             </div>
                         </div>
                     </li>

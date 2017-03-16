@@ -7,7 +7,7 @@
                 <span>返回</span>
             </a>
         </div>
-        <div class="center sliding"><strong>添加活动日程</strong></div>
+        <div class="center sliding"><strong>添加日程</strong></div>
     </div>
 </div>
 <div class="pages">
@@ -16,37 +16,46 @@
             @using (Html.BeginForm("Manager_CreateEvent", "Seller", FormMethod.Post, new { @id = "createevent-form", @class = "validate-form" }))
             {
                 @Html.AntiForgeryToken()
-                <div class="content-block-title">活动日程</div>
                 <div class="list-block">
                     <ul>
                         <li>
                             <div class="item-content">
                                 <div class="item-inner">
-                                    <div class="item-title label">活动时间</div>
+                                    <div class="item-title label">日程时间</div>
                                     <div class="item-input">
-                                        <input type="text" id="actDate" name="actDate" placeholder="请选择日期">
+                                        <input type="text" id="actDate" name="actDate" placeholder="请选择日期" class="item-input-right">
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                      
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title label" style="width:50%;">标准上班时间</div>
+                                    <div class="item-input">
+                                        <input id="startTime" name="startTime" type="text" placeholder="请输入时间" value="10:00" class="item-input-right">
                                     </div>
                                 </div>
                             </div>
                         </li>
                         <li>
-                            <a href="#" class="smart-select item-link" data-back-text="返回" data-searchbar="true" data-searchbar-placeholder="店铺名称" data-searchbar-cancel="取消">
-                                <select multiple id="actStore" name="actStore">
-                                    @foreach (string groupname in ViewBag.GroupList)
-                                    {
-                                        <optgroup label="@groupname">
-                                            @foreach (var item in ((IEnumerable<SqzEvent.Models.Off_Store>)(ViewBag.StoreList)).Where(m => m.StoreSystem == groupname))
-                                            {
-                                                <option value="@item.Id">@Html.Encode(item.StoreName)</option>
-                                            }
-                                        </optgroup>
-                                    }
-
-                                </select>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title label" style="width:50%;">标准下班时间</div>
+                                    <div class="item-input">
+                                        <input id="endTime" name="endTime" type="text" placeholder="请输入时间" value="21:00" class="item-input-right">
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="#" class="item-link smart-select" data-back-text="返回" data-back-on-select="true" data-searchbar="true" data-searchbar-placeholder="渠道名称" data-searchbar-cancel="取消">
+                               @Html.DropDownList("Off_StoreSystem_id",ViewBag.StoreSystem as SelectList,new { @required = "required" })
                                 <div class="item-content">
                                     <div class="item-inner">
-                                        <div class="item-title">选择门店</div>
-                                        <div class="item-after smart-select-value">- 请选择 -</div>
+                                        <div class="item-title">渠道选择</div>
+                                        <div class="item-after smart-select-value">@Html.Encode((ViewBag.StoreSystem as SelectList).FirstOrDefault().Text)</div>
                                     </div>
                                 </div>
                             </a>
@@ -54,30 +63,23 @@
                         <li>
                             <div class="item-content">
                                 <div class="item-inner">
-                                    <div class="item-title label">标准上班时间</div>
-                                    <div class="item-input">
-                                        <input id="startTime" name="startTime" type="text" placeholder="请输入时间" value="10:00">
+                                    <div class="item-title label">全选店铺</div>
+                                    <div class="item-input item-input-right">
+                                        <label class="label-switch">
+                                            <input type="checkbox" id="allcheck" name="allcheck">
+                                            <div class="checkbox"></div>
+                                        </label>
                                     </div>
                                 </div>
                             </div>
                         </li>
-                        <li>
-                            <div class="item-content">
-                                <div class="item-inner">
-                                    <div class="item-title label">标准下班时间</div>
-                                    <div class="item-input">
-                                        <input id="endTime" name="endTime" type="text" placeholder="请输入时间" value="21:00">
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <a href="#" class="item-link smart-select" data-back-text="返回" data-back-on-select="true" data-searchbar="true" data-searchbar-placeholder="选择模板" data-searchbar-cancel="取消">
-                                @Html.DropDownList("actTemp", ViewBag.TemplateList as SelectList)
+                        <li id="store-smart">
+                            <a href="#" class="item-link smart-select" data-back-text="返回" data-back-on-select="true" data-searchbar="true" data-searchbar-placeholder="店铺名称" data-searchbar-cancel="取消">
+                                <select multiple id="actStore" name="actStore" required="required" maxlength="20"></select>
                                 <div class="item-content">
                                     <div class="item-inner">
-                                        <div class="item-title">选择模板</div>
-                                        <div class="item-after"></div>
+                                        <div class="item-title">选择店铺</div>
+                                        <div class="item-after smart-select-value smart-select-value2">- 请选择 -</div>
                                     </div>
                                 </div>
                             </a>
@@ -87,7 +89,7 @@
                                 <div class="item-inner">
                                     <div class="item-title label">标准薪资</div>
                                     <div class="item-input">
-                                        <input id="Salary" name="Salary" type="number" placeholder="请输入标准薪资">
+                                        <input id="Salary" name="Salary" type="number" placeholder="请输入标准薪资" class="item-input-right"> 
                                     </div>
                                 </div>
                             </div>

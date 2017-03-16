@@ -1,0 +1,60 @@
+﻿@model SqzEvent.Models.Off_StoreManager
+@{
+    Layout = "~/Views/Shared/_WeekendBreak.cshtml";
+}
+@using (Html.BeginForm("WeekendBreak_Start", "WeekendBreak", FormMethod.Post, new { @class = "form", @role = "form", @id = "start-form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="page__header">周末突破签到信息</div>
+                <br />
+    <div class="weui-cells">
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <p>督导姓名</p>
+            </div>
+            <div class="weui-cell__ft">@Html.Encode(Model.NickName)</div>
+            <input type="hidden" class="form-control" id="managerName" value="@Model.NickName" readonly>
+        </div>
+        <div class="weui-cell weui-cell_select weui-cell_select-after">
+            <div class="weui-cell__hd">
+                <label for="" class="weui-label">店铺名称</label>
+            </div>
+            <div class="weui-cell__bd">
+                @Html.DropDownList("ScheduleId", ViewBag.StoreListSelectList as SelectList, new { @class = "weui-select" })
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="weui-btn-area">
+        <a class="weui-btn weui-btn_primary" href="javascript:" id="start-submit">签到并开始</a>
+    </div>
+    <div id="toast" style="display:none;">
+        <div class="weui-mask_transparent"></div>
+        <div class="weui-toast">
+            <i class="weui-icon-success-no-circle weui-icon_toast"></i>
+            <p class="weui-toast__content">签到成功</p>
+        </div>
+    </div>
+}
+@section scripts{
+    <script>
+        var submitting = false
+        $("#start-submit").on("click", function () {
+            if (!submitting) {
+                $("#start-submit").addClass("weui-btn_disabled");
+                submitting = true;
+                $("#start-form").ajaxSubmit(function (data) {
+                    if (data == "SUCCESS") {
+                        $("#toast").fadeIn(100);
+                        setTimeout(function () {
+                            $("#toast").fadeOut(100);
+                            window.location.href = "/WeekendBreak/WeekendBreak_Home";
+                            submitting = false;
+                        }, 2000);
+                    }
+                });
+                return false;
+            };
+        });
+    </script>
+}

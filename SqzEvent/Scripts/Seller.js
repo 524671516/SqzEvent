@@ -131,7 +131,6 @@ $$(document).on("pageInit", ".page[data-page='seller-changeaccount']", function 
         }
     });
 })
-
 //Seller_CheckIn 签到
 $$(document).on("pageInit", ".page[data-page='seller-checkin']", function (e) {
     //新用户弹窗

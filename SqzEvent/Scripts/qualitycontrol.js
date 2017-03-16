@@ -207,23 +207,23 @@ myApp.onPageInit("addcheckout", function (page) {
 厂检报告页
 =========*/
 myApp.onPageInit("factorytestlist", function (page) {
-    if ($$("#FactoryId").val() != "") {
+    if ($$("#SelectFactoryId").val() != "") {
         $$.ajax({
             url: "/QualityControl/QualityFactoryTestPartial",
             data: {
-                fid: $$("#FactoryId").val()
+                fid: $$("#SelectFactoryId").val()
             },
             success: function (data) {
                 $$("#factorytest-list").html(data);
             }
         })
     }
-    $$("#FactoryId").on("change", function () {
-        if ($$("#FactoryId").val() != "") {
+    $$("#factorytestlist").on("change", "#SelectFactoryId", function () {
+        if ($$("#SelectFactoryId").val() != "") {
             $$.ajax({
                 url: "/QualityControl/QualityFactoryTestPartial",
                 data: {
-                    fid: $$("#FactoryId").val()
+                    fid: $$("#SelectFactoryId").val()
                 },
                 success: function (data) {
                     $$("#factorytest-list").html(data);
@@ -299,7 +299,7 @@ myApp.onPageInit("qualityregulartest", function (page) {
         dayNamesShort: dayNamesShort,
         closeOnSelect: true
     });
-    $$("#FactoryId").on("change", function () {
+    $$("#qualityregulartest").on("change", "#FactoryId", function () {
         $$("#ProductId").html("");
         $$("#ProductId").append("<option>" + "- 请选择 -" + "</option>");
         $$("#product-select").find(".item-after").html("- 请选择 -");
@@ -463,7 +463,19 @@ myApp.onPageInit('dailysummary', function (page) {
             }, 500)
         }
     });
-
+    $$("#AgendaId").on("change", function () {
+        $$.ajax({
+            url: "/QualityControl/QCDailySummaryPartial",
+            data: {
+                agendaId: $$("#AgendaId").val()
+            },
+            success: function (data) {
+                $$('#dailysummary-content').html(data);
+                uploadCheckinFile("qcdailysummarypartial-form", "qcsummary-photos", "SummaryPhotos", "qcsummary-imgcount", 7);
+                currentTextAreaLength("qcdailysummarypartial-form", "Remark", 200, "qccheckin-currentlen");
+            }
+        });
+    });
 });
 /*==========
 确认修复页
@@ -519,14 +531,26 @@ myApp.onPageInit('recoverybreakdown', function (page) {
 =========*/
 myApp.onPageInit("productionplan", function (page) {
     //添加日历
-    var calendarMultiple = myApp.calendar({
-        input: "#productionplan-date",
-        dateFormat: "yyyy-mm-dd",
-        monthNames: monthNames,
-        monthNamesShort: monthNamesShort,
-        dayNames: dayNames,
-        dayNamesShort: dayNamesShort,
-        closeOnSelect: true
+    //var calendarMultiple = myApp.calendar({
+    //    input: "#productionplan-date",
+    //    dateFormat: "yyyy-mm-dd",
+    //    monthNames: monthNames,
+    //    monthNamesShort: monthNamesShort,
+    //    dayNames: dayNames,
+    //    dayNamesShort: dayNamesShort,
+    //    closeOnSelect: true
+    //});
+    var today = new Date();
+    var currentYear = today.getFullYear();
+    var currentMonth = (today.getMonth() + 1) < 10 ? "0" + (today.getMonth() + 1) : (today.getMonth() + 1);
+    var pickerInline = myApp.picker({
+        input: '#productionplan-date',
+        formatValue: function (p, values, displayValues) {
+            return values[0] + '-' + values[1];           //文本框显示格式
+        },
+        toolbarCloseText: "关闭",
+        value: [currentYear, currentMonth],
+        cols: time_col2
     });
     $$.ajax({
         url: "/QualityControl/ProductPlanPartial",
@@ -933,6 +957,23 @@ function currentTextAreaLength(pagename, id_name, max_length, result_id) {
         }
     });
 }
+var time_col2 = [
+    {
+        values: (function () {
+            var arr = [];
+            for (var i = 1999; i <= 2030; i++) { arr.push(i); }
+            return arr;
+        })(),
+    },
+    {
+        divider: true,
+        content: '-'
+    },
+     {
+         values: ('01 02 03 04 05 06 07 08 09 10 11 12').split(' '),
+         textAlign: 'right'
+     },
+]
 var time_col = [
     {
         values: (function () {
@@ -1003,6 +1044,7 @@ function CheckError(SubmitBtn, SubmitForm) {
             if ($(this).val() == "- 请选择 -" || $(this).val() == null || $(this).val() =="") {
                 myApp.alert($(this).next().find(".item-title").html() + " 未选择");
                 pass = false;
+                
             }
         });
     }

@@ -8,12 +8,14 @@
             </a>
         </div>
         <div class="center sliding"><strong>销量排名</strong></div>
+        <div class="right">
+            <a href="#" class="link" id="statistic_btn"><i class="fa fa-bar-chart" aria-hidden="true"></i><span>统计</span></a>
+        </div>
     </div>
 </div>
 <div class="pages">
     <div class="page" data-page="manager-reportlist">
         <div class="page-content">
-            <div class="content-block-title">选择日期</div>
             <div class="list-block">
                 <ul>
                     <li>
@@ -21,7 +23,7 @@
                             <div class="item-inner">
                                 <div class="item-title label">日期</div>
                                 <div class="item-input">
-                                    <input id="manager-reportlist-date" type="text" placeholder="日期" value="@ViewBag.today.ToString("yyyy-MM-dd")" />
+                                    <input id="manager-reportlist-date" type="text" placeholder="日期" value="@ViewBag.today.ToString("yyyy-MM-dd")" class="item-input-right"/>
                                 </div>
                             </div>
                         </div>
@@ -31,7 +33,7 @@
                             @Html.DropDownList("checklist", ViewBag.StoreSystem as SelectList, new { @id = "manager-reportlist-storesystem" })
                             <div class="item-content">
                                 <div class="item-inner">
-                                    <div class="item-title">系统</div>
+                                    <div class="item-title">选择渠道</div>
                                 </div>
                             </div>
                         </a>

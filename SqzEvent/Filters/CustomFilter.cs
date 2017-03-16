@@ -33,4 +33,28 @@ namespace SqzEvent.Filters
             }
         }
     }
+
+    public class StatisticsFilter : ActionFilterAttribute
+    {
+        public string PageName;
+        public string PageURL;
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            base.OnActionExecuting(filterContext);
+            if (PageName !=null && PageURL != null)
+            {
+                Configuration db = new Configuration();
+                WeChatStatistic item = new WeChatStatistic()
+                {
+                    AccessDatetime = DateTime.Now,
+                    HostAddress = filterContext.HttpContext.Request.UserHostAddress,
+                    PageName = PageName,
+                    PageURL = PageURL
+                };
+                db.WeChatStatistic.Add(item);
+                db.SaveChanges();
+            }
+            //filterContext.HttpContext.Response.Write("Action执行之前" + statistics_Id + "<br />");
+        }
+    }
 }
