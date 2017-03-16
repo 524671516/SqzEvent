@@ -68,7 +68,14 @@
                                 <div class="item-inner">
                                     <div class="item-title label">制造时间</div>
                                     <div class="item-input">
-                                        <input type="text" class="item-input-right" id="ManufactureDate" name="ManufactureDate" placeholder="请输入制造时间" required  value="@Html.Encode(Convert.ToDateTime(Model.ManufactureDate).ToString("yyyy-MM-dd"))"/>
+                                        @if (Model.ManufactureDate == null)
+                                        {
+                                            <input type="text" class="item-input-right" id="ManufactureDate" name="ManufactureDate" placeholder="请输入制造时间" dateISO=true required value="@Model.ManufactureDate" />
+                                        }                                                                              
+                                        else
+                                        {
+                                            <input type="text" class="item-input-right" id="ManufactureDate" name="ManufactureDate" placeholder="请输入制造时间" dateISO=true required value="@Html.Encode(Convert.ToDateTime(Model.ManufactureDate).ToString("yyyy-MM-dd"))" />
+                                        }                                       
                                     </div>
                                 </div>
                             </div>

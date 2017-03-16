@@ -1486,7 +1486,14 @@ namespace SqzEvent.Controllers
                 if (TryUpdateModel(item))
                 {
                     _qcdb.Entry(item).State = System.Data.Entity.EntityState.Modified;
-                    _qcdb.SaveChanges();
+                    try
+                    {
+                        _qcdb.SaveChanges();
+                    }
+                    catch
+                    {
+                        return Content("提交数据异常");
+                    }
                     return Content("SUCCESS");
                 }
                 return Content("FAIL");
