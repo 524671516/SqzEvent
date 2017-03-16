@@ -59,35 +59,35 @@ $$(document).on('refresh',".pull-to-refresh-content", function (e) {
 var myPhotoBrowserPopupDark = myApp.photoBrowser({
     photos: [
         {
-            url: '/Content/Content/images/sellertask-guide-01.jpg',
+            url: '/Content/images/sellertask-guide-01.jpg',
             caption: '促销管理系统'
         },
         {
-            url: '/Content/Content/images/sellertask-guide-02.jpg',
+            url: '/Content/images/sellertask-guide-02.jpg',
             caption: '个人信息'
         },
         {
-            url: '/Content/Content/images/sellertask-guide-03.jpg',
+            url: '/Content/images/sellertask-guide-03.jpg',
             caption: '每日任务'
         },
         {
-            url: '/Content/Content/images/sellertask-guide-04.jpg',
+            url: '/Content/images/sellertask-guide-04.jpg',
             caption: '历史记录'
         },
         {
-            url: '/Content/Content/images/sellertask-guide-05.jpg',
+            url: '/Content/images/sellertask-guide-05.jpg',
             caption: '库存详情'
         },
         {
-            url: '/Content/Content/images/sellertask-guide-06.jpg',
+            url: '/Content/images/sellertask-guide-06.jpg',
             caption: '修改记录'
         },
         {
-            url: '/Content/Content/images/sellertask-guide-07.jpg',
+            url: '/Content/images/sellertask-guide-07.jpg',
             caption: '提交修改'
         },
         {
-            url: '/Content/Content/images/sellertask-guide-08.jpg',
+            url: '/Content/images/sellertask-guide-08.jpg',
             caption: '完善信息'
         }
     ],
@@ -566,7 +566,7 @@ $$(document).on('pageInit', '.page[data-page="infinitescroll"]', function (e) {
             //生成新的条目
             itemList = '';
             for (var i = lastIndex + 1; i <= lastIndex + itemPerload; i++) {
-                itemList += "<li class='card'><div class='card-content demo-card-header-pic'><div style='background-image: url('../../Content/Content/images/img_" + i + ".jpg');' class='card-header'></div><div class='card-content-inner'><p class='color-gray'>2016-07-06</p></div></div></li>";
+                itemList += "<li class='card'><div class='card-content demo-card-header-pic'><div style='background-image: url('../../Content/images/img_" + i + ".jpg');' class='card-header'></div><div class='card-content-inner'><p class='color-gray'>2016-07-06</p></div></div></li>";
             };
             $$(".list-card").append(itemList);//添加
             lastIndex = $$(".list-card li").length//新的条数
@@ -622,7 +622,7 @@ $$(document).on("pageInit", ".page[data-page='managersystem-patrol']", function 
             //生成新的条目
             itemList = '';
             for (var i = lastIndex + 1; i <= lastIndex + itemPerload; i++) {
-                itemList += "<li class='card'><div class='card-content demo-card-header-pic'><div style='background-image: url('../../Content/Content/images/img_" + i + ".jpg');' class='card-header'></div><div class='card-footer'><span>大润发-江山店</span><span class='manager-patrol-date'>2016-07-07</span></div></div></li>";
+                itemList += "<li class='card'><div class='card-content demo-card-header-pic'><div style='background-image: url('../../Content/images/img_" + i + ".jpg');' class='card-header'></div><div class='card-footer'><span>大润发-江山店</span><span class='manager-patrol-date'>2016-07-07</span></div></div></li>";
             };
             $$(".list-card").append(itemList);//添加
             lastIndex = $$(".list-card li").length//新的条数

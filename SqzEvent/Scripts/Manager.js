@@ -86,55 +86,55 @@ $$(document).on("touchstart", "a.random-param", function () {
 // 使用指南
 $$("#manager_userpanel").on("click", ".manager-photolist", function () {
     var photo = [{
-        url: "/Content/Content/images/Manager_app_01.jpg",
+        url: "/Content/images/Manager_app_01.jpg",
         caption: "督导签到 - - 首页"
     }, {
-        url: "/Content/Content/images/Manager_app_03.jpg",
+        url: "/Content/images/Manager_app_03.jpg",
         caption: "督导签到 - - 首页"
     }, {
-        url: "/Content/Content/images/Manager_app_02.jpg",
+        url: "/Content/images/Manager_app_02.jpg",
         caption: "督导签到 - - 督导个人信息"
     }, {
-        url: "/Content/Content/images/Manager_app_04.jpg",
+        url: "/Content/images/Manager_app_04.jpg",
         caption: "督导签到 - - 督导每日签到"
     }, {
-        url: "/Content/Content/images/Manager_app_05.jpg",
+        url: "/Content/images/Manager_app_05.jpg",
         caption: "督导签到 - - 督导工作日报"
     }, {
-        url: "/Content/Content/images/Manager_app_06.jpg",
+        url: "/Content/images/Manager_app_06.jpg",
         caption: "督导签到 - - 查看个人签到信息"
     }, {
-        url: "/Content/Content/images/Manager_app_07.jpg",
+        url: "/Content/images/Manager_app_07.jpg",
         caption: "督导签到 - - 查看其他督导签到"
     }, {
-        url: "/Content/Content/images/Manager_app_08.jpg",
+        url: "/Content/images/Manager_app_08.jpg",
         caption: "督导签到 - - 店铺提报列表"
     }, {
-        url: "/Content/Content/images/Manager_app_09.jpg",
+        url: "/Content/images/Manager_app_09.jpg",
         caption: "督导巡店 - - 首页"
     }, {
-        url: "/Content/Content/images/Manager_app_10.jpg",
+        url: "/Content/images/Manager_app_10.jpg",
         caption: "督导巡店 - - 未签到"
     }, {
-        url: "/Content/Content/images/Manager_app_11.jpg",
+        url: "/Content/images/Manager_app_11.jpg",
         caption: "督导巡店 - - 未签退"
     }, {
-        url: "/Content/Content/images/Manager_app_12.jpg",
+        url: "/Content/images/Manager_app_12.jpg",
         caption: "督导巡店 - - 修改签到信息"
     }, {
-        url: "/Content/Content/images/Manager_app_13.jpg",
+        url: "/Content/images/Manager_app_13.jpg",
         caption: "督导管理 - - 首页"
     }, {
-        url: "/Content/Content/images/Manager_app_14.jpg",
+        url: "/Content/images/Manager_app_14.jpg",
         caption: "督导管理 - - 销量排名"
     }, {
-        url: "/Content/Content/images/Manager_app_15.jpg",
+        url: "/Content/images/Manager_app_15.jpg",
         caption: "督导管理 - - 红包发放"
     }, {
-        url: "/Content/Content/images/Manager_app_16.jpg",
+        url: "/Content/images/Manager_app_16.jpg",
         caption: "督导管理 - - 红包记录"
     }, {
-        url: "/Content/Content/images/Manager_app_17.jpg",
+        url: "/Content/images/Manager_app_17.jpg",
         caption: "督导暗促 - - 首页"
     }];
     var myPhotoBrowserPopupDark = myApp.photoBrowser({
@@ -1511,7 +1511,7 @@ $$(document).on("pageInit", ".page[data-page='manager-task-eventedit']", functio
 $$(document).on("pageInit", ".page[data-page='manager-tasksellerdetails']", function () {
     //查看签到图片
     var myPhotoManagerSellerChekinIn = myApp.photoBrowser({
-        photos: ["/Content/Content/images/guide-02-3.jpg"],
+        photos: ["/Content/images/guide-02-3.jpg"],
         theme: "dark",
         type: "standalone",
         lazyLoading: true,
@@ -1519,7 +1519,7 @@ $$(document).on("pageInit", ".page[data-page='manager-tasksellerdetails']", func
         backLinkText: "关闭"
     });
     var myPhotoManagerSellerChekinOut = myApp.photoBrowser({
-        photos: ["/Content/Content/images/guide-02-2.jpg"],
+        photos: ["/Content/images/guide-02-2.jpg"],
         theme: "dark",
         type: "standalone",
         lazyLoading: true,
@@ -1527,7 +1527,7 @@ $$(document).on("pageInit", ".page[data-page='manager-tasksellerdetails']", func
         backLinkText: "关闭"
     });
     var myPhotoManagerSellerSales = myApp.photoBrowser({
-        photos: ["/Content/Content/images/guide-02-3.jpg"],
+        photos: ["/Content/images/guide-02-3.jpg"],
         theme: "dark",
         type: "standalone",
         lazyLoading: true,
