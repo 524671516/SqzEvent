@@ -1,0 +1,50 @@
+﻿@model IEnumerable<SqzEvent.Models.Off_Membership_Bind>
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="left">
+            <a href="#" class="back link">
+                <i class="icon icon-back" aria-hidden="true"></i>
+                <span>返回</span>
+            </a>
+        </div>
+        <div class="center sliding"><strong>未绑定促销员</strong></div>
+    </div>
+</div>
+<div class="pages">
+    <div class="page" data-page="manager-bindseller">
+        <form class="searchbar">
+            <div class="searchbar-input">
+                <input type="search" placeholder="搜索">
+                <a href="#" class="searchbar-clear"></a>
+            </div>
+            <a href="#" class="searchbar-cancel">取消</a>
+        </form>
+        <div class="searchbar-overlay"></div>
+        <div class="page-content">
+            <div class="content-block searchbar-not-found">
+                查找内容不存在
+            </div>
+
+            <div class="list-block list-block-search searchbar-found">
+                <ul>
+                    @foreach (var item in Model)
+                    {
+                        <li class="swipeout">
+                            <div class="swipeout-content">
+                                <a href="javascript:;" class="item-content item-link">
+                                    <div class="item-inner">
+                                        <div class="item-title">@Html.Encode(item.NickName)</div>
+                                        <div class="item-after">@Html.Encode(item.Mobile)</div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="swipeout-actions-right">
+                                <a href="/Seller/Manager_BindSeller?id=@item.Id" class="bg-blue random-param">绑定</a>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

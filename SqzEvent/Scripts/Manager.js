@@ -1991,6 +1991,103 @@ $$(document).on("pageInit", ".page[data-page='manager-queryseller']", function (
     });
 });
 
+//Manager_BindList 绑定促销员列表
+$$(document).on("pageInit", ".page[data-page='manager-bindseller']", function () {
+    var mySearchbar = myApp.searchbar(".searchbar", {
+        searchList: ".list-block-search",
+        searchIn: ".item-content"
+    });
+});
+//Manager_BindSeller 绑定促销员
+$$(document).on("pageInit", ".page[data-page='manager-bind']", function () {
+    var mySearchbar = myApp.searchbar(".searchbar", {
+        searchList: ".list-block-search",
+        searchIn: ".item-content"
+    });
+    if ($$("#storesystemid").val() != "") {
+        $$.ajax({
+            url: "/Seller/Manager_StoreListByStoreSystemId",
+            type: "post",
+            data: {
+                storesystemId: $$("#storesystemid").val()
+            },
+            success: function (data) {
+                data = JSON.parse(data);
+                if (data.result == "SUCCESS") {
+                    for (var i = 0; i < data.storelist.length; i++) {
+                        $$("#StoreId").append("<option value=\"" + data.storelist[i].Id + "\">" + data.storelist[i].StoreName + "</option>");
+                    }
+                }
+            }
+        });
+    }
+    $$("#storesystemid").on("change", function () {
+        $$("#StoreId").html("");
+        $$("#StoreId").append("<option value=\"\">- 请选择 -</option>");
+        $("#store-smart .smart-select-value").html("- 请选择 -")
+        if ($$(this).val() != "") {
+            $$.ajax({
+                url: "/Seller/Manager_StoreListByStoreSystemId",
+                type: "post",
+                data: {
+                    storesystemId: $$("#storesystemid").val()
+                },
+                success: function (data) {
+                    data = JSON.parse(data);
+                    if (data.result == "SUCCESS") {
+                        for (var i = 0; i < data.storelist.length; i++) {
+                            $$("#StoreId").append("<option value=\"" + data.storelist[i].Id + "\">" + data.storelist[i].StoreName + "</option>");
+                        }
+                    }
+                }
+            });
+        }
+    });
+    $$("#bind-submit").on("click", function () {
+        if (!$(this).hasClass("color-gray")) {
+            var pass = true;
+            if ($("#storesystemid").val() == "") {
+                myApp.alert("请选择系统");
+                $$("#bind-submit").removeClass("color-gray");
+                pass = false;
+            };
+            if (pass == true) {
+                if ($("#StoreId").val() == "") {
+                    myApp.alert("请选择店铺");
+                    $$("#bind-submit").removeClass("color-gray");
+                    pass = false;
+                };
+            }
+            if (pass) {
+                $("#bind-form").ajaxSubmit(function (data) {
+                    if (data == "SUCCESS") {
+                        myApp.hideIndicator();
+                        mainView.router.back();
+                        myApp.addNotification({
+                            title: "通知",
+                            message: "表单提交成功"
+                        });
+                        setTimeout(function () {
+                            myApp.closeNotification(".notifications");
+                        }, 2e3);
+                    } else {
+                        myApp.hideIndicator();
+                        myApp.addNotification({
+                            title: "通知",
+                            message: "表单提交失败"
+                        });
+                        $$("#bind-submit").removeClass("color-gray");
+                        setTimeout(function () {
+                            myApp.closeNotification(".notifications");
+                        }, 2e3);
+                    }
+                });
+            }
+        } else {
+            $$("#bind-submit").removeClass("color-gray");
+        }
+    });
+});
 // Manager_EditSellerInfo 修改促销员信息
 $$(document).on("pageInit", ".page[data-page='manager-editsellerinfo']", function () {
     $("#editsellerinfo-form").validate({
