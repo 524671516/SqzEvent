@@ -2000,10 +2000,6 @@ $$(document).on("pageInit", ".page[data-page='manager-bindseller']", function ()
 });
 //Manager_BindSeller 绑定促销员
 $$(document).on("pageInit", ".page[data-page='manager-bind']", function () {
-    var mySearchbar = myApp.searchbar(".searchbar", {
-        searchList: ".list-block-search",
-        searchIn: ".item-content"
-    });
     if ($$("#storesystemid").val() != "") {
         $$.ajax({
             url: "/Seller/Manager_StoreListByStoreSystemId",
@@ -2074,7 +2070,7 @@ $$(document).on("pageInit", ".page[data-page='manager-bind']", function () {
                         myApp.hideIndicator();
                         myApp.addNotification({
                             title: "通知",
-                            message: "表单提交失败"
+                            message: data
                         });
                         $$("#bind-submit").removeClass("color-gray");
                         setTimeout(function () {

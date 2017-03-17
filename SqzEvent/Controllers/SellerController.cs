@@ -2077,25 +2077,37 @@ namespace SqzEvent.Controllers
                 Off_Seller item = new Off_Seller();
                 if (TryUpdateModel(item))
                 {
-                    item.UploadUser = User.Identity.Name;
-                    item.UploadTime = DateTime.Now;
-                    offlineDB.Off_Seller.Add(item);
-                    await offlineDB.SaveChangesAsync();
                     var bindid = Convert.ToInt32(form["Sid"]);
                     var bindone = offlineDB.Off_Membership_Bind.SingleOrDefault(m => m.Id == bindid);
-                    try
+                    var seller = from m in offlineDB.Off_Seller
+                                 where m.Mobile == bindone.Mobile
+                                 select m;
+                    if (seller.Count() > 0)
                     {
-                        var seller = offlineDB.Off_Seller.SingleOrDefault(m => m.Mobile == bindone.Mobile);
-                        bindone.Off_Seller_Id = seller.Id;
-                        bindone.Bind = true;
-                        offlineDB.Entry(bindone).State = System.Data.Entity.EntityState.Modified;
-                        offlineDB.SaveChanges();
-                        return Content("SUCCESS");
+                        return Content("此促销员已存在系统中，请在电脑上尝试绑定");
                     }
-                    catch
+                    else
                     {
-                        return Content("FAIL");
+                        item.UploadUser = User.Identity.Name;
+                        item.UploadTime = DateTime.Now;
+                        offlineDB.Off_Seller.Add(item);
+                        await offlineDB.SaveChangesAsync();
+                        try
+                        {
+
+                            bindone.Off_Seller_Id = seller.FirstOrDefault().Id;
+                            bindone.Bind = true;
+                            offlineDB.Entry(bindone).State = System.Data.Entity.EntityState.Modified;
+                            offlineDB.SaveChanges();
+                            return Content("SUCCESS");
+                        }
+                        catch
+                        {
+                            return Content("FAIL");
+                        }
                     }
+
+
                 }
                 else
                 {
