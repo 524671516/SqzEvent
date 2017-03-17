@@ -657,6 +657,7 @@
     <Content Include="Views\Promotion\Tjh_WechatPay_Success.cshtml" />
     <Content Include="Views\Seller\Manager_BindList.cshtml" />
     <Content Include="Views\Seller\Manager_BindSeller.cshtml" />
+    <Content Include="Views\Seller\Manager_BindListPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

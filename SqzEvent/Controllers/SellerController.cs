@@ -2051,14 +2051,32 @@ namespace SqzEvent.Controllers
         [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_BindList()
         {
-            var user = UserManager.FindById(User.Identity.GetUserId());
-            var bindlist = from m in offlineDB.Off_Membership_Bind
-                           where m.Off_System_Id== user.DefaultSystemId&&m.Type==2&&m.Bind==false
-                           orderby m.ApplicationDate descending
-                           select m;
-            return PartialView(bindlist);
+
+            return View();
         }
 
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
+        public ActionResult Manager_BindListPartial(int? page,string query)
+        {
+            var _page = page ?? 0;
+            var user = UserManager.FindById(User.Identity.GetUserId());
+            if (query == null)
+            {
+                var bindlist= (from m in offlineDB.Off_Membership_Bind
+                               where m.Off_System_Id == user.DefaultSystemId && m.Type == 2 && m.Bind == false
+                               orderby m.ApplicationDate descending
+                               select m).Skip(_page * 10).Take(10);
+                return PartialView(bindlist);
+            }
+            else
+            {
+                var bindlist = (from m in offlineDB.Off_Membership_Bind
+                                where m.Off_System_Id == user.DefaultSystemId && m.Type == 2 && m.Bind == false || m.NickName.Contains(query)
+                                orderby m.ApplicationDate descending
+                                select m).Skip(_page * 10).Take(10);
+                return PartialView(bindlist);
+            }
+        }
         [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_BindSeller(int id)
         {
@@ -2083,22 +2101,26 @@ namespace SqzEvent.Controllers
                 }
                 else
                 {
+                    var user = UserManager.FindById(User.Identity.GetUserId());
                     Off_Seller item = new Off_Seller()
                     {
                         Mobile = model.Mobile,
                         Name = model.NickName,
                         StoreId = Convert.ToInt32(form["StoreId"]),
-                        Off_System_Id = model.Off_System_Id
+                        Off_System_Id = model.Off_System_Id,
+                        UploadTime=DateTime.Now,
+                        UploadUser=user.UserName
+                         
                     };
                     offlineDB.Off_Seller.Add(item);
                     try
                     {
                         await offlineDB.SaveChangesAsync();
-                        var sellerperson = offlineDB.Off_Seller.SingleOrDefault(m => m.Mobile == model.Mobile);
+                        var sellerperson = offlineDB.Off_Seller.SingleOrDefault(m => m.Mobile == model.Mobile&&m.Off_System_Id==model.Off_System_Id);
                         model.Off_Seller_Id = sellerperson.Id;
                         model.Bind = false;
                         offlineDB.Entry(model).State = System.Data.Entity.EntityState.Modified;
-                        offlineDB.SaveChanges();
+                        await offlineDB.SaveChangesAsync();
                     }
                     catch
                     {
@@ -2115,6 +2137,7 @@ namespace SqzEvent.Controllers
 
 
         // 红包信息列表
+
         [Authorize(Roles = "Administrator")]
         [SettingFilter(SettingName = "BONUS")]
         public ActionResult Manager_BonusList()
