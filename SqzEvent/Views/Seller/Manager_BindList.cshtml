@@ -31,15 +31,12 @@
                     {
                         <li class="swipeout">
                             <div class="swipeout-content">
-                                <a href="javascript:;" class="item-content item-link">
+                                <a href="/Seller/Manager_BindSeller?id=@item.Id" class="item-content item-link">
                                     <div class="item-inner">
                                         <div class="item-title">@Html.Encode(item.NickName)</div>
                                         <div class="item-after">@Html.Encode(item.Mobile)</div>
                                     </div>
                                 </a>
-                            </div>
-                            <div class="swipeout-actions-right">
-                                <a href="/Seller/Manager_BindSeller?id=@item.Id" class="bg-blue random-param">绑定</a>
                             </div>
                         </li>
                     }
