@@ -16,7 +16,7 @@
     <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
     <style>
         body {
-            background-image: url('../../Content/images/tjh_wechatpay_background.jpg');
+            background-image: url('/Content/images/tjh_wechatpay_background.jpg');
             background-size:100%;
         }
         .wrap{
@@ -33,11 +33,11 @@
             margin:40px 20px 0 20px;
             position:absolute;
             color:#000;
-            height:27rem;
             border-radius:10px;
+            padding-bottom:30px;
         }
         .num{
-            height:16rem;
+            padding:20px;
         }
         .btn-box{
             height:4rem;
@@ -58,10 +58,10 @@
             height:80px;
         }
         #start_pay:hover,#start_pay:focus{
-            color:#000 !important;
+            color:#fff !important;
         }
        .btn{
-            width:120px;
+            width:50%;
             background-color:#a41b37;
             color:#fff;
         }
@@ -81,17 +81,18 @@
             <div class="col-xs-12">
                 <div class="col-xs-4"></div>
                 <div class="logo col-xs-4">
-                    <img src="~/Content/images/logo_new.png" />
+                    <img src="~/Content/images/logo_new.png" class="img-circle" />
                 </div>
                 <div class="col-xs-4"></div>
             </div>
         </div>
         <div class="content text-center" id="before-pay">
-            <div class="num">
-                <h3 id="order-money"  style="padding:40px;">支付金额:&nbsp;<span>&yen;&nbsp;</span><span>200</span></h3>
+            <div class="num" style="padding:20px 0 40px 0;">
+                <h4>支付金额</h4>
+                <h1 id="order-money"><span>&yen;&nbsp;</span><span>5.00 元</span></h1>
             </div>
             <div class="btn-box">
-                <button class="btn btn-lg" id="start_pay" ><span>立即支付</span></button>
+                <button class="btn btn-lg" id="start_pay"><span>立即支付</span></button>
             </div>
         </div>
     </div>
@@ -111,23 +112,28 @@
                     if (res.err_msg == "get_brand_wcpay_request:ok") {
                         window.location.href = "/Promotion/Tjh_WechatPay_Success?" + _package;
                     }     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+                    else {
+                        $("#start_pay").html("<span>立即支付</span>").attr("disabled", false);
+                    }
                 }
             );
         }
         function onBridgeReady() {
+            
             $("#start_pay").click(function () {
-                $.ajax({
-                    url: "/Promotion/Tjh_WechatPay_SetMoney",
-                    data: {
-                        __RequestVerificationToken: $("input[name=__RequestVerificationToken]").val(),
-                        "_openId": $("#openid").text(),
-                        "body": "寿全斋 红糖姜茶微信支付"
-                    },
-                    type: "post",
-                    success: function (data) {
-                        $("#start_pay").html("<i class=\"fa fa-spinner fa-spin fa-1x fa-fw\" style=\"color:#fff;\"></i>");
-                        if ($("#start_pay").prop("disabled") == false) {
-                            $("#start_pay").prop("disabled", true);
+                $("#start_pay").html("<i class=\"fa fa-spinner fa-spin fa-1x fa-fw\" style=\"color:#fff;\"></i>");
+                if ($("#start_pay").prop("disabled") == false) {
+                    $("#start_pay").prop("disabled", true);
+                    $.ajax({
+                        url: "/Promotion/Tjh_WechatPay_SetMoney",
+                        data: {
+                            __RequestVerificationToken: $("input[name=__RequestVerificationToken]").val(),
+                            "_openId": $("#openid").text(),
+                            "body": "寿全斋 红糖姜茶微信支付"
+                        },
+                        type: "post",
+                        success: function (data) {
+
                             $.ajax({
                                 type: "get",
                                 url: "/Pay/createPay",
@@ -135,7 +141,6 @@
                                     "prepay_id": data.prepay_id
                                 },
                                 success: function (data) {
-                                    alert("3");
                                     if (data.result == "SUCCESS") {
                                         var _appId = data.appid;
                                         var _timeStamp = data.timeStamp;
@@ -150,11 +155,9 @@
                                     }
                                 }
                             });
-                        } else {
-                            $("#start_pay").html("<span>立即支付</span>").attr("disabled", false);
                         }
-                    }
-                });
+                    });
+                }
             });
         }
         if (typeof WeixinJSBridge == "undefined") {

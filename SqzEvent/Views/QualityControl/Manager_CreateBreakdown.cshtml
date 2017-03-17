@@ -1,5 +1,4 @@
-﻿@model SqzEvent.Models.BreakdownReport
-
+﻿@model SqzEvent.Models.BreakdownType
 <div class="navbar">
     <div class="navbar-inner">
         <div class="left">
@@ -8,27 +7,23 @@
                 <span>返回</span>
             </a>
         </div>
-        <div class="center sliding"><strong>新增故障报告</strong></div>
+        <div class="center sliding"><strong>新增故障</strong></div>
         <div class="right">
-            <a href="javascript:;" class="link" id="addbreakdown-submit">提交</a>
+            <a href="javascript:;" class="link" id="addbreakdowntype-submit">提交</a>
         </div>
     </div>
 </div>
 <div class="pages">
-    <div class="page" data-page="addbreakdown">
+    <div class="page" data-page="addbreakdowntype" id="addbreakdowntype">
         <div class="page-content">
-            @using (Html.BeginForm("AddBreakdown", "QualityControl", FormMethod.Post, new { @id = "addbreakdown-form", @class = "validate-form" }))
+            @using (Html.BeginForm("CreateBreakdowmForEquipment", "QualityControl", FormMethod.Post, new { @id = "addbreakdowntype-form", @class = "validate-form" }))
             {
                 @Html.AntiForgeryToken()
-                @Html.HiddenFor(m => m.Status)
-                @Html.HiddenFor(m => m.Id)
-                @Html.HiddenFor(m => m.QCStaffId)
-                <div class="content-block-title">新增故障报告</div>
                 <div class="list-block">
                     <ul>
-                        <li id="FactoryLi">
+                        <li>
                             <a href="#" class="item-link smart-select" data-back-text="返回" data-back-on-select="true" data-searchbar-placeholder="选择工厂" data-searchbar-cancel="取消" id="factory-select">
-                                @Html.DropDownList("FactoryId", ViewBag.FactoryDropDown as SelectList, "- 请选择 -", new { @class = "required" })
+                                @Html.DropDownList("FactoryId", ViewBag.fl as SelectList, "- 请选择 -", new { @class = "required" })
                                 <div class="item-content">
                                     <div class="item-inner">
                                         <div class="item-title">选择工厂</div>
@@ -37,11 +32,9 @@
                                 </div>
                             </a>
                         </li>
-                        <li id="QCEquipmentLi" class="hidden">
+                        <li>
                             <a href="#" class="item-link smart-select" data-back-text="返回" data-back-on-select="true" data-searchbar-placeholder="选择设备" data-searchbar-cancel="取消" id="equipment-select">
-                                <select id="QCEquipmentId" name="QCEquipmentId" class="required">
-                                    <option>- 请选择 -</option>
-                                </select>
+                                @Html.DropDownList("EquipmentId",ViewBag.el as SelectList, "- 请选择 -", new { @class = "required" })
                                 <div class="item-content">
                                     <div class="item-inner">
                                         <div class="item-title">选择设备</div>
@@ -50,14 +43,17 @@
                                 </div>
                             </a>
                         </li>
-                        <li id="BreakDownTypeLi" class="hidden">
-                            <a href="#" class="item-link smart-select" data-back-text="返回" data-back-on-select="true" data-searchbar-placeholder="故障类型" data-searchbar-cancel="取消" id="breakdowntype-select">
-                                <select id="BreakDownTypeId" name="BreakDownTypeId" class="required">
-                                    <option>- 请选择 -</option>
+                        <li>
+                            <a href="#" class="item-link smart-select" data-back-text="返回" data-back-on-select="true" data-searchbar-placeholder="选择权重" data-searchbar-cancel="取消" id="priority-select">
+                                <select class="required" id="Priority" name="Priority">
+                                    <option value="">- 请选择 -</option>
+                                    <option value="1">高</option>
+                                    <option value="2">中</option>
+                                    <option value="3">低</option>
                                 </select>
                                 <div class="item-content">
                                     <div class="item-inner">
-                                        <div class="item-title">故障类型</div>
+                                        <div class="item-title">选择权重</div>
                                         <div class="item-after">- 请选择 -</div>
                                     </div>
                                 </div>
@@ -66,37 +62,32 @@
                         <li>
                             <div class="item-content">
                                 <div class="item-inner">
-                                    <div class="item-title label">故障时间</div>
+                                    <div class="item-title label">故障简称</div>
                                     <div class="item-input">
-                                        <input type="text" class="item-input-right" id="BreakDownTimeTiny" name="BreakDownTimeTiny" placeholder="故障时间" />
+                                        <input type="text" class="item-input-right" id="SimpleDescribe" name="SimpleDescribe" placeholder="故障简称" required />
                                     </div>
                                 </div>
                             </div>
                         </li>
                         <li>
-                            <div class="item-content">
-                                <div class="item-inner">
-                                    <div class="item-title">上传照片</div>
-                                    <div class="item-after"><abbr id="addbreakdown-imgcount">0</abbr>/7</div>
-                                </div>
-                            </div>
                             <div class="item-content middle-content">
-                                <div class="item-inner">
-                                    <div class="hidden">
-                                        @Html.TextBoxFor(m => m.Photos, new { @class = "photos" })
-                                    </div>
-                                    <ul class="rep-imglist" id="addbreakdown-photos"></ul>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="item-content middle-content">
-                                @Html.TextAreaFor(m => m.ReportContent, new { placeholder = "请输入故障备注", required = "required", maxlength = "200"})
+                                @Html.TextAreaFor(m => m.Describe, new { placeholder = "请简要描述故障", required = "required", maxlength = "200" })
                             </div>
                             <div class="item-content">
                                 <div class="item-inner">
                                     <div class="item-title"></div>
-                                    <div class="item-after"><span id="addbreakdown-currentlen">0</span>/<span>200</span></div>
+                                    <div class="item-after"><span id="addDescribe-currentlen">0</span>/<span>200</span></div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content middle-content">
+                                @Html.TextAreaFor(m => m.Recommand, new { placeholder = "解决方案", required = "required", maxlength = "200" })
+                            </div>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title"></div>
+                                    <div class="item-after"><span id="addRecommand-currentlen">0</span>/<span>200</span></div>
                                 </div>
                             </div>
                         </li>
@@ -106,3 +97,5 @@
         </div>
     </div>
 </div>
+
+

@@ -1,0 +1,566 @@
+﻿
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>封疆大史</title>
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.min.css">
+    <style>
+        .close {
+            font-size: 45px;
+            position: absolute;
+            right: 0px;
+            top: -5px;
+            text-align: right;
+            width: 25px;
+            height: 25px;
+            transform: rotate(45deg);
+            -ms-transform: rotate(45deg); /* IE 9 */
+            -moz-transform: rotate(45deg); /* Firefox */
+            -webkit-transform: rotate(45deg); /* Safari 和 Chrome */
+            -o-transform: rotate(45deg); /* Opera */
+        }
+
+        .box5 {
+            top: 5%;
+            z-index: 999;
+            margin-right: auto;
+            margin-left: auto;
+            left: 0;
+            right: 0;
+            width: 80%;
+            padding: 10px;
+            position: fixed;
+            background: -webkit-gradient(linear, 0% 20%, 0% 92%, from(#f3f3f3), to(#fff), color-stop(.1,#f3f3f3));
+            border-top: 1px solid #ccc;
+            border-right: 1px solid #ccc;
+            -webkit-border-bottom-right-radius: 60px 60px;
+            -webkit-box-shadow: -1px 2px 2px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+
+            .box5 h1 {
+                padding: 5px;
+            }
+
+            .box5 p {
+                margin: 0;
+                padding: 2px;
+            }
+
+            .box5:before {
+                content: '';
+                width: 25px;
+                height: 20px;
+                background: white;
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                background: -webkit-gradient(linear, 0% 20%, 50% 40%, from(#fff), to( #eee), color-stop(.1,#fff));
+                -webkit-border-bottom-right-radius: 30px;
+                -webkit-box-shadow: -2px -2px 5px rgba(0, 0, 0, 0.2);
+                -webkit-transform: rotate(-20deg) skew(-40deg,-3deg) translate(-13px,-13px);
+            }
+
+            .box5:after {
+                content: '';
+                z-index: -10;
+                width: 100px;
+                height: 100px;
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                display: inline-block;
+                -webkit-transform: rotate(0deg) translate(-45px,-20px) skew(20deg);
+            }
+
+
+        .pic_box p {
+            color: #ccc;
+            height: 34px;
+            margin: 2px 0 0 0;
+            text-align: justify;
+        }
+
+        h1 {
+            text-align: left;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 5px 0 0 0;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+
+        a {
+            text-decoration: none !important;
+            color: #4A4A4A !important;
+        }
+
+            a:hover {
+                text-decoration: underline;
+                color: #6B6B6B !important;
+            }
+
+        body {
+            background: url(/Content/images/bg0042.png);
+            background-size: contain;
+            overflow-x: hidden;
+            font-size: 12px;
+            color: #4A4A4A;
+        }
+
+        .box :hover {
+            background-color: rgba(255,255,255,0.3);
+        }
+
+        .box {
+            cursor: pointer;
+            margin: 5px auto;
+            padding: 5px 5px 5px 5px;
+            position: relative;
+            background: -webkit-gradient(linear, 0% 20%, 0% 100%, from(#fff), to(#fff), color-stop(.2, #f2f2f2));
+            border: 1px solid #ccc;
+            -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+        }
+
+            .box:before {
+                content: '';
+                width: 50px;
+                height: 50px;
+                top: 0;
+                right: 0;
+                position: absolute;
+                z-index: -1;
+                -webkit-box-shadow: 10px -10px 8px rgba(0, 0, 0, 0.2);
+                -webkit-transform: rotate(2deg) translate(-14px,20px) skew(-20deg);
+            }
+
+        img {
+            display: block;
+            width: 100%;
+        }
+
+        .box img {
+            margin: 0 auto;
+        }
+
+        .box5 img {
+            margin-top: 20px;
+        }
+
+        .post {
+            text-align: right;
+        }
+
+        .num1 {
+            margin-left: 4.33333333%;
+        }
+
+        .num2 {
+            margin-left: 8.33333333%;
+        }
+
+        .hidden-bg {
+            background-color: rgba(0,0,0,0.8);
+            position: fixed;
+            z-index: 99;
+            width: 100%;
+            height: 100%;
+        }
+
+        .wrap-12 {
+            margin-top: 10px;
+            padding: 0;
+        }
+
+        .pic_box {
+            margin: 0px 5px 0px 5px;
+            background: url(/Content/images/content.png);
+            background-size: contain;
+        }
+    </style>
+</head>
+<body>
+    <div class="hidden-bg hidden"></div>
+    <div class="header" style="padding:30px 5px 0 5px">
+        <img src="/Content/images/header.png">
+    </div>
+    <div class="row pic_box">
+        <div class="col-xs-12 wrap-12">
+            <div class="col-xs-5 box num1" data-url="person_one">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <img src="/Content/images/fhc001.jpg">
+                        <h1>冯浩成</h1>
+                        <p>上海福平金盛企业发展有限公司</p>
+                        <div class="post">--董事长</div>
+                        <div style="text-align: center;color: #ccc;padding: 5px;color: #ad1d35">点击查看</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-5 box num2" data-url="person_two">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <img src="/Content/images/czg001.jpg">
+                        <h1>陈治光</h1>
+                        <p>上海中洋商务有限公司 </p>
+                        <div class="post">--董事长</div>
+                        <div style="text-align: center;color: #ccc;padding: 5px;color: #ad1d35">点击查看</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 wrap-12">
+            <div class="col-xs-5 box num1" data-url="person_three">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <img src="/Content/images/zf001.jpg">
+                        <h1>张峰</h1>
+                        <p>上海好雄食品有限公司</p>
+                        <div class="post">--总经理</div>
+                        <div style="text-align: center;color: #ccc;padding: 5px;color: #ad1d35">点击查看</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-5 box num2" data-url="person_four">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <img src="/Content/images/mxq001.jpg">
+                        <h1>毛仙琴</h1>
+                        <p>宁波天天茂盛食品有限公司</p>
+                        <div class="post">--董事长</div>
+                        <div style="text-align: center;color: #ccc;padding: 5px;color: #ad1d35">点击查看</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 wrap-12">
+            <div class="col-xs-5 box num1" data-url="person_five">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <img src="/Content/images/wyq001.jpg">
+                        <h1>王元清</h1>
+                        <p>上海科的商贸有限公司</p>
+                        <div class="post">--董事长</div>
+                        <div style="text-align: center;color: #ccc;padding: 5px;color: #ad1d35">点击查看</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-5 box num2" data-url="person_six">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <img src="/Content/images/cl001.jpg">
+                        <h1>陈龙</h1>
+                        <p>深圳华裕时代商贸有限公司</p>
+                        <div class="post">--董事长</div>
+                        <div style="text-align: center;color: #ccc;padding: 5px;color: #ad1d35">点击查看</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 wrap-12">
+            <div class="col-xs-5 box num1" data-url="person_seven">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <img src="/Content/images/wp001.jpg">
+                        <h1>王鹏 </h1>
+                        <p>上海颍农国际贸易有限公司</p>
+                        <div class="post">--董事长</div>
+                        <div style="text-align: center;color: #ccc;padding: 5px;color: #ad1d35">点击查看</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-5 box num2" data-url="person_eight">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <img src="/Content/images/lsq001.jpg">
+                        <h1>刘树青</h1>
+                        <p>深圳市润谷食品有限公司</p>
+                        <div class="post">--总经理</div>
+                        <div style="text-align: center;color: #ccc;padding: 5px;color: #ad1d35">点击查看</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 wrap-12">
+            <div class="col-xs-5 box num1" data-url="person_nine">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <img src="/Content/images/xky001.jpg">
+                        <h1>徐魁永</h1>
+                        <p>河南枣上好商贸有限公司</p>
+                        <div class="post">--董事长</div>
+                        <div style="text-align: center;color: #ccc;padding: 5px;color: #ad1d35">点击查看</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-5 box num2" data-url="person_ten">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <img src="/Content/images/mh001.jpg">
+                        <h1>马洪</h1>
+                        <p>四川乡村阳光土特产贸易有限公司</p>
+                        <div class="post">--董事长</div>
+                        <div style="text-align: center;color: #ccc;padding: 5px;color: #ad1d35">点击查看</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="box5" id="person_one">
+        <div class="close"><a class="_close">+</a></div>
+        <img src="/Content/images/fhc001.jpg" class="col-xs-6">
+        <h1>冯浩成</h1>
+        <div class="content-info">
+            <p>经销系统：大润发（华东）160余家店</p>
+            <p>经销前：姜茶品类销售POS不到50万元</p>
+            <p>2016销售额：超过了2000万元</p>
+            <p>代理的其他品牌：香飘飘 麦吉士</p>
+        </div>
+        <br />
+    </div>
+    <div class="box5" id="person_two">
+        <div class="close"><a class="_close">+</a></div>
+        <img src="/Content/images/czg001.jpg">
+        <div class="content-info">
+            <h1>陈治光</h1>
+            <p>经销系统：乐购（华东）卜蜂莲花（华东） 农工商 好德便利 良友便利等500余家店</p>
+            <p>经销前：姜茶品类销售POS总额不到60万元</p>
+            <p>2016销售额：超过4000万元</p>
+            <p>代理的其他品牌：恒大冰泉、桂格燕麦、米老头、金冠、春光</p>
+        </div>
+        <br />
+    </div>
+    <div class="box5" id="person_three">
+        <div class="close"><a class="_close">+</a></div>
+        <img src="/Content/images/zf001.jpg">
+        <div class="content-info">
+            <h1>张峰</h1>
+            <p>经销系统：欧尚（全国）68家店</p>
+            <p>经销前：姜茶品类销售POS不到30万元</p>
+            <p>2016销售额：超过3000万元</p>
+            <p>代理的其他品牌：自有坚果品牌</p>
+        </div>
+        <br />
+    </div>
+    <div class="box5" id="person_four">
+        <div class="close"><a class="_close">+</a></div>
+        <img src="/Content/images/mxq001.jpg">
+        <div class="content-info">
+            <h1>毛仙琴</h1>
+            <p>经销系统：宁波三江超市 新江夏超市 家家乐超市等系统260余家店</p>
+            <p>经销前：系统没有姜茶品类销售</p>
+            <p>2016销售额：超过800万元</p>
+            <p>代理的其他品牌：相约奶茶</p>
+        </div>
+        <br />
+    </div>
+    <div class="box5" id="person_five">
+        <div class="close"><a class="_close">+</a></div>
+        <img src="/Content/images/wyq001.jpg">
+        <div class="content-info">
+            <h1>王元清</h1>
+            <p>经销系统：全家便利系统1200家店<p>
+            <p>经销前：姜茶品类销售POS不到40万元<p>
+            <p>2016销售额：超过1000万元<p><p></p>
+            <p>代理的其他品牌：椰树牌椰汁<p>
+        </div>
+        <br />
+    </div>
+    <div class="box5" id="person_six">
+        <div class="close"><a class="_close">+</a></div>
+        <img src="/Content/images/cl001.jpg">
+        <div class="content-info">
+            <h1>陈龙</h1>
+            <p>经销系统：沃尔玛（华东/华南）系统240余家店<p>
+            <p>经销前：姜茶品类销售POS不到50万元<p>
+            <p>2016销售额：超过1000万元<p><p>
+            <p>代理的其他品牌：东鹏特饮 王老吉 香飘飘<p>
+        </div>
+        <br />
+    </div>
+    <div class="box5" id="person_seven">
+        <div class="close"><a class="_close">+</a></div>
+        <img src="/Content/images/wp001.jpg">
+        <p>
+            <h1>王鹏</h1>
+            经销系统：物美系统（华北）<br>
+        </p>
+        <br />
+    </div>
+    <div class="box5" id="person_eight">
+        <div class="close"><a class="_close">+</a></div>
+        <img src="/Content/images/lsq001.jpg">
+        <p>
+            <h1>刘树青</h1>
+            经销系统：屈臣氏（全国）系统<br>
+        </p>
+        <br />
+    </div>
+    <div class="box5" id="person_nine">
+        <div class="close"><a class="_close">+</a></div>
+        <img src="/Content/images/xky001.jpg">
+        <h1>徐魁永</h1>
+        <p>
+            经销系统：沃尔玛华北东北系统<br>
+        </p>
+        <br />
+    </div>
+    <div class="box5" id="person_ten">
+        <div class="close"><a class="_close">+</a></div>
+        <img src="/Content/images/mh001.jpg">
+        <h1>马洪</h1>
+        <p>
+            经销系统：沃尔玛（西南）系统<br>
+        </p>
+        <br />
+    </div>
+    <div class="footer" style="padding: 0 5px 5px 5px;position: relative;">
+        <img src="/Content/images/footer.png">
+        <div class="h1" style="color:#ddd; font-size:16px; text-align:center;">期待您的加入，与寿全斋一统江山。</div>
+    </div>
+    <div class="hidden">
+        <span id="appId">@ViewBag.AppId</span>
+        <span id="timeStamp">@ViewBag.TimeStamp</span>
+        <span id="nonce">@ViewBag.Nonce</span>
+        <span id="url">@ViewBag.Url</span>
+        <span id="signature">@ViewBag.Signature</span>
+    </div>
+    <script type="text/javascript" src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript"></script>
+    <script>
+        wx.config({
+            debug: false,
+            // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: $("#appId").text(),
+            // 必填，公众号的唯一标识
+            timestamp: $("#timeStamp").text(),
+            // 必填，生成签名的时间戳
+            nonceStr: $("#nonce").text(),
+            // 必填，生成签名的随机串
+            signature: $("#signature").text(),
+            // 必填，签名，见附录1
+            jsApiList: ["onMenuShareTimeline", "onMenuShareAppMessage", "onMenuShareQQ", "onMenuShareWeibo", "onMenuShareQZone"]
+        });
+        wx.ready(function () {
+            wx.onMenuShareTimeline({
+                title: '寿全斋 优秀经销商介绍', // 分享标题
+                link: 'https://event.shouquanzhai.cn/Promotion/Tjh_Distribution', // 分享链接
+                imgUrl: 'http://cdn.shouquanzhai.cn/Content/tjh_distribution_720_400.jpg', // 分享图标
+                success: function () {
+                    // 用户确认分享后执行的回调函数
+                },
+                cancel: function () {
+                    // 用户取消分享后执行的回调函数
+                }
+            });
+            wx.onMenuShareAppMessage({
+                title: '寿全斋 优秀经销商介绍', // 分享标题
+                link: 'https://event.shouquanzhai.cn/Promotion/Tjh_Distribution', // 分享链接
+                imgUrl: 'http://cdn.shouquanzhai.cn/Content/tjh_distribution_720_400.jpg', // 分享图标
+                desc: '', // 分享描述
+                type: '', // 分享类型,music、video或link，不填默认为link
+                dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                success: function () {
+                    // 用户确认分享后执行的回调函数
+                },
+                cancel: function () {
+                    // 用户取消分享后执行的回调函数
+                }
+            });
+            wx.onMenuShareQQ({
+                title: '寿全斋 优秀经销商介绍', // 分享标题
+                link: 'https://event.shouquanzhai.cn/Promotion/Tjh_Distribution', // 分享链接
+                imgUrl: 'http://cdn.shouquanzhai.cn/Content/tjh_distribution_720_400.jpg', // 分享图标
+                desc: '', // 分享描述
+                success: function () {
+                    // 用户确认分享后执行的回调函数
+
+                },
+                cancel: function () {
+                    // 用户取消分享后执行的回调函数
+                }
+            });
+            wx.onMenuShareWeibo({
+                title: '寿全斋 优秀经销商介绍', // 分享标题
+                link: 'https://event.shouquanzhai.cn/Promotion/Tjh_Distribution', // 分享链接
+                imgUrl: 'http://cdn.shouquanzhai.cn/Content/tjh_distribution_720_400.jpg', // 分享图标
+                desc: '', // 分享描述
+                success: function () {
+                    // 用户确认分享后执行的回调函数
+                },
+                cancel: function () {
+                    // 用户取消分享后执行的回调函数
+                }
+            });
+            wx.onMenuShareQZone({
+                title: '寿全斋 优秀经销商介绍', // 分享标题
+                link: 'https://event.shouquanzhai.cn/Promotion/Tjh_Distribution', // 分享链接
+                imgUrl: 'http://cdn.shouquanzhai.cn/Content/tjh_distribution_720_400.jpg', // 分享图标
+                desc: '', // 分享描述
+                success: function () {
+                    // 用户确认分享后执行的回调函数
+                },
+                cancel: function () {
+                    // 用户取消分享后执行的回调函数
+                }
+            });
+        });
+        var initwidth = "";
+        var _clientheight = $(window).height();
+        var _clientwidth = $(window).width();
+        if (_clientheight < _clientwidth) {
+            $(".box5 img").addClass("col-xs-6")
+            $(".box5 .content-info").addClass("col-xs-6")
+            initwidth = _clientheight;
+        } else {
+            $(".box5 img").removeClass("col-xs-6")
+            $(".box5 .content-info").removeClass("col-xs-6")
+            initwidth = _clientwidth;
+        }
+        $(window).resize(function () {
+            var clientheight = $(window).height();
+            var clientwidth = $(window).width();
+            if (clientwidth == initwidth) {
+                $(".box5 img").removeClass("col-xs-6")
+                $(".box5 .content-info").removeClass("col-xs-6")
+            } else {
+                if (_clientwidth < clientheight && _clientwidth < clientwidth) {
+                    $(".box5 img").removeClass("col-xs-6")
+                    $(".box5 .content-info").removeClass("col-xs-6")
+                } else {
+                    if (clientheight < clientwidth) {
+                        $(".box5 img").addClass("col-xs-6")
+                        $(".box5 .content-info").addClass("col-xs-6")
+                    } else {
+                        $(".box5 img").removeClass("col-xs-6")
+                        $(".box5 .content-info").removeClass("col-xs-6")
+                    }
+                }
+            }
+        });
+        $(".box").on("click", function () {
+            $(".box5").hide();
+            $(".hidden-bg").removeClass("hidden");
+            $("#" + $(this).attr("data-url")).fadeIn(200);
+        });
+        $("._close").on("click", function () {
+
+            setTimeout(function () {
+                $(".hidden-bg").addClass("hidden");
+            }, 500);
+            $(".box5").fadeOut(500);
+        });
+        $(".hidden-bg").on("click", function () {
+
+            setTimeout(function () {
+                $(".hidden-bg").addClass("hidden");
+            }, 500);
+            $(".box5").fadeOut(500);
+        });
+    </script>
+</body>
+</html>
