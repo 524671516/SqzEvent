@@ -338,6 +338,14 @@ namespace SqzEvent.Controllers
 
         public ActionResult Tjh_Distribution()
         {
+            WeChatUtilities utilities = new WeChatUtilities();
+            string _url = ViewBag.Url = Request.Url.ToString();
+            ViewBag.AppId = utilities.getAppId();
+            string _nonce = CommonUtilities.generateNonce();
+            ViewBag.Nonce = _nonce;
+            string _timeStamp = CommonUtilities.generateTimeStamp().ToString();
+            ViewBag.TimeStamp = _timeStamp;
+            ViewBag.Signature = utilities.generateWxJsApiSignature(_nonce, utilities.getJsApiTicket(), _timeStamp, _url);
             return View();
         }
         #endregion
@@ -367,8 +375,13 @@ namespace SqzEvent.Controllers
             return View();
         }
    
-        public ActionResult Tjh_WechatPay_Success(string package)
+        public ActionResult Tjh_WechatPay_Success(string prepay_id)
         {
+            var order_item = paydb.WxPaymentOrder.SingleOrDefault(m => m.Prepay_Id == prepay_id);
+            if (order_item != null)
+            {
+                return View(order_item);
+            }
             return View();
         }
 
@@ -381,7 +394,7 @@ namespace SqzEvent.Controllers
             //先确认，之后做随机数
             string nonce_str = CommonUtilities.generateNonce();
             string out_trade_no = "WXJSAPI_" + DateTime.Now.Ticks;
-            int total_fee = 10;
+            int total_fee = 500;
             try
             {
                 AppPayUtilities pay = new AppPayUtilities();

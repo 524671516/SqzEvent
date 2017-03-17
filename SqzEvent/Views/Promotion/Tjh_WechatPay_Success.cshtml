@@ -1,4 +1,4 @@
-﻿
+﻿@model SqzEvent.Models.WxPaymentOrder
 @{
     Layout = null;
 }
@@ -15,7 +15,7 @@
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
     <style>
         body {
-            background-image: url('../../Content/images/tjh_wechatpay_background.jpg');
+            background-image: url('/Content/images/tjh_wechatpay_background.jpg');
             background-size: 100%;
         }
 
@@ -27,23 +27,23 @@
 
         .content {
             background-color: rgba(249, 218,174,0.8);
-            padding: 60px 0 0 0;
+            padding: 40px 0 0 0;
             top: 0;
             left: 0;
             right: 0;
             margin: 40px 20px 0 20px;
             position: absolute;
             color: #000;
-            height: 25rem;
             border-radius: 10px;
         }
 
         .num {
-            height: 16rem;
+            padding: 20px;
         }
-        .btn-box{
-           height: 4rem;
-           color:#fff;
+
+        .btn-box {
+            height: 4rem;
+            color: #fff;
         }
 
         .logo img {
@@ -63,12 +63,18 @@
             height: 80px;
         }
 
-        #start_pay:hover, #start_pay:focus {
-            color: #000 !important;
-        }
-
         h3 {
             margin: 0;
+            color: #a41b37;
+        }
+
+        .content-info {
+            color: #666;
+            font-size: 12px;
+            text-align: left;
+            padding: 0 20px;
+            margin-bottom: 30px;
+            line-height: 20px;
         }
     </style>
 </head>
@@ -78,17 +84,21 @@
             <div class="col-xs-12">
                 <div class="col-xs-4"></div>
                 <div class="logo col-xs-4">
-                    <img src="~/Content/images/logo_new.png" />
+                    <img src="~/Content/images/logo_new.png" class="img-circle" />
                 </div>
                 <div class="col-xs-4"></div>
             </div>
         </div>
         <div class="content text-center" id="after-pay">
-                <div class="num">
-                    <h3 id="order-id">订单号:&nbsp;<span>&yen;&nbsp;</span><span>13456785244</span></h3>
-                    <h3 id="order-money" style="padding:20px 0px;">支付金额:&nbsp;<span>&yen;&nbsp;</span><span>200</span></h3>
-                </div>
+            <div class="num">
+                <h3><b>支付成功</b></h3>
             </div>
+            <div class="content-info">
+                产品名称：@Html.Encode(Model.Body)<br />
+                订单号：@Html.Encode(Model.Trade_No)<br />
+                支付时间：@Html.Encode(Model.Time_Start.ToString("yyyy-MM-dd HH:mm:ss"))
+            </div>
+        </div>
     </div>
 </body>
 </html>
