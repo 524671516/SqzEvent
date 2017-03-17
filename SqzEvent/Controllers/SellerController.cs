@@ -2003,6 +2003,7 @@ namespace SqzEvent.Controllers
             var seller = offlineDB.Off_Seller.SingleOrDefault(m => m.Id == id && m.Off_System_Id == user.DefaultSystemId);
             return PartialView(seller);
         }
+
         // 修改促销员信息
         [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_EditSellerInfo(int id)
@@ -2044,6 +2045,67 @@ namespace SqzEvent.Controllers
                 }
             }
             return Content("FAIL");
+        }
+
+        //未绑定促销员列表
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
+        public ActionResult Manager_BindList()
+        {
+            var user = UserManager.FindById(User.Identity.GetUserId());
+            var bindlist = from m in offlineDB.Off_Membership_Bind
+                           where m.Off_System_Id== user.DefaultSystemId&&m.Type==2&&m.Bind==false
+                           orderby m.ApplicationDate descending
+                           select m;
+            return PartialView(bindlist);
+        }
+
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
+        public ActionResult Manager_BindSeller(int id)
+        {
+            var storesystemlist = offlineDB.Off_StoreSystem;
+            ViewBag.ssl = new SelectList(storesystemlist, "Id", "SystemName");
+            var bindone = offlineDB.Off_Membership_Bind.SingleOrDefault(m => m.Id == id);
+            return PartialView(bindone);              
+        }
+
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
+        [HttpPost,ValidateAntiForgeryToken]
+        public async Task<ContentResult> Manager_BindSeller(Off_Seller model,FormCollection form)
+        {
+            if (ModelState.IsValid)
+            {
+                Off_Seller item = new Off_Seller();
+                if (TryUpdateModel(item))
+                {
+                    item.UploadUser = User.Identity.Name;
+                    item.UploadTime = DateTime.Now;
+                    offlineDB.Off_Seller.Add(item);
+                    await offlineDB.SaveChangesAsync();
+                    var bindid = Convert.ToInt32(form["Sid"]);
+                    var bindone = offlineDB.Off_Membership_Bind.SingleOrDefault(m => m.Id == bindid);
+                    try
+                    {
+                        var seller = offlineDB.Off_Seller.SingleOrDefault(m => m.Mobile == bindone.Mobile);
+                        bindone.Off_Seller_Id = seller.Id;
+                        bindone.Bind = true;
+                        offlineDB.Entry(bindone).State = System.Data.Entity.EntityState.Modified;
+                        offlineDB.SaveChanges();
+                        return Content("SUCCESS");
+                    }
+                    catch
+                    {
+                        return Content("FAIL");
+                    }
+                }
+                else
+                {
+                    return Content("FAIL");
+                }
+            }
+            else
+            {
+                return Content("FAIL");
+            }
         }
 
 

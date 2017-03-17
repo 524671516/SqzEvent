@@ -1,0 +1,71 @@
+﻿@model SqzEvent.Models.Off_Membership_Bind
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="left">
+            <a href="#" class="back link">
+                <i class="icon icon-back" aria-hidden="true"></i>
+                <span>返回</span>
+            </a>
+        </div>
+        <div class="center sliding"><strong>绑定促销员</strong></div>
+        <div class="right">
+            <a href="javascript:;" class="link" id="bind-submit">提交</a>
+        </div>
+    </div>
+</div>
+<div class="pages">
+    <div class="page" data-page="manager-bind">
+        <div class="page-content">
+            @using (Html.BeginForm("Manager_BindSeller", "Seller", FormMethod.Post, new { @id = "bind-form", @class = "validate-form" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("UploadTime")
+                @Html.Hidden("UploadUser")
+                <input id="Off_System_Id" name="Off_System_Id" type="hidden" value="@Model.Off_System_Id" />
+                <input  id="Sid" name="Sid" type="hidden" value="@Model.Id" />
+                <input  value="@Model.NickName" id="Name" name="Name" type="hidden"/>
+                <input value="@Model.Mobile" id="Mobile" name="Mobile" type="hidden"/>
+                <div class="list-block">
+                    <ul>
+                        <li class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">姓名</div>
+                                <div class="item-after">@Html.Encode(Model.NickName)</div>
+                            </div>
+                        </li>
+                        <li class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">手机号</div>
+                                <div class="item-after">@Html.Encode(Model.Mobile)</div>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="#" class="smart-select item-link" data-back-text="返回" data-searchbar="true"  data-back-on-select="true" data-searchbar-placeholder="系统名称" data-searchbar-cancel="取消">
+                                @Html.DropDownList("storesystemid", ViewBag.ssl as SelectList, "-请选择-")
+                                <div class="item-content">
+                                    <div class="item-inner">
+                                        <div class="item-title">选择系统</div>
+                                        <div class="item-after smart-select-value">-请选择-</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="smart-select item-link" data-back-text="返回" data-searchbar="true"  data-back-on-select="true" data-searchbar-placeholder="店铺名称" data-searchbar-cancel="取消">
+                                <select id="StoreId" name="StoreId">
+                                    <option value="">- 请选择 -</option>
+                                </select>
+                                <div class="item-content" id="store-smart">
+                                    <div class="item-inner">
+                                        <div class="item-title">选择门店</div>
+                                        <div class="item-after smart-select-value">-请选择-</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            }
+        </div>
+    </div>
+</div>
