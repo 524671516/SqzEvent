@@ -3,7 +3,10 @@
 // Initialize app
 var myApp = new Framework7({
     modalTitle: '督导管理',
-    pushState:true
+    pushState: true,
+    cache: false,
+    domCache:false,
+    cacheIgnoreGetParameters:false
 });
 
 // If we need to use custom DOM library, let's save it to $$ variable:
@@ -2006,7 +2009,7 @@ $$(document).on("pageInit", ".page[data-page='manager-bindseller']", function ()
         success: function (data) {
             $$("#bind-listpartial").html(data);
             $$("#_pagenum").val(1);
-            if ($("#bind-listpartial").find("li").length < 8) {
+            if ($("#bind-listpartial").find("li").length < 10) {
                 myApp.detachInfiniteScroll($$('.infinite-scroll'));
                 // 删除加载提示符
                 $$('.infinite-scroll-preloader').remove();
