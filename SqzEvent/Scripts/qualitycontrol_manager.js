@@ -3,6 +3,12 @@ var myApp = new Framework7({
     swipeBackPage:false,
     modalTitle: '生产管理',
     pushState: true,
+    cache: false,
+    domCache: false,
+    cacheIgnoreGetParameters: false,
+    smartSelectInPopup: false,
+    swipeBackPage:false
+
 });
 var $$ = Dom7;
 var mainView = myApp.addView('.view-main', {
@@ -19,6 +25,17 @@ $$(document).on("ajaxComplete", function (e) {
         return;
     }
     myApp.hideIndicator();
+});
+//tab-list 底部工具栏转换
+$$(".tab-link").on("click", function (data) {
+    if (!$$(this).hasClass("active")) {
+        var url = $$(this).attr("data-href");
+        mainView.router.load({
+            url: url,
+            animatePages: false
+        });
+        $(this).addClass("active").siblings().removeClass("active");
+    }
 });
 wx.config({
     debug: false,
@@ -272,6 +289,33 @@ myApp.onPageAfterAnimation('manager_breakdownlist', function () {
     }
 })
 myApp.onPageInit('manager_breakdownlist', function (page) {
+    $$('#manager_breakdownlist').on('deleted', ".swipeout", function (e) {
+        $$.ajax({
+            url: $(this).attr("data-url"),
+            type: "post",
+            success: function (data) {
+                var _data = JSON.parse(data);
+                if (_data.result == "SUCCESS") {
+                    myApp.alert("删除成功");
+                    if ($$("#EquipmentId").val() != "") {
+                        $$.ajax({
+                            url: "/QualityControl/Manager_BreakdownListPartial",
+                            data: {
+                                Eid: $$("#manager_breakdownlist #EquipmentId").val()
+                            },
+                            success: function (data) {
+                                $$("#breakdowntype-list").html(data);
+                            }
+                        })
+                    } else {
+                        $$("#breakdowntype-list").html("");
+                    }
+                } else {
+                    myApp.alert("删除失败");
+                }
+            }
+        })
+    });
     $$("#manager_breakdownlist #factory-select").on("change", function () {
         $$("#breakdowntype-list").html("");
         $$("#manager_breakdownlist #EquipmentId").html("");

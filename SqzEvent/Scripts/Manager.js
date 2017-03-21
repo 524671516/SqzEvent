@@ -1996,10 +1996,6 @@ $$(document).on("pageInit", ".page[data-page='manager-queryseller']", function (
 
 //Manager_BindList 绑定促销员列表
 $$(document).on("pageInit", ".page[data-page='manager-bindseller']", function () {
-    var mySearchbar = myApp.searchbar(".searchbar", {
-        searchList: ".list-block-search",
-        searchIn: ".item-content"
-    });
     $$.ajax({
         url: "/Seller/Manager_BindListPartial",
         data: {
@@ -2015,7 +2011,16 @@ $$(document).on("pageInit", ".page[data-page='manager-bindseller']", function ()
                 $$('.infinite-scroll-preloader').remove();
                 return;
             }
+        },
+        error: function () {
+            myApp.alert("发生错误");
         }
+
+
+    });
+    var mySearchbar = myApp.searchbar(".searchbar", {
+        searchList: ".list-block-search",
+        searchIn: ".item-content"
     });
     var loading = false;
     $$('.infinite-scroll').on('infinite', function () {

@@ -2060,7 +2060,7 @@ namespace SqzEvent.Controllers
         {
             var _page = page ?? 0;
             var user = UserManager.FindById(User.Identity.GetUserId());
-            if (query == null)
+            if (query == null||query=="")
             {
                 var bindlist= (from m in offlineDB.Off_Membership_Bind
                                where m.Off_System_Id == user.DefaultSystemId && m.Type == 2 && m.Bind == false
