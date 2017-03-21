@@ -2051,14 +2051,32 @@ namespace SqzEvent.Controllers
         [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_BindList()
         {
-            var user = UserManager.FindById(User.Identity.GetUserId());
-            var bindlist = from m in offlineDB.Off_Membership_Bind
-                           where m.Off_System_Id== user.DefaultSystemId&&m.Type==2&&m.Bind==false
-                           orderby m.ApplicationDate descending
-                           select m;
-            return PartialView(bindlist);
+
+            return View();
         }
 
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
+        public ActionResult Manager_BindListPartial(int? page,string query)
+        {
+            var _page = page ?? 0;
+            var user = UserManager.FindById(User.Identity.GetUserId());
+            if (query == null||query=="")
+            {
+                var bindlist= (from m in offlineDB.Off_Membership_Bind
+                               where m.Off_System_Id == user.DefaultSystemId && m.Type == 2 && m.Bind == false
+                               orderby m.ApplicationDate descending
+                               select m).Skip(_page * 10).Take(10);
+                return PartialView(bindlist);
+            }
+            else
+            {
+                var bindlist = (from m in offlineDB.Off_Membership_Bind
+                                where m.Off_System_Id == user.DefaultSystemId && m.Type == 2 && m.Bind == false || m.NickName.Contains(query)
+                                orderby m.ApplicationDate descending
+                                select m).Skip(_page * 10).Take(10);
+                return PartialView(bindlist);
+            }
+        }
         [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_BindSeller(int id)
         {
@@ -2069,49 +2087,46 @@ namespace SqzEvent.Controllers
         }
 
         [Authorize(Roles = "Supervisor,Manager,Administrator")]
-        [HttpPost,ValidateAntiForgeryToken]
-        public async Task<ContentResult> Manager_BindSeller(Off_Seller model,FormCollection form)
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<ContentResult> Manager_BindSeller(Off_Membership_Bind model, FormCollection form)
         {
             if (ModelState.IsValid)
             {
-                Off_Seller item = new Off_Seller();
-                if (TryUpdateModel(item))
+                var seller = (from m in offlineDB.Off_Seller
+                              where m.Mobile == model.Mobile && m.Off_System_Id == model.Off_System_Id
+                              select m).Count();
+                if (seller > 0)
                 {
-                    var bindid = Convert.ToInt32(form["Sid"]);
-                    var bindone = offlineDB.Off_Membership_Bind.SingleOrDefault(m => m.Id == bindid);
-                    var seller = from m in offlineDB.Off_Seller
-                                 where m.Mobile == bindone.Mobile
-                                 select m;
-                    if (seller.Count() > 0)
-                    {
-                        return Content("此促销员已存在系统中，请在电脑上尝试绑定");
-                    }
-                    else
-                    {
-                        item.UploadUser = User.Identity.Name;
-                        item.UploadTime = DateTime.Now;
-                        offlineDB.Off_Seller.Add(item);
-                        await offlineDB.SaveChangesAsync();
-                        try
-                        {
-
-                            bindone.Off_Seller_Id = seller.FirstOrDefault().Id;
-                            bindone.Bind = true;
-                            offlineDB.Entry(bindone).State = System.Data.Entity.EntityState.Modified;
-                            offlineDB.SaveChanges();
-                            return Content("SUCCESS");
-                        }
-                        catch
-                        {
-                            return Content("FAIL");
-                        }
-                    }
-
-
+                    return Content("已存在此促销员请在电脑上完成添加");
                 }
                 else
                 {
-                    return Content("FAIL");
+                    var user = UserManager.FindById(User.Identity.GetUserId());
+                    Off_Seller item = new Off_Seller()
+                    {
+                        Mobile = model.Mobile,
+                        Name = model.NickName,
+                        StoreId = Convert.ToInt32(form["StoreId"]),
+                        Off_System_Id = model.Off_System_Id,
+                        UploadTime=DateTime.Now,
+                        UploadUser=user.UserName
+                         
+                    };
+                    offlineDB.Off_Seller.Add(item);
+                    try
+                    {
+                        await offlineDB.SaveChangesAsync();
+                        var sellerperson = offlineDB.Off_Seller.SingleOrDefault(m => m.Mobile == model.Mobile&&m.Off_System_Id==model.Off_System_Id);
+                        model.Off_Seller_Id = sellerperson.Id;
+                        model.Bind = false;
+                        offlineDB.Entry(model).State = System.Data.Entity.EntityState.Modified;
+                        await offlineDB.SaveChangesAsync();
+                    }
+                    catch
+                    {
+                        return Content("FAIL");
+                    }         
+                    return Content("SUCCESS");
                 }
             }
             else
@@ -2122,6 +2137,7 @@ namespace SqzEvent.Controllers
 
 
         // 红包信息列表
+
         [Authorize(Roles = "Administrator")]
         [SettingFilter(SettingName = "BONUS")]
         public ActionResult Manager_BonusList()

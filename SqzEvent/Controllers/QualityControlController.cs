@@ -602,7 +602,7 @@ namespace SqzEvent.Controllers
         public JsonResult RefreshEquipmentListAjax(int factoryId)
         {
             var list = from m in _qcdb.QCEquipment
-                       where m.FactoryId == factoryId
+                       where m.FactoryId == factoryId && m.Status != -1
                        select new { Id = m.Id, Name = m.SimpleName };
             return Json(new { result = "SUCCESS", content = list });
         }

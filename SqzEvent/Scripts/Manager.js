@@ -3,7 +3,10 @@
 // Initialize app
 var myApp = new Framework7({
     modalTitle: '督导管理',
-    pushState:true
+    pushState: true,
+    cache: false,
+    domCache:false,
+    cacheIgnoreGetParameters:false
 });
 
 // If we need to use custom DOM library, let's save it to $$ variable:
@@ -175,7 +178,7 @@ $$(document).on("pageInit", ".page[data-page='manager-recruitlist']", function (
             page++;
             $$("#c_page").val(page);
         }
-    })
+    });
     var loading = false;
     if (!loading) {
         $$('.infinite-scroll').on("infinite", function () {
@@ -1993,9 +1996,57 @@ $$(document).on("pageInit", ".page[data-page='manager-queryseller']", function (
 
 //Manager_BindList 绑定促销员列表
 $$(document).on("pageInit", ".page[data-page='manager-bindseller']", function () {
+    $$.ajax({
+        url: "/Seller/Manager_BindListPartial",
+        data: {
+            page: $$("#_pagenum").val(),
+            query: $$("#bind-search").val()
+        },
+        success: function (data) {
+            $$("#bind-listpartial").html(data);
+            $$("#_pagenum").val(1);
+            if ($("#bind-listpartial").find("li").length < 10) {
+                myApp.detachInfiniteScroll($$('.infinite-scroll'));
+                // 删除加载提示符
+                $$('.infinite-scroll-preloader').remove();
+                return;
+            }
+        },
+        error: function () {
+            myApp.alert("发生错误");
+        }
+
+
+    });
     var mySearchbar = myApp.searchbar(".searchbar", {
         searchList: ".list-block-search",
         searchIn: ".item-content"
+    });
+    var loading = false;
+    $$('.infinite-scroll').on('infinite', function () {
+        if (loading) return;
+        loading = true;
+        setTimeout(function () {
+            loading = false;
+            $$.ajax({
+                url: "/Seller/Manager_BindListPartial",
+                data: {
+                    page: $$("#_pagenum").val(),
+                    query: $$("#bind-search").val()
+                },
+                success: function (data) {
+                    $$("#bind-listpartial").append(data);
+                    if ($$("#recruit-none").length > 0) {
+                        // 加载完毕，则注销无限加载事件，以防不必要的加载
+                        myApp.detachInfiniteScroll($$('.infinite-scroll'));
+                        // 删除加载提示符
+                        $$('.infinite-scroll-preloader').remove();
+                        return;
+                    }
+                }
+            });
+            $$("#_pagenum").val($$("#_pagenum").val()+1);
+        }, 1000);
     });
 });
 //Manager_BindSeller 绑定促销员

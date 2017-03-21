@@ -19,12 +19,14 @@
             @using (Html.BeginForm("Manager_BindSeller", "Seller", FormMethod.Post, new { @id = "bind-form", @class = "validate-form" }))
             {
                 @Html.AntiForgeryToken()
-                @Html.Hidden("UploadTime")
-                @Html.Hidden("UploadUser")
-                <input id="Off_System_Id" name="Off_System_Id" type="hidden" value="@Model.Off_System_Id" />
-                <input  id="Sid" name="Sid" type="hidden" value="@Model.Id" />
-                <input  value="@Model.NickName" id="Name" name="Name" type="hidden"/>
-                <input value="@Model.Mobile" id="Mobile" name="Mobile" type="hidden"/>
+                @Html.HiddenFor(m=>m.UserName)
+                @Html.HiddenFor(m=>m.Type)
+                @Html.HiddenFor(m=>m.Recruit)
+                @Html.HiddenFor(m=>m.ApplicationDate)
+                @Html.HiddenFor(m=>m.Id)
+                @Html.HiddenFor(m=>m.Mobile)
+                @Html.HiddenFor(m=>m.NickName)
+                @Html.HiddenFor(m=>m.Off_System_Id)
                 <div class="list-block">
                     <ul>
                         <li class="item-content">
