@@ -2005,6 +2005,7 @@ $$(document).on("pageInit", ".page[data-page='manager-bindseller']", function ()
         success: function (data) {
             $$("#bind-listpartial").html(data);
             $$("#_pagenum").val(1);
+            console.log($$("#_pagenum").val());
             if ($("#bind-listpartial").find("li").length < 10) {
                 myApp.detachInfiniteScroll($$('.infinite-scroll'));
                 // 删除加载提示符
@@ -2024,25 +2025,25 @@ $$(document).on("pageInit", ".page[data-page='manager-bindseller']", function ()
     });
     var loading = false;
     $$('.infinite-scroll').on('infinite', function () {
-        if (loading) return;
+        if (loading)
+            return;
         loading = true;
-        setTimeout(function () {
-            
+        setTimeout(function () {       
             $$.ajax({
                 url: "/Seller/Manager_BindListPartial",
                 data: {
                     page: $$("#_pagenum").val(),
                     query: $$("#bind-search").val()
                 },
-                success: function (data) {
+                success: function (data) {                    
                     $$("#bind-listpartial").append(data);
+                    $$("#_pagenum").val(parseInt($$("#_pagenum").val()) + 1);
+                    loading=false;
                     if ($$("#recruit-none").length > 0) {
                         // 加载完毕，则注销无限加载事件，以防不必要的加载
                         myApp.detachInfiniteScroll($$('.infinite-scroll'));
                         // 删除加载提示符
-                        $$('.infinite-scroll-preloader').remove();
-                        $$("#_pagenum").val($$("#_pagenum").val() + 1);
-                        loading = false;
+                        $$('.infinite-scroll-preloader').remove();                        
                         return;
                     }
                 }
