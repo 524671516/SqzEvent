@@ -2063,7 +2063,7 @@ namespace SqzEvent.Controllers
             if (query == null||query=="")
             {
                 var bindlist= (from m in offlineDB.Off_Membership_Bind
-                               where m.Off_System_Id == user.DefaultSystemId && m.Type == 2 && m.Bind == false
+                               where m.Off_System_Id == user.DefaultSystemId && m.Type == 1 && m.Bind == false
                                orderby m.ApplicationDate descending
                                select m).Skip(_page * 10).Take(10);
                 return PartialView(bindlist);
@@ -2071,17 +2071,22 @@ namespace SqzEvent.Controllers
             else
             {
                 var bindlist = (from m in offlineDB.Off_Membership_Bind
-                                where m.Off_System_Id == user.DefaultSystemId && m.Type == 2 && m.Bind == false || m.NickName.Contains(query)
+                                where m.Off_System_Id == user.DefaultSystemId && m.Type == 1 && m.Bind == false || m.NickName.Contains(query)
                                 orderby m.ApplicationDate descending
                                 select m).Skip(_page * 10).Take(10);
                 return PartialView(bindlist);
             }
         }
+        // 仅可以绑定管辖范围内的门店
         [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public ActionResult Manager_BindSeller(int id)
         {
-            var storesystemlist = offlineDB.Off_StoreSystem;
-            ViewBag.ssl = new SelectList(storesystemlist, "Id", "SystemName");
+            var user = UserManager.FindById(User.Identity.GetUserId());
+            var manager = offlineDB.Off_StoreManager.SingleOrDefault(m => m.UserName == user.UserName && m.Off_System_Id == user.DefaultSystemId);
+            var storesystem = from m in manager.Off_Store
+                              group m by m.Off_StoreSystem into g
+                              select new { Id = g.Key.Id, SystemName = g.Key.SystemName };
+            ViewBag.ssl = new SelectList(storesystem, "Id", "SystemName");
             var bindone = offlineDB.Off_Membership_Bind.SingleOrDefault(m => m.Id == id);
             return PartialView(bindone);              
         }
@@ -2118,7 +2123,7 @@ namespace SqzEvent.Controllers
                         await offlineDB.SaveChangesAsync();
                         var sellerperson = offlineDB.Off_Seller.SingleOrDefault(m => m.Mobile == model.Mobile&&m.Off_System_Id==model.Off_System_Id);
                         model.Off_Seller_Id = sellerperson.Id;
-                        model.Bind = false;
+                        model.Bind = true;
                         offlineDB.Entry(model).State = System.Data.Entity.EntityState.Modified;
                         await offlineDB.SaveChangesAsync();
                     }
@@ -2702,6 +2707,18 @@ namespace SqzEvent.Controllers
                             where m.Off_StoreSystemId == storesystemId
                             orderby m.StoreName
                             select new { Id = m.Id, StoreName = m.StoreName};
+            return Json(new { result = "SUCCESS", storelist = storelist });
+        }
+        [HttpPost]
+        [Authorize(Roles ="Supervisor,Manager,Administrator")]
+        public JsonResult Manager_StoreListDependance(int storesystemId)
+        {
+            var user = UserManager.FindById(User.Identity.GetUserId());
+            var manager = offlineDB.Off_StoreManager.SingleOrDefault(m => m.UserName == user.UserName && m.Off_System_Id == user.DefaultSystemId);
+            var storelist = from m in manager.Off_Store
+                            where m.Off_StoreSystemId == storesystemId
+                            orderby m.StoreName
+                            select new { Id = m.Id, StoreName = m.StoreName };
             return Json(new { result = "SUCCESS", storelist = storelist });
         }
         [HttpPost, ValidateAntiForgeryToken]

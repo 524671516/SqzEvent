@@ -2027,7 +2027,7 @@ $$(document).on("pageInit", ".page[data-page='manager-bindseller']", function ()
         if (loading) return;
         loading = true;
         setTimeout(function () {
-            loading = false;
+            
             $$.ajax({
                 url: "/Seller/Manager_BindListPartial",
                 data: {
@@ -2041,11 +2041,13 @@ $$(document).on("pageInit", ".page[data-page='manager-bindseller']", function ()
                         myApp.detachInfiniteScroll($$('.infinite-scroll'));
                         // 删除加载提示符
                         $$('.infinite-scroll-preloader').remove();
+                        $$("#_pagenum").val($$("#_pagenum").val() + 1);
+                        loading = false;
                         return;
                     }
                 }
             });
-            $$("#_pagenum").val($$("#_pagenum").val()+1);
+            
         }, 1000);
     });
 });
@@ -2053,7 +2055,7 @@ $$(document).on("pageInit", ".page[data-page='manager-bindseller']", function ()
 $$(document).on("pageInit", ".page[data-page='manager-bind']", function () {
     if ($$("#storesystemid").val() != "") {
         $$.ajax({
-            url: "/Seller/Manager_StoreListByStoreSystemId",
+            url: "/Seller/Manager_StoreListDependance",
             type: "post",
             data: {
                 storesystemId: $$("#storesystemid").val()
@@ -2074,7 +2076,7 @@ $$(document).on("pageInit", ".page[data-page='manager-bind']", function () {
         $("#store-smart .smart-select-value").html("- 请选择 -")
         if ($$(this).val() != "") {
             $$.ajax({
-                url: "/Seller/Manager_StoreListByStoreSystemId",
+                url: "/Seller/Manager_StoreListDependance",
                 type: "post",
                 data: {
                     storesystemId: $$("#storesystemid").val()

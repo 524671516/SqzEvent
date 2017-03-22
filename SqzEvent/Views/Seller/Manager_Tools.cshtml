@@ -10,13 +10,13 @@
 <div class="pages">
     <div class="page" data-page="manager-tools">
         <div class="page-content">
-            <div class="content-block-title">管理工具</div>
+            <div class="content-block-title">店铺管理</div>
             <div class="list-block">
-                <ul>                  
+                <ul>
                     <li>
                         <a href="/Seller/Manager_ReportList" class="item-link item-content">
                             <div class="item-inner">
-                                <div class="item-title">销量排名</div>
+                                <div class="item-title">店铺销量排名</div>
                             </div>
                         </a>
                     </li>
@@ -34,6 +34,11 @@
                             </div>
                         </a>
                     </li>
+                </ul>
+            </div>
+            <div class="content-block-title">促销员管理</div>
+            <div class="list-block">
+                <ul>
                     <li>
                         <a href="/Seller/Manager_SellerList" class="item-link item-content">
                             <div class="item-inner">
@@ -41,17 +46,15 @@
                             </div>
                         </a>
                     </li>
-                    @if (User.IsInRole("Supervisor")|| User.IsInRole("Manager"))
-                    {
-                        <li>
-                            <a href="/Seller/Manager_BindList" class="item-link item-content">
-                                <div class="item-inner">
-                                    <div class="item-title">未绑定促销员</div>
-                                    <div class="item-after"><i class="fa fa-exclamation-triangle color-yellow" aria-hidden="true"></i></div>
-                                </div>
-                            </a>
-                        </li>
-                    }                 
+
+                    <li>
+                        <a href="/Seller/Manager_BindList" class="item-link item-content">
+                            <div class="item-inner">
+                                <div class="item-title">绑定促销员</div>
+                                <div class="item-after"></div>
+                            </div>
+                        </a>
+                    </li>
                     <li>
                         <a href="/Seller/Manager_RecruitList" class="item-link item-content">
                             <div class="item-inner">
@@ -60,25 +63,31 @@
                             </div>
                         </a>
                     </li>
-                    @if (User.IsInRole("Administrator"))
-                    {
-                    <li>
-                        <a href="/Seller/Manager_BonusList" class="item-link item-content">
-                            <div class="item-inner">
-                                <div class="item-title">确认促销员奖励</div>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/Seller/Manager_CompetitionInfoList" class="item-link item-content">
-                            <div class="item-inner">
-                                <div class="item-title">确认竞品信息</div>
-                            </div>
-                        </a>
-                    </li>
-                    }
                 </ul>
+            </div>
+            @if (User.IsInRole("Administrator"))
+            {
+                <div class="content-block-title">高级管理工具</div>
+                <div class="list-block">
+                    <ul>
+
+                        <li>
+                            <a href="/Seller/Manager_BonusList" class="item-link item-content">
+                                <div class="item-inner">
+                                    <div class="item-title">确认促销员奖励</div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/Seller/Manager_CompetitionInfoList" class="item-link item-content">
+                                <div class="item-inner">
+                                    <div class="item-title">确认竞品信息</div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            }
             </div>
         </div>
     </div>
-</div>
