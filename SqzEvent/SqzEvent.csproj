@@ -224,6 +224,7 @@
     <Compile Include="DAL\OfflineSalesUtilities.cs" />
     <Compile Include="DAL\PeriodAidUtilities.cs" />
     <Compile Include="DAL\WeChatClasses.cs" />
+    <Compile Include="DAL\WeChatMiniClasses.cs" />
     <Compile Include="DAL\WeChatUtilities.cs" />
     <Compile Include="Extensions\HtmlExtensions.cs" />
     <Compile Include="Filters\CustomFilter.cs" />
@@ -243,6 +244,7 @@
     <Compile Include="Models\QualityControlModels.cs" />
     <Compile Include="Models\QualityControlViewModels.cs" />
     <Compile Include="Models\PromotionModels.cs" />
+    <Compile Include="Models\WeChatMiniModels.cs" />
     <Compile Include="Models\WxAcountViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
