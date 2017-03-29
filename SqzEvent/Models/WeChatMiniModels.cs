@@ -23,6 +23,7 @@
         public virtual DbSet<WechatUser> WechatUser { get; set; }
         public virtual DbSet<VoiceRecord> VoiceRecord { get; set; }
         public virtual DbSet<ProgrammLog> ProgrammLog { get; set; }
+        public virtual DbSet<SmsValidate> SmsValidate { get; set; }
 
         //为您要在模型中包含的每种实体类型都添加 DbSet。有关配置和使用 Code First  模型
         //的详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=390109。
@@ -34,7 +35,7 @@
         }
     }
     [Table("WechatUser")]
-    public class WechatUser
+    public partial class WechatUser
     {
         public int id { get; set; }
 
@@ -60,7 +61,7 @@
         [StringLength(256)]
         public string avatar_url { get; set; }
 
-        public bool gender { get; set; }
+        public int gender { get; set; }
 
         [StringLength(32)]
         public string province { get; set; }
@@ -87,7 +88,7 @@
         public virtual ICollection<VoiceRecord> VoiceRecord { get; set; }
     }
     [Table("ProgrammLog")]
-    public class ProgrammLog
+    public partial class ProgrammLog
     {
         public int id { get; set; }
 
@@ -100,8 +101,25 @@
         public DateTime log_time { get; set; }
     }
 
+    [Table("SmsValidate")]
+    public partial class SmsValidate
+    {
+        public int id { get; set; }
+
+        [Required, StringLength(16), RegularExpression("1[3|4|5|7|8|][0-9]{9}")]
+        public string mobile { get; set; }
+
+        // 短信状态 1:已发送;2:已确认;
+        public int status { get; set; }
+
+        [StringLength(8)]
+        public string validate_code { get; set; }
+
+        public DateTime send_time { get; set; }
+    }
+
     [Table("VoiceRecord")]
-    public class VoiceRecord
+    public partial class VoiceRecord
     {
         public int id { get; set; }
 
@@ -141,6 +159,21 @@
         public DateTime? receive_time { get; set; }
 
         public virtual WechatUser WechatUser { get; set; }
+    }
+
+    public class UserInfoViewModel
+    {
+        public string nickName { get; set; }
+
+        public string avatarUrl { get; set; }
+
+        public int gender { get; set; }
+
+        public string province { get; set; }
+
+        public string city { get; set; }
+
+        public string country { get; set; }
     }
     //public class MyEntity
     //{
