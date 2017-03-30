@@ -26,6 +26,7 @@ namespace SqzEvent.Controllers
         {
             return Json(new { data = "content" });
         }
+
         [HttpPost]
         public ActionResult SaveFiles(FormCollection form)
         {
@@ -53,6 +54,7 @@ namespace SqzEvent.Controllers
             string err_res = "{ error:'" + error + "', msg:'" + msg + "',imgurl:''}";
             return Json(new { error = error, msg = msg, imgurl = "" });
         }
+
         public ActionResult GetFiles(string filename)
         {
             AliOSSUtilities util = new AliOSSUtilities();
@@ -167,7 +169,6 @@ namespace SqzEvent.Controllers
         }
 
         // 读取语音
-        [HttpPost]
         public ActionResult getVoiceRecord(int id, string storage_session)
         {
             try
@@ -207,7 +208,7 @@ namespace SqzEvent.Controllers
                     var list = from m in _db.VoiceRecord
                                where m.user_id == user.id
                                orderby m.record_time descending
-                               select m;
+                               select new { Id=m.id, path=m.voice_path, status =m.status};
                     return Json(new { result = "SUCCESS", info = list });
                 }
                 return Json(new { result = "FAIL", errmsg = "无法获取用户信息" });
@@ -352,13 +353,11 @@ namespace SqzEvent.Controllers
 
         // 提交手机绑定
         [HttpPost]
-        public async Task<JsonResult> submitMobileBind(string storage_session, FormCollection form)
+        public async Task<JsonResult> submitMobileBind(string storage_session, string mobile, string vcode)
         {
             try
             {
                 // 检查验证码
-                string mobile = form["mobile"].ToString();
-                string validate_code = form["vcode"].ToString();
                 var sms = (from m in _db.SmsValidate
                                  where m.mobile == mobile && m.status==1
                                  orderby m.send_time descending
@@ -367,7 +366,7 @@ namespace SqzEvent.Controllers
                 {
                     return Json(new { result = "FAIL", errmsg = "手机绑定错误" });
                 }
-                if(sms.validate_code == validate_code)
+                if(sms.validate_code == vcode)
                 {
                     if (sms.send_time.AddSeconds(1800) <= DateTime.Now)
                     {
