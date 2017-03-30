@@ -352,13 +352,13 @@ namespace SqzEvent.Controllers
 
         // 提交手机绑定
         [HttpPost]
-        public async Task<JsonResult> submitMobileBind(string storage_session, FormCollection form)
+        public async Task<JsonResult> submitMobileBind(string storage_session, string _mobile,string _vcode)
         {
             try
             {
                 // 检查验证码
-                string mobile = form["mobile"].ToString();
-                string validate_code = form["vcode"].ToString();
+                string mobile = _mobile.ToString();
+                string validate_code = _vcode.ToString();
                 var sms = (from m in _db.SmsValidate
                                  where m.mobile == mobile && m.status==1
                                  orderby m.send_time descending
