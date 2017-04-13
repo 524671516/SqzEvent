@@ -174,6 +174,10 @@
         public string city { get; set; }
 
         public string country { get; set; }
+
+        public string openId { get; set; }
+
+        public string unionId { get; set; }
     }
     //public class MyEntity
     //{

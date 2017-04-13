@@ -10,6 +10,7 @@ using System.IO;
 using System.Web.Script.Serialization;
 using System.Threading.Tasks;
 using System.Text;
+using System.Security.Cryptography;
 
 namespace SqzEvent.Controllers
 {
@@ -36,7 +37,7 @@ namespace SqzEvent.Controllers
             string imgurl;
             if (files.Count > 0)
             {
-                if (files[0].ContentLength > 0 )
+                if (files[0].ContentLength > 0)
                 {
                     string filename = files[0].FileName;
                     //files[0].SaveAs(Server.MapPath("/Content/checkin-img/") + filename);
@@ -93,7 +94,7 @@ namespace SqzEvent.Controllers
                         exist_user.lastlogin_time = loginDate;
                         _db.Entry(exist_user).State = System.Data.Entity.EntityState.Modified;
                         await _db.SaveChangesAsync();
-                        return Json(new { result = "SUCCESS", session = storage_session });
+                        return Json(new { result = "SUCCESS", session = storage_session, new_user = false });
                     }
                     else
                     {
@@ -111,10 +112,10 @@ namespace SqzEvent.Controllers
                         };
                         _db.WechatUser.Add(item);
                         await _db.SaveChangesAsync();
-                        return Json(new { result = "SUCCESS", session = storage_session });
+                        return Json(new { result = "SUCCESS", session = storage_session, new_user = true });
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     return Json(new { result = "FAIL", error = ex.Message });
                 }
@@ -155,21 +156,21 @@ namespace SqzEvent.Controllers
                             };
                             _db.VoiceRecord.Add(record);
                             await _db.SaveChangesAsync();
-                            return Json(new { result = "SUCCESS", localpath = files[0].FileName });
+                            return Json(new { result = "SUCCESS", localpath = files[0].FileName, filename = filename });
                         }
                     }
                     return Json(new { result = "FAIL", errmsg = "文件无法上传" });
                 }
                 return Json(new { result = "FAIL", errmsg = "获取用户失败" });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return Json(new { result = "FAIL", errmsg = ex.Message });
             }
         }
 
         // 读取语音
-        public ActionResult getVoiceRecord(int id, string storage_session)
+        public async Task<ActionResult> getVoiceRecord(int id, string storage_session)
         {
             try
             {
@@ -181,7 +182,15 @@ namespace SqzEvent.Controllers
                     // 判断所属权
                     if (record.user_id == user.id || record.receiver_mobile == user.mobile)
                     {
+                        // 如果是收件人，更新状态
+                        if(record.receiver_mobile == user.mobile)
+                        {
+                            record.status = 2;
+                            _db.Entry(record).State = System.Data.Entity.EntityState.Modified;
+                            await _db.SaveChangesAsync();
+                        }
                         // 读取文件并返回
+
                         AliOSSUtilities util = new AliOSSUtilities();
                         var obj = util.GetObject("WeChatFiles/" + record.voice_path);
                         return File(obj, "application/octet-stream", record.voice_path);
@@ -203,12 +212,12 @@ namespace SqzEvent.Controllers
             try
             {
                 var user = getWechatUser(storage_session);
-                if(user != null)
+                if (user != null)
                 {
                     var list = from m in _db.VoiceRecord
-                               where m.user_id == user.id
+                               where m.user_id == user.id && m.status >= 0
                                orderby m.record_time descending
-                               select new { Id=m.id, path=m.voice_path, status =m.status};
+                               select new { Id = m.id, path = m.voice_path, status = m.status };
                     return Json(new { result = "SUCCESS", info = list });
                 }
                 return Json(new { result = "FAIL", errmsg = "无法获取用户信息" });
@@ -231,9 +240,9 @@ namespace SqzEvent.Controllers
                     if (user.user_status == 1)
                     {
                         var list = from m in _db.VoiceRecord
-                                   where m.receiver_mobile == user.mobile
+                                   where m.receiver_mobile == user.mobile && m.status >= 0
                                    orderby m.record_time descending
-                                   select m;
+                                   select new { Id = m.id, path = m.voice_path, status = m.status };
                         return Json(new { result = "SUCCESS", info = list });
                     }
                     else
@@ -256,7 +265,7 @@ namespace SqzEvent.Controllers
             try
             {
                 var user = getWechatUser(storage_session);
-                if(user != null)
+                if (user != null)
                 {
                     if (user.authorize)
                     {
@@ -291,25 +300,32 @@ namespace SqzEvent.Controllers
 
         // 更新用户资料
         [HttpPost]
-        public async Task<JsonResult> updateUserAuthorizedInfo(string storage_session, string rawData)
+        public async Task<JsonResult> updateUserAuthorizedInfo(string storage_session, string encryptedData, string iv)
         {
             try
             {
-                JavaScriptSerializer serializer = new JavaScriptSerializer();
-                var userinfo = serializer.Deserialize<UserInfoViewModel>(rawData);
                 var user = getWechatUser(storage_session);
-                if(user != null)
+                if (user != null)
                 {
-                    user.authorize = true;
-                    user.avatar_url = userinfo.avatarUrl;
-                    user.nickname = userinfo.nickName;
-                    user.province = userinfo.province;
-                    user.country = userinfo.country;
-                    user.city = user.city;
-                    user.gender = user.gender;
-                    _db.Entry(user).State = System.Data.Entity.EntityState.Modified;
-                    await _db.SaveChangesAsync();
-                    return Json(new { result = "SUCCESS", info = userinfo });
+                    string rawData = DecodeUserInfo(encryptedData, iv, user.session_key);
+                    JavaScriptSerializer serializer = new JavaScriptSerializer();
+                    var userinfo = serializer.Deserialize<UserInfoViewModel>(rawData);
+                    // 验证是否同一个用户
+                    if (userinfo.openId == user.open_id)
+                    {
+                        user.authorize = true;
+                        user.avatar_url = userinfo.avatarUrl;
+                        user.nickname = userinfo.nickName;
+                        user.province = userinfo.province;
+                        user.country = userinfo.country;
+                        user.city = userinfo.city;
+                        user.gender = userinfo.gender;
+                        user.union_id = userinfo.unionId;
+                        _db.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                        await _db.SaveChangesAsync();
+                        return Json(new { result = "SUCCESS", info = new { avatar_url = user.avatar_url, nickname = user.nickname, gender = user.gender, authorize = user.authorize, user_status = user.user_status } });
+                    }
+                    return Json(new { result = "FAIL", errmsg = "用户校验错误" });
                 }
                 return Json(new { result = "FAIL", errmsg = "无法找到用户" });
             }
@@ -319,6 +335,22 @@ namespace SqzEvent.Controllers
             }
         }
 
+        // 解密用户资料
+        [HttpPost]
+        public JsonResult Decrypt(string storage_session, string rawData, string iv)
+        {
+            try
+            {
+                var user = getWechatUser(storage_session);
+                var content = DecodeUserInfo(rawData, iv, user.session_key);
+                return Json(new { result = content });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { result = ex.Message });
+            }
+
+        }
         // 获取手机验证码
         [HttpPost]
         public async Task<JsonResult> sendSmsValidate(string mobile)
@@ -359,14 +391,14 @@ namespace SqzEvent.Controllers
             {
                 // 检查验证码
                 var sms = (from m in _db.SmsValidate
-                                 where m.mobile == mobile && m.status==1
-                                 orderby m.send_time descending
-                                 select m).FirstOrDefault();
+                           where m.mobile == mobile && m.status == 1
+                           orderby m.send_time descending
+                           select m).FirstOrDefault();
                 if (sms == null)
                 {
                     return Json(new { result = "FAIL", errmsg = "手机绑定错误" });
                 }
-                if(sms.validate_code == vcode)
+                if (sms.validate_code == vcode)
                 {
                     if (sms.send_time.AddSeconds(1800) <= DateTime.Now)
                     {
@@ -394,6 +426,130 @@ namespace SqzEvent.Controllers
             catch
             {
                 return Json(new { result = "FAIL", errmsg = "未知错误" });
+            }
+        }
+
+
+        // 绑定发送信息
+        [HttpPost]
+        public async Task<JsonResult> submitSendInfo(string storage_session, string filename, string title, string wish, string mobile)
+        {
+            try
+            {
+                // 检查用户
+                var user = getWechatUser(storage_session);
+                if (user != null)
+                {
+                    // 检查文件
+                    var record = _db.VoiceRecord.SingleOrDefault(m => m.voice_path == filename && m.user_id == user.id);
+                    if (record != null)
+                    {
+                        // 保存发送记录
+                        record.voice_title = title;
+                        record.voice_wish = wish;
+                        record.send_time = DateTime.Now;
+                        record.receiver_mobile = mobile;
+                        record.status = 1;
+                        _db.Entry(record).State = System.Data.Entity.EntityState.Modified;
+                        await _db.SaveChangesAsync();
+                        return Json(new { result = "SUCCESS", errmsg = "" });
+                    }
+                    else
+                    {
+                        return Json(new { result = "FAIL", errmsg = "待发送文件不存在" });
+                    }
+                }
+                else
+                {
+                    return Json(new { result = "FAIL", errmsg = "当前用户不存在" });
+                }
+            }
+            catch
+            {
+                return Json(new { result = "FAIL", errmsg = "发生错误" });
+            }
+        }
+
+        // 获取语音资料详细信息
+        [HttpPost]
+        public JsonResult getVoiceRecordDetails(int id, string storage_session)
+        {
+            try
+            {
+                var user = getWechatUser(storage_session);
+                if (user != null)
+                {
+                    var record = _db.VoiceRecord.SingleOrDefault(m => m.id == id);
+                    if (record != null)
+                    {
+                        if (record.user_id == user.id || record.receiver_mobile == user.mobile)
+                        {
+                            return Json(new
+                            {
+                                result = "SUCCESS",
+                                info = new
+                                {
+                                    id = record.id,
+                                    title = record.voice_title,
+                                    wish = record.voice_wish,
+                                    path = record.voice_path,
+                                    username = record.WechatUser.nickname,
+                                    avatarurl = record.WechatUser.avatar_url
+                                }
+                            });
+                        }
+                        else
+                        {
+                            return Json(new { result = "FAIL", errmsg = "用户无法读取指定语音" });
+                        }
+                    }
+                    return Json(new { result = "FAIL", errmsg = "无法获取语音" });
+                }
+                else
+                {
+                    return Json(new { result = "FAIL", errmsg = "当前用户不存在" });
+                }
+            }
+            catch
+            {
+                return Json(new { result = "FAIL", errmsg = "发生错误" });
+            }
+        }
+
+        // 删除语音资料
+        [HttpPost]
+        public async Task<JsonResult> deleteVoiceRecord(int id, string storage_session)
+        {
+            try
+            {
+                var user = getWechatUser(storage_session);
+                if (user != null)
+                {
+                    var record = _db.VoiceRecord.SingleOrDefault(m => m.id == id);
+                    if (record != null)
+                    {
+                        if (record.user_id == user.id || record.receiver_mobile == user.mobile)
+                        {
+                            record.status = -1;
+                            _db.Entry(record).State = System.Data.Entity.EntityState.Modified;
+                            await _db.SaveChangesAsync();
+                            return Json(new { result = "SUCCESS", errmsg = "" });
+                        }
+                        else
+                        {
+                            return Json(new { result = "FAIL", errmsg = "用户无法删除指定语音" });
+                        }
+                    }
+                    return Json(new { result = "FAIL", errmsg = "无法获取语音" });
+                }
+                else
+                {
+                    return Json(new { result = "FAIL", errmsg = "当前用户不存在" });
+                }
+            }
+            catch
+            {
+                return Json(new { result = "FAIL", errmsg = "发生错误" });
             }
         }
 
@@ -432,6 +588,26 @@ namespace SqzEvent.Controllers
                 result = reader.ReadToEnd();
             }
             return result;
+        }
+
+
+        public static string DecodeUserInfo(string encryptedData, string iv, string session_key)
+        {
+            byte[] iv2 = Convert.FromBase64String(iv);
+
+            if (string.IsNullOrEmpty(encryptedData)) return "";
+            Byte[] toEncryptArray = Convert.FromBase64String(encryptedData);
+
+            System.Security.Cryptography.RijndaelManaged rm = new System.Security.Cryptography.RijndaelManaged
+            {
+                Key = Convert.FromBase64String(session_key),
+                IV = iv2,
+                Mode = System.Security.Cryptography.CipherMode.CBC,
+                Padding = System.Security.Cryptography.PaddingMode.PKCS7
+            };
+            System.Security.Cryptography.ICryptoTransform cTransform = rm.CreateDecryptor();
+            Byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
+            return Encoding.UTF8.GetString(resultArray);
         }
         #endregion
     }
