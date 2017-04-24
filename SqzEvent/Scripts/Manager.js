@@ -261,7 +261,6 @@ $$(document).on("pageInit", ".page[data-page='manager-recruitlist']", function (
     });
 
 });
-
 $$(document).on("pageInit", ".page[data-page='manager-recruitdetails']", function (e) {
     var worktype = $$("#WorkType").val()
     var weekday = worktype.substr(worktype.indexOf(":") + 1, 1);

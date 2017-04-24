@@ -1097,15 +1097,15 @@ namespace SqzEvent.Controllers
             int uncheckin = (from m in today_schedule
                              where m.Off_Checkin.Count(p => p.Status >= 0) == 0
                              select m).Count();
-            int uncheckout = (from m in today_schedule
-                              where m.Off_Checkin.Any(p => p.Status == 1)
+            int uncheckout = (from m in today_schedule.SelectMany(p => p.Off_Checkin)
+                              where m.Status == 1
                               select m).Count();
-            int unreport = (from m in today_schedule
-                            where m.Off_Checkin.Any(p => p.Status == 2)
+            int unreport = (from m in today_schedule.SelectMany(p => p.Off_Checkin)
+                            where m.Status==2
                             select m).Count();
-            int unconfirm = (from m in offlineDB.Off_Checkin_Schedule
-                             where m.Off_Checkin.Any(p => p.Status == 3) &&
-                             storelist.Contains(m.Off_Store_Id)
+            int unconfirm = (from m in offlineDB.Off_Checkin_Schedule.SelectMany(p=>p.Off_Checkin)
+                             where m.Status == 3 &&
+                             storelist.Contains(m.Off_Checkin_Schedule.Off_Store_Id)
                              select m).Count();
             return Json(new { result = "SUCCESS", data = new { uncheckin = uncheckin, uncheckout = uncheckout, unreport = unreport, unconfirm = unconfirm } });
         }
@@ -1139,7 +1139,7 @@ namespace SqzEvent.Controllers
             var today_schedule = from m in offlineDB.Off_Checkin_Schedule
                                  where storelist.Contains(m.Off_Store_Id)
                                  && m.Subscribe == _date
-                                 && m.Off_Checkin.Count(p => p.Status >=1) !=m.Off_Store.Off_Seller.Count()
+                                 && m.Off_Checkin.Count(p => p.Status >= 0) == 0
                                  orderby m.Off_Store.Off_StoreSystem.SystemName, m.Off_Store.StoreName
                                  select m;
             return PartialView(today_schedule);
