@@ -137,6 +137,10 @@
         [StringLength(128)]
         public string voice_path { get; set; }
 
+
+        // 录音时长(second)
+        public int duration { get; set; }
+
         // 祝福语
         [StringLength(64)]
         public string voice_wish { get; set; }

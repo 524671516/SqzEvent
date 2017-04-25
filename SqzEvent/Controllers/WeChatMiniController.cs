@@ -128,7 +128,7 @@ namespace SqzEvent.Controllers
 
         // 保存语音
         [HttpPost]
-        public async Task<JsonResult> saveVoiceRecord(FormCollection form, string storage_session)
+        public async Task<JsonResult> saveVoiceRecord(FormCollection form, string storage_session, int duration)
         {
             try
             {
@@ -142,7 +142,7 @@ namespace SqzEvent.Controllers
                         if (files[0].ContentLength > 0)
                         {
                             // 定义本地文件名
-                            var filename = Guid.NewGuid().ToString("N");
+                            var filename = Guid.NewGuid().ToString("N")+".silk";
                             // 保存文件
                             AliOSSUtilities util = new AliOSSUtilities();
                             util.PutObject(files[0].InputStream, "WeChatFiles/" + filename);
@@ -151,6 +151,7 @@ namespace SqzEvent.Controllers
                             {
                                 record_time = DateTime.Now,
                                 status = 0,
+                                duration = duration,
                                 user_id = user.id,
                                 voice_path = filename
                             };
@@ -166,6 +167,39 @@ namespace SqzEvent.Controllers
             catch (Exception ex)
             {
                 return Json(new { result = "FAIL", errmsg = ex.Message });
+            }
+        }
+
+        // 实时信息
+        [HttpPost]
+        public JsonResult getRecordCount(string storage_session)
+        {
+            try
+            {
+                var user = getWechatUser(storage_session);
+                if(user != null)
+                {
+                    int own_count = (from m in _db.VoiceRecord
+                                   where m.status >= 0 && m.user_id == user.id
+                                   select m).Count();
+                    if (user.user_status == 1)
+                    {
+                        int receive_count = (from m in _db.VoiceRecord
+                                             where m.receiver_mobile == user.mobile && m.status >= 1
+                                             select m).Count();
+                        return Json(new { result = "SUCCESS", own_count = own_count, receive_count = receive_count });
+                    }
+                    else
+                    {
+                        //return Json(new { result = "FAIL", errmsg = "当前用户未绑定" });
+                        return Json(new { result = "SUCCESS", own_count = own_count, receive_count = "N/A" });
+                    }
+                }
+                return Json(new { result = "FAIL", errmsg = "无法获取用户信息" });
+            }
+            catch
+            {
+                return Json(new { result = "FAIL", errmsg = "无法获取列表" });
             }
         }
 
@@ -217,7 +251,7 @@ namespace SqzEvent.Controllers
                     var list = from m in _db.VoiceRecord
                                where m.user_id == user.id && m.status >= 0
                                orderby m.record_time descending
-                               select new { Id = m.id, path = m.voice_path, status = m.status };
+                               select new { id = m.id, title = m.voice_title, path = m.voice_path, status = getVoiceStatus( m.status), duration = m.duration, record_time = m.record_time };
                     return Json(new { result = "SUCCESS", info = list });
                 }
                 return Json(new { result = "FAIL", errmsg = "无法获取用户信息" });
@@ -242,7 +276,7 @@ namespace SqzEvent.Controllers
                         var list = from m in _db.VoiceRecord
                                    where m.receiver_mobile == user.mobile && m.status >= 0
                                    orderby m.record_time descending
-                                   select new { Id = m.id, path = m.voice_path, status = m.status };
+                                   select new { id = m.id, title = m.voice_title, path = m.voice_path, status = getVoiceStatus(m.status), duration = m.duration, send_time = m.send_time };
                         return Json(new { result = "SUCCESS", info = list });
                     }
                     else
@@ -335,22 +369,6 @@ namespace SqzEvent.Controllers
             }
         }
 
-        // 解密用户资料
-        [HttpPost]
-        public JsonResult Decrypt(string storage_session, string rawData, string iv)
-        {
-            try
-            {
-                var user = getWechatUser(storage_session);
-                var content = DecodeUserInfo(rawData, iv, user.session_key);
-                return Json(new { result = content });
-            }
-            catch (Exception ex)
-            {
-                return Json(new { result = ex.Message });
-            }
-
-        }
         // 获取手机验证码
         [HttpPost]
         public async Task<JsonResult> sendSmsValidate(string mobile)
@@ -428,7 +446,6 @@ namespace SqzEvent.Controllers
                 return Json(new { result = "FAIL", errmsg = "未知错误" });
             }
         }
-
 
         // 绑定发送信息
         [HttpPost]
@@ -569,6 +586,12 @@ namespace SqzEvent.Controllers
             }
         }
 
+        /// <summary>
+        /// 发送短信
+        /// </summary>
+        /// <param name="mobile"></param>
+        /// <param name="code"></param>
+        /// <returns></returns>
         private string Send_Sms_VerifyCode(string mobile, string code)
         {
             string apikey = "2100e8a41c376ef6c6a18114853393d7";
@@ -590,8 +613,14 @@ namespace SqzEvent.Controllers
             return result;
         }
 
-
-        public static string DecodeUserInfo(string encryptedData, string iv, string session_key)
+        /// <summary>
+        /// 解密用户信息
+        /// </summary>
+        /// <param name="encryptedData"></param>
+        /// <param name="iv"></param>
+        /// <param name="session_key"></param>
+        /// <returns></returns>
+        private static string DecodeUserInfo(string encryptedData, string iv, string session_key)
         {
             byte[] iv2 = Convert.FromBase64String(iv);
 
@@ -610,5 +639,22 @@ namespace SqzEvent.Controllers
             return Encoding.UTF8.GetString(resultArray);
         }
         #endregion
+
+        private static string getVoiceStatus(int status)
+        {
+            switch (status)
+            {
+                case -1:
+                    return "已删除";
+                case 0:
+                    return "已保存";
+                case 1:
+                    return "已发送";
+                case 2:
+                    return "已收听";
+                default:
+                    return "未知";
+            }
+        }
     }
 }
