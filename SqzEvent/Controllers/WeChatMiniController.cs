@@ -251,7 +251,7 @@ namespace SqzEvent.Controllers
                     var list = from m in _db.VoiceRecord
                                where m.user_id == user.id && m.status >= 0
                                orderby m.record_time descending
-                               select new { id = m.id, title = m.voice_title, path = m.voice_path, status = getVoiceStatus( m.status), duration = m.duration, record_time = m.record_time };
+                               select new { id = m.id, title = m.voice_title, path = m.voice_path, status = m.status, duration = m.duration, record_time = m.record_time };
                     return Json(new { result = "SUCCESS", info = list });
                 }
                 return Json(new { result = "FAIL", errmsg = "无法获取用户信息" });
@@ -276,7 +276,7 @@ namespace SqzEvent.Controllers
                         var list = from m in _db.VoiceRecord
                                    where m.receiver_mobile == user.mobile && m.status >= 0
                                    orderby m.record_time descending
-                                   select new { id = m.id, title = m.voice_title, path = m.voice_path, status = getVoiceStatus(m.status), duration = m.duration, send_time = m.send_time };
+                                   select new { id = m.id, title = m.voice_title, path = m.voice_path, status = m.status, duration = m.duration, send_time = m.send_time };
                         return Json(new { result = "SUCCESS", info = list });
                     }
                     else
@@ -640,7 +640,7 @@ namespace SqzEvent.Controllers
         }
         #endregion
 
-        private static string getVoiceStatus(int status)
+        private string getVoiceStatus(int status)
         {
             switch (status)
             {
