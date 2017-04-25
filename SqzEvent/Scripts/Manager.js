@@ -957,14 +957,9 @@ $$(document).on("pageInit", ".page[data-page='manager-createcheckin']", function
         //当为false时，验证无效时，没有焦点响应
         onkeyup: false,
         submitHandler: function (form) {
-            var array1 = splitArray($("#CheckinPhoto").val());
             if ($$("#Off_Seller_Id").val().trim() == "") {
                 myApp.hideIndicator();
                 myApp.alert("请选择促销员");
-                $("#createcheckin-btn").prop("disabled", false).removeClass("color-gray");
-            } else if (array1.length == 0) {
-                myApp.hideIndicator();
-                myApp.alert("请至少上传一张签到图片");
                 $("#createcheckin-btn").prop("disabled", false).removeClass("color-gray");
             } else {
                 $("#createcheckin-form").ajaxSubmit(function (data) {
@@ -1031,12 +1026,6 @@ $$(document).on("pageInit", ".page[data-page='manager-createcheckout']", functio
         //当为false时，验证无效时，没有焦点响应
         onkeyup: false,
         submitHandler: function (form) {
-            var array1 = splitArray($("#CheckoutPhoto").val());
-            if (array1.length == 0) {
-                myApp.hideIndicator();
-                myApp.alert("请至少上传一张签退图片");
-                $("#createcheckout-btn").prop("disabled", false).removeClass("color-gray");
-            } else {
                 $("#createcheckout-form").ajaxSubmit(function (data) {
                     if (data == "SUCCESS") {
                         myApp.hideIndicator();
@@ -1060,7 +1049,7 @@ $$(document).on("pageInit", ".page[data-page='manager-createcheckout']", functio
                         }, 2e3);
                     }
                 });
-            }
+ 
         },
         rules: {
             Confirm_Remark: {
@@ -1101,12 +1090,6 @@ $$(document).on("pageInit", ".page[data-page='manager-createcheckreport']", func
         //当为false时，验证无效时，没有焦点响应
         onkeyup: false,
         submitHandler: function (form) {
-            var array1 = splitArray($("#Rep_Image").val());
-            if (array1.length == 0) {
-                myApp.hideIndicator();
-                myApp.alert("请至少上传一张销量图片");
-                $("#createcheckreport-btn").prop("disabled", false).removeClass("color-gray");
-            } else {
                 $("#createcheckreport-form").ajaxSubmit(function (data) {
                     if (data == "SUCCESS") {
                         myApp.hideIndicator();
@@ -1130,7 +1113,6 @@ $$(document).on("pageInit", ".page[data-page='manager-createcheckreport']", func
                         }, 2e3);
                     }
                 });
-            }
         },
         rules: {
             Confirm_Remark: {
