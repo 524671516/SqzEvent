@@ -5,8 +5,8 @@ var myApp = new Framework7({
     modalTitle: '督导管理',
     pushState: true,
     cache: false,
-    domCache:false,
-    cacheIgnoreGetParameters:false
+    domCache: false,
+    cacheIgnoreGetParameters: false
 });
 
 // If we need to use custom DOM library, let's save it to $$ variable:
@@ -165,7 +165,7 @@ $$("#manager_userpanel").on("click", ".manager-recruitphoto", function () {
     myPhotoBrowserPopupDark.open();
 });
 /************* 促销员注册 ************/
-$$(document).on("pageInit", ".page[data-page='manager-recruitlist']", function (e) { 
+$$(document).on("pageInit", ".page[data-page='manager-recruitlist']", function (e) {
     $$.ajax({
         url: "/Seller/Manager_RecruitListPartial",
         data: {
@@ -211,7 +211,7 @@ $$(document).on("pageInit", ".page[data-page='manager-recruitlist']", function (
         });
     }
     var mySearchbar = myApp.searchbar('.searchbar', {
-        customSearch:true,
+        customSearch: true,
         searchList: '.list-block-search',
         searchIn: '.item-content',
         onDisable: function (s) {
@@ -234,13 +234,13 @@ $$(document).on("pageInit", ".page[data-page='manager-recruitlist']", function (
             $$.ajax({
                 url: "/Seller/Manager_RecruitListPartial",
                 data: {
-                    page:$$("#c_page").val(),
+                    page: $$("#c_page").val(),
                     query: s.input.val()
                 },
                 success: function (data) {
                     $$(".search-list").html(data);
                     if ($$(".search-list").find("li").length < 20) {
-                        $$("#recruit-none").remove();                  
+                        $$("#recruit-none").remove();
                         myApp.detachInfiniteScroll($$('.infinite-scroll'));
                         // 删除加载提示符
                         $$('.infinite-scroll-preloader').remove();
@@ -259,9 +259,8 @@ $$(document).on("pageInit", ".page[data-page='manager-recruitlist']", function (
             });
         },
     });
-    
-});
 
+});
 $$(document).on("pageInit", ".page[data-page='manager-recruitdetails']", function (e) {
     var worktype = $$("#WorkType").val()
     var weekday = worktype.substr(worktype.indexOf(":") + 1, 1);
@@ -290,7 +289,7 @@ $$(document).on("pageInit", ".page[data-page='manager-recruitbind']", function (
                     //$$("#managerreport-form").submit();
                     myApp.hideIndicator();
                     $("#recruitbind-form").ajaxSubmit({
-                        error:function(){
+                        error: function () {
                             $("#recruitbind-submit").removeClass("color-gray");
                         },
                         success: function (data) {
@@ -417,7 +416,7 @@ $$(document).on("pageInit", ".page[data-page='manager-task-eventcreate']", funct
         //当为false时，验证无效时，没有焦点响应
         onkeyup: false,
         submitHandler: function (form) {
-            if ($$("#StoreList").val() == "" && $$("#allcheck").is(':checked')==false) {
+            if ($$("#StoreList").val() == "" && $$("#allcheck").is(':checked') == false) {
                 myApp.hideIndicator();
                 myApp.addNotification({
                     title: "通知",
@@ -425,7 +424,7 @@ $$(document).on("pageInit", ".page[data-page='manager-task-eventcreate']", funct
                 });
                 $("#eventcreate-btn").prop("disabled", false).removeClass("color-gray");
             } else {
-                if ($$("#StartDate").val() > $$("#EndDate").val()) {                   
+                if ($$("#StartDate").val() > $$("#EndDate").val()) {
                     myApp.hideIndicator();
                     myApp.addNotification({
                         title: "通知",
@@ -466,11 +465,11 @@ $$(document).on("pageInit", ".page[data-page='manager-task-eventcreate']", funct
         }
     });
     $$("#eventcreate-btn").click(function () {
-            myApp.showIndicator();
-            $("#eventcreate-btn").prop("disabled", true).addClass("color-gray");
-            setTimeout(function () {
-                $("#createsaleevent-form").submit();
-            }, 500);  
+        myApp.showIndicator();
+        $("#eventcreate-btn").prop("disabled", true).addClass("color-gray");
+        setTimeout(function () {
+            $("#createsaleevent-form").submit();
+        }, 500);
     });
 });
 //Manager_SalesEventView 本周活动页列表形式
@@ -479,7 +478,7 @@ $$(document).on("pageInit", ".page[data-page='manager-task-addcheckin']", functi
     // 获取当前备注文本长度
     currentTextAreaLength("manager-task-addcheckin", "Remark", 50, "checkin-currentlength");
     // 显示所有的已上传图片
-    uploadCheckinFile("manager-task-addcheckin", "manager-imglist", "Photo", "current_image",9);
+    uploadCheckinFile("manager-task-addcheckin", "manager-imglist", "Photo", "current_image", 9);
     uploadLocationWithDetails("location-btn", "Location", "Location_Desc");
     $("#addcheckin_form").validate({
         debug: false,
@@ -899,7 +898,7 @@ $$(document).on("pageAfterAnimation", ".page[data-page='manager-uncheckoutlist']
         var _url = "/Seller/Manager_DeleteCheckIn";
         var Id = $$(e.target).attr("data-url");
         swipe_deleted(_url, Id);
-        datepicker_refresh(url);   
+        datepicker_refresh(url);
     });
 });
 
@@ -949,9 +948,6 @@ myApp.onPageBack("manager-unconfirmlist", function (e) {
 //Manager_CreateCheckIn 代提报销量  填写备注信息字数提示
 $$(document).on("pageInit", ".page[data-page='manager-createcheckin']", function () {
     uploadCheckinFile("checkinphoto-area", "manager-checkin-imglist", "CheckinPhoto", "checkin-current-image", 1);
-    uploadCheckinFile("checkoutphoto-area", "manager-checkout-imglist", "CheckoutPhoto", "checkout-current-image", 1);
-    uploadCheckinFile("reportphoto-area", "manager-report-imglist", "Rep_Image", "report-current-image", 7);
-    currentTextAreaLength("confirmremark-area", "Confirm_Remark", 500, "confirmremark-length");
     $("#createcheckin-form").validate({
         debug: false,
         //调试模式取消submit的默认提交功能   
@@ -962,15 +958,13 @@ $$(document).on("pageInit", ".page[data-page='manager-createcheckin']", function
         onkeyup: false,
         submitHandler: function (form) {
             var array1 = splitArray($("#CheckinPhoto").val());
-            var array2 = splitArray($("#CheckoutPhoto").val());
-            var array3 = splitArray($("#Rep_Image").val());
             if ($$("#Off_Seller_Id").val().trim() == "") {
                 myApp.hideIndicator();
                 myApp.alert("请选择促销员");
                 $("#createcheckin-btn").prop("disabled", false).removeClass("color-gray");
-            } else if (array3.length == 0) {
+            } else if (array1.length == 0) {
                 myApp.hideIndicator();
-                myApp.alert("请至少上传一张销量图片");
+                myApp.alert("请至少上传一张签到图片");
                 $("#createcheckin-btn").prop("disabled", false).removeClass("color-gray");
             } else {
                 $("#createcheckin-form").ajaxSubmit(function (data) {
@@ -1025,6 +1019,145 @@ $$(document).on("pageInit", ".page[data-page='manager-createcheckin']", function
     });
 });
 
+//Manager_CreateCheckOut 代签退
+$$(document).on("pageInit", ".page[data-page='manager-createcheckout']", function () {
+    uploadCheckinFile("checkoutphoto-area", "manager-checkout-imglist", "CheckoutPhoto", "checkout-current-image", 1);
+    $("#createcheckout-form").validate({
+        debug: false,
+        //调试模式取消submit的默认提交功能   
+        errorClass: "custom-error",
+        //默认为错误的样式类为：error   
+        focusInvalid: false,
+        //当为false时，验证无效时，没有焦点响应
+        onkeyup: false,
+        submitHandler: function (form) {
+            var array1 = splitArray($("#CheckoutPhoto").val());
+            if (array1.length == 0) {
+                myApp.hideIndicator();
+                myApp.alert("请至少上传一张签退图片");
+                $("#createcheckout-btn").prop("disabled", false).removeClass("color-gray");
+            } else {
+                $("#createcheckout-form").ajaxSubmit(function (data) {
+                    if (data == "SUCCESS") {
+                        myApp.hideIndicator();
+                        mainView.router.back();
+                        myApp.addNotification({
+                            title: "通知",
+                            message: "表单提交成功"
+                        });
+                        setTimeout(function () {
+                            myApp.closeNotification(".notifications");
+                        }, 2e3);
+                    } else {
+                        myApp.hideIndicator();
+                        myApp.addNotification({
+                            title: "通知",
+                            message: "表单提交失败"
+                        });
+                        $("#createcheckout-btn").prop("disabled", false).removeClass("color-gray");
+                        setTimeout(function () {
+                            myApp.closeNotification(".notifications");
+                        }, 2e3);
+                    }
+                });
+            }
+        },
+        rules: {
+            Confirm_Remark: {
+                required: true,
+                maxlength: 500
+            }
+        },
+        messages: {
+            Confirm_Remark: {
+                required: "字段不能为空",
+                maxlength: jQuery.format("不能小于{0}个字符")
+            }
+        },
+        errorPlacement: function (error, element) {
+            myApp.hideIndicator();
+            $("#createcheckout-btn").prop("disabled", false).removeClass("color-gray");
+            element.attr("placeholder", error.text());
+        }
+    });
+    $$("#createcheckout-btn").click(function () {
+        myApp.showIndicator();
+        $("#createcheckout-btn").prop("disabled", true).addClass("color-gray");
+        setTimeout(function () {
+            $("#createcheckout-form").submit();
+        }, 500);
+    });
+});
+
+//Manager_CreateCheckReport 代提销
+$$(document).on("pageInit", ".page[data-page='manager-createcheckreport']", function () {
+    uploadCheckinFile("reportphoto-area", "manager-report-imglist", "Rep_Image", "report-current-image", 7);
+    $("#createcheckreport-form").validate({
+        debug: false,
+        //调试模式取消submit的默认提交功能   
+        errorClass: "custom-error",
+        //默认为错误的样式类为：error   
+        focusInvalid: false,
+        //当为false时，验证无效时，没有焦点响应
+        onkeyup: false,
+        submitHandler: function (form) {
+            var array1 = splitArray($("#Rep_Image").val());
+            if (array1.length == 0) {
+                myApp.hideIndicator();
+                myApp.alert("请至少上传一张销量图片");
+                $("#createcheckreport-btn").prop("disabled", false).removeClass("color-gray");
+            } else {
+                $("#createcheckreport-form").ajaxSubmit(function (data) {
+                    if (data == "SUCCESS") {
+                        myApp.hideIndicator();
+                        mainView.router.back();
+                        myApp.addNotification({
+                            title: "通知",
+                            message: "表单提交成功"
+                        });
+                        setTimeout(function () {
+                            myApp.closeNotification(".notifications");
+                        }, 2e3);
+                    } else {
+                        myApp.hideIndicator();
+                        myApp.addNotification({
+                            title: "通知",
+                            message: "表单提交失败"
+                        });
+                        $("#createcheckreport-btn").prop("disabled", false).removeClass("color-gray");
+                        setTimeout(function () {
+                            myApp.closeNotification(".notifications");
+                        }, 2e3);
+                    }
+                });
+            }
+        },
+        rules: {
+            Confirm_Remark: {
+                required: true,
+                maxlength: 500
+            }
+        },
+        messages: {
+            Confirm_Remark: {
+                required: "字段不能为空",
+                maxlength: jQuery.format("不能小于{0}个字符")
+            }
+        },
+        errorPlacement: function (error, element) {
+            myApp.hideIndicator();
+            $("#createcheckreport-btn").prop("disabled", false).removeClass("color-gray");
+            element.attr("placeholder", error.text());
+        }
+    });
+    $$("#createcheckreport-btn").click(function () {
+        myApp.showIndicator();
+        $("#createcheckreport-btn").prop("disabled", true).addClass("color-gray");
+        setTimeout(function () {
+            $("#createcheckreport-form").submit();
+        }, 500);
+    });
+});
 // Manager_EditCheckin 修改签到信息
 $$(document).on("pageInit", ".page[data-page='manager-editcheckin']", function () {
     uploadCheckinFile("checkinphoto-area", "manager-checkin-imglist", "CheckinPhoto", "checkin-current-image", 1);
@@ -1262,7 +1395,7 @@ $$(document).on("pageInit", ".page[data-page='admin-event-list']", function () {
     });
 });
 //Admin_EditSalesEvent 超级管理员活动需求更改
-$$(document).on("pageInit", ".page[data-page='admin-task-eventconfirm']", function () {   
+$$(document).on("pageInit", ".page[data-page='admin-task-eventconfirm']", function () {
     $("#adminconfirm-form").validate({
         debug: false,
         //调试模式取消submit的默认提交功能   
@@ -1390,7 +1523,7 @@ $$(document).on("pageInit", ".page[data-page='manager-task-eventedit']", functio
             storesystemId: $$("#Off_StoreSystem_Id").val()
         },
         success: function (data) {
-            
+
             data = JSON.parse(data);
             if (data.result == "SUCCESS") {
                 var s = $$("#smart-select-m .item-after").html().trim();
@@ -1403,11 +1536,11 @@ $$(document).on("pageInit", ".page[data-page='manager-task-eventedit']", functio
                 var arr = newstr.split(",");
                 for (var i = 0; i < data.storelist.length; i++) {
                     if (arr.indexOf(data.storelist[i].StoreName) != -1) {
-                            $$("#smart-select-m select").append("<option value=\"" + data.storelist[i].Id + "\" selected>" + data.storelist[i].StoreName + "</option>");
-                        } else {
-                            $$("#smart-select-m select").append("<option value=\"" + data.storelist[i].Id + "\">" + data.storelist[i].StoreName + "</option>");
-                        }
-                   
+                        $$("#smart-select-m select").append("<option value=\"" + data.storelist[i].Id + "\" selected>" + data.storelist[i].StoreName + "</option>");
+                    } else {
+                        $$("#smart-select-m select").append("<option value=\"" + data.storelist[i].Id + "\">" + data.storelist[i].StoreName + "</option>");
+                    }
+
                 }
             }
         }
@@ -1446,7 +1579,7 @@ $$(document).on("pageInit", ".page[data-page='manager-task-eventedit']", functio
         //当为false时，验证无效时，没有焦点响应
         onkeyup: false,
         submitHandler: function (form) {
-            if ($$("#storelist").val() == "" && $$("#allcheck").is(':checked')==false) {
+            if ($$("#storelist").val() == "" && $$("#allcheck").is(':checked') == false) {
                 myApp.hideIndicator();
                 myApp.addNotification({
                     title: "通知",
@@ -2005,7 +2138,6 @@ $$(document).on("pageInit", ".page[data-page='manager-bindseller']", function ()
         success: function (data) {
             $$("#bind-listpartial").html(data);
             $$("#_pagenum").val(1);
-            console.log($$("#_pagenum").val());
             if ($("#bind-listpartial").find("li").length < 10) {
                 myApp.detachInfiniteScroll($$('.infinite-scroll'));
                 // 删除加载提示符
@@ -2028,27 +2160,27 @@ $$(document).on("pageInit", ".page[data-page='manager-bindseller']", function ()
         if (loading)
             return;
         loading = true;
-        setTimeout(function () {       
+        setTimeout(function () {
             $$.ajax({
                 url: "/Seller/Manager_BindListPartial",
                 data: {
                     page: $$("#_pagenum").val(),
                     query: $$("#bind-search").val()
                 },
-                success: function (data) {                    
+                success: function (data) {
                     $$("#bind-listpartial").append(data);
                     $$("#_pagenum").val(parseInt($$("#_pagenum").val()) + 1);
-                    loading=false;
+                    loading = false;
                     if ($$("#recruit-none").length > 0) {
                         // 加载完毕，则注销无限加载事件，以防不必要的加载
                         myApp.detachInfiniteScroll($$('.infinite-scroll'));
                         // 删除加载提示符
-                        $$('.infinite-scroll-preloader').remove();                        
+                        $$('.infinite-scroll-preloader').remove();
                         return;
                     }
                 }
             });
-            
+
         }, 1000);
     });
 });
@@ -2600,7 +2732,7 @@ function uploadCheckinFile(pagename, imglist, photolist_id, current_count, max_c
         var photolist = splitArray($("#" + photolist_id).val());
         if (photolist.length < max_count) {
             wx.chooseImage({
-                count: max_count-photolist.length,
+                count: max_count - photolist.length,
                 // 默认9
                 sizeType: ["compressed"],
                 // 可以指定是原图还是压缩图，默认二者都有
@@ -2695,7 +2827,7 @@ function uploadLocation(btn_id, location_id) {
                 myApp.alert("获取位置失败");
             }
         }, 8e3);
-        
+
         wx.getLocation({
             type: "wgs84",
             // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
@@ -2794,7 +2926,7 @@ function PhotoBrowser(pagename) {
                 zoom: 400,
                 photos: images,
                 theme: 'dark',
-                type:'popup',
+                type: 'popup',
                 backLinkText: '关闭',
                 toolbar: false,
                 ofText: '/'

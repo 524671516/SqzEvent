@@ -1097,15 +1097,15 @@ namespace SqzEvent.Controllers
             int uncheckin = (from m in today_schedule
                              where m.Off_Checkin.Count(p => p.Status >= 0) == 0
                              select m).Count();
-            int uncheckout = (from m in today_schedule
-                              where m.Off_Checkin.Any(p => p.Status == 1)
+            int uncheckout = (from m in today_schedule.SelectMany(p => p.Off_Checkin)
+                              where m.Status == 1
                               select m).Count();
-            int unreport = (from m in today_schedule
-                            where m.Off_Checkin.Any(p => p.Status == 2)
+            int unreport = (from m in today_schedule.SelectMany(p => p.Off_Checkin)
+                            where m.Status==2
                             select m).Count();
-            int unconfirm = (from m in offlineDB.Off_Checkin_Schedule
-                             where m.Off_Checkin.Any(p => p.Status == 3) &&
-                             storelist.Contains(m.Off_Store_Id)
+            int unconfirm = (from m in offlineDB.Off_Checkin_Schedule.SelectMany(p=>p.Off_Checkin)
+                             where m.Status == 3 &&
+                             storelist.Contains(m.Off_Checkin_Schedule.Off_Store_Id)
                              select m).Count();
             return Json(new { result = "SUCCESS", data = new { uncheckin = uncheckin, uncheckout = uncheckout, unreport = unreport, unconfirm = unconfirm } });
         }
@@ -1256,7 +1256,7 @@ namespace SqzEvent.Controllers
                 Status = 0
             };
             var sellerlist = from m in offlineDB.Off_Seller
-                             where m.StoreId == schedule.Off_Store_Id
+                             where m.StoreId == schedule.Off_Store_Id&&m.Off_Checkin.Any(p=>p.Off_Schedule_Id==schedule.Id)==false
                              select m;
             ViewBag.SellerDropDown = new SelectList(sellerlist, "Id", "Name");
             return PartialView(item);
@@ -1271,16 +1271,86 @@ namespace SqzEvent.Controllers
                 if (TryUpdateModel(checkin))
                 {
                     // 获取模板产品列表
-                    checkin.Report_Time = DateTime.Now;
+                    checkin.CheckinTime = DateTime.Now;
                     checkin.CheckinLocation = "N/A";
-                    checkin.CheckoutLocation = "N/A";
-                    checkin.ConfirmTime = DateTime.Now;
-                    checkin.ConfirmUser = User.Identity.Name;
                     checkin.Proxy = true;
-                    checkin.Status = 3;
-                    //offlineDB.Entry(checkin).State = System.Data.Entity.EntityState.Modified;
+                    checkin.Status = 1;
                     offlineDB.Off_Checkin.Add(checkin);
+                    offlineDB.SaveChanges();                   
+                    return Content("SUCCESS");
+                }
+                return View("Error");
+            }
+            else
+            {
+                ModelState.AddModelError("", "错误");
+                var schedule = offlineDB.Off_Checkin_Schedule.SingleOrDefault(m => m.Id == model.Off_Schedule_Id);
+                ViewBag.StoreName = schedule.Off_Store.StoreName;
+                ViewBag.Subscribe = schedule.Subscribe;
+                var sellerlist = from m in offlineDB.Off_Seller
+                                 where m.StoreId == schedule.Off_Store_Id && m.Off_Checkin.Any(p => p.Off_Schedule_Id == schedule.Id) == false
+                                 select m;
+                ViewBag.SellerDropDown = new SelectList(sellerlist, "Id", "Name");
+                return View(model);
+            }
+        }
+
+        //代签退
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
+        public ActionResult Manager_CreateCheckOut(int id)
+        {
+            var checkin = offlineDB.Off_Checkin.SingleOrDefault(m => m.Id == id);
+            ViewBag.Subscribe = offlineDB.Off_Checkin_Schedule.SingleOrDefault(m => m.Id == checkin.Off_Schedule_Id).Subscribe;
+            return View(checkin);
+        }
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
+        [HttpPost, ValidateAntiForgeryToken]
+        public ActionResult Manager_CreateCheckOut(Off_Checkin model,FormCollection form)
+        {
+            if (ModelState.IsValid)
+            {
+                var checkinid = Convert.ToInt32(form["Id"]);
+                var checkin = offlineDB.Off_Checkin.SingleOrDefault(m => m.Id == checkinid);
+                if (TryUpdateModel(checkin))
+                {
+                    // 获取模板产品列表
+                    checkin.CheckoutTime = DateTime.Now;
+                    checkin.CheckoutLocation = "N/A";
+                    checkin.Status = 2;
+                    offlineDB.Entry(checkin).State = System.Data.Entity.EntityState.Modified;
                     offlineDB.SaveChanges();
+                    return Content("SUCCESS");
+                }
+                else
+                {
+                    return Content("FAIL");
+                }
+                }
+            else
+            {
+                return Content("FAIL");
+            }
+        }
+
+        //代替报销量
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
+        public ActionResult Manager_CreateCheckReport(int id)
+        {
+            var checkin = offlineDB.Off_Checkin.SingleOrDefault(m => m.Id == id);
+            ViewBag.Subscribe = offlineDB.Off_Checkin_Schedule.SingleOrDefault(m => m.Id == checkin.Off_Schedule_Id).Subscribe;
+            return View(checkin);
+        }
+        [Authorize(Roles = "Supervisor,Manager,Administrator")]
+        [HttpPost, ValidateAntiForgeryToken]
+        public ActionResult Manager_CreateCheckReport(Off_Checkin model, FormCollection form)
+        {
+            if (ModelState.IsValid)
+            {
+                var checkinid = Convert.ToInt32(form["Id"]);
+                var checkin = offlineDB.Off_Checkin.SingleOrDefault(m => m.Id == checkinid);
+                if (TryUpdateModel(checkin))
+                {
+                    checkin.Status = 3;
                     List<int> plist = new List<int>();
                     var Template = offlineDB.Off_Checkin_Schedule.SingleOrDefault(m => m.Id == checkin.Off_Schedule_Id).Off_Store.Off_StoreSystem;
                     foreach (var i in Template.ProductList.Split(','))
@@ -1320,24 +1390,22 @@ namespace SqzEvent.Controllers
                             offlineDB.Off_Checkin_Product.Add(existdata);
                         }
                     }
+                    offlineDB.Entry(checkin).State = System.Data.Entity.EntityState.Modified;
                     offlineDB.SaveChanges();
                     return Content("SUCCESS");
                 }
-                return View("Error");
+                else
+                {
+                    return Content("FAIL");
+                }
             }
             else
             {
-                ModelState.AddModelError("", "错误");
-                var schedule = offlineDB.Off_Checkin_Schedule.SingleOrDefault(m => m.Id == model.Off_Schedule_Id);
-                ViewBag.StoreName = schedule.Off_Store.StoreName;
-                ViewBag.Subscribe = schedule.Subscribe;
-                var sellerlist = from m in offlineDB.Off_Seller
-                                 where m.StoreId == schedule.Off_Store_Id
-                                 select m;
-                ViewBag.SellerDropDown = new SelectList(sellerlist, "Id", "Name");
-                return View(model);
+                return Content("FAIL");
             }
         }
+
+
         [Authorize(Roles = "Supervisor,Manager,Administrator")]
         public PartialViewResult Manager_EditReport_Item(int id, int ScheduleId)
         {

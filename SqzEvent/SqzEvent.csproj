@@ -665,7 +665,8 @@
     <Content Include="Views\Seller\Manager_BindList.cshtml" />
     <Content Include="Views\Seller\Manager_BindSeller.cshtml" />
     <Content Include="Views\Seller\Manager_BindListPartial.cshtml" />
-    <Content Include="Views\Promotion\LittleGingerVoice.cshtml" />
+    <Content Include="Views\Seller\Manager_CreateCheckOut.cshtml" />
+    <Content Include="Views\Seller\Manager_CreateCheckReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
