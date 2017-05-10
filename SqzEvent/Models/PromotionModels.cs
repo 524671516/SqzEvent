@@ -147,7 +147,7 @@ namespace SqzEvent.Models
         public string Name { get; set; }
 
         [Required, StringLength(16)]
-        [RegularExpression("(^\\d{18}$)|(^\\d{15}$)|(^\\d{17}(\\d|X|x))", ErrorMessage = "格式错误")]
+        [RegularExpression("1[3|4|5|7|8|][0-9]{9}", ErrorMessage = "格式错误")]
         public string Mobile { get; set; }
 
         [Required, StringLength(64)]
