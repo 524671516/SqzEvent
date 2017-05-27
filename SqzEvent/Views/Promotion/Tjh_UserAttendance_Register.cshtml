@@ -10,7 +10,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimum-scale=1.0,maximum-scale=1.0" />
     <meta name="keywords" content="fullpage,jquery,demo,screen,fullscreen,backgrounds,full-screen" />
-    <title>2017春糖会 参会报名</title>
+    <title>2017中食展 参会报名</title>
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
     <link href="~/Content/jquery.fullPage.css" rel="stylesheet" />
     <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
@@ -239,11 +239,14 @@
         }
 
         #section0 {
-            background-image: url(/Content/images/0306-H5-1.jpg);
+            background-image: url(/Content/images/0509-H5-1.jpg);
         }
 
         #section1 {
-            background-image: url(/Content/images/0306-H5-2.jpg);
+            background-image: url(/Content/images/0509-H5-2.jpg);
+        }
+        #section2{
+            background-image: url(/Content/images/0509-H5-3.jpg);
         }
 
         #section4 {
@@ -317,6 +320,11 @@
                 <a href="javascript:;"><span></span></a>
             </div>
         </div>
+        <div class="section" id="section2">
+            <div id="huadong" class="down">
+                <a href="javascript:;"><span></span></a>
+            </div>
+        </div>
         <div class="section" id="section4">
             <div id="header_pic">
                 <img src="~/Content/images/bg0041h.png" />
@@ -325,6 +333,7 @@
                 <div class="col-xs-12" id="register">
                     @using (Html.BeginForm("Tjh_UserAttendance_Register", "Promotion", FormMethod.Post, new { @class = "form-horizontal", id = "create-form" }))
                     {
+                        @Html.ValidationSummary()
                         @Html.AntiForgeryToken()
                         @Html.HiddenFor(m => m.Id)
                         @Html.HiddenFor(m => m.openid)
@@ -419,9 +428,9 @@
         });
         wx.ready(function () {
             wx.onMenuShareTimeline({
-                title: '寿全斋2017年成都春糖会-参展商邀请函', // 分享标题
+                title: '寿全斋2017年上海中食展-参展商邀请函', // 分享标题
                 link: 'https://event.shouquanzhai.cn/Promotion/Tjh_UserAttendanceStart?type=1', // 分享链接
-                imgUrl: 'http://cdn.shouquanzhai.cn/Content/Fifv3dKQ7o35TXS0go3CyeiQTzVe.jpg', // 分享图标
+                imgUrl: 'http://cdn.shouquanzhai.cn/Content/20170509-exhibition.jpg', // 分享图标
                 success: function () {
                     // 用户确认分享后执行的回调函数
                     alert("分享");
@@ -432,10 +441,10 @@
                 }
             });
             wx.onMenuShareAppMessage({
-                title: '寿全斋2017年成都春糖会-参展商邀请函', // 分享标题
+                title: '寿全斋2017年上海中食展-参展商邀请函', // 分享标题
                 desc: '', // 分享描述
                 link: 'https://event.shouquanzhai.cn/Promotion/Tjh_UserAttendanceStart?type=1', // 分享链接
-                imgUrl: 'http://cdn.shouquanzhai.cn/Content/Fifv3dKQ7o35TXS0go3CyeiQTzVe.jpg', // 分享图标
+                imgUrl: 'http://cdn.shouquanzhai.cn/Content/20170509-exhibition.jpg', // 分享图标
                 type: '', // 分享类型,music、video或link，不填默认为link
                 dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
                 success: function () {
@@ -446,10 +455,10 @@
                 }
             });
             wx.onMenuShareQQ({
-                title: '寿全斋2017年成都春糖会-参展商邀请函', // 分享标题
+                title: '寿全斋2017年上海中食展-参展商邀请函', // 分享标题
                 desc: '', // 分享描述
                 link: 'https://event.shouquanzhai.cn/Promotion/Tjh_UserAttendanceStart?type=1', // 分享链接
-                imgUrl: 'http://cdn.shouquanzhai.cn/Content/Fifv3dKQ7o35TXS0go3CyeiQTzVe.jpg', // 分享图标
+                imgUrl: 'http://cdn.shouquanzhai.cn/Content/20170509-exhibition.jpg', // 分享图标
                 success: function () {
                     // 用户确认分享后执行的回调函数
 
@@ -459,10 +468,10 @@
                 }
             });
             wx.onMenuShareWeibo({
-                title: '寿全斋2017年成都春糖会-参展商邀请函', // 分享标题
+                title: '寿全斋2017年上海中食展-参展商邀请函', // 分享标题
                 desc: '', // 分享描述
                 link: 'https://event.shouquanzhai.cn/Promotion/Tjh_UserAttendanceStart?type=1', // 分享链接
-                imgUrl: 'http://cdn.shouquanzhai.cn/Content/Fifv3dKQ7o35TXS0go3CyeiQTzVe.jpg', // 分享图标
+                imgUrl: 'http://cdn.shouquanzhai.cn/Content/20170509-exhibition.jpg', // 分享图标
                 success: function () {
                     // 用户确认分享后执行的回调函数
                 },
@@ -474,7 +483,7 @@
                 title: '寿全斋2017年成都春糖会-参展商邀请函', // 分享标题
                 desc: '', // 分享描述
                 link: 'https://event.shouquanzhai.cn/Promotion/Tjh_UserAttendanceStart?type=1', // 分享链接
-                imgUrl: 'http://cdn.shouquanzhai.cn/Content/Fifv3dKQ7o35TXS0go3CyeiQTzVe.jpg', // 分享图标
+                imgUrl: 'http://cdn.shouquanzhai.cn/Content/20170509-exhibition.jpg', // 分享图标
                 success: function () {
                     // 用户确认分享后执行的回调函数
                 },
@@ -518,7 +527,6 @@
         });
         
         $(document).ready(function () {
-            
             $('#fullpage').fullpage({
                 autoScrolling: true,
                 verticalCentered: false,
