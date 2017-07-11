@@ -98,8 +98,8 @@
                             </div>
                         </li>                      
                         <li>
-                            <div class="item-content">
-                                @Html.TextAreaFor(m => m.EventDetails, new { placeholder = "请输入需求详细信息", @class = "", @required = "required", @maxlength = "500" ,@readonly = "readonly"})
+                            <div class="item-content" style="white-space: pre-line">
+                               @Html.Encode(Model.EventDetails)
                             </div>
                             <div class="item-content">
                                 <div class="item-inner">

@@ -206,6 +206,9 @@
         public virtual ICollection<RegularTest> RegularTest { get; set; }
     }
 
+
+
+
     /// <summary>
     /// 设备信息
     /// </summary>
@@ -545,6 +548,7 @@
 
         public virtual Product Product { get; set; }
     }
+
     //public class MyEntity
     //{
     //    public int Id { get; set; }
