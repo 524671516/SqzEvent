@@ -39,6 +39,7 @@
         public virtual DbSet<AgendaTemplate> AgendaTemplate { get; set; }
         public virtual DbSet<RegularTest> RegularTest { get; set; }
         public virtual DbSet<ProductClass> ProductClass { get; set; }
+        public virtual DbSet<QCTemplate> QCTemplate { get; set; }
         
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -63,6 +64,7 @@
             modelBuilder.Entity<QCStaff>().HasMany(e => e.RegularTest).WithRequired(e => e.QCStaff).HasForeignKey(e => e.UploadStaffId).WillCascadeOnDelete(true);
             modelBuilder.Entity<Product>().HasMany(e => e.RegularTest).WithRequired(e => e.Product).HasForeignKey(e => e.ProductId).WillCascadeOnDelete(true);
             modelBuilder.Entity<ProductClass>().HasMany(e => e.Product).WithRequired(e => e.ProductClass).HasForeignKey(e => e.ProductClassId).WillCascadeOnDelete(false);
+            modelBuilder.Entity<QCTemplate>().HasMany(e => e.Product).WithRequired(e => e.QCTemplate).HasForeignKey(e => e.TemplateId).WillCascadeOnDelete(false);
         }
     }
 
@@ -150,6 +152,7 @@
     {
         public int Id { get; set; }
 
+        [StringLength(32)]
         public string ProductClassName { get; set; }
 
         // 对应关系
@@ -185,6 +188,10 @@
         public int ProductClassId { get; set; }
 
         public virtual ProductClass ProductClass { get; set; }
+
+        public int TemplateId { get; set; }
+
+        public virtual QCTemplate QCTemplate { get; set; }
 
         // 对应关系
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -426,6 +433,21 @@
         // 对应关系
         public virtual Product Product { get; set; }
 
+    }
+
+    [Table("QCTemplate")]
+    public partial class QCTemplate
+    {
+        public int Id { get; set; }
+
+        [StringLength(32)]
+        public string Name { get; set; }
+
+        public string TemplateValues { get; set; }
+
+        // 对应关系
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Product> Product { get; set; }
     }
 
     /// <summary>

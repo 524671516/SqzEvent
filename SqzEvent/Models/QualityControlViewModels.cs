@@ -77,6 +77,61 @@ namespace SqzEvent.Models
 
         public string default_value { get; set; }
     }
+    #region 新元素
+    // 内容组成JSON
+    public class QCContent
+    {
+        public int TemplateId { get; set; }
+
+        public ICollection<QCContentCategory> CategoryItems { get; set; }
+    }
+
+    public class QCContentCategory
+    {
+        public bool State { get; set; }
+
+        public string CategoryName { get; set; }
+
+        public ICollection<QCContentItem> Columns { get; set; }
+    }
+    
+    public class QCContentItem
+    {
+        public int Type { get; set; }
+
+        public string Key { get; set; }
+
+        public string Value { get; set; }
+
+        public string Title { get; set; }
+
+        public string Default_value { get; set; }
+    }
+    // 模板组成JSON
+    public class QCTemplateContent
+    {
+        public string CatetoryName { get; set; }
+
+        public ICollection<QCTemplateColumns> QCTemplateColumns { get; set; }
+    }
+
+    public class QCTemplateColumns
+    {
+        public string KeyName { get; set; }
+
+        public string KeyTitle { get; set; }
+
+        public int ValueTypeId { get; set; }
+
+        public int LengthValue { get; set; }
+
+        public bool Required { get; set; }
+
+        public bool ForceComplete { get; set; }
+
+        public string Unit { get; set; }
+    }
+    #endregion
 
     public class FactoryGroup
     {
