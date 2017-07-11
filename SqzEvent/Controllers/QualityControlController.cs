@@ -888,13 +888,23 @@ namespace SqzEvent.Controllers
 
         // 质检产品列表更新ajax
         [HttpPost]
-        public JsonResult RefreshQualityTestProductListAjax(int factoryId)
+        public JsonResult RefreshQualityTestProductListAjax(int factoryId,int productclassId)
         {
             var _factory = _qcdb.Factory.SingleOrDefault(m => m.Id == factoryId);
             var list = from m in _factory.Product
-                       where m.QCProduct
+                       where m.QCProduct&&m.ProductClassId== productclassId
                        select new { Id = m.Id, Name = m.SimpleName };
             return Json(new { result = "SUCCESS", content = list });
+        }
+
+        [HttpPost]
+        public JsonResult RefreshQualityProductClassListAjax(int factoryId)
+        {
+            var _factory = _qcdb.Factory.SingleOrDefault(m => m.Id == factoryId);
+            var productClassList = (from m in _factory.Product
+                                   where m.QCProduct
+                                   select new { Id = m.ProductClassId, Name = m.ProductClass.ProductClassName }).Distinct().ToList();
+            return Json(new { result = "SUCCESS", content = productClassList });
         }
         public PartialViewResult AddQualityTestPartial(int pid)
         {
