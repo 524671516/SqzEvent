@@ -2,6 +2,8 @@
 var myApp = new Framework7({
     modalTitle: '生产管理',
     pushState: true,
+    modalButtonOk: "确定",
+    modalButtonCancel:"取消"
 });
 var $$ = Dom7;
 var mainView = myApp.addView('.view-main', {
@@ -656,18 +658,11 @@ myApp.onPageInit("addqualitytest", function (page) {
             CheckError("addqualitytest-submit", "addqualitytest-form")
         }
     });
-    $$("input[type='digits']").val("");
-    $addqualitytestsubmit.prop("disabled", true).addClass("color-gray");
-    $$(".info-content").addClass("hidden");
     uploadCheckinFile("addqualitytest-form", "addqualitytest-photos", "Photos", "addqualitytest-imgcount", 9);
-    currentTextAreaLength("addqualitytest-form", "Remark", 200, "addqualitytest-currentlen");
     $factoryselect.on("change", function () {
-        $$("#template-content").html("");
-        $$(".info-content").addClass("hidden");
-        $addqualitytestsubmit.prop("disabled", true).addClass("color-gray");
+        $$("#list-type-template").addClass("hidden");
         $$("#ProductId").html("");
-        $$("#ProductId").append("<option>- 请选择 -</option>");
-        $$("#product-select .item-after").text("- 请选择 -");
+        $$("#ProductId").append("<option value=\"\">- 请选择 -</option>");
         if ($$("#FactoryId").val() != "") {
             $$.ajax({
                 url: "/QualityControl/RefreshQualityTestProductListAjax",
@@ -686,25 +681,30 @@ myApp.onPageInit("addqualitytest", function (page) {
                 }
             });
         } else {
+            $addqualitytestsubmit.addClass("color-gray");
             $("#productli").addClass("hidden");
         }
     });
     $productselect.on("change", function () {
-        $$("#template-content").html("");
+        $$("#list-type-template").addClass("hidden");
         $$(".info-content").addClass("hidden");
-        $addqualitytestsubmit.prop("disabled", true).addClass("color-gray");
-        if ($$("#ProductId").val() != "" && $$("#ProductId").val() != "- 请选择 -") {
+        if ($$("#ProductId").val() != "") {
             $$.ajax({
                 url: "/QualityControl/AddQualityTestPartial",
                 data: {
                     pid: $$("#ProductId").val()
                 },
                 success: function (data) {
-                    $$("#template-content").html(data);
-                    $$(".info-content").removeClass("hidden");
-                    $addqualitytestsubmit.prop("disabled", false).removeClass("color-gray");
+                    $$("#list-type-template").removeClass("hidden");
+                    $addqualitytestsubmit.removeClass("color-gray");
+                },
+                error: function () {
+                    myApp.alert("加载模版失败!");
+                    $addqualitytestsubmit.addClass("color-gray");
                 }
             });
+        } else {
+            $addqualitytestsubmit.addClass("color-gray");
         }
     });
     $addqualitytestform.on("click", ".scan-input", function () {
@@ -721,7 +721,7 @@ myApp.onPageInit("addqualitytest", function (page) {
     });
     //提交按钮事件
     $addqualitytestsubmit.on("click", function () {
-        if (!$addqualitytestsubmit.prop("disabled")) {
+        if (!$addqualitytestsubmit.hasClass("color-gray")) {
             $addqualitytestsubmit.prop("disabled", true).addClass("color-gray");
             setTimeout(function () {
                 $addqualitytestform.submit();
