@@ -7,13 +7,13 @@ namespace SqzEvent.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class _201704241807 : IMigrationMetadata
+    public sealed partial class _201707111202 : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(_201704241807));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(_201707111202));
         
         string IMigrationMetadata.Id
         {
-            get { return "201704241007482_201704241807"; }
+            get { return "201707110402489_201707111202"; }
         }
         
         string IMigrationMetadata.Source

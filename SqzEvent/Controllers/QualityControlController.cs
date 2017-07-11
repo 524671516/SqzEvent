@@ -446,7 +446,7 @@ namespace SqzEvent.Controllers
                                 default_value = template.StandardValue,
                                 type = template.ValueTypeId,
                                 key = template.KeyName,
-                                value = _value,
+                                value = _value,                                                                                                                                                                                                                                                                                                                                                 
                                 title = template.KeyTitle
                             };
                             templatelist.Add(tt_item);

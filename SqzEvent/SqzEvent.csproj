@@ -231,9 +231,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201704241007482_201704241807.cs" />
-    <Compile Include="Migrations\201704241007482_201704241807.Designer.cs">
-      <DependentUpon>201704241007482_201704241807.cs</DependentUpon>
+    <Compile Include="Migrations\201707110402489_201707111202.cs" />
+    <Compile Include="Migrations\201707110402489_201707111202.Designer.cs">
+      <DependentUpon>201707110402489_201707111202.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -254,12 +254,27 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\audio\audio_01.mp3" />
+    <Content Include="Content\audio\audio_01_background.jpg" />
+    <Content Include="Content\audio\audio_02.mp3" />
+    <Content Include="Content\audio\audio_02_background.jpg" />
+    <Content Include="Content\audio\audio_03.mp3" />
+    <Content Include="Content\audio\audio_03_background.jpg" />
+    <Content Include="Content\audio\audio_05.mp3" />
+    <Content Include="Content\audio\audio_05_background.jpg" />
+    <Content Include="Content\audio\audio_06.mp3" />
+    <Content Include="Content\audio\audio_06_background.jpg" />
+    <Content Include="Content\audio\audio_07.mp3" />
+    <Content Include="Content\audio\littleginger_background.jpg" />
     <Content Include="Content\images\0306-H5-4.jpg" />
     <Content Include="Content\images\0306-H5-finish.jpg" />
     <Content Include="Content\images\0306-H5-success.jpg" />
     <Content Include="Content\images\0509-H5-1.jpg" />
     <Content Include="Content\images\0509-H5-2.jpg" />
     <Content Include="Content\images\0509-H5-3.jpg" />
+    <Content Include="Content\images\0523-H5-1.jpg" />
+    <Content Include="Content\images\0523-H5-2.jpg" />
+    <Content Include="Content\images\0523-H5-3.jpg" />
     <Content Include="Content\images\bg0041c.png" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -670,10 +685,11 @@
     <Content Include="Views\Seller\Manager_BindListPartial.cshtml" />
     <Content Include="Views\Seller\Manager_CreateCheckOut.cshtml" />
     <Content Include="Views\Seller\Manager_CreateCheckReport.cshtml" />
+    <Content Include="Views\Promotion\LittleGingerVoice_may.cshtml" />
+    <Content Include="Views\Promotion\LittleGingerVoice.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\audio\" />
     <Folder Include="Views\WeChatMini\" />
   </ItemGroup>
   <ItemGroup>
@@ -681,8 +697,8 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201704241007482_201704241807.resx">
-      <DependentUpon>201704241007482_201704241807.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201707110402489_201707111202.resx">
+      <DependentUpon>201707110402489_201707111202.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
