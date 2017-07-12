@@ -509,19 +509,59 @@ myApp.onPageInit('Add-schedule', function (page) {
         cols: time_col
     });
     $$("#FactoryId").on("change", function () {
+        $("#ProductId").html("<option value=\"\">- 请选择 -</option>");
+        $("#ProductId").parent().find(".smart-select-value").html("- 请选择 -")
+        $("#ProductClassId").html("<option value=\"\">- 请选择 -</option>");
+        $("#ProductClassId").parent().find(".smart-select-value").html("- 请选择 -")
         if ($$("#FactoryId").val() != "") {
             $$.ajax({
-                url: "/QualityControl/Manager_AddSchedulePartial",
+                url: "/QualityControl/RefreshQualityProductClassListAjax",
+                type:"post",
                 data: {
-                    fid: $$("#FactoryId").val(),
-                    date: $$("#DateList").val()+"-01"
+                    factoryId: $$("#FactoryId").val(),
                 },
                 success: function (data) {
-                    $$(".tempalate-content").html(data);
+                    $$("#ProductClassId").html("").append("<option value=\"\">- 请选择 -</option>")
+                    var _data = JSON.parse(data);
+                    var _len = _data.content.length;
+                    if (_data.result == "SUCCESS") {
+                        for (var i = 0; i < _len; i++) {
+                            $$("#ProductClassId").append("<option value=\"" + _data.content[i].Id + "\">" + _data.content[i].Name + "</option>");
+                        }
+                    }
                 }
             })
-        } else {
-            $$(".tempalate-content").html("");
+        }
+    })
+    $$("#ProductClassId").on("change", function () {
+        $("#ProductId").html("<option value=\"\">- 请选择 -</option>");
+        $("#ProductId").parent().find(".smart-select-value").html("- 请选择 -")
+        if ($$("#ProductClassId").val() != "") {
+            $$.ajax({
+                url: "/QualityControl/RefreshQualityTestProductListAjax",
+                type: "post",
+                data: {
+                    factoryId: $$("#FactoryId").val(),
+                    productclassId: $$("#ProductClassId").val()
+                },
+                success: function (data) {
+                    $$("#ProductId").html("").append("<option value=\"\">- 请选择 -</option>")
+                    var _data = JSON.parse(data);
+                    var _len = _data.content.length;
+                    if (_data.result == "SUCCESS") {
+                        for (var i = 0; i < _len; i++) {
+                            $$("#ProductId").append("<option value=\"" + _data.content[i].Id + "\">" + _data.content[i].Name + "</option>");
+                        }
+                    }
+                }
+            })
+        }
+    })
+    $$("#ProductId").on("change", function () {
+        if ($("#ProductId").val() != "") {
+            $$.ajax({
+                url: "/QualityControl/Manager_AddSchedulePartial"
+            })
         }
     })
     $("#manager_addschedule-form").validate({
