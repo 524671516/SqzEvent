@@ -1463,6 +1463,7 @@ namespace SqzEvent.Controllers
 
         public ActionResult Manager_QualityTestPartial(int fid, string date, bool? sorttype)
         {
+            
             bool _sorttype = sorttype ?? false;
             DateTime _start = Convert.ToDateTime(date);
             DateTime _end = _start.AddDays(1);
@@ -1472,6 +1473,20 @@ namespace SqzEvent.Controllers
                              where m.FactoryId == fid && m.ApplyTime >= _start && m.ApplyTime < _end
                              orderby m.ProductId, m.ApplyTime descending
                              select m;
+                foreach (var item in qtlist)
+                {
+                    try
+                    {
+                        var a = Newtonsoft.Json.JsonConvert.DeserializeObject<QCContent>(item.Values);
+                    }
+                    catch (Exception)
+                    {
+                        ViewBag.version = "Old";
+                        return PartialView(qtlist);
+                    }
+                    break;
+                }
+                ViewBag.version = "New";
                 return PartialView(qtlist);
             }
             else
@@ -1480,6 +1495,20 @@ namespace SqzEvent.Controllers
                              where m.FactoryId == fid && m.ApplyTime >= _start && m.ApplyTime < _end
                              orderby m.ApplyTime descending
                              select m;
+                foreach (var item in qtlist)
+                {
+                    try
+                    {
+                        var a = Newtonsoft.Json.JsonConvert.DeserializeObject<QCContent>(item.Values);
+                    }
+                    catch (Exception)
+                    {
+                        ViewBag.version = "Old";
+                        return PartialView(qtlist);
+                    }
+                    break;
+                }
+                ViewBag.version = "New";
                 return PartialView(qtlist);
             }
         }
