@@ -22,7 +22,7 @@
             <li>
                 <div class="item-content">
                     <div class="item-inner">
-                        <div class="item-title label">@Html.Encode(p.SimpleName)</div>
+                        <div class="item-title label" style="width:50%;">@Html.Encode(p.SimpleName+(p.Specification))</div>
                         <div class="item-input">
                             <input type="digits" placeholder="数量" class="item-input-right isnumber" id="@p.ProductCode" name="@p.ProductCode"/>
                         </div>

@@ -1,36 +1,41 @@
-﻿@model IEnumerable<SqzEvent.Models.Product>
+﻿@model SqzEvent.Models.ProductionSchedule
 @using SqzEvent.Models;
-@{ 
-    var schedule = ViewBag.ScheduleList as IEnumerable<ProductionSchedule>;
-}
-
 <div class="content-block-title">生产计划</div>
 <div class="list-block">
     <ul>
-        @foreach (var item in Model)
-        {
         <li>
             <div class="item-content">
-                <div class="item-inner">
-                    <div class="item-title label">@item.SimpleName</div>
-                    <div class="item-input">
-                        @{
-                            var singleschedule = schedule.SingleOrDefault(m => m.ProductId == item.Id);
-                            if (singleschedule != null)
-                            {
-                                <input type="digits" id="@item.ProductCode" name="@item.ProductCode" placeholder="请输入数量" class="item-input-right isnumber" value="@singleschedule.ProductionPlan"/>
-                            }
-                            else
-                            {
-                                <input type="digits" id="@item.ProductCode" name="@item.ProductCode" placeholder="请输入数量" class="item-input-right isnumber" />
-                            }
-                        }
-                        
+                @if (Model == null)
+                {
+                    <div class="item-inner">
+                        <div class="item-title label">@ViewBag.pname</div>
+                        <div class="item-input">
+                            <input type="digits" id="ProductionPlan" name="ProductionPlan" placeholder="请输入数量" class="item-input-right isnumber" />
+                        </div>
+                        <div class="item-after unit">盒</div>
                     </div>
-                    <div class="item-after unit">盒</div>
-                </div>
+                }
+                else
+                {
+                    <div class="item-inner">
+                        <div class="item-title label">@Model.Product.SimpleName</div>
+                        <div class="item-input">
+                            @{
+                                if (Model.ProductionPlan != 0)
+                                {
+                                    <input type="digits" id="ProductionPlan" name="ProductionPlan" placeholder="请输入数量" class="item-input-right isnumber" value="@Model.ProductionPlan" />
+                                }
+                                else
+                                {
+                                    <input type="digits" id="ProductionPlan" name="ProductionPlan" placeholder="请输入数量" class="item-input-right isnumber" />
+                                }
+                            }
+
+                        </div>
+                        <div class="item-after unit">盒</div>
+                    </div>
+                                }
             </div>
         </li>
-        }
     </ul>
 </div>

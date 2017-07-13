@@ -683,6 +683,7 @@
     <Content Include="Views\Seller\Manager_CreateCheckReport.cshtml" />
     <Content Include="Views\Promotion\LittleGingerVoice_may.cshtml" />
     <Content Include="Views\Promotion\LittleGingerVoice.cshtml" />
+    <Content Include="Views\QualityControl\QualityTestNewVersionDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

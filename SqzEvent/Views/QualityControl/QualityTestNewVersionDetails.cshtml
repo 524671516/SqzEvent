@@ -1,0 +1,313 @@
+﻿@model SqzEvent.Models.QualityTest
+@using SqzEvent.Models;
+
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="left">
+            <a href="#" class="back link">
+                <i class="icon icon-back" aria-hidden="true"></i>
+                <span>返回</span>
+            </a>
+        </div>
+        <div class="center sliding"><strong>质检信息详情</strong></div>
+        <div class="right">
+            @if (Model.EvalResult == false)
+            {
+                <a href="#" class="link" id="edit-qt">保存</a>
+            }
+        </div>
+    </div>
+</div>
+<div class="pages">
+    <div class="page" data-page="qualitytestdetails" id="qualitytestdetails">
+        <div class="page-content">
+@using (Html.BeginForm("EditQualityTest", "QualityControl", FormMethod.Post, new { @id = "edit-qt-form", @class = "validate-form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Id);
+            <div class="content-block-title">基本信息</div>
+            <div class="list-block">
+                <ul>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">工厂名称</div>
+                                <div class="item-after">@Html.Encode(Model.Factory.SimpleName)</div>
+                            </div>
+                        </div>
+
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">产品名称</div>
+                                <div class="item-after">@Html.Encode(Model.Product.SimpleName)</div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">规格</div>
+                                <div class="item-after">@Html.Encode(Model.Product.Specification)</div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">质检时间</div>
+                                <div class="item-after">@Html.Encode(Model.ApplyTime.ToString("yyyy-MM-dd HH:mm"))</div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">质检结果</div>
+                                <div class="item-after">@Html.Encode(Model.EvalResult ? "通过" : "不合格")</div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="content-block-title">质检项目</div>
+            <div class="list-block">
+                <ul>
+                    @foreach (QCContentCategory item in ViewBag.Details.CategoryItems)
+                    {
+                        <li class="accordion-item">
+                            <a href="#" class="item-content item-link">
+                                <div class="item-inner">
+                                    <div class="item-title">@Html.Encode(item.CategoryName)</div>
+                                    <div class="item-after">@Html.Encode(item.State ? "已填写" : "未填写")</div>
+                                </div>
+                            </a>
+                            <div class="accordion-item-content">
+                                @if (item.State == false)
+                                {
+                                    <div class="content-block" style="padding:0">
+                                        <ul>
+                                            @foreach (QCContentItem _item in item.Columns)
+                                            {
+                                                switch (_item.Type)
+                                                {
+                                                    case 1:
+                                                        {
+                                                            <li>
+                                                                <div class="item-content">
+                                                                    <div class="item-inner">
+                                                                        <div class="item-title label">@Html.Encode(_item.Title)</div>
+                                                                        <div class="item-input item-input-right">
+                                                                            <label class="label-switch">
+                                                                                @if (_item.Value.ToString() == "false")
+                                                                                {
+                                                                                    <input type="checkbox" id="@_item.Key" name="@_item.Key">
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <input type="checkbox" id="@_item.Key" name="@_item.Key" checked>
+                                                                                }
+
+                                                                                <div class="checkbox"></div>
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        }
+                                                        break;
+                                                    case 2:
+                                                        {
+                                                            <li>
+                                                                <div class="item-content">
+                                                                    <div class="item-inner">
+                                                                        <div class="item-title label">@Html.Encode(_item.Title)</div>
+                                                                        <div class="item-input">
+                                                                            <input type="digits" class="item-input-right" id="@_item.Key" name="@_item.Key" placeholder="请输入数字" />
+                                                                        </div>
+                                                                        <div class="item-after"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        }
+                                                        break;
+                                                    case 3:
+                                                        {
+                                                            <li>
+                                                                <div class="item-content">
+                                                                    <div class="item-inner">
+                                                                        <div class="item-title label">@Html.Encode(_item.Title)</div>
+                                                                        <div class="item-input">
+                                                                            <input type="number" class="item-input-right" id="@_item.Key" name="@_item.Key" placeholder="请输入数字" />
+                                                                        </div>
+                                                                        <div class="item-after"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        }
+                                                        break;
+                                                    case 4:
+                                                        {
+                                                            <li>
+                                                                <div class="item-content">
+                                                                    <div class="item-inner">
+                                                                        <div class="item-title label">@Html.Encode(_item.Title)</div>
+                                                                        <div class="item-input">
+                                                                            <input type="text" class="item-input-right" id="@_item.Key" name="@_item.Key" placeholder="请输入文字" />
+                                                                        </div>
+                                                                        <div class="item-after"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        }
+                                                        break;
+                                                    case 5:
+                                                        {
+                                                            <li>
+                                                                <div class="item-content">
+                                                                    <div class="item-inner">
+                                                                        <div class="item-title label">@Html.Encode(_item.Title)</div>
+                                                                        <div class="item-input">
+                                                                            <input type="text" class="item-input-right scan-input" id="@_item.Key" name="@_item.Key" placeholder="点击扫描条形码" readonly />
+                                                                        </div>
+                                                                        <div class="item-after"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        }
+                                                        break;
+                                                    case 6:
+                                                        {
+                                                            <li>
+                                                                <div class="item-content">
+                                                                    <div class="item-inner">
+                                                                        <div class="item-title">上传照片</div>
+                                                                        <div class="item-after"><abbr id="@Html.Encode(_item.Key + "-imgcount")">0</abbr>/1</div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="item-content middle-content">
+                                                                    <div class="item-inner">
+                                                                        <div class="hidden">
+                                                                            <input class="one_photo" data-val="true" data-val-length="字段 Photos 必须是最大长度为 256 的字符串。" data-val-length-max="256" id="@_item.Key" name="@_item.Key" type="text" value="">
+                                                                        </div>
+                                                                        <ul class="rep-imglist" id="@Html.Encode(_item.Key + "-photoul")"><li><a href="javascript:;" class="rep-imgitem-btn" id="qccheckin-photos-upload-btn"><i class="fa fa-plus"></i></a></li></ul>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        }
+                                                        break;
+                                                    default:
+                                                        break;
+                                                }
+                                            }
+                                        </ul>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="content-block" style="padding:0">
+                                        <ul>
+                                            @foreach (QCContentItem _item in item.Columns)
+                                            {
+                                                switch (_item.Type)
+                                                {
+                                                    case 1:
+                                                        {
+                                                            <li>
+                                                                <div class="item-content">
+                                                                    <div class="item-inner">
+                                                                        <div class="item-title">@Html.Encode(_item.Title)</div>
+                                                                        @if (_item.Value.ToString() == "false")
+                                                                        {
+                                                                            <div class="item-after"><i class="fa fa-times color-red" aria-hidden="true"></i></div>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <div class="item-after"><i class="fa fa-check color-green" aria-hidden="true"></i></div>
+                                                                        }
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        }
+                                                        break;
+                                                    case 6:
+                                                        {
+                                                            if (_item.Value == "")
+                                                            {
+                                                                <li>
+                                                                    <div class="item-content">
+                                                                        <div class="item-inner">
+                                                                            <div class="item-title">上传照片</div>
+                                                                            <div class="item-after"><abbr id="@Html.Encode(_item.Key + "-imgcount")">0</abbr>/1</div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="item-content middle-content">
+                                                                        <div class="item-inner">
+                                                                            <div class="hidden">
+                                                                                <input class="one_photo" data-val="true" data-val-length="字段 Photos 必须是最大长度为 256 的字符串。" data-val-length-max="256" id="@_item.Key" name="@_item.Key" type="text" value="">
+                                                                            </div>
+                                                                            <ul class="rep-imglist" id="@Html.Encode(_item.Key + "-photoul")"><li><a href="javascript:;" class="rep-imgitem-btn" id="qccheckin-photos-upload-btn"><i class="fa fa-plus"></i></a></li></ul>
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                            }
+                                                            else
+                                                            {
+                                                                <li>
+                                                                    <a href="javascript:;" class="item-content item-link qc-photos" data-photos="@_item.Value">
+                                                                        <div class="item-inner">
+                                                                            <div class="item-title">检验图片</div>
+                                                                            <div class="item-after">点击查看</div>
+                                                                        </div>
+                                                                    </a>
+                                                                </li>
+                                                            }
+                                                        }
+                                                        break;
+                                                    default:
+                                                        {
+                                                            <li>
+                                                                <div class="item-content">
+                                                                    <div class="item-inner">
+                                                                        <div class="item-title label">@Html.Encode(_item.Title)</div>
+                                                                        <div class="item-after">@Html.Encode(_item.Value)</div>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        }
+                                                        break;
+                                                }
+                                            }
+                                        </ul>
+                                    </div>
+                                }                                
+                            </div>
+                        </li>
+
+                    }
+                </ul>
+            </div>
+            <div class="content-block-title">其他信息</div>
+            <div class="list-block">
+                <ul>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">生产数</div>
+                                <div class="item-after">@Html.Encode(Model.ProductionQty)</div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content middle-content">
+                            @Html.TextAreaFor(m => m.Remark, new { placeholder = "请输入签到备注", @class = "required input-textarea", @readonly = "readonly" })
+                        </div>
+                    </li>
+                </ul>
+            </div>
+}
+        </div>
+    </div>
+</div>
+

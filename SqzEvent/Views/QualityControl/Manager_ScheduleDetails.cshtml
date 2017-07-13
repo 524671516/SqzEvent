@@ -12,7 +12,7 @@
                     {
                     <li class="item-content">
                         <div class="item-inner">
-                            <div class="item-title">@Html.Encode(item.ProductName)</div>
+                            <div class="item-title">@Html.Encode(item.ProductName + "("+item.Specification+")")</div>
                             <div class="item-after">@Html.Encode(item.Qty) / @Html.Encode(item.ProductionPlan)</div>
                         </div>
                     </li>

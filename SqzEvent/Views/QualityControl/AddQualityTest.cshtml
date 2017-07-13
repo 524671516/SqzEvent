@@ -15,7 +15,7 @@
     </div>
 </div>
 <div class="pages">
-    <div class="page" data-page="addqualitytest">
+    <div class="page" data-page="addqualitytest" id="addqualitytest">
         <div class="page-content">
             @using (Html.BeginForm("AddQualityTest", "QualityControl", FormMethod.Post, new { @id = "addqualitytest-form", @class = "validate-form" }))
             {
@@ -37,6 +37,19 @@
                                 </div>
                             </a>
                         </li>
+                        <li class="hidden" id="productclassli">
+                            <a href="#" class="item-link smart-select" data-back-text="返回" data-back-on-select="true" data-searchbar-placeholder="选择品类" data-searchbar-cancel="取消" id="product-select">
+                                <select id="ProductClassId" name="ProductClassId" class="required">
+                                    <option value="">- 请选择 -</option>
+                                </select>
+                                <div class="item-content">
+                                    <div class="item-inner">
+                                        <div class="item-title">选择品类</div>
+                                        <div class="item-after">- 请选择 -</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
                         <li class="hidden" id="productli">
                             <a href="#" class="item-link smart-select" data-back-text="返回" data-back-on-select="true" data-searchbar-placeholder="选择产品" data-searchbar-cancel="取消" id="product-select">
                                 <select id="ProductId" name="ProductId" class="required">
@@ -52,252 +65,7 @@
                         </li>
                     </ul>
                 </div>
-                <div class="list-block hidden" id="list-type-template">
-                    <div class="content-block-title">检验类型(请根据检测阶段选择性填写)</div>
-                    <ul>
-                        <li class="accordion-item" data-list-id="1">
-                            <a href="#" class="item-content item-link">
-                                <div class="item-inner">
-                                    <div class="item-title">基本信息</div>
-                                    <div class="item-after">已填写</div>
-                                </div>
-                            </a>
-                            <div class="accordion-item-content">
-                                <div class="content-block" style="padding:0">
-                                    <ul>
-                                        <li>
-                                            <div class="item-content">
-                                                <div class="item-inner">
-                                                    <div class="item-title label">产品追踪码</div>
-                                                    <div class="item-input">
-                                                        <input type="text" class="item-input-right scan-input" id="source-code" name="source-code" placeholder="点击扫描条形码" readonly="" required="">
-                                                    </div>
-                                                    <div class="item-after"></div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="item-content">
-                                                <div class="item-inner">
-                                                    <div class="item-title label">塑封膜无破损</div>
-                                                    <div class="item-input item-input-right">
-                                                        <label class="label-switch">
-                                                            <input type="checkbox" id="film-break" name="film-break">
-                                                            <div class="checkbox"></div>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="item-content">
-                                                <div class="item-inner">
-                                                    <div class="item-title label">折页和卡片齐全</div>
-                                                    <div class="item-input item-input-right">
-                                                        <label class="label-switch">
-                                                            <input type="checkbox" id="accessories-check" name="accessories-check">
-                                                            <div class="checkbox"></div>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="item-content">
-                                                <div class="item-inner">
-                                                    <div class="item-title label">单盒条数正确</div>
-                                                    <div class="item-input item-input-right">
-                                                        <label class="label-switch">
-                                                            <input type="checkbox" id="qty-check" name="qty-check">
-                                                            <div class="checkbox"></div>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="item-content">
-                                                <div class="item-inner">
-                                                    <div class="item-title label">生产日期正确</div>
-                                                    <div class="item-input item-input-right">
-                                                        <label class="label-switch">
-                                                            <input type="checkbox" id="product-date" name="product-date">
-                                                            <div class="checkbox"></div>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="item-content">
-                                                <div class="item-inner">
-                                                    <div class="item-title label">口味正常</div>
-                                                    <div class="item-input item-input-right">
-                                                        <label class="label-switch">
-                                                            <input type="checkbox" id="tasty-check" name="tasty-check">
-                                                            <div class="checkbox"></div>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="item-content">
-                                                <div class="item-inner">
-                                                    <div class="item-title label">颜色正常</div>
-                                                    <div class="item-input item-input-right">
-                                                        <label class="label-switch">
-                                                            <input type="checkbox" id="colour-check" name="colour-check">
-                                                            <div class="checkbox"></div>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="accordion-item">
-                            <a href="#" class="item-content item-link">
-                                <div class="item-inner">
-                                    <div class="item-title">外箱</div>
-                                    <div class="item-after">已填写</div>
-                                </div>
-                            </a>
-                            <div class="accordion-item-content">
-                                <div class="content-block" style="padding:0">
-                                    <ul>
-                                        <li>
-                                            <div class="item-content">
-                                                <div class="item-inner">
-                                                    <div class="item-title label">产品追踪码</div>
-                                                    <div class="item-input">
-                                                        <input type="text" class="item-input-right scan-input" id="source-code" name="source-code" placeholder="点击扫描条形码" readonly="" required="">
-                                                    </div>
-                                                    <div class="item-after"></div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="item-content">
-                                                <div class="item-inner">
-                                                    <div class="item-title label">塑封膜无破损</div>
-                                                    <div class="item-input item-input-right">
-                                                        <label class="label-switch">
-                                                            <input type="checkbox" id="film-break" name="film-break">
-                                                            <div class="checkbox"></div>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="item-content">
-                                                <div class="item-inner">
-                                                    <div class="item-title label">折页和卡片齐全</div>
-                                                    <div class="item-input item-input-right">
-                                                        <label class="label-switch">
-                                                            <input type="checkbox" id="accessories-check" name="accessories-check">
-                                                            <div class="checkbox"></div>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="item-content">
-                                                <div class="item-inner">
-                                                    <div class="item-title label">单盒条数正确</div>
-                                                    <div class="item-input item-input-right">
-                                                        <label class="label-switch">
-                                                            <input type="checkbox" id="qty-check" name="qty-check">
-                                                            <div class="checkbox"></div>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="item-content">
-                                                <div class="item-inner">
-                                                    <div class="item-title label">生产日期正确</div>
-                                                    <div class="item-input item-input-right">
-                                                        <label class="label-switch">
-                                                            <input type="checkbox" id="product-date" name="product-date">
-                                                            <div class="checkbox"></div>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="item-content">
-                                                <div class="item-inner">
-                                                    <div class="item-title label">口味正常</div>
-                                                    <div class="item-input item-input-right">
-                                                        <label class="label-switch">
-                                                            <input type="checkbox" id="tasty-check" name="tasty-check">
-                                                            <div class="checkbox"></div>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="item-content">
-                                                <div class="item-inner">
-                                                    <div class="item-title label">颜色正常</div>
-                                                    <div class="item-input item-input-right">
-                                                        <label class="label-switch">
-                                                            <input type="checkbox" id="colour-check" name="colour-check">
-                                                            <div class="checkbox"></div>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="accordion-item">
-                            <a href="#" class="item-content item-link">
-                                <div class="item-inner">
-                                    <div class="item-title">原料</div>
-                                </div>
-                            </a>
-                            <div class="accordion-item-content">
-                                <div class="content-block">
-                                    <p>Item 1 content. Lorem ipsum dolor sit amet...</p>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="accordion-item">
-                            <a href="#" class="item-content item-link">
-                                <div class="item-inner">
-                                    <div class="item-title">外包装</div>
-                                </div>
-                            </a>
-                            <div class="accordion-item-content">
-                                <div class="content-block">
-                                    <p>Item 1 content. Lorem ipsum dolor sit amet...</p>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="accordion-item">
-                            <a href="#" class="item-content item-link">
-                                <div class="item-inner">
-                                    <div class="item-title">内包装</div>
-                                </div>
-                            </a>
-                            <div class="accordion-item-content">
-                                <div class="content-block">
-                                    <p>Item 2 content. Lorem ipsum dolor sit amet...</p>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
+                <div class="list-block" id="list-type-template">
                 </div>
             }
         </div>

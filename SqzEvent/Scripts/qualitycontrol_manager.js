@@ -508,7 +508,27 @@ myApp.onPageInit('Add-schedule', function (page) {
         value: [currentYear, currentMonth],
         cols: time_col
     });
+    $$("#DateList").on("change", function () {
+        $$("#tempalate-content").html("");
+        if ($("#ProductId").val() != "") {
+            $$.ajax({
+                url: "/QualityControl/Manager_AddSchedulePartial",
+                data: {
+                    fid: $$("#FactoryId").val(),
+                    pid: $$("#ProductId").val(),
+                    date: $$("#DateList").val()
+                },
+                success: function (data) {
+                    $$("#tempalate-content").html(data);
+                },
+                error: function (data) {
+                    myApp.alert("请求失败。")
+                }
+            })
+        }
+    });
     $$("#FactoryId").on("change", function () {
+        $$("#tempalate-content").html("");
         $("#ProductId").html("<option value=\"\">- 请选择 -</option>");
         $("#ProductId").parent().find(".smart-select-value").html("- 请选择 -")
         $("#ProductClassId").html("<option value=\"\">- 请选择 -</option>");
@@ -534,6 +554,7 @@ myApp.onPageInit('Add-schedule', function (page) {
         }
     })
     $$("#ProductClassId").on("change", function () {
+        $$("#tempalate-content").html("");
         $("#ProductId").html("<option value=\"\">- 请选择 -</option>");
         $("#ProductId").parent().find(".smart-select-value").html("- 请选择 -")
         if ($$("#ProductClassId").val() != "") {
@@ -558,9 +579,21 @@ myApp.onPageInit('Add-schedule', function (page) {
         }
     })
     $$("#ProductId").on("change", function () {
+        $$("#tempalate-content").html("");
         if ($("#ProductId").val() != "") {
             $$.ajax({
-                url: "/QualityControl/Manager_AddSchedulePartial"
+                url: "/QualityControl/Manager_AddSchedulePartial",
+                data: {
+                    fid: $$("#FactoryId").val(),
+                    pid: $$("#ProductId").val(),
+                    date: $$("#DateList").val()
+                },
+                success: function (data) {
+                    $$("#tempalate-content").html(data);
+                },
+                error: function (data) {
+                    myApp.alert("请求失败。")
+                }
             })
         }
     })

@@ -175,6 +175,7 @@ namespace SqzEvent.Models
         public int ProductId { get; set; }
         public string ProductName { get; set; }
         public string FactoryName { get; set; }
+        public string Specification { get; set; }
         public int FactoryId { get; set; }
         public int ProductionPlan { get; set; }
         public int? Qty { get; set; }

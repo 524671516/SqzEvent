@@ -21,7 +21,7 @@
                                                 <div class="item-title">@Html.Encode(item.ProductName)</div>
                                                 <div class="item-after">@Html.Encode(item.Qty ?? 0)/@Html.Encode(item.ProductionPlan)</div>
                                             </div>
-                                            <div class="item-subtitle"><strong>规格:</strong><span>15g*30条装</span></div>
+                                            <div class="item-subtitle color-gray"><span>规格:@Html.Encode(item.Specification)</span></div>
                                         </div>
                                     </a>
                                 }
@@ -33,7 +33,7 @@
                                                 <div class="item-title">@Html.Encode(item.ProductName)</div>
                                                 <div class="item-after">@Html.Encode(item.Qty ?? 0)/@Html.Encode(item.ProductionPlan)</div>
                                             </div>
-                                            <div class="item-subtitle"><span>15g*30条装</span></div>
+                                            <div class="item-subtitle color-gray"><span>规格:@Html.Encode(item.Specification)</span></div>
                                         </div>
                                     </a>
                                 }
