@@ -1,89 +1,166 @@
-﻿@model IEnumerable<SqzEvent.Models.QualityTestTemplate>
-<div class="content-block-title">检验项目</div>
+﻿@model IEnumerable<SqzEvent.Models.QCTemplateContent>
 <ul>
-    @foreach (var item in Model)
+    <li>
+        <div class="item-content">
+            <div class="item-inner">
+                <div class="item-title label" style="width:50%;">数量</div>
+                <div class="item-input">
+                    <input type="digits" placeholder="检测数量" class="item-input-right isnumber" name="ProductionQty" id="ProductionQty">
+                </div>
+                <div class="item-after color-black">盒</div>
+            </div>
+        </div>
+    </li>
+</ul>
+<div class="content-block-title">检验类型(请根据检测阶段选择性填写)</div>
+<ul>    
+    @foreach (var list in Model)
     {
-        switch (item.ValueTypeId)
-        {
-            case 1:
-                {
-                    <li>
-                        <div class="item-content">
-                            <div class="item-inner">
-                                <div class="item-title label">@Html.Encode(item.KeyTitle)</div>
-                                <div class="item-input item-input-right">
-                                    <label class="label-switch">
-                                        <input type="checkbox" id="@item.KeyName" name="@item.KeyName">
-                                        <div class="checkbox"></div>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                }
-                break;
-            case 2:
-                {
-                    <li>
-                        <div class="item-content">
-                            <div class="item-inner">
-                                <div class="item-title label">@Html.Encode(item.KeyTitle)</div>
-                                <div class="item-input">
-                                    <input type="digits" class="item-input-right" id="@item.KeyName" name="@item.KeyName" placeholder="请输入数字" value="@item.StandardValue" />
-                                </div>
-                                <div class="item-after"></div>
-                            </div>
-                        </div>
-                    </li>
-                }
-                break;
-            case 3:
-                {
-                    <li>
-                        <div class="item-content">
-                            <div class="item-inner">
-                                <div class="item-title label">@Html.Encode(item.KeyTitle)</div>
-                                <div class="item-input">
-                                    <input type="number" class="item-input-right" id="@item.KeyName" name="@item.KeyName" placeholder="请输入数字" value="@item.StandardValue" />
-                                </div>
-                                <div class="item-after"></div>
-                            </div>
-                        </div>
-                    </li>
-                }
-                break;
-            case 4:
-                {
-                    <li>
-                        <div class="item-content">
-                            <div class="item-inner">
-                                <div class="item-title label">@Html.Encode(item.KeyTitle)</div>
-                                <div class="item-input">
-                                    <input type="text" class="item-input-right" id="@item.KeyName" name="@item.KeyName" placeholder="请输入文字" value="@item.StandardValue" />
-                                </div>
-                                <div class="item-after"></div>
-                            </div>
-                        </div>
-                    </li>
-                }
-                break;
-            case 5:
-                {
-                    <li>
-                        <div class="item-content">
-                            <div class="item-inner">
-                                <div class="item-title label">@Html.Encode(item.KeyTitle)</div>
-                                <div class="item-input">
-                                    <input type="text" class="item-input-right scan-input" id="@item.KeyName" name="@item.KeyName" placeholder="点击扫描条形码" value="@item.StandardValue" readonly required />
-                                </div>
-                                <div class="item-after"></div>
-                            </div>
-                        </div>
-                    </li>
-                }
-                break;
-            default:
-                break;
-        }
+        <li class="accordion-item" data-list-id="1">
+            <a href="#" class="item-content item-link">
+                <div class="item-inner">
+                    <div class="item-title">@Html.Encode(list.CatetoryName)</div>
+                    <div class="item-after"></div>
+                </div>
+            </a>
+            <div class="accordion-item-content">
+                <div class="content-block" style="padding:0">
+                    <ul>
+                        @foreach (var item in list.QCTemplateColumns)
+                        {
+                            switch (item.ValueTypeId)
+                            {
+                                case 1:
+                                    {
+                                        <li>
+                                            <div class="item-content">
+                                                <div class="item-inner">
+                                                    <div class="item-title label">@Html.Encode(item.KeyTitle)</div>
+                                                    <div class="item-input item-input-right">
+                                                        <label class="label-switch">
+                                                            <input type="checkbox" id="@item.KeyName" name="@item.KeyName">
+                                                            <div class="checkbox"></div>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    }
+                                    break;
+                                case 2:
+                                    {
+                                        <li>
+                                            <div class="item-content">
+                                                <div class="item-inner">
+                                                    <div class="item-title label">@Html.Encode(item.KeyTitle)</div>
+                                                    <div class="item-input">
+                                                        <input type="digits" class="item-input-right" id="@item.KeyName" name="@item.KeyName" placeholder="请输入数字" />
+                                                    </div>
+                                                    <div class="item-after"></div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    }
+                                    break;
+                                case 3:
+                                    {
+                                        <li>
+                                            <div class="item-content">
+                                                <div class="item-inner">
+                                                    <div class="item-title label">@Html.Encode(item.KeyTitle)</div>
+                                                    <div class="item-input">
+                                                        <input type="number" class="item-input-right" id="@item.KeyName" name="@item.KeyName" placeholder="请输入数字"/>
+                                                    </div>
+                                                    <div class="item-after"></div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    }
+                                    break;
+                                case 4:
+                                    {
+                                        <li>
+                                            <div class="item-content">
+                                                <div class="item-inner">
+                                                    <div class="item-title label">@Html.Encode(item.KeyTitle)</div>
+                                                    <div class="item-input">
+                                                        <input type="text" class="item-input-right" id="@item.KeyName" name="@item.KeyName" placeholder="请输入文字" />
+                                                    </div>
+                                                    <div class="item-after"></div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    }
+                                    break;
+                                case 5:
+                                    {
+                                        <li>
+                                            <div class="item-content">
+                                                <div class="item-inner">
+                                                    <div class="item-title label">@Html.Encode(item.KeyTitle)</div>
+                                                    <div class="item-input">
+                                                        <input type="text" class="item-input-right scan-input" id="@item.KeyName" name="@item.KeyName" placeholder="点击扫描条形码"  readonly  />
+                                                    </div>
+                                                    <div class="item-after"></div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    }
+                                    break;
+                                case 6:
+                                    {
+                                        <li>
+                                            <div class="item-content">
+                                                <div class="item-inner">
+                                                    <div class="item-title">上传照片</div>
+                                                    <div class="item-after"><abbr id="@Html.Encode(item.KeyName+"-imgcount")">0</abbr>/1</div>
+                                                </div>
+                                            </div>
+                                            <div class="item-content middle-content">
+                                                <div class="item-inner">
+                                                    <div class="hidden">
+                                                        <input class="one_photo" data-val="true" data-val-length="字段 Photos 必须是最大长度为 256 的字符串。" data-val-length-max="256" id="@item.KeyName" name="@item.KeyName" type="text" value="">
+                                                    </div>
+                                                    <ul class="rep-imglist" id="@Html.Encode(item.KeyName+"-photoul")"><li><a href="javascript:;" class="rep-imgitem-btn" id="qccheckin-photos-upload-btn"><i class="fa fa-plus"></i></a></li></ul>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        </li>
     }
+    @*<li>
+        <div class="item-content">
+            <div class="item-inner">
+                <div class="item-title">检测照片</div>
+                <div class="item-after"><abbr id="addqualitytest-imgcount">0</abbr>/9</div>
+            </div>
+        </div>
+        <div class="item-content middle-content">
+            <div class="item-inner">
+                <div class="hidden">
+                    <input class="photos" data-val="true" data-val-length="字段 Photos 必须是最大长度为 256 的字符串。" data-val-length-max="256" id="Photos" name="Photos" type="text" value="">
+                </div>
+                <ul class="rep-imglist" id="addqualitytest-photos"><li><a href="javascript:;" class="rep-imgitem-btn" id="qctest-photos-upload-btn"><i class="fa fa-plus"></i></a></li></ul>
+            </div>
+        </div>
+    </li>*@
+    <li>
+        <div class="item-content middle-content">
+            <textarea class="input-textarea" cols="20" data-val="true" data-val-length="字段 Remark 必须是最大长度为 256 的字符串。" data-val-length-max="256" id="Remark" maxlength="200" name="Remark" placeholder="请输入检测备注" required="required" rows="2"></textarea>
+        </div>
+        <div class="item-content">
+            <div class="item-inner">
+                <div class="item-title"></div>
+                <div class="item-after"><span id="qctest-currentlen">0</span>/<span>200</span></div>
+            </div>
+        </div>
+    </li>
 </ul>
