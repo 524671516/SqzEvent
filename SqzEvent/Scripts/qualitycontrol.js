@@ -617,10 +617,23 @@ myApp.onPageInit("productionplan", function (page) {
         });
     });
 });
+$$(document).on('pageAfterAnimation', '.page[data-page="qualitytestlist"]', function (e) {
+    
+    $$.ajax({
+        url: "/QualityControl/QualityTestListPartial",
+        data: {
+            date: $$("#qualitytestlist-date").val()
+        },
+        success: function (data) {
+            $$("#qualitytestlist-content").html(data);
+        }
+    });
+})
 /*==========
 产品检测列表
 =========*/
 myApp.onPageInit("qualitytestlist", function (page) {
+    
     //添加日历
     var calendarMultiple = myApp.calendar({
         input: "#qualitytestlist-date",
@@ -630,15 +643,6 @@ myApp.onPageInit("qualitytestlist", function (page) {
         dayNames: dayNames,
         dayNamesShort: dayNamesShort,
         closeOnSelect: true
-    });
-    $$.ajax({
-        url: "/QualityControl/QualityTestListPartial",
-        data: {
-            date: $$("#qualitytestlist-date").val()
-        },
-        success: function (data) {
-            $$("#qualitytestlist-content").html(data);
-        }
     });
     $$("#qualitytestlist-date").on("change", function () {
         $$.ajax({
@@ -683,7 +687,7 @@ myApp.onPageInit("addqualitytest", function (page) {
         },
         errorClass: "invalid-input",
         submitHandler: function (form) {
-            CheckError("addqualitytest-submit", "addqualitytest-form")
+            CheckError("addqualitytest-submit", "addqualitytest-form");
         }
     });
     $$("#FactoryId").on("change", function () {

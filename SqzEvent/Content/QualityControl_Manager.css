@@ -22,7 +22,7 @@ textarea.h5{
 
 /*工具样式*/
 .hidden {
-    display: none;
+    display: none!important;
 }
 .color-red{
     color:red;

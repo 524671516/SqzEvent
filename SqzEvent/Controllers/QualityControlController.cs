@@ -867,6 +867,7 @@ namespace SqzEvent.Controllers
                 QCStaff staff = getStaff(User.Identity.Name);
                 var list = from m in _qcdb.QualityTest
                            where m.QCStaffId == staff.Id && m.ApplyTime >= _start && m.ApplyTime < _end
+                           orderby m.ApplyTime descending
                            select m;
                 foreach(var item in list)
                 {
