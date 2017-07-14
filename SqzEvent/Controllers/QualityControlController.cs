@@ -385,7 +385,7 @@ namespace SqzEvent.Controllers
             var factoryIdList = staff.Factory.Select(m => m.Id);
             var factorylist = from m in _qcdb.Factory
                               select m;
-            var monthlist = _qcdb.Database.SqlQuery<MonthSchedule>("select T3.ProductId, Product.SimpleName as ProductName,Product.Specification as Specification, T3.FactoryId, Factory.Name as FactoryName, T3.ProductionPlan, T3.Qty from " +
+            var monthlist = _qcdb.Database.SqlQuery<MonthSchedule>("select T3.ProductId, Product.SimpleName as ProductName,Product.Specification as Specification,T3.FactoryId, Factory.Name as FactoryName, T3.ProductionPlan, T3.Qty from " +
                 "(select ISNULL(ProductionPlan, 0) as ProductionPlan, ISNULL(Qty, 0) as Qty, ISNULL(ISNULL(T1.ProductId, T2.ProductId),0) as ProductId, ISNULL(ISNULL(T1.FactoryId, T2.FactoryId),0) as FactoryId " +
                 "from(select Factory.Id as FactoryId,Product.Id as ProductId,sum(ProductionSchedules.ProductionPlan) as ProductionPlan from Factory left join ProductFactories on Factory.Id = ProductFactories.Factory_Id " +
                 "left join Product on Product.Id = ProductFactories.Product_Id left join QCStaffFactories on QCStaffFactories.Factory_Id = Factory.Id left join ProductionSchedules on Factory.Id = ProductionSchedules.FactoryId and Product.Id = ProductionSchedules.ProductId " +
@@ -1344,7 +1344,7 @@ namespace SqzEvent.Controllers
                                select new FactoryGroup{ FactoryId = m.Id, FactoryName = m.Name };
             ViewBag.FG = factoryGroup;
             // 当月累计表
-            var monthlist = _qcdb.Database.SqlQuery<MonthSchedule>("select T3.ProductId, Product.SimpleName as ProductName,Product.Specification as Specification, T3.FactoryId, Factory.Name as FactoryName, T3.ProductionPlan, T3.Qty from " +
+            var monthlist = _qcdb.Database.SqlQuery<MonthSchedule>("select T3.ProductId, Product.SimpleName as ProductName,Product.Specification as Specification,T3.FactoryId, Factory.Name as FactoryName, T3.ProductionPlan, T3.Qty from " +
                 "(select ISNULL(ProductionPlan, 0) as ProductionPlan, ISNULL(Qty, 0) as Qty, ISNULL(ISNULL(T1.ProductId, T2.ProductId),0) as ProductId, ISNULL(ISNULL(T1.FactoryId,T2.FactoryId),0) as FactoryId " +
                 "from(select Factory.Id as FactoryId,Product.Id as ProductId,sum(ProductionSchedules.ProductionPlan) as ProductionPlan from Factory left join ProductFactories on Factory.Id = ProductFactories.Factory_Id " +
                 "left join Product on Product.Id = ProductFactories.Product_Id left join ProductionSchedules on Factory.Id = ProductionSchedules.FactoryId and Product.Id = ProductionSchedules.ProductId " +
