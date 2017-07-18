@@ -3,7 +3,8 @@ var myApp = new Framework7({
     modalTitle: '生产管理',
     pushState: true,
     modalButtonOk: "确定",
-    modalButtonCancel:"取消"
+    modalButtonCancel: "取消",
+    cache:false
 });
 var $$ = Dom7;
 var mainView = myApp.addView('.view-main', {
