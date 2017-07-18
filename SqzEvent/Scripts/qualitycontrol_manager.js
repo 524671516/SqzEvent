@@ -65,6 +65,45 @@ $$(".icon-link").each(function () {
         $$(this).addClass("active");
     });
 });
+/*检测详情页*/
+myApp.onPageInit("qualitytestdetails", function (page) {
+    $("#qualitytestdetails").on("click", ".scan-input", function () {
+        var $input = $$(this);
+        wx.scanQRCode({
+            needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+            scanType: ["barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+            success: function (res) {
+                var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+                var _result = result.toString().substr(result.toString().lastIndexOf(",") + 1);
+                $input.val(_result);
+            }
+        });
+    });
+    $(".one_photo").each(function () {
+        var pid = $(this).attr("Id");
+        var uid = $(this).parent().parent().find("ul").attr("Id");
+        var countid = $(this).parent().parent().parent().parent().find("abbr").attr("Id");
+        uploadCheckinFile("addqualitytest-form", uid, pid, countid, 1);
+    })
+    PhotoBrowser("qualitytestdetails");
+    $("#edit-qt").on("click", function () {
+        $("#edit-qt-form").ajaxSubmit(function (data) {
+            if (data.result == "SUCCESS") {
+                mainView.router.back();
+                myApp.addNotification({
+                    title: "通知",
+                    message: "表单修改成功"
+                });
+            } else {
+                mainView.router.back();
+                myApp.addNotification({
+                    title: "通知",
+                    message: "表单修改失败"
+                });
+            }
+        });
+    })
+})
 // 实时状态页
 myApp.onPageInit("Home", function (page) {
 });
@@ -989,3 +1028,98 @@ var time_col = [
          textAlign: 'right'
      },
 ]
+// 上传签到图片文件模块
+function uploadCheckinFile(pagename, imglist, photolist_id, current_count, max_count) {
+    $$("#" + imglist).html("");
+    var photolist = splitArray($$("#" + photolist_id).val());
+    $$("#" + current_count).text(photolist.length);
+    for (var i = 0; i < photolist.length; i++) {
+        $$("#" + imglist).append("<li><div class=\"rep-imgitem\" data-rel=\"" + photolist[i] + "\" style=\"background-image:url(/QualityControl/ThumbnailImage?filename=" + photolist[i] + "); background-size:cover\"></div></li>");
+    }
+    $$("#" + imglist).append('<li><a href="javascript:;" class="rep-imgitem-btn" id="' + imglist + '-upload-btn"><i class="fa fa-plus"></i></a></li>');
+    $$("#" + imglist).on("click", "#" + imglist + "-upload-btn", function (e) {
+        var localIds;
+        var photolist = splitArray($("#" + photolist_id).val());
+        if (photolist.length < max_count) {
+            wx.chooseImage({
+                count: max_count - photolist.length,
+                // 默认9
+                sizeType: ["compressed"],
+                // 可以指定是原图还是压缩图，默认二者都有
+                sourceType: ["album", "camera"],
+                // 可以指定来源是相册还是相机，默认二者都有
+                success: function (res) {
+                    localIds = res.localIds;
+                    // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                    //$("#preview").attr("src", localIds);
+                    upload_img(localIds, 0, photolist);
+                }
+            });
+        } else {
+            myApp.alert("上传图片不得大于" + max_count + "张，无法添加");
+        }
+    });
+    function upload_img(localIds, arraycount, pl) {
+        if (arraycount < localIds.length) {
+            wx.uploadImage({
+                localId: localIds[arraycount], // 需要上传的图片的本地ID，由chooseImage接口获得
+                isShowProgressTips: 1, // 默认为1，显示进度提示
+                success: function (res) {
+                    var serverId = res.serverId; // 返回图片的服务器端ID
+                    $$.ajax({
+                        url: "/QualityControl/SaveOrignalImage",
+                        type: "post",
+                        data: {
+                            serverId: serverId
+                        },
+                        success: function (data) {
+                            data = JSON.parse(data);
+                            if (data.result == "SUCCESS") {
+                                pl.push(data.filename);
+                                arraycount++;
+                                upload_img(localIds, arraycount, pl);
+                            }
+                            else {
+                                myApp.alert("上传失败");
+                            }
+                        }
+                    });
+                }
+            });
+        }
+        else {
+            $$("#" + imglist).html("");
+            $$("#" + current_count).text(pl.length);
+            $$("#" + photolist_id).val(pl.toString());
+            for (var i = 0; i < pl.length; i++) {
+                $$("#" + imglist).append('<li><div class="rep-imgitem" data-rel=\'' + pl[i] + "' style=\"background-image:url(/QualityControl/ThumbnailImage?filename=" + pl[i] + '); background-size:cover"></div></li>');
+            }
+            $$("#" + imglist).append('<li><a href="javascript:;" class="rep-imgitem-btn" id="' + imglist + '-upload-btn"><i class="fa fa-plus"></i></a></li>');
+            myApp.hideIndicator();
+        }
+    }
+    // 删除图片
+    //$$("#" + pagename).off("click", ".rep-imgitem");
+    $$("#" + imglist).on("click", ".rep-imgitem", function (e) {
+        var img_item = $$(this);
+        $$(".rep-imgitem").each(function () {
+            $$(this).html("");
+        });
+        img_item.html("<div class='rep-imgitem-selected'><i class='fa fa-minus'></i></div>");
+    });
+    $$("#" + imglist).on("click", ".rep-imgitem-selected", function () {
+        myApp.confirm("是否确认删除已上传图片?", "提示", function () {
+            var delete_item = $(".rep-imgitem-selected").closest(".rep-imgitem").attr("data-rel");
+            var arraylist = splitArray($("#" + photolist_id).val());
+            var pos = $.inArray(delete_item, arraylist);
+            arraylist.splice(pos, 1);
+            $$("#" + photolist_id).val(arraylist.toString());
+            $$("#" + current_count).text(arraylist.length);
+            $$("#" + imglist).html("");
+            for (var i = 0; i < arraylist.length; i++) {
+                $("#" + imglist).append('<li><div class="rep-imgitem" data-rel=\'' + arraylist[i] + "' style=\"background-image:url(/QualityControl/ThumbnailImage?filename=" + arraylist[i] + '); background-size:cover"></div></li>');
+            }
+            $$("#" + imglist).append('<li><a href="javascript:;" class="rep-imgitem-btn" id="' + imglist + '-upload-btn"><i class="fa fa-plus"></i></a></li>');
+        });
+    });
+}

@@ -1055,40 +1055,7 @@ namespace SqzEvent.Controllers
                     List<QCContentCategory> qccclist = new List<QCContentCategory>();
                     foreach (var _item in valuelist.CategoryItems)
                     {
-                        if (_item.State == true)
-                        {
-                            List<QCContentItem> qccilist = new List<QCContentItem>();
-                            foreach (var __item in _item.Columns)
-                            {
-                                string _value;
-                                if (__item.Type == 6&&__item.Value=="")
-                                {
-                                    _value = form[__item.Key].ToString();
-                                }
-                                else
-                                {
-                                    _value = __item.Value;
-                                }                             
-                                QCContentItem qcci = new QCContentItem()
-                                {
-                                    Type = __item.Type,
-                                    Key = __item.Key,
-                                    Title = __item.Title,
-                                    Value = _value
-                                };
-                                qccilist.Add(qcci);
-                            }
-                            bool _state = IsEmpty(qccilist);
-                            QCContentCategory qccc = new QCContentCategory()
-                            {
-                                State = _state,
-                                CategoryName = _item.CategoryName,
-                                Columns = qccilist
-                            };
-                            qccclist.Add(qccc);
-                        }
-                        else
-                        {
+ 
                             List<QCContentItem> qccilist = new List<QCContentItem>();
                             foreach (var __item in _item.Columns)
                             {                               
@@ -1099,9 +1066,9 @@ namespace SqzEvent.Controllers
                                 }
                                 else
                                 {
-                                    _value = form[__item.Key].ToString();
+                                _value = form[__item.Key].ToString();
                                 }
-                                QCContentItem qcci = new QCContentItem()
+                            QCContentItem qcci = new QCContentItem()
                                 {
                                     Type = __item.Type,
                                     Key=__item.Key,
@@ -1118,7 +1085,6 @@ namespace SqzEvent.Controllers
                                 Columns = qccilist
                             };
                             qccclist.Add(qccc);
-                        }
                     }
                     QCContent qcc = new QCContent
                     {

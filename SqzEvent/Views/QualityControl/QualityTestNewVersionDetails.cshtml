@@ -84,8 +84,6 @@
                                 </div>
                             </a>
                             <div class="accordion-item-content">
-                                @if (item.State == false)
-                                {
                                     <div class="content-block" style="padding:0">
                                         <ul>
                                             @foreach (QCContentItem _item in item.Columns)
@@ -124,7 +122,7 @@
                                                                     <div class="item-inner">
                                                                         <div class="item-title label">@Html.Encode(_item.Title)</div>
                                                                         <div class="item-input">
-                                                                            <input type="digits" class="item-input-right" id="@_item.Key" name="@_item.Key" placeholder="请输入数字" />
+                                                                            <input type="digits" class="item-input-right" id="@_item.Key" name="@_item.Key" placeholder="请输入数字" value="@_item.Value"/>
                                                                         </div>
                                                                         <div class="item-after"></div>
                                                                     </div>
@@ -139,7 +137,7 @@
                                                                     <div class="item-inner">
                                                                         <div class="item-title label">@Html.Encode(_item.Title)</div>
                                                                         <div class="item-input">
-                                                                            <input type="number" class="item-input-right" id="@_item.Key" name="@_item.Key" placeholder="请输入数字" />
+                                                                            <input type="number" class="item-input-right" id="@_item.Key" name="@_item.Key" placeholder="请输入数字" value="@_item.Value" />
                                                                         </div>
                                                                         <div class="item-after"></div>
                                                                     </div>
@@ -154,7 +152,7 @@
                                                                     <div class="item-inner">
                                                                         <div class="item-title label">@Html.Encode(_item.Title)</div>
                                                                         <div class="item-input">
-                                                                            <input type="text" class="item-input-right" id="@_item.Key" name="@_item.Key" placeholder="请输入文字" />
+                                                                            <input type="text" class="item-input-right" id="@_item.Key" name="@_item.Key" placeholder="请输入文字" value="@_item.Value"/>
                                                                         </div>
                                                                         <div class="item-after"></div>
                                                                     </div>
@@ -169,63 +167,9 @@
                                                                     <div class="item-inner">
                                                                         <div class="item-title label">@Html.Encode(_item.Title)</div>
                                                                         <div class="item-input">
-                                                                            <input type="text" class="item-input-right scan-input" id="@_item.Key" name="@_item.Key" placeholder="点击扫描条形码" readonly />
+                                                                            <input type="text" class="item-input-right scan-input" id="@_item.Key" name="@_item.Key" placeholder="点击扫描条形码" readonly value="@_item.Value"/>
                                                                         </div>
                                                                         <div class="item-after"></div>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                        }
-                                                        break;
-                                                    case 6:
-                                                        {
-                                                            <li>
-                                                                <div class="item-content">
-                                                                    <div class="item-inner">
-                                                                        <div class="item-title">上传照片</div>
-                                                                        <div class="item-after"><abbr id="@Html.Encode(_item.Key + "-imgcount")">0</abbr>/1</div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="item-content middle-content">
-                                                                    <div class="item-inner">
-                                                                        <div class="hidden">
-                                                                            <input class="one_photo" data-val="true" data-val-length="字段 Photos 必须是最大长度为 256 的字符串。" data-val-length-max="256" id="@_item.Key" name="@_item.Key" type="text" value="">
-                                                                        </div>
-                                                                        <ul class="rep-imglist" id="@Html.Encode(_item.Key + "-photoul")"><li><a href="javascript:;" class="rep-imgitem-btn" id="qccheckin-photos-upload-btn"><i class="fa fa-plus"></i></a></li></ul>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                        }
-                                                        break;
-                                                    default:
-                                                        break;
-                                                }
-                                            }
-                                        </ul>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="content-block" style="padding:0">
-                                        <ul>
-                                            @foreach (QCContentItem _item in item.Columns)
-                                            {
-                                                switch (_item.Type)
-                                                {
-                                                    case 1:
-                                                        {
-                                                            <li>
-                                                                <div class="item-content">
-                                                                    <div class="item-inner">
-                                                                        <div class="item-title">@Html.Encode(_item.Title)</div>
-                                                                        @if (_item.Value.ToString() == "false")
-                                                                        {
-                                                                            <div class="item-after"><i class="fa fa-times color-red" aria-hidden="true"></i></div>
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            <div class="item-after"><i class="fa fa-check color-green" aria-hidden="true"></i></div>
-                                                                        }
                                                                     </div>
                                                                 </div>
                                                             </li>
@@ -255,6 +199,7 @@
                                                             else
                                                             {
                                                                 <li>
+                                                                    <input class="one_photo" data-val="true" data-val-length="字段 Photos 必须是最大长度为 256 的字符串。" data-val-length-max="256" id="@_item.Key" name="@_item.Key" type="hidden" value="@_item.Value">
                                                                     <a href="javascript:;" class="item-content item-link qc-photos" data-photos="@_item.Value">
                                                                         <div class="item-inner">
                                                                             <div class="item-title">检验图片</div>
@@ -266,22 +211,11 @@
                                                         }
                                                         break;
                                                     default:
-                                                        {
-                                                            <li>
-                                                                <div class="item-content">
-                                                                    <div class="item-inner">
-                                                                        <div class="item-title label">@Html.Encode(_item.Title)</div>
-                                                                        <div class="item-after">@Html.Encode(_item.Value)</div>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                        }
                                                         break;
                                                 }
                                             }
                                         </ul>
-                                    </div>
-                                }                                
+                                    </div>                               
                             </div>
                         </li>
 

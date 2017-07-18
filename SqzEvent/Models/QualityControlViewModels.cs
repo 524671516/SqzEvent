@@ -110,7 +110,7 @@ namespace SqzEvent.Models
     // 模板组成JSON
     public class QCTemplateContent
     {
-        public string CatetoryName { get; set; }
+        public string CategoryName { get; set; }
 
         public ICollection<QCTemplateColumns> QCTemplateColumns { get; set; }
     }
