@@ -385,14 +385,15 @@ namespace SqzEvent.Controllers
             var factoryIdList = staff.Factory.Select(m => m.Id);
             var factorylist = from m in _qcdb.Factory
                               select m;
-            var monthlist = _qcdb.Database.SqlQuery<MonthSchedule>("select T3.ProductId, Product.SimpleName as ProductName,Product.Specification as Specification,T3.FactoryId, Factory.Name as FactoryName, T3.ProductionPlan, T3.Qty from " +
+            var monthlist = _qcdb.Database.SqlQuery<MonthSchedule>("select T4.ProductId,T4.ProductName,T4.Specification,ProductClass.ProductClassName,T4.FactoryId,T4.FactoryName,T4.ProductionPlan,T4.Qty from "+
+                "(select T3.ProductId as ProductId, Product.SimpleName as ProductName,Product.ProductClassId as ProductClassId ,Specification as Specification,T3.FactoryId as FactoryId, Factory.Name as FactoryName, T3.ProductionPlan as ProductionPlan, T3.Qty as Qty from " +
                 "(select ISNULL(ProductionPlan, 0) as ProductionPlan, ISNULL(Qty, 0) as Qty, ISNULL(ISNULL(T1.ProductId, T2.ProductId),0) as ProductId, ISNULL(ISNULL(T1.FactoryId, T2.FactoryId),0) as FactoryId " +
                 "from(select Factory.Id as FactoryId,Product.Id as ProductId,sum(ProductionSchedules.ProductionPlan) as ProductionPlan from Factory left join ProductFactories on Factory.Id = ProductFactories.Factory_Id " +
                 "left join Product on Product.Id = ProductFactories.Product_Id left join QCStaffFactories on QCStaffFactories.Factory_Id = Factory.Id left join ProductionSchedules on Factory.Id = ProductionSchedules.FactoryId and Product.Id = ProductionSchedules.ProductId " +
                 "where QCStaff_Id = " + staff.Id + " and ProductionSchedules.Subscribe >= '" + fom.ToString("yyyy-MM-dd") + "' and ProductionSchedules.Subscribe < '" + lom.ToString("yyyy-MM-dd") + "' " +
                 "group by Product.Id, Factory.Id) as T1 full join (select QCAgenda.FactoryId, ProductionDetails.ProductId, SUM(ProductionDetails.ProductionQty) as Qty from QCAgenda " +
                 "left join ProductionDetails on ProductionDetails.QCAgendaId = QCAgenda.Id where QCAgenda.Subscribe >= '" + fom.ToString("yyyy-MM-dd") + "' and QCAgenda.Subscribe < '" + lom.ToString("yyyy-MM-dd") + "' " +
-                "group by QCAgenda.FactoryId, ProductionDetails.ProductId) as T2 on T1.FactoryId = T2.FactoryId and T1.ProductId = T2.ProductId) as T3 left join Product on T3.ProductId = Product.Id left join Factory on T3.FactoryId = Factory.Id");
+                "group by QCAgenda.FactoryId, ProductionDetails.ProductId) as T2 on T1.FactoryId = T2.FactoryId and T1.ProductId = T2.ProductId) as T3 left join Product on T3.ProductId = Product.Id left join Factory on T3.FactoryId = Factory.Id) as T4 left join ProductClass on T4.ProductClassId=ProductClass.Id");
             ViewBag.fl = factorylist;
             return PartialView(monthlist);
         }
@@ -1344,14 +1345,15 @@ namespace SqzEvent.Controllers
                                select new FactoryGroup{ FactoryId = m.Id, FactoryName = m.Name };
             ViewBag.FG = factoryGroup;
             // 当月累计表
-            var monthlist = _qcdb.Database.SqlQuery<MonthSchedule>("select T3.ProductId, Product.SimpleName as ProductName,Product.Specification as Specification,T3.FactoryId, Factory.Name as FactoryName, T3.ProductionPlan, T3.Qty from " +
+            var monthlist = _qcdb.Database.SqlQuery<MonthSchedule>("select T4.ProductId,T4.ProductName,T4.Specification,ProductClass.ProductClassName,T4.FactoryId,T4.FactoryName,T4.ProductionPlan,T4.Qty from " +
+                "(select T3.ProductId as ProductId, Product.SimpleName as ProductName,Product.ProductClassId as ProductClassId ,Specification as Specification,T3.FactoryId as FactoryId, Factory.Name as FactoryName, T3.ProductionPlan as ProductionPlan, T3.Qty as Qty from " +
                 "(select ISNULL(ProductionPlan, 0) as ProductionPlan, ISNULL(Qty, 0) as Qty, ISNULL(ISNULL(T1.ProductId, T2.ProductId),0) as ProductId, ISNULL(ISNULL(T1.FactoryId,T2.FactoryId),0) as FactoryId " +
                 "from(select Factory.Id as FactoryId,Product.Id as ProductId,sum(ProductionSchedules.ProductionPlan) as ProductionPlan from Factory left join ProductFactories on Factory.Id = ProductFactories.Factory_Id " +
                 "left join Product on Product.Id = ProductFactories.Product_Id left join ProductionSchedules on Factory.Id = ProductionSchedules.FactoryId and Product.Id = ProductionSchedules.ProductId " +
                 "where ProductionSchedules.Subscribe >= '" + _pickdate.ToString("yyyy-MM-dd") + "' and ProductionSchedules.Subscribe < '" + nextmonth.ToString("yyyy-MM-dd") + "' " +
                 "group by Product.Id, Factory.Id) as T1 full join (select QCAgenda.FactoryId, ProductionDetails.ProductId, SUM(ProductionDetails.ProductionQty) as Qty from QCAgenda " +
                 "left join ProductionDetails on ProductionDetails.QCAgendaId = QCAgenda.Id where QCAgenda.Subscribe >= '" + _pickdate.ToString("yyyy-MM-dd") + "' and QCAgenda.Subscribe < '" + nextmonth.ToString("yyyy-MM-dd") + "' " +
-                "group by QCAgenda.FactoryId, ProductionDetails.ProductId) as T2 on T1.FactoryId = T2.FactoryId and T1.ProductId = T2.ProductId) as T3 left join Product on T3.ProductId = Product.Id left join Factory on T3.FactoryId = Factory.Id");
+                "group by QCAgenda.FactoryId, ProductionDetails.ProductId) as T2 on T1.FactoryId = T2.FactoryId and T1.ProductId = T2.ProductId) as T3 left join Product on T3.ProductId = Product.Id left join Factory on T3.FactoryId = Factory.Id) as T4 left join ProductClass on T4.ProductClassId=ProductClass.Id");
             return PartialView(monthlist);
         }
         public ActionResult Manager_AddSchedule()
