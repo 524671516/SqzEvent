@@ -14,7 +14,8 @@ using System.Drawing.Imaging;
 using System.Drawing;
 using System.Collections;
 using System.Collections.Generic;
-
+using System.Web.Script.Serialization;
+using Newtonsoft.Json;
 
 namespace SqzEvent.Controllers
 {
@@ -64,6 +65,7 @@ namespace SqzEvent.Controllers
         [AllowAnonymous]
         public ActionResult LoginManager()
         {
+            
             string user_Agent = HttpContext.Request.UserAgent;
             if (user_Agent.Contains("MicroMessenger"))
             {
@@ -383,14 +385,15 @@ namespace SqzEvent.Controllers
             var factoryIdList = staff.Factory.Select(m => m.Id);
             var factorylist = from m in _qcdb.Factory
                               select m;
-            var monthlist = _qcdb.Database.SqlQuery<MonthSchedule>("select T3.ProductId, Product.SimpleName as ProductName, T3.FactoryId, Factory.Name as FactoryName, T3.ProductionPlan, T3.Qty from " +
+            var monthlist = _qcdb.Database.SqlQuery<MonthSchedule>("select T4.ProductId,T4.ProductName,T4.Specification,ProductClass.ProductClassName,T4.FactoryId,T4.FactoryName,T4.ProductionPlan,T4.Qty from "+
+                "(select T3.ProductId as ProductId, Product.SimpleName as ProductName,Product.ProductClassId as ProductClassId ,Specification as Specification,T3.FactoryId as FactoryId, Factory.Name as FactoryName, T3.ProductionPlan as ProductionPlan, T3.Qty as Qty from " +
                 "(select ISNULL(ProductionPlan, 0) as ProductionPlan, ISNULL(Qty, 0) as Qty, ISNULL(ISNULL(T1.ProductId, T2.ProductId),0) as ProductId, ISNULL(ISNULL(T1.FactoryId, T2.FactoryId),0) as FactoryId " +
                 "from(select Factory.Id as FactoryId,Product.Id as ProductId,sum(ProductionSchedules.ProductionPlan) as ProductionPlan from Factory left join ProductFactories on Factory.Id = ProductFactories.Factory_Id " +
                 "left join Product on Product.Id = ProductFactories.Product_Id left join QCStaffFactories on QCStaffFactories.Factory_Id = Factory.Id left join ProductionSchedules on Factory.Id = ProductionSchedules.FactoryId and Product.Id = ProductionSchedules.ProductId " +
                 "where QCStaff_Id = " + staff.Id + " and ProductionSchedules.Subscribe >= '" + fom.ToString("yyyy-MM-dd") + "' and ProductionSchedules.Subscribe < '" + lom.ToString("yyyy-MM-dd") + "' " +
                 "group by Product.Id, Factory.Id) as T1 full join (select QCAgenda.FactoryId, ProductionDetails.ProductId, SUM(ProductionDetails.ProductionQty) as Qty from QCAgenda " +
                 "left join ProductionDetails on ProductionDetails.QCAgendaId = QCAgenda.Id where QCAgenda.Subscribe >= '" + fom.ToString("yyyy-MM-dd") + "' and QCAgenda.Subscribe < '" + lom.ToString("yyyy-MM-dd") + "' " +
-                "group by QCAgenda.FactoryId, ProductionDetails.ProductId) as T2 on T1.FactoryId = T2.FactoryId and T1.ProductId = T2.ProductId) as T3 left join Product on T3.ProductId = Product.Id left join Factory on T3.FactoryId = Factory.Id");
+                "group by QCAgenda.FactoryId, ProductionDetails.ProductId) as T2 on T1.FactoryId = T2.FactoryId and T1.ProductId = T2.ProductId) as T3 left join Product on T3.ProductId = Product.Id left join Factory on T3.FactoryId = Factory.Id) as T4 left join ProductClass on T4.ProductClassId=ProductClass.Id");
             ViewBag.fl = factorylist;
             return PartialView(monthlist);
         }
@@ -865,7 +868,22 @@ namespace SqzEvent.Controllers
                 QCStaff staff = getStaff(User.Identity.Name);
                 var list = from m in _qcdb.QualityTest
                            where m.QCStaffId == staff.Id && m.ApplyTime >= _start && m.ApplyTime < _end
+                           orderby m.ApplyTime descending
                            select m;
+                foreach(var item in list)
+                {
+                    try
+                    {
+                        var a = Newtonsoft.Json.JsonConvert.DeserializeObject<QCContent>(item.Values);
+                    }
+                    catch (Exception)
+                    {
+                        ViewBag.version = "Old";
+                        return PartialView(list);
+                    }
+                    break;
+                }
+                ViewBag.version = "New";
                 return PartialView(list);
             }
             catch
@@ -888,21 +906,32 @@ namespace SqzEvent.Controllers
 
         // 质检产品列表更新ajax
         [HttpPost]
-        public JsonResult RefreshQualityTestProductListAjax(int factoryId)
+        public JsonResult RefreshQualityTestProductListAjax(int factoryId,int productclassId)
         {
             var _factory = _qcdb.Factory.SingleOrDefault(m => m.Id == factoryId);
             var list = from m in _factory.Product
-                       where m.QCProduct
-                       select new { Id = m.Id, Name = m.SimpleName };
+                       where m.QCProduct&&m.ProductClassId== productclassId
+                       select new { Id = m.Id, Name = m.SimpleName+"("+m.Specification+")" };
             return Json(new { result = "SUCCESS", content = list });
+        }
+
+        [HttpPost]
+        public JsonResult RefreshQualityProductClassListAjax(int factoryId)
+        {
+            var _factory = _qcdb.Factory.SingleOrDefault(m => m.Id == factoryId);
+            var productClassList = (from m in _factory.Product
+                                   where m.QCProduct
+                                   select new { Id = m.ProductClassId, Name = m.ProductClass.ProductClassName }).Distinct().ToList();
+            return Json(new { result = "SUCCESS", content = productClassList });
         }
         public PartialViewResult AddQualityTestPartial(int pid)
         {
             Product p = _qcdb.Product.SingleOrDefault(m => m.Id == pid);
             if (p != null)
             {
-                var _templatelist = p.QualityTestTemplate.OrderByDescending(m=>m.Priority);
-                return PartialView(_templatelist);
+                var qctemplate = _qcdb.QCTemplate.SingleOrDefault(m => m.Id == p.TemplateId);
+                List<QCTemplateContent> list = Newtonsoft.Json.JsonConvert.DeserializeObject<List<QCTemplateContent>>(qctemplate.TemplateValues);        
+                return PartialView(list);
             }
             return PartialView("NotFound");
         }
@@ -920,27 +949,49 @@ namespace SqzEvent.Controllers
                     item.ApplyTime = DateTime.Now;
                     Product p = _qcdb.Product.SingleOrDefault(m => m.Id == item.ProductId);
                     if (p != null)
-                    {
-                        List<TestTemplateItem> templatelist = new List<TestTemplateItem>(); 
-                        foreach(var template in p.QualityTestTemplate)
+                    {                       
+                        List<QCTemplateContent> list = Newtonsoft.Json.JsonConvert.DeserializeObject<List<QCTemplateContent>>(p.QCTemplate.TemplateValues);
+                        QCContent qcc = new QCContent
                         {
-                            string _value;
-                            if (template.ValueTypeId == 1)
-                                _value = form[template.KeyName] == null ? "0" : "1";
-                            else
-                                _value = form[template.KeyName].ToString();
-                            TestTemplateItem tt_item = new TestTemplateItem()
+                            TemplateId=p.TemplateId
+                        };
+                        List<QCContentCategory> cgilist = new List<QCContentCategory>();
+                        foreach (var _item in list)
+                        {
+                            List<QCContentItem> qccitemlist = new List<QCContentItem>();
+                            foreach (var __item in _item.QCTemplateColumns)
+                            {                               
+                                string _value;
+                                if (__item.ValueTypeId == 1)
+                                {
+                                    _value = form[__item.KeyName] == null ? "false" : "true";
+                                }
+                                else
+                                {
+                                    _value = form[__item.KeyName].ToString();
+                                }                              
+                                QCContentItem qcci = new QCContentItem()
+                                {
+
+                                    Type = __item.ValueTypeId,
+                                    Key = __item.KeyName,
+                                    Title=__item.KeyTitle,
+                                    Value=_value                                  
+                                };
+                                qccitemlist.Add(qcci);
+                            }
+                            bool _state = IsEmpty(qccitemlist);
+                            QCContentCategory qccc = new QCContentCategory()
                             {
-                                default_value =template.StandardValue,
-                                type = template.ValueTypeId,
-                                key = template.KeyName,
-                                value = _value,
-                                title = template.KeyTitle
+                                State = _state,
+                                CategoryName = _item.CatetoryName,
+                                Columns = qccitemlist
                             };
-                            templatelist.Add(tt_item);
+                            cgilist.Add(qccc);
                         }
-                        item.Values = Newtonsoft.Json.JsonConvert.SerializeObject(templatelist);
-                        item.EvalResult = EvalQualityTest(templatelist);
+                        qcc.CategoryItems = cgilist;
+                        item.EvalResult = EvalQualityTest(cgilist);
+                        item.Values = Newtonsoft.Json.JsonConvert.SerializeObject(qcc);
                     }
                     try
                     {
@@ -974,6 +1025,123 @@ namespace SqzEvent.Controllers
                 return PartialView("NotFound");
         }
 
+        //质检信息新版本详情
+        public PartialViewResult QualityTestNewVersionDetails(int qtId)
+        {
+            var model = _qcdb.QualityTest.SingleOrDefault(m => m.Id == qtId);
+            if (model != null)
+            {
+                QCContent list = Newtonsoft.Json.JsonConvert.DeserializeObject<QCContent>(model.Values);
+                ViewBag.Details = list;
+                return PartialView(model);
+            }
+            else
+                return PartialView("NotFound");
+        }
+
+
+        //修改质检信息新版本支持
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public JsonResult EditQualityTest(QualityTest model, FormCollection form)
+        {
+            if (ModelState.IsValid)
+            {
+                QualityTest item = new QualityTest();
+                if (TryUpdateModel(item))
+                {
+                    var qt = _qcdb.QualityTest.SingleOrDefault(m => m.Id == item.Id);
+                    QCContent valuelist = Newtonsoft.Json.JsonConvert.DeserializeObject<QCContent>(qt.Values);
+                    List<QCContentCategory> qccclist = new List<QCContentCategory>();
+                    foreach (var _item in valuelist.CategoryItems)
+                    {
+                        if (_item.State == true)
+                        {
+                            List<QCContentItem> qccilist = new List<QCContentItem>();
+                            foreach (var __item in _item.Columns)
+                            {
+                                string _value;
+                                if (__item.Type == 6&&__item.Value=="")
+                                {
+                                    _value = form[__item.Key].ToString();
+                                }
+                                else
+                                {
+                                    _value = __item.Value;
+                                }                             
+                                QCContentItem qcci = new QCContentItem()
+                                {
+                                    Type = __item.Type,
+                                    Key = __item.Key,
+                                    Title = __item.Title,
+                                    Value = _value
+                                };
+                                qccilist.Add(qcci);
+                            }
+                            bool _state = IsEmpty(qccilist);
+                            QCContentCategory qccc = new QCContentCategory()
+                            {
+                                State = _state,
+                                CategoryName = _item.CategoryName,
+                                Columns = qccilist
+                            };
+                            qccclist.Add(qccc);
+                        }
+                        else
+                        {
+                            List<QCContentItem> qccilist = new List<QCContentItem>();
+                            foreach (var __item in _item.Columns)
+                            {                               
+                                string _value;
+                                if (__item.Type == 1)
+                                {
+                                    _value = form[__item.Key] == null ? "false" : "true";
+                                }
+                                else
+                                {
+                                    _value = form[__item.Key].ToString();
+                                }
+                                QCContentItem qcci = new QCContentItem()
+                                {
+                                    Type = __item.Type,
+                                    Key=__item.Key,
+                                    Title = __item.Title,
+                                    Value = _value
+                                };
+                                qccilist.Add(qcci);
+                            }
+                            bool _state = IsEmpty(qccilist);
+                            QCContentCategory qccc = new QCContentCategory()
+                            {
+                                State = _state,
+                                CategoryName = _item.CategoryName,
+                                Columns = qccilist
+                            };
+                            qccclist.Add(qccc);
+                        }
+                    }
+                    QCContent qcc = new QCContent
+                    {
+                        TemplateId = qt.Product.TemplateId
+                    };
+                    qcc.CategoryItems = qccclist;
+                    qt.EvalResult = EvalQualityTest(qccclist);
+                    qt.Values = Newtonsoft.Json.JsonConvert.SerializeObject(qcc);
+                    _qcdb.Entry(qt).State = System.Data.Entity.EntityState.Modified;
+                    _qcdb.SaveChanges();
+                    return Json(new { result = "SUCCESS"});
+                }
+                else
+                {
+                    return Json(new { result = "FAIL" });
+                }
+                
+            }
+            else
+            {
+                return Json(new { result = "FAIL" });
+            }
+        }
         // 删除质检信息
         [HttpPost]
         public async Task<JsonResult> DeleteQualityTest(int qtId)
@@ -1177,14 +1345,15 @@ namespace SqzEvent.Controllers
                                select new FactoryGroup{ FactoryId = m.Id, FactoryName = m.Name };
             ViewBag.FG = factoryGroup;
             // 当月累计表
-            var monthlist = _qcdb.Database.SqlQuery<MonthSchedule>("select T3.ProductId, Product.SimpleName as ProductName, T3.FactoryId, Factory.Name as FactoryName, T3.ProductionPlan, T3.Qty from " +
+            var monthlist = _qcdb.Database.SqlQuery<MonthSchedule>("select T4.ProductId,T4.ProductName,T4.Specification,ProductClass.ProductClassName,T4.FactoryId,T4.FactoryName,T4.ProductionPlan,T4.Qty from " +
+                "(select T3.ProductId as ProductId, Product.SimpleName as ProductName,Product.ProductClassId as ProductClassId ,Specification as Specification,T3.FactoryId as FactoryId, Factory.Name as FactoryName, T3.ProductionPlan as ProductionPlan, T3.Qty as Qty from " +
                 "(select ISNULL(ProductionPlan, 0) as ProductionPlan, ISNULL(Qty, 0) as Qty, ISNULL(ISNULL(T1.ProductId, T2.ProductId),0) as ProductId, ISNULL(ISNULL(T1.FactoryId,T2.FactoryId),0) as FactoryId " +
                 "from(select Factory.Id as FactoryId,Product.Id as ProductId,sum(ProductionSchedules.ProductionPlan) as ProductionPlan from Factory left join ProductFactories on Factory.Id = ProductFactories.Factory_Id " +
                 "left join Product on Product.Id = ProductFactories.Product_Id left join ProductionSchedules on Factory.Id = ProductionSchedules.FactoryId and Product.Id = ProductionSchedules.ProductId " +
                 "where ProductionSchedules.Subscribe >= '" + _pickdate.ToString("yyyy-MM-dd") + "' and ProductionSchedules.Subscribe < '" + nextmonth.ToString("yyyy-MM-dd") + "' " +
                 "group by Product.Id, Factory.Id) as T1 full join (select QCAgenda.FactoryId, ProductionDetails.ProductId, SUM(ProductionDetails.ProductionQty) as Qty from QCAgenda " +
                 "left join ProductionDetails on ProductionDetails.QCAgendaId = QCAgenda.Id where QCAgenda.Subscribe >= '" + _pickdate.ToString("yyyy-MM-dd") + "' and QCAgenda.Subscribe < '" + nextmonth.ToString("yyyy-MM-dd") + "' " +
-                "group by QCAgenda.FactoryId, ProductionDetails.ProductId) as T2 on T1.FactoryId = T2.FactoryId and T1.ProductId = T2.ProductId) as T3 left join Product on T3.ProductId = Product.Id left join Factory on T3.FactoryId = Factory.Id");
+                "group by QCAgenda.FactoryId, ProductionDetails.ProductId) as T2 on T1.FactoryId = T2.FactoryId and T1.ProductId = T2.ProductId) as T3 left join Product on T3.ProductId = Product.Id left join Factory on T3.FactoryId = Factory.Id) as T4 left join ProductClass on T4.ProductClassId=ProductClass.Id");
             return PartialView(monthlist);
         }
         public ActionResult Manager_AddSchedule()
@@ -1200,46 +1369,31 @@ namespace SqzEvent.Controllers
             // 判断下拉菜单以及日期选项是否为空
             try
             {
-                int factoryId = Convert.ToInt32(form["FactoryId"].ToString());
-                string[] datelist = form["DateList"].ToString().Split(',');
-                var factory = _qcdb.Factory.SingleOrDefault(m => m.Id == factoryId);
-                                                                     if (factory != null)
+                int pid = Convert.ToInt32(form["ProductId"]);
+                int fid = Convert.ToInt32(form["FactoryId"]);
+                var currenmonth = Convert.ToDateTime(form["DateList"]);
+                var productionSchedule = _qcdb.ProductionSchedule.SingleOrDefault(m => m.ProductId == pid && m.Subscribe == currenmonth && m.FactoryId == fid);
+                if (productionSchedule == null)
                 {
-                    foreach(var date in datelist)
+                    ProductionSchedule newSchedule = new ProductionSchedule()
                     {
-                        DateTime Subscribe = Convert.ToDateTime(date);
-                        foreach(var p in factory.Product)
-                        {
-                            string _cnt = form[p.ProductCode].ToString();
-                            if (_cnt != "")
-                            {
-                                int schedule_cnt = Convert.ToInt32(_cnt);
-                                // 判断是否存在
-                                ProductionSchedule exist_item = _qcdb.ProductionSchedule.SingleOrDefault(m => m.ProductId == p.Id && m.Subscribe == Subscribe && m.FactoryId == factoryId);
-                                if (exist_item != null)
-                                {
-                                    exist_item.ProductionPlan = schedule_cnt;
-                                    _qcdb.Entry(exist_item).State = System.Data.Entity.EntityState.Modified;
-                                }
-                                else
-                                {
-                                    ProductionSchedule s = new ProductionSchedule()
-                                    {
-                                        FactoryId = factoryId,
-                                        Subscribe = Subscribe,
-                                        ProductId = p.Id,
-                                        Status = false,
-                                        ProductionPlan = schedule_cnt
-                                    };
-                                    _qcdb.ProductionSchedule.Add(s);
-                                }
-                            }
-                        }
-                    }
+                        FactoryId = fid,
+                        ProductId = pid,
+                        Subscribe = currenmonth,
+                        Status = false,
+                        ProductionPlan= Convert.ToInt32(form["ProductionPlan"])
+                };
+                    _qcdb.ProductionSchedule.Add(newSchedule);
                     await _qcdb.SaveChangesAsync();
                     return Content("SUCCESS");
                 }
-                return Content("FAIL");
+                else
+                {
+                    productionSchedule.ProductionPlan = Convert.ToInt32(form["ProductionPlan"]);
+                    _qcdb.Entry(productionSchedule).State = System.Data.Entity.EntityState.Modified;
+                    await _qcdb.SaveChangesAsync();
+                    return Content("SUCCESS");
+                }
             }
             catch
             {
@@ -1247,12 +1401,12 @@ namespace SqzEvent.Controllers
             }
         }
 
-        public ActionResult Manager_AddSchedulePartial(int fid, string date)
+        public ActionResult Manager_AddSchedulePartial(int fid,int pid,string date)
         {
-            DateTime currentMonth = Convert.ToDateTime(date);
-            var template = _qcdb.Factory.SingleOrDefault(m => m.Id == fid).Product;
-            ViewBag.ScheduleList = _qcdb.ProductionSchedule.Where(m => m.FactoryId == fid && m.Subscribe == currentMonth);
-            return PartialView(template);
+            DateTime currentDate = Convert.ToDateTime(date);
+            var monthSchedule = _qcdb.ProductionSchedule.SingleOrDefault(m => m.FactoryId == fid && m.ProductId == pid && m.Subscribe == currentDate);
+            ViewBag.pname = _qcdb.Product.SingleOrDefault(m => m.Id == pid).SimpleName;
+            return PartialView(monthSchedule);
         }
 
         public ActionResult Manager_ProductionDetails(int fid, string date)
@@ -1312,6 +1466,7 @@ namespace SqzEvent.Controllers
 
         public ActionResult Manager_QualityTestPartial(int fid, string date, bool? sorttype)
         {
+            
             bool _sorttype = sorttype ?? false;
             DateTime _start = Convert.ToDateTime(date);
             DateTime _end = _start.AddDays(1);
@@ -1321,6 +1476,20 @@ namespace SqzEvent.Controllers
                              where m.FactoryId == fid && m.ApplyTime >= _start && m.ApplyTime < _end
                              orderby m.ProductId, m.ApplyTime descending
                              select m;
+                foreach (var item in qtlist)
+                {
+                    try
+                    {
+                        var a = Newtonsoft.Json.JsonConvert.DeserializeObject<QCContent>(item.Values);
+                    }
+                    catch (Exception)
+                    {
+                        ViewBag.version = "Old";
+                        return PartialView(qtlist);
+                    }
+                    break;
+                }
+                ViewBag.version = "New";
                 return PartialView(qtlist);
             }
             else
@@ -1329,6 +1498,20 @@ namespace SqzEvent.Controllers
                              where m.FactoryId == fid && m.ApplyTime >= _start && m.ApplyTime < _end
                              orderby m.ApplyTime descending
                              select m;
+                foreach (var item in qtlist)
+                {
+                    try
+                    {
+                        var a = Newtonsoft.Json.JsonConvert.DeserializeObject<QCContent>(item.Values);
+                    }
+                    catch (Exception)
+                    {
+                        ViewBag.version = "Old";
+                        return PartialView(qtlist);
+                    }
+                    break;
+                }
+                ViewBag.version = "New";
                 return PartialView(qtlist);
             }
         }
@@ -1693,19 +1876,23 @@ namespace SqzEvent.Controllers
             return user;
         }
 
-        public bool EvalQualityTest(List<TestTemplateItem> items)
+        public bool EvalQualityTest(List<QCContentCategory> items)
         {
             foreach(var item in items)
             {
-                if (item.default_value == null)
+                if (item.State == false)
                 {
-                    if (item.value == "")
-                        return false;
+                    return false;
                 }
                 else
                 {
-                    if (item.value == "0")
-                        return false;
+                    foreach(var _item in item.Columns)
+                    {
+                        if (_item.Value.ToString() == "false"||_item.Value=="")
+                        {
+                            return false;
+                        }
+                    }
                 }
             }
             return true;
@@ -1876,6 +2063,26 @@ namespace SqzEvent.Controllers
             TimeSpan ts = DateTime.Now.Date.AddSeconds(135816).ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0, 0);
             var datecode = ts.TotalSeconds.ToString();
             return "" + datecode[7] + datecode[6] + datecode[5] + datecode[4];
+        }
+
+        public bool IsEmpty(List<QCContentItem> item)
+        {
+            
+            foreach(var _item in item)
+            {
+                if (_item.Value.ToString()=="true")
+                {
+                    return true;
+                }
+                else
+                {
+                    if (_item.Value != ""&&_item.Value.ToString()!="false")
+                    {
+                        return true;
+                    }
+                }               
+            }
+            return false;
         }
     }
 }

@@ -20,14 +20,17 @@
                 foreach (DateTime dt in dates)
                 {
                     <div class="content-block-title">@Html.Encode(dt.ToString("yyyy-MM-dd"))</div>
-                    <div class="list-block">
+                    <div class="list-block media-list">
                         <ul>
                             @foreach (var item in Model.SingleOrDefault(m => m.Subscribe == dt).ProductionDetails)
                             {
                                 <li class="item-content">
                                     <div class="item-inner">
-                                        <div class="item-title">@Html.Encode(item.Product.Name)</div>
-                                        <div class="item-after">@Html.Encode(item.ProductionQty)</div>
+                                        <div class="item-title-row">
+                                            <div class="item-title">@Html.Encode(item.Product.SimpleName)</div>
+                                            <div class="item-after">@Html.Encode(item.ProductionQty)</div>  
+                                        </div>
+                                        <div class="item-subtitle color-gray"><span>品类:@Html.Encode(item.Product.ProductClass.ProductClassName)</span>&nbsp;<span>规格:@Html.Encode(item.Product.Specification)</span></div>                                                        
                                     </div>
                                 </li>
                             }

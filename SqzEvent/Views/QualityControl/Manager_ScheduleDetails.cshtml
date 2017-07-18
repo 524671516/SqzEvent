@@ -4,7 +4,7 @@
 @foreach (FactoryGroup group in ViewBag.FG)
 {
     <div class="content-block-title">@Html.Encode(group.FactoryName)</div>
-    <div class="list-block">
+    <div class="list-block media-list">
         <ul>
             @foreach (var item in Model.Where(m => m.FactoryId == group.FactoryId))
                 {
@@ -12,8 +12,11 @@
                     {
                     <li class="item-content">
                         <div class="item-inner">
-                            <div class="item-title">@Html.Encode(item.ProductName)</div>
-                            <div class="item-after">@Html.Encode(item.Qty) / @Html.Encode(item.ProductionPlan)</div>
+                            <div class="item-title-row">
+                                <div class="item-title">@Html.Encode(item.ProductName)</div>
+                                <div class="item-after">@Html.Encode(item.Qty) / @Html.Encode(item.ProductionPlan)</div>
+                            </div>
+                            <div class="item-subtitle color-gray"><span>品类:@Html.Encode(item.ProductClassName)</span>&nbsp;<span>规格:@Html.Encode(item.Specification)</span></div>
                         </div>
                     </li>
                 }

@@ -138,7 +138,7 @@ textarea.invalid-input {
 }
 /*个人信息展示页样式*/
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 .img-center {

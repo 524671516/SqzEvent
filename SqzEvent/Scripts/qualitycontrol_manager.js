@@ -508,20 +508,93 @@ myApp.onPageInit('Add-schedule', function (page) {
         value: [currentYear, currentMonth],
         cols: time_col
     });
-    $$("#FactoryId").on("change", function () {
-        if ($$("#FactoryId").val() != "") {
+    $$("#DateList").on("change", function () {
+        $$("#tempalate-content").html("");
+        if ($("#ProductId").val() != "") {
             $$.ajax({
                 url: "/QualityControl/Manager_AddSchedulePartial",
                 data: {
                     fid: $$("#FactoryId").val(),
-                    date: $$("#DateList").val()+"-01"
+                    pid: $$("#ProductId").val(),
+                    date: $$("#DateList").val()
                 },
                 success: function (data) {
-                    $$(".tempalate-content").html(data);
+                    $$("#tempalate-content").html(data);
+                },
+                error: function (data) {
+                    myApp.alert("请求失败。")
                 }
             })
-        } else {
-            $$(".tempalate-content").html("");
+        }
+    });
+    $$("#FactoryId").on("change", function () {
+        $$("#tempalate-content").html("");
+        $("#ProductId").html("<option value=\"\">- 请选择 -</option>");
+        $("#ProductId").parent().find(".smart-select-value").html("- 请选择 -")
+        $("#ProductClassId").html("<option value=\"\">- 请选择 -</option>");
+        $("#ProductClassId").parent().find(".smart-select-value").html("- 请选择 -")
+        if ($$("#FactoryId").val() != "") {
+            $$.ajax({
+                url: "/QualityControl/RefreshQualityProductClassListAjax",
+                type:"post",
+                data: {
+                    factoryId: $$("#FactoryId").val(),
+                },
+                success: function (data) {
+                    $$("#ProductClassId").html("").append("<option value=\"\">- 请选择 -</option>")
+                    var _data = JSON.parse(data);
+                    var _len = _data.content.length;
+                    if (_data.result == "SUCCESS") {
+                        for (var i = 0; i < _len; i++) {
+                            $$("#ProductClassId").append("<option value=\"" + _data.content[i].Id + "\">" + _data.content[i].Name + "</option>");
+                        }
+                    }
+                }
+            })
+        }
+    })
+    $$("#ProductClassId").on("change", function () {
+        $$("#tempalate-content").html("");
+        $("#ProductId").html("<option value=\"\">- 请选择 -</option>");
+        $("#ProductId").parent().find(".smart-select-value").html("- 请选择 -")
+        if ($$("#ProductClassId").val() != "") {
+            $$.ajax({
+                url: "/QualityControl/RefreshQualityTestProductListAjax",
+                type: "post",
+                data: {
+                    factoryId: $$("#FactoryId").val(),
+                    productclassId: $$("#ProductClassId").val()
+                },
+                success: function (data) {
+                    $$("#ProductId").html("").append("<option value=\"\">- 请选择 -</option>")
+                    var _data = JSON.parse(data);
+                    var _len = _data.content.length;
+                    if (_data.result == "SUCCESS") {
+                        for (var i = 0; i < _len; i++) {
+                            $$("#ProductId").append("<option value=\"" + _data.content[i].Id + "\">" + _data.content[i].Name + "</option>");
+                        }
+                    }
+                }
+            })
+        }
+    })
+    $$("#ProductId").on("change", function () {
+        $$("#tempalate-content").html("");
+        if ($("#ProductId").val() != "") {
+            $$.ajax({
+                url: "/QualityControl/Manager_AddSchedulePartial",
+                data: {
+                    fid: $$("#FactoryId").val(),
+                    pid: $$("#ProductId").val(),
+                    date: $$("#DateList").val()
+                },
+                success: function (data) {
+                    $$("#tempalate-content").html(data);
+                },
+                error: function (data) {
+                    myApp.alert("请求失败。")
+                }
+            })
         }
     })
     $("#manager_addschedule-form").validate({

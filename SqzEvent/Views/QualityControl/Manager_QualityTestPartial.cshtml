@@ -1,36 +1,89 @@
 ﻿@model IEnumerable<SqzEvent.Models.QualityTest>
+@using SqzEvent.Models
 @if (Model.Count() != 0)
 {
     <div class="list-block media-list bottom-list">
         <ul>
             @foreach (var item in Model)
             {
-                <li class="swipeout" data-url="@item.Id">
-                    <div class="swipeout-content">
-                        @if (item.EvalResult)
+                if (ViewBag.version == "New")
+                {
+                    {
+                        ViewBag.total = Newtonsoft.Json.JsonConvert.DeserializeObject<QCContent>(item.Values).CategoryItems.Count();
+                        ViewBag.has = Newtonsoft.Json.JsonConvert.DeserializeObject<QCContent>(item.Values).CategoryItems.Where(m => m.State == true).Count();
+                    }
+                    <li class="swipeout" data-url="@item.Id">
+                        <div class="swipeout-content">
+                            @if (item.EvalResult)
                         {
-                            <a href="/QualityControl/Manager_QualityTestDetail?qtid=@item.Id" class="item-link item-content random-param pass-border">
-                                <div class="item-inner">
-                                    <div class="item-title-row">
-                                        <div class="item-title">@Html.Encode(item.Product.SimpleName) <span style="font-weight:100">(@Html.Encode(item.ProductionQty) 盒)</span></div>
-                                        <div class="item-after">@Html.Encode(item.ApplyTime.ToString("HH:mm"))</div>
+                                <a href="/QualityControl/QualityTestNewVersionDetails?qtId=@item.Id" class="item-link item-content random-param pass-border">
+                                    <div class="item-inner">
+                                        <div class="item-title-row">
+                                            <div class="item-title">@Html.Encode(item.Product.SimpleName)<span><span style="font-weight:500">&nbsp;进度:@Html.Encode(ViewBag.has)/@Html.Encode(ViewBag.total)</span></span></div>
+                                            <div class="item-after">@Html.Encode(item.ApplyTime.ToString("HH:mm"))</div>
+                                        </div>
+                                        <div class="item-subtitle color-gray"><span>@Html.Encode(item.Factory.SimpleName)</span>&nbsp;<span>(@Html.Encode(item.ProductionQty) 盒)</span></div>
+                                        <div class="item-subtitle color-gray"><span>品类:@Html.Encode(item.Product.ProductClass.ProductClassName)</span>&nbsp;<span>规格:@Html.Encode(item.Product.Specification)</span></div>
                                     </div>
-                                </div>
-                            </a>
-                        }
-                        else
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="/QualityControl/QualityTestNewVersionDetails?qtId=@item.Id" class="item-link item-content random-param fail-border">
+                                    <div class="item-inner">
+                                        <div class="item-title-row">
+                                            <div class="item-title">@Html.Encode(item.Product.SimpleName)<span><span style="font-weight:500">&nbsp;进度:@Html.Encode(ViewBag.has)/@Html.Encode(ViewBag.total)</span></span></div>
+                                            <div class="item-after">@Html.Encode(item.ApplyTime.ToString("HH:mm"))</div>
+                                        </div>
+                                        <div class="item-subtitle color-gray"><span>@Html.Encode(item.Factory.SimpleName)</span>&nbsp;<span>(@Html.Encode(item.ProductionQty) 盒)</span></div>
+                                        <div class="item-subtitle color-gray"><span>品类:@Html.Encode(item.Product.ProductClass.ProductClassName)</span>&nbsp;<span>规格:@Html.Encode(item.Product.Specification)</span></div>
+                                    </div>
+                                </a>
+                            }
+                        </div>
+                        <div class="swipeout-actions-right">
+                            <a href="#" class="swipeout-delete" data-confirm="是否确认删除" data-close-on-cancel="true" data-url="@item.Id">删除</a>
+                        </div>
+                    </li>
+                }
+                else
+                {
+                    <li class="swipeout" data-url="@item.Id">
+                        <div class="swipeout-content">
+                            @if (item.EvalResult)
                         {
-                            <a href="/QualityControl/Manager_QualityTestDetail?qtId=@item.Id" class="item-link item-content random-param fail-border">
-                                <div class="item-inner">
-                                    <div class="item-title-row">
-                                        <div class="item-title">@Html.Encode(item.Product.SimpleName) <span style="font-weight:100">(@Html.Encode(item.ProductionQty) 盒)</span></div>
-                                        <div class="item-after">@Html.Encode(item.ApplyTime.ToString("HH:mm"))</div>
+                                <a href="/QualityControl/QualityTestDetails?qtId=@item.Id" class="item-link item-content random-param pass-border">
+                                    <div class="item-inner">
+                                        <div class="item-title-row">
+                                            <div class="item-title">@Html.Encode(item.Product.SimpleName)</div>
+                                            <div class="item-after">@Html.Encode(item.ApplyTime.ToString("HH:mm"))</div>
+                                        </div>
+                                        <div class="item-subtitle color-gray"><span>@Html.Encode(item.Factory.SimpleName)</span>&nbsp;<span>(@Html.Encode(item.ProductionQty) 盒)</span></div>
+                                        <div class="item-subtitle color-gray"><span>品类:@Html.Encode(item.Product.ProductClass.ProductClassName)</span>&nbsp;<span>规格:@Html.Encode(item.Product.Specification)</span></div>
                                     </div>
-                                </div>
-                            </a>
-                        }
-                    </div>
-                </li>
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="/QualityControl/QualityTestDetails?qtId=@item.Id" class="item-link item-content random-param fail-border">
+                                    <div class="item-inner">
+                                        <div class="item-title-row">
+                                            <div class="item-title">@Html.Encode(item.Product.SimpleName)</div>
+                                            <div class="item-after">@Html.Encode(item.ApplyTime.ToString("HH:mm"))</div>
+                                        </div>
+                                        <div class="item-subtitle color-gray"><span>@Html.Encode(item.Factory.SimpleName)</span>&nbsp;<span>(@Html.Encode(item.ProductionQty) 盒)</span></div>
+                                        <div class="item-subtitle color-gray"><span>品类:@Html.Encode(item.Product.ProductClass.ProductClassName)</span>&nbsp;<span>规格:@Html.Encode(item.Product.Specification)</span></div>
+                                    </div>
+                                </a>
+                            }
+                        </div>
+                        <div class="swipeout-actions-right">
+                            <a href="#" class="swipeout-delete" data-confirm="是否确认删除" data-close-on-cancel="true" data-url="@item.Id">删除</a>
+                        </div>
+                    </li>
+                }
+
+
             }
         </ul>
     </div>
