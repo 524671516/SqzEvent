@@ -122,7 +122,7 @@
                                                                     <div class="item-inner">
                                                                         <div class="item-title label">@Html.Encode(_item.Title)</div>
                                                                         <div class="item-input">
-                                                                            <input type="digits" class="item-input-right" id="@_item.Key" name="@_item.Key" placeholder="请输入数字" />
+                                                                            <input type="digits" class="item-input-right" id="@_item.Key" name="@_item.Key" placeholder="请输入数字" value="@_item.Value"/>
                                                                         </div>
                                                                         <div class="item-after"></div>
                                                                     </div>
@@ -137,7 +137,7 @@
                                                                     <div class="item-inner">
                                                                         <div class="item-title label">@Html.Encode(_item.Title)</div>
                                                                         <div class="item-input">
-                                                                            <input type="number" class="item-input-right" id="@_item.Key" name="@_item.Key" placeholder="请输入数字" />
+                                                                            <input type="number" class="item-input-right" id="@_item.Key" name="@_item.Key" placeholder="请输入数字" value="@_item.Value" />
                                                                         </div>
                                                                         <div class="item-after"></div>
                                                                     </div>
@@ -152,7 +152,7 @@
                                                                     <div class="item-inner">
                                                                         <div class="item-title label">@Html.Encode(_item.Title)</div>
                                                                         <div class="item-input">
-                                                                            <input type="text" class="item-input-right" id="@_item.Key" name="@_item.Key" placeholder="请输入文字" />
+                                                                            <input type="text" class="item-input-right" id="@_item.Key" name="@_item.Key" placeholder="请输入文字" value="@_item.Value"/>
                                                                         </div>
                                                                         <div class="item-after"></div>
                                                                     </div>
@@ -167,7 +167,7 @@
                                                                     <div class="item-inner">
                                                                         <div class="item-title label">@Html.Encode(_item.Title)</div>
                                                                         <div class="item-input">
-                                                                            <input type="text" class="item-input-right scan-input" id="@_item.Key" name="@_item.Key" placeholder="点击扫描条形码" readonly />
+                                                                            <input type="text" class="item-input-right scan-input" id="@_item.Key" name="@_item.Key" placeholder="点击扫描条形码" readonly value="@_item.Value"/>
                                                                         </div>
                                                                         <div class="item-after"></div>
                                                                     </div>
