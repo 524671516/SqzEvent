@@ -984,7 +984,7 @@ namespace SqzEvent.Controllers
                             QCContentCategory qccc = new QCContentCategory()
                             {
                                 State = _state,
-                                CategoryName = _item.CatetoryName,
+                                CategoryName = _item.CategoryName,
                                 Columns = qccitemlist
                             };
                             cgilist.Add(qccc);
