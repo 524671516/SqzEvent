@@ -11,10 +11,7 @@
         </div>
         <div class="center sliding"><strong>质检信息详情</strong></div>
         <div class="right">
-            @if (Model.EvalResult == false)
-            {
                 <a href="#" class="link" id="edit-qt">保存</a>
-            }
         </div>
     </div>
 </div>
@@ -183,7 +180,7 @@
                                                                     <div class="item-content">
                                                                         <div class="item-inner">
                                                                             <div class="item-title">上传照片</div>
-                                                                            <div class="item-after"><abbr id="@Html.Encode(_item.Key + "-imgcount")">0</abbr>/1</div>
+                                                                            <div class="item-after"><abbr id="@Html.Encode(_item.Key + "-imgcount")">0</abbr>/5</div>
                                                                         </div>
                                                                     </div>
                                                                     <div class="item-content middle-content">
@@ -199,7 +196,7 @@
                                                             else
                                                             {
                                                                 <li>
-                                                                    <input class="one_photo" data-val="true" data-val-length="字段 Photos 必须是最大长度为 256 的字符串。" data-val-length-max="256" id="@_item.Key" name="@_item.Key" type="hidden" value="@_item.Value">
+                                                                    <input class="second_photo" data-val="true" data-val-length="字段 Photos 必须是最大长度为 256 的字符串。" data-val-length-max="256" id="@_item.Key" name="@_item.Key" type="hidden" value="@_item.Value">
                                                                     <a href="javascript:;" class="item-content item-link qc-photos" data-photos="@_item.Value">
                                                                         <div class="item-inner">
                                                                             <div class="item-title">检验图片</div>

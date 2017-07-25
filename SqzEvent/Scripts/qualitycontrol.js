@@ -688,7 +688,25 @@ myApp.onPageInit("addqualitytest", function (page) {
         },
         errorClass: "invalid-input",
         submitHandler: function (form) {
-            CheckError("addqualitytest-submit", "addqualitytest-form");
+            var nophotoarry = [];
+            var pass = false;
+            $(".one_photo").each(function () {
+                if ($(this).val() == "") {
+                    nophotoarry.push($(this).parents(".accordion-item").find(".item-title").html())
+                } else {
+                    pass = true;
+                }
+            });
+            if (pass) {
+                CheckError("addqualitytest-submit", "addqualitytest-form");
+            } else {
+                if (nophotoarry.length > 0) {
+                    $addqualitytestsubmit.prop("disabled", false).removeClass("color-gray");
+                    myApp.alert(nophotoarry[0] + "需要添加图片")
+                } else {
+                    CheckError("addqualitytest-submit", "addqualitytest-form");
+                }
+            }
         }
     });
     $$("#FactoryId").on("change", function () {
@@ -769,7 +787,7 @@ myApp.onPageInit("addqualitytest", function (page) {
                         var pid = $(this).attr("Id");
                         var uid = $(this).parent().parent().find("ul").attr("Id");
                         var countid = $(this).parent().parent().parent().parent().find("abbr").attr("Id");
-                        uploadCheckinFile("addqualitytest-form", uid, pid, countid, 1);
+                        uploadCheckinFile("addqualitytest-form", uid, pid, countid, 5);
                     });
                     $(".item-after").on("click", function () {
                         var _self = $(this).parent().parent().parent().parent();
@@ -834,27 +852,70 @@ myApp.onPageInit("qualitytestdetails", function (page) {
     })
     PhotoBrowser("qualitytestdetails");
     $("#edit-qt").on("click", function () {
-        $("#edit-qt-form").ajaxSubmit(function (data) {
-            if (data.result == "SUCCESS") {
-                mainView.router.back();
-                myApp.addNotification({
-                    title: "通知",
-                    message: "表单修改成功"
-                });
-                setTimeout(function () {
-                    myApp.closeNotification(".notifications");
-                }, 2e3);
-            } else {
-                mainView.router.back();
-                myApp.addNotification({
-                    title: "通知",
-                    message: "表单修改失败"
-                });
-                setTimeout(function () {
-                    myApp.closeNotification(".notifications");
-                }, 2e3);
-            }
-        });
+        if (!$(this).hasClass("color-gray")) {
+           $(this).prop("disabled", true).addClass("color-gray");
+           var nophotoarry = [];
+           var pass = false;
+           $(".one_photo").each(function () {
+               if ($(this).val() == "") {
+                   nophotoarry.push($(this).parents(".accordion-item").find(".item-title").html())
+               } else {
+                   pass = true;
+               }
+           });
+           if (pass) {
+               $("#edit-qt-form").ajaxSubmit(function (data) {
+                   if (data.result == "SUCCESS") {
+                       mainView.router.back();
+                       myApp.addNotification({
+                           title: "通知",
+                           message: "表单修改成功"
+                       });
+                       setTimeout(function () {
+                           myApp.closeNotification(".notifications");
+                       }, 2e3);
+                   } else {
+                       mainView.router.back();
+                       myApp.addNotification({
+                           title: "通知",
+                           message: "表单修改失败"
+                       });
+                       $("#edit-qt").prop("disabled", false).removeClass("color-gray");
+                       setTimeout(function () {
+                           myApp.closeNotification(".notifications");
+                       }, 2e3);
+                   }
+               });
+           } else {
+               if (nophotoarry.length > 0) {
+                   $("#edit-qt").prop("disabled", false).removeClass("color-gray");
+                   myApp.alert(nophotoarry[0] + "需要添加图片")
+               } else {
+                   $("#edit-qt-form").ajaxSubmit(function (data) {
+                       if (data.result == "SUCCESS") {
+                           mainView.router.back();
+                           myApp.addNotification({
+                               title: "通知",
+                               message: "表单修改成功"
+                           });
+                           setTimeout(function () {
+                               myApp.closeNotification(".notifications");
+                           }, 2e3);
+                       } else {
+                           mainView.router.back();
+                           myApp.addNotification({
+                               title: "通知",
+                               message: "表单修改失败"
+                           });
+                           $("#edit-qt").prop("disabled", false).removeClass("color-gray");
+                           setTimeout(function () {
+                               myApp.closeNotification(".notifications");
+                           }, 2e3);
+                       }
+                   });
+               }
+           }
+        }
     })
 })
 
