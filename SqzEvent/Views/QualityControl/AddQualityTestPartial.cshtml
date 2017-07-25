@@ -12,19 +12,17 @@
         </div>
     </li>
 </ul>
-<div class="content-block-title">检验类型(请根据检测阶段选择性填写)</div>
+<div class="content-block-title">检验类型(如某大项无需检测可左滑删除)</div>
 <ul>    
     @foreach (var list in Model)
     {
         <li class="swipeout accordion-item" data-list-id="1">
-            <div class="swipeout-content">
-                <a href="#" class="item-content item-link">
-                    <div class="item-inner">
-                        <div class="item-title">@Html.Encode(list.CategoryName)</div>
-                        <div class="item-after"></div>
-                    </div>
-                    </a>
-            </div>
+            <a href="#" class="item-content item-link swipeout-content">
+                <div class="item-inner">
+                    <div class="item-title">@Html.Encode(list.CategoryName)</div>
+                    <div class="item-after"></div>
+                </div>
+            </a>
             <div class="swipeout-actions-right">
                 <a href="#" class="swipeout-delete">删除</a>
             </div>
