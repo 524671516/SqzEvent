@@ -16,13 +16,18 @@
 <ul>    
     @foreach (var list in Model)
     {
-        <li class="accordion-item" data-list-id="1">
-            <a href="#" class="item-content item-link">
-                <div class="item-inner">
-                    <div class="item-title">@Html.Encode(list.CatetoryName)</div>
-                    <div class="item-after"></div>
-                </div>
-            </a>
+        <li class="swipeout accordion-item" data-list-id="1">
+            <div class="swipeout-content">
+                <a href="#" class="item-content item-link">
+                    <div class="item-inner">
+                        <div class="item-title">@Html.Encode(list.CategoryName)</div>
+                        <div class="item-after"></div>
+                    </div>
+                    </a>
+            </div>
+            <div class="swipeout-actions-right">
+                <a href="#" class="swipeout-delete">删除</a>
+            </div>
             <div class="accordion-item-content">
                 <div class="content-block" style="padding:0">
                     <ul>
