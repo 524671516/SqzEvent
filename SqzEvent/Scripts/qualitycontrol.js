@@ -3,7 +3,8 @@ var myApp = new Framework7({
     modalTitle: '生产管理',
     pushState: true,
     modalButtonOk: "确定",
-    modalButtonCancel:"取消"
+    modalButtonCancel: "取消",
+    cache:false
 });
 var $$ = Dom7;
 var mainView = myApp.addView('.view-main', {
@@ -769,6 +770,13 @@ myApp.onPageInit("addqualitytest", function (page) {
                         var uid = $(this).parent().parent().find("ul").attr("Id");
                         var countid = $(this).parent().parent().parent().parent().find("abbr").attr("Id");
                         uploadCheckinFile("addqualitytest-form", uid, pid, countid, 1);
+                    });
+                    $(".item-after").on("click", function () {
+                        var _self = $(this).parent().parent().parent().parent();
+                        myApp.confirm("是否确认删除此检测项", "提示", function () {
+                            _self.remove();
+                        });
+                        return false;
                     })
                 },
                 error: function (data) {
@@ -833,12 +841,18 @@ myApp.onPageInit("qualitytestdetails", function (page) {
                     title: "通知",
                     message: "表单修改成功"
                 });
+                setTimeout(function () {
+                    myApp.closeNotification(".notifications");
+                }, 2e3);
             } else {
                 mainView.router.back();
                 myApp.addNotification({
                     title: "通知",
                     message: "表单修改失败"
                 });
+                setTimeout(function () {
+                    myApp.closeNotification(".notifications");
+                }, 2e3);
             }
         });
     })

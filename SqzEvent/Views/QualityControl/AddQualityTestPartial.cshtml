@@ -12,17 +12,21 @@
         </div>
     </li>
 </ul>
-<div class="content-block-title">检验类型(请根据检测阶段选择性填写)</div>
-<ul>    
+<div class="content-block-title">检验类型</div>
+<ul class="accordion-list">    
     @foreach (var list in Model)
     {
         <li class="accordion-item" data-list-id="1">
-            <a href="#" class="item-content item-link">
-                <div class="item-inner">
-                    <div class="item-title">@Html.Encode(list.CategoryName)</div>
-                    <div class="item-after"></div>
-                </div>
-            </a>
+            <div class="accordion-item-toggle">
+                <a href="#" class="item-content item-link">
+                    <div class="item-inner">
+                        <div class="item-title">@Html.Encode(list.CategoryName)</div>
+                        <div class="item-after">
+                           <span class="cannel_item color-red button button-fill">删除</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
             <div class="accordion-item-content">
                 <div class="content-block" style="padding:0">
                     <ul>

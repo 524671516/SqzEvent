@@ -958,50 +958,75 @@ namespace SqzEvent.Controllers
                         List<QCContentCategory> cgilist = new List<QCContentCategory>();
                         foreach (var _item in list)
                         {
+                            bool isdelete = false;
                             List<QCContentItem> qccitemlist = new List<QCContentItem>();
                             foreach (var __item in _item.QCTemplateColumns)
                             {                               
                                 string _value;
                                 if (__item.ValueTypeId == 1)
                                 {
-                                    _value = form[__item.KeyName] == null ? "false" : "true";
+
+                                    try
+                                    {
+                                        _value = form[__item.KeyName] == null ? "false" : "true";
+                                    }
+                                    catch (Exception)
+                                    {
+                                        isdelete = !isdelete;
+                                        continue;
+                                    }
                                 }
                                 else
                                 {
-                                    _value = form[__item.KeyName].ToString();
-                                }                              
-                                QCContentItem qcci = new QCContentItem()
+                                    try
+                                    {
+                                        _value = form[__item.KeyName].ToString();
+                                    }
+                                    catch (Exception)
+                                    {
+                                        isdelete = !isdelete;
+                                        continue;
+                                    }
+                                    
+                                }
+                                if (!isdelete)
                                 {
+                                    QCContentItem qcci = new QCContentItem()
+                                    {
 
-                                    Type = __item.ValueTypeId,
-                                    Key = __item.KeyName,
-                                    Title=__item.KeyTitle,
-                                    Value=_value                                  
-                                };
-                                qccitemlist.Add(qcci);
+                                        Type = __item.ValueTypeId,
+                                        Key = __item.KeyName,
+                                        Title = __item.KeyTitle,
+                                        Value = _value
+                                    };
+                                    qccitemlist.Add(qcci);
+                                }                                                           
                             }
-                            bool _state = IsEmpty(qccitemlist);
-                            QCContentCategory qccc = new QCContentCategory()
+                            if (!isdelete)
                             {
-                                State = _state,
-                                CategoryName = _item.CategoryName,
-                                Columns = qccitemlist
-                            };
-                            cgilist.Add(qccc);
+                                bool _state = IsEmpty(qccitemlist);
+                                QCContentCategory qccc = new QCContentCategory()
+                                {
+                                    State = _state,
+                                    CategoryName = _item.CategoryName,
+                                    Columns = qccitemlist
+                                };
+                                cgilist.Add(qccc);
+                            }
                         }
+                        var startTime = DateTime.Now.Date;
                         qcc.CategoryItems = cgilist;
                         item.EvalResult = EvalQualityTest(cgilist);
                         item.Values = Newtonsoft.Json.JsonConvert.SerializeObject(qcc);
-                    }
-                    try
-                    {
-                        var _date = DateTime.Now.Date;
-                        var schedule = _qcdb.ProductionSchedule.SingleOrDefault(m => m.FactoryId == item.FactoryId && m.Subscribe == _date && m.ProductId == item.ProductId);
-                    }
-                    catch
-                    {
-                        return Content("FAIL");
-                    }
+                        try
+                        {
+                            var schedule = _qcdb.ProductionSchedule.SingleOrDefault(m => m.FactoryId == item.FactoryId && m.Subscribe == startTime && m.ProductId == item.ProductId);
+                        }
+                        catch
+                        {
+                            return Content("FAIL");
+                        }
+                    }                    
                     _qcdb.QualityTest.Add(item);
                     await _qcdb.SaveChangesAsync();
                     return Content("SUCCESS");
@@ -1055,40 +1080,7 @@ namespace SqzEvent.Controllers
                     List<QCContentCategory> qccclist = new List<QCContentCategory>();
                     foreach (var _item in valuelist.CategoryItems)
                     {
-                        if (_item.State == true)
-                        {
-                            List<QCContentItem> qccilist = new List<QCContentItem>();
-                            foreach (var __item in _item.Columns)
-                            {
-                                string _value;
-                                if (__item.Type == 6&&__item.Value=="")
-                                {
-                                    _value = form[__item.Key].ToString();
-                                }
-                                else
-                                {
-                                    _value = __item.Value;
-                                }                             
-                                QCContentItem qcci = new QCContentItem()
-                                {
-                                    Type = __item.Type,
-                                    Key = __item.Key,
-                                    Title = __item.Title,
-                                    Value = _value
-                                };
-                                qccilist.Add(qcci);
-                            }
-                            bool _state = IsEmpty(qccilist);
-                            QCContentCategory qccc = new QCContentCategory()
-                            {
-                                State = _state,
-                                CategoryName = _item.CategoryName,
-                                Columns = qccilist
-                            };
-                            qccclist.Add(qccc);
-                        }
-                        else
-                        {
+ 
                             List<QCContentItem> qccilist = new List<QCContentItem>();
                             foreach (var __item in _item.Columns)
                             {                               
@@ -1099,9 +1091,9 @@ namespace SqzEvent.Controllers
                                 }
                                 else
                                 {
-                                    _value = form[__item.Key].ToString();
+                                _value = form[__item.Key].ToString();
                                 }
-                                QCContentItem qcci = new QCContentItem()
+                            QCContentItem qcci = new QCContentItem()
                                 {
                                     Type = __item.Type,
                                     Key=__item.Key,
@@ -1118,13 +1110,13 @@ namespace SqzEvent.Controllers
                                 Columns = qccilist
                             };
                             qccclist.Add(qccc);
-                        }
                     }
                     QCContent qcc = new QCContent
                     {
                         TemplateId = qt.Product.TemplateId
                     };
                     qcc.CategoryItems = qccclist;
+                    var startTime = DateTime.Now.Date;
                     qt.EvalResult = EvalQualityTest(qccclist);
                     qt.Values = Newtonsoft.Json.JsonConvert.SerializeObject(qcc);
                     _qcdb.Entry(qt).State = System.Data.Entity.EntityState.Modified;
@@ -1879,7 +1871,7 @@ namespace SqzEvent.Controllers
         public bool EvalQualityTest(List<QCContentCategory> items)
         {
             foreach(var item in items)
-            {
+            {              
                 if (item.State == false)
                 {
                     return false;
@@ -1888,10 +1880,10 @@ namespace SqzEvent.Controllers
                 {
                     foreach(var _item in item.Columns)
                     {
-                        if (_item.Value.ToString() == "false"||_item.Value=="")
-                        {
-                            return false;
-                        }
+                            if (_item.Value.ToString() == "false" || _item.Value == "")
+                            {
+                                return false;
+                            }                    
                     }
                 }
             }
