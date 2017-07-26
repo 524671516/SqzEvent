@@ -15,18 +15,26 @@
     @Html.HiddenFor(model => model.CheckinRemark)
     @Html.HiddenFor(model => model.TemplateValues)
     <div class="content-block-title">产量数据</div>
-    <div class="list-block">
+    <div class="list-block media-list">
         <ul>
             @foreach (Product p in ViewBag.ProductList)
             {
             <li>
                 <div class="item-content">
                     <div class="item-inner">
-                        <div class="item-title label" style="width:50%;">@Html.Encode(p.SimpleName+(p.Specification))</div>
-                        <div class="item-input">
-                            <input type="digits" placeholder="数量" class="item-input-right isnumber" id="@p.ProductCode" name="@p.ProductCode"/>
+                        <div class="item-title-row">
+                            <div class="item-title label" style="width:50%;">@Html.Encode(p.SimpleName)</div>
+                            <div class="item-input">
+                                <input type="digits" placeholder="数量" class="item-input-right isnumber" id="@p.ProductCode" name="@p.ProductCode" style="height:40px;"/>
+                            </div>
+                            <div class="item-after color-black">盒</div>
                         </div>
-                        <div class="item-after color-black">盒</div>
+                        <div class="item-subtitle color-gray"><span>康尔福</span>&nbsp;<span>(555 盒)</span></div>
+                        <div class="item-subtitle color-gray">
+                            <span>品类:@Html.Encode(p.ProductClass.ProductClassName)</span>&nbsp;<span>
+                                规格:@Html.Encode(p.Specification)
+                            </span>
+                        </div>
                     </div>
                 </div>
             </li>
