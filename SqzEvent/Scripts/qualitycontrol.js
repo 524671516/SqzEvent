@@ -311,10 +311,10 @@ myApp.onPageInit("qualityregulartest", function (page) {
         }
     })
     $$("#qualityregulartest").on("change", "#FactoryId", function () {
-        $$("#product-select").find(".item-after").html("- 请选择 -");
-        $$("#productclass-select").find(".item-after").html("- 请选择 -");
         $("#ProductId").html("<option value=\"\">- 请选择 -</option>");
         $("#ProductId").parent().find(".smart-select-value").html("- 请选择 -")
+        $("#ProductBoxId").html("<option value=\"\">- 请选择 -</option>");
+        $("#ProductBoxId").parent().find(".smart-select-value").html("- 请选择 -")
         $("#ProductClassId").html("<option value=\"\">- 请选择 -</option>");
         $("#ProductClassId").parent().find(".smart-select-value").html("- 请选择 -")
         if ($$("#FactoryId").val() != "") {
@@ -330,7 +330,7 @@ myApp.onPageInit("qualityregulartest", function (page) {
                     var _len = _data.content.length;
                     if (_data.result == "SUCCESS") {
                         for (var i = 0; i < _len; i++) {
-                            $$("#ProductClassId").append("<option value=\"" + _data.content[i].Id + "\">" + _data.content[i].Name + "</option>");
+                            $$("#ProductClassId").append("<option value=\"" + _data.content[i].Name + "\">" + _data.content[i].Name + "</option>");
                         }
                     }
                 }
@@ -338,16 +338,42 @@ myApp.onPageInit("qualityregulartest", function (page) {
         }
     })
     $$("#qualityregulartest").on("change", "#ProductClassId", function () {
-        $$("#product-select").find(".item-after").html("- 请选择 -");
         $("#ProductId").html("<option value=\"\">- 请选择 -</option>");
         $("#ProductId").parent().find(".smart-select-value").html("- 请选择 -")
+        $("#ProductBoxId").html("<option value=\"\">- 请选择 -</option>");
+        $("#ProductBoxId").parent().find(".smart-select-value").html("- 请选择 -")
         if ($$("#ProductClassId").val() != "") {
+            $$.ajax({
+                url: "/QualityControl/RefreshQualityBoxClassListAjax",
+                type: "post",
+                data: {
+                    factoryId: $$("#FactoryId").val(),
+                    productClassName: $$("#ProductClassId").val()
+                },
+                success: function (data) {
+                    $$("#ProductBoxId").html("").append("<option value=\"\">- 请选择 -</option>")
+                    var _data = JSON.parse(data);
+                    var _len = _data.content.length;
+                    if (_data.result == "SUCCESS") {
+                        for (var i = 0; i < _len; i++) {
+                            $$("#ProductBoxId").append("<option value=\"" + _data.content[i].Id + "\">" + _data.content[i].Name + "</option>");
+                        }
+                    }
+                }
+            })
+        }
+    })
+    $$("#qualityregulartest").on("change", "#ProductBoxId", function () {
+        $("#ProductId").html("<option value=\"\">- 请选择 -</option>");
+        $("#ProductId").parent().find(".smart-select-value").html("- 请选择 -")
+        if ($$("#ProductBoxId").val() != "") {
             $$.ajax({
                 url: "/QualityControl/RefreshQualityTestProductListAjax",
                 type: "post",
                 data: {
                     factoryId: $$("#FactoryId").val(),
-                    productclassId: $$("#ProductClassId").val()
+                    productClassName: $$("#ProductClassId").val(),
+                    productClassId: $$("#ProductBoxId").val()
                 },
                 success: function (data) {
                     $$("#ProductId").html("").append("<option value=\"\">- 请选择 -</option>")
@@ -688,7 +714,25 @@ myApp.onPageInit("addqualitytest", function (page) {
         },
         errorClass: "invalid-input",
         submitHandler: function (form) {
-            CheckError("addqualitytest-submit", "addqualitytest-form");
+            var nophotoarry = [];
+            var pass = false;
+            $(".one_photo").each(function () {
+                if ($(this).val() == "") {
+                    nophotoarry.push($(this).parents(".accordion-item").find(".item-title").html())
+                } else {
+                    pass = true;
+                }
+            });
+            if (pass) {
+                CheckError("addqualitytest-submit", "addqualitytest-form");
+            } else {
+                if (nophotoarry.length > 0) {
+                    $addqualitytestsubmit.prop("disabled", false).removeClass("color-gray");
+                    myApp.alert(nophotoarry[0] + "需要添加图片")
+                } else {
+                    CheckError("addqualitytest-submit", "addqualitytest-form");
+                }
+            }
         }
     });
     $$("#FactoryId").on("change", function () {
@@ -697,10 +741,13 @@ myApp.onPageInit("addqualitytest", function (page) {
         $$("#list-type-template").addClass("hidden");
         $("#productli").addClass("hidden")
         $("#productclassli").addClass("hidden")
-        $("#ProductId").html("<option value=\"\">- 请选择 -</option>");
+        $("#productboxli").addClass("hidden")
+        $("#ProductId").html("<option value=\"\" select>- 请选择 -</option>");
         $("#ProductId").parent().find(".smart-select-value").html("- 请选择 -")
         $("#ProductClassId").html("<option value=\"\">- 请选择 -</option>");
         $("#ProductClassId").parent().find(".smart-select-value").html("- 请选择 -")
+        $("#ProductBoxId").html("<option value=\"\">- 请选择 -</option>");
+        $("#ProductBoxId").parent().find(".smart-select-value").html("- 请选择 -")
         if ($$("#FactoryId").val() != "") {
             $$.ajax({
                 url: "/QualityControl/RefreshQualityProductClassListAjax",
@@ -714,9 +761,9 @@ myApp.onPageInit("addqualitytest", function (page) {
                     var _len = _data.content.length;
                     if (_data.result == "SUCCESS") {
                         for (var i = 0; i < _len; i++) {
-                            $$("#ProductClassId").append("<option value=\"" + _data.content[i].Id + "\">" + _data.content[i].Name + "</option>");
+                            $$("#ProductClassId").append("<option value=\"" + _data.content[i].Name + "\">" + _data.content[i].Name + "</option>");
                         }
-                        $("#productclassli").removeClass("hidden")
+                        $("#productclassli").removeClass("hidden");
                     }
                 }
             })
@@ -727,15 +774,48 @@ myApp.onPageInit("addqualitytest", function (page) {
         $$("#list-type-template").html("");
         $$("#list-type-template").addClass("hidden");
         $("#productli").addClass("hidden")
-        $("#ProductId").html("<option value=\"\">- 请选择 -</option>");
+        $("#productboxli").addClass("hidden")
+        $("#ProductBoxId").html("<option value=\"\">- 请选择 -</option>");
+        $("#ProductBoxId").parent().find(".smart-select-value").html("- 请选择 -")
+        $("#ProductId").html("<option value=\"\" select>- 请选择 -</option>");
         $("#ProductId").parent().find(".smart-select-value").html("- 请选择 -")
-        if ($$("#ProductClassId").val() != "") {
+        if ($("#ProductClassId").val() != "") {
+            $$.ajax({
+                url: "/QualityControl/RefreshQualityBoxClassListAjax",
+                type: "post",
+                data: {
+                    factoryId: $$("#FactoryId").val(),
+                    productClassName: $("#ProductClassId").val()
+                },
+                success: function (data) {
+                    $$("#ProductBoxId").html("").append("<option value=\"\">- 请选择 -</option>")
+                    var _data = JSON.parse(data);
+                    var _len = _data.content.length;
+                    if (_data.result == "SUCCESS") {
+                        for (var i = 0; i < _len; i++) {
+                            $$("#ProductBoxId").append("<option value=\"" + _data.content[i].Id + "\">" + _data.content[i].Name + "</option>");
+                        }
+                        $("#productboxli").removeClass("hidden");
+                    }
+                }
+            })
+        }
+    })
+    $$("#ProductBoxId").on("change", function () {
+        $addqualitytestsubmit.prop("disabled", true).addClass("color-gray");
+        $$("#list-type-template").html("");
+        $$("#list-type-template").addClass("hidden");
+        $("#productli").addClass("hidden")
+        $("#ProductId").html("<option value=\"\" select>- 请选择 -</option>");
+        $("#ProductId").parent().find(".smart-select-value").html("- 请选择 -")
+        if ($("#ProductBoxId").val() != "") {
             $$.ajax({
                 url: "/QualityControl/RefreshQualityTestProductListAjax",
                 type: "post",
                 data: {
                     factoryId: $$("#FactoryId").val(),
-                    productclassId: $$("#ProductClassId").val()
+                    productClassName: $("#ProductClassId").val(),
+                    productClassId: $("#ProductBoxId").val()
                 },
                 success: function (data) {
                     $$("#ProductId").html("").append("<option value=\"\">- 请选择 -</option>")
@@ -752,8 +832,10 @@ myApp.onPageInit("addqualitytest", function (page) {
         }
     })
     $$("#ProductId").on("change", function () {
-        $$("#tempalate-content").html("");
-        if ($("#ProductId").val() != "") {
+        $addqualitytestsubmit.prop("disabled", true).addClass("color-gray");
+        $$("#list-type-template").html("");
+        $$("#list-type-template").addClass("hidden");
+        if ($$("#ProductId").val() != "") {
             $$.ajax({
                 url: "/QualityControl/AddQualityTestPartial",
                 data: {
@@ -769,9 +851,9 @@ myApp.onPageInit("addqualitytest", function (page) {
                         var pid = $(this).attr("Id");
                         var uid = $(this).parent().parent().find("ul").attr("Id");
                         var countid = $(this).parent().parent().parent().parent().find("abbr").attr("Id");
-                        uploadCheckinFile("addqualitytest-form", uid, pid, countid, 1);
+                        uploadCheckinFile("addqualitytest-form", uid, pid, countid, 5);
                     });
-                    $(".item-after").on("click", function () {
+                    $("#list-type-template .item-after").on("click", function () {
                         var _self = $(this).parent().parent().parent().parent();
                         myApp.confirm("是否确认删除此检测项", "提示", function () {
                             _self.remove();
@@ -830,31 +912,74 @@ myApp.onPageInit("qualitytestdetails", function (page) {
         var pid = $(this).attr("Id");
         var uid = $(this).parent().parent().find("ul").attr("Id");
         var countid = $(this).parent().parent().parent().parent().find("abbr").attr("Id");
-        uploadCheckinFile("addqualitytest-form", uid, pid, countid, 1);
+        uploadCheckinFile("addqualitytest-form", uid, pid, countid, 5);
     })
     PhotoBrowser("qualitytestdetails");
     $("#edit-qt").on("click", function () {
-        $("#edit-qt-form").ajaxSubmit(function (data) {
-            if (data.result == "SUCCESS") {
-                mainView.router.back();
-                myApp.addNotification({
-                    title: "通知",
-                    message: "表单修改成功"
-                });
-                setTimeout(function () {
-                    myApp.closeNotification(".notifications");
-                }, 2e3);
-            } else {
-                mainView.router.back();
-                myApp.addNotification({
-                    title: "通知",
-                    message: "表单修改失败"
-                });
-                setTimeout(function () {
-                    myApp.closeNotification(".notifications");
-                }, 2e3);
-            }
-        });
+        if (!$(this).hasClass("color-gray")) {
+           $(this).prop("disabled", true).addClass("color-gray");
+           var nophotoarry = [];
+           var pass = false;
+           $(".one_photo").each(function () {
+               if ($(this).val() == "") {
+                   nophotoarry.push($(this).parents(".accordion-item").find(".item-title").html())
+               } else {
+                   pass = true;
+               }
+           });
+           if (pass) {
+               $("#edit-qt-form").ajaxSubmit(function (data) {
+                   if (data.result == "SUCCESS") {
+                       mainView.router.back();
+                       myApp.addNotification({
+                           title: "通知",
+                           message: "表单修改成功"
+                       });
+                       setTimeout(function () {
+                           myApp.closeNotification(".notifications");
+                       }, 2e3);
+                   } else {
+                       mainView.router.back();
+                       myApp.addNotification({
+                           title: "通知",
+                           message: "表单修改失败"
+                       });
+                       $("#edit-qt").prop("disabled", false).removeClass("color-gray");
+                       setTimeout(function () {
+                           myApp.closeNotification(".notifications");
+                       }, 2e3);
+                   }
+               });
+           } else {
+               if (nophotoarry.length > 0) {
+                   $("#edit-qt").prop("disabled", false).removeClass("color-gray");
+                   myApp.alert(nophotoarry[0] + "需要添加图片")
+               } else {
+                   $("#edit-qt-form").ajaxSubmit(function (data) {
+                       if (data.result == "SUCCESS") {
+                           mainView.router.back();
+                           myApp.addNotification({
+                               title: "通知",
+                               message: "表单修改成功"
+                           });
+                           setTimeout(function () {
+                               myApp.closeNotification(".notifications");
+                           }, 2e3);
+                       } else {
+                           mainView.router.back();
+                           myApp.addNotification({
+                               title: "通知",
+                               message: "表单修改失败"
+                           });
+                           $("#edit-qt").prop("disabled", false).removeClass("color-gray");
+                           setTimeout(function () {
+                               myApp.closeNotification(".notifications");
+                           }, 2e3);
+                       }
+                   });
+               }
+           }
+        }
     })
 })
 

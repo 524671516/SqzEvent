@@ -572,10 +572,12 @@ myApp.onPageInit('Add-schedule', function (page) {
         $("#ProductId").parent().find(".smart-select-value").html("- 请选择 -")
         $("#ProductClassId").html("<option value=\"\">- 请选择 -</option>");
         $("#ProductClassId").parent().find(".smart-select-value").html("- 请选择 -")
+        $("#ProductBoxId").html("<option value=\"\">- 请选择 -</option>");
+        $("#ProductBoxId").parent().find(".smart-select-value").html("- 请选择 -")
         if ($$("#FactoryId").val() != "") {
             $$.ajax({
                 url: "/QualityControl/RefreshQualityProductClassListAjax",
-                type:"post",
+                type: "post",
                 data: {
                     factoryId: $$("#FactoryId").val(),
                 },
@@ -585,7 +587,7 @@ myApp.onPageInit('Add-schedule', function (page) {
                     var _len = _data.content.length;
                     if (_data.result == "SUCCESS") {
                         for (var i = 0; i < _len; i++) {
-                            $$("#ProductClassId").append("<option value=\"" + _data.content[i].Id + "\">" + _data.content[i].Name + "</option>");
+                            $$("#ProductClassId").append("<option value=\"" + _data.content[i].Name + "\">" + _data.content[i].Name + "</option>");
                         }
                     }
                 }
@@ -594,15 +596,43 @@ myApp.onPageInit('Add-schedule', function (page) {
     })
     $$("#ProductClassId").on("change", function () {
         $$("#tempalate-content").html("");
+        $("#ProductBoxId").html("<option value=\"\">- 请选择 -</option>");
+        $("#ProductBoxId").parent().find(".smart-select-value").html("- 请选择 -")
         $("#ProductId").html("<option value=\"\">- 请选择 -</option>");
         $("#ProductId").parent().find(".smart-select-value").html("- 请选择 -")
-        if ($$("#ProductClassId").val() != "") {
+        if ($("#ProductClassId").val() != "") {
+            $$.ajax({
+                url: "/QualityControl/RefreshQualityBoxClassListAjax",
+                type: "post",
+                data: {
+                    factoryId: $$("#FactoryId").val(),
+                    productClassName: $$("#ProductClassId").val()
+                },
+                success: function (data) {
+                    $$("#ProductBoxId").html("").append("<option value=\"\">- 请选择 -</option>")
+                    var _data = JSON.parse(data);
+                    var _len = _data.content.length;
+                    if (_data.result == "SUCCESS") {
+                        for (var i = 0; i < _len; i++) {
+                            $$("#ProductBoxId").append("<option value=\"" + _data.content[i].Id + "\">" + _data.content[i].Name + "</option>");
+                        }
+                    }
+                }
+            })
+        }
+    })
+    $$("#ProductBoxId").on("change", function () {
+        $$("#tempalate-content").html("");
+        $("#ProductId").html("<option value=\"\">- 请选择 -</option>");
+        $("#ProductId").parent().find(".smart-select-value").html("- 请选择 -")
+        if ($("#ProductBoxId").val() != "") {
             $$.ajax({
                 url: "/QualityControl/RefreshQualityTestProductListAjax",
                 type: "post",
                 data: {
                     factoryId: $$("#FactoryId").val(),
-                    productclassId: $$("#ProductClassId").val()
+                    productClassName: $$("#ProductClassId").val(),
+                    productClassId: $("#ProductBoxId").val()
                 },
                 success: function (data) {
                     $$("#ProductId").html("").append("<option value=\"\">- 请选择 -</option>")
@@ -619,7 +649,7 @@ myApp.onPageInit('Add-schedule', function (page) {
     })
     $$("#ProductId").on("change", function () {
         $$("#tempalate-content").html("");
-        if ($("#ProductId").val() != "") {
+        if ($$("#ProductId").val() != "") {
             $$.ajax({
                 url: "/QualityControl/Manager_AddSchedulePartial",
                 data: {
