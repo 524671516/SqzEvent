@@ -313,8 +313,6 @@ myApp.onPageInit("qualityregulartest", function (page) {
     $$("#qualityregulartest").on("change", "#FactoryId", function () {
         $("#ProductId").html("<option value=\"\">- 请选择 -</option>");
         $("#ProductId").parent().find(".smart-select-value").html("- 请选择 -")
-        $("#ProductBoxId").html("<option value=\"\">- 请选择 -</option>");
-        $("#ProductBoxId").parent().find(".smart-select-value").html("- 请选择 -")
         $("#ProductClassId").html("<option value=\"\">- 请选择 -</option>");
         $("#ProductClassId").parent().find(".smart-select-value").html("- 请选择 -")
         if ($$("#FactoryId").val() != "") {
@@ -330,7 +328,7 @@ myApp.onPageInit("qualityregulartest", function (page) {
                     var _len = _data.content.length;
                     if (_data.result == "SUCCESS") {
                         for (var i = 0; i < _len; i++) {
-                            $$("#ProductClassId").append("<option value=\"" + _data.content[i].Name + "\">" + _data.content[i].Name + "</option>");
+                            $$("#ProductClassId").append("<option value=\"" + _data.content[i].Id + "\">" + _data.content[i].Name + "</option>");
                         }
                     }
                 }
@@ -340,40 +338,13 @@ myApp.onPageInit("qualityregulartest", function (page) {
     $$("#qualityregulartest").on("change", "#ProductClassId", function () {
         $("#ProductId").html("<option value=\"\">- 请选择 -</option>");
         $("#ProductId").parent().find(".smart-select-value").html("- 请选择 -")
-        $("#ProductBoxId").html("<option value=\"\">- 请选择 -</option>");
-        $("#ProductBoxId").parent().find(".smart-select-value").html("- 请选择 -")
         if ($$("#ProductClassId").val() != "") {
-            $$.ajax({
-                url: "/QualityControl/RefreshQualityBoxClassListAjax",
-                type: "post",
-                data: {
-                    factoryId: $$("#FactoryId").val(),
-                    productClassName: $$("#ProductClassId").val()
-                },
-                success: function (data) {
-                    $$("#ProductBoxId").html("").append("<option value=\"\">- 请选择 -</option>")
-                    var _data = JSON.parse(data);
-                    var _len = _data.content.length;
-                    if (_data.result == "SUCCESS") {
-                        for (var i = 0; i < _len; i++) {
-                            $$("#ProductBoxId").append("<option value=\"" + _data.content[i].Id + "\">" + _data.content[i].Name + "</option>");
-                        }
-                    }
-                }
-            })
-        }
-    })
-    $$("#qualityregulartest").on("change", "#ProductBoxId", function () {
-        $("#ProductId").html("<option value=\"\">- 请选择 -</option>");
-        $("#ProductId").parent().find(".smart-select-value").html("- 请选择 -")
-        if ($$("#ProductBoxId").val() != "") {
             $$.ajax({
                 url: "/QualityControl/RefreshQualityTestProductListAjax",
                 type: "post",
                 data: {
                     factoryId: $$("#FactoryId").val(),
-                    productClassName: $$("#ProductClassId").val(),
-                    productClassId: $$("#ProductBoxId").val()
+                    productClassId: $$("#ProductClassId").val()
                 },
                 success: function (data) {
                     $$("#ProductId").html("").append("<option value=\"\">- 请选择 -</option>")
@@ -746,8 +717,6 @@ myApp.onPageInit("addqualitytest", function (page) {
         $("#ProductId").parent().find(".smart-select-value").html("- 请选择 -")
         $("#ProductClassId").html("<option value=\"\">- 请选择 -</option>");
         $("#ProductClassId").parent().find(".smart-select-value").html("- 请选择 -")
-        $("#ProductBoxId").html("<option value=\"\">- 请选择 -</option>");
-        $("#ProductBoxId").parent().find(".smart-select-value").html("- 请选择 -")
         if ($$("#FactoryId").val() != "") {
             $$.ajax({
                 url: "/QualityControl/RefreshQualityProductClassListAjax",
@@ -761,7 +730,7 @@ myApp.onPageInit("addqualitytest", function (page) {
                     var _len = _data.content.length;
                     if (_data.result == "SUCCESS") {
                         for (var i = 0; i < _len; i++) {
-                            $$("#ProductClassId").append("<option value=\"" + _data.content[i].Name + "\">" + _data.content[i].Name + "</option>");
+                            $$("#ProductClassId").append("<option value=\"" + _data.content[i].Id + "\">" + _data.content[i].Name + "</option>");
                         }
                         $("#productclassli").removeClass("hidden");
                     }
@@ -774,48 +743,15 @@ myApp.onPageInit("addqualitytest", function (page) {
         $$("#list-type-template").html("");
         $$("#list-type-template").addClass("hidden");
         $("#productli").addClass("hidden")
-        $("#productboxli").addClass("hidden")
-        $("#ProductBoxId").html("<option value=\"\">- 请选择 -</option>");
-        $("#ProductBoxId").parent().find(".smart-select-value").html("- 请选择 -")
         $("#ProductId").html("<option value=\"\" select>- 请选择 -</option>");
         $("#ProductId").parent().find(".smart-select-value").html("- 请选择 -")
         if ($("#ProductClassId").val() != "") {
-            $$.ajax({
-                url: "/QualityControl/RefreshQualityBoxClassListAjax",
-                type: "post",
-                data: {
-                    factoryId: $$("#FactoryId").val(),
-                    productClassName: $("#ProductClassId").val()
-                },
-                success: function (data) {
-                    $$("#ProductBoxId").html("").append("<option value=\"\">- 请选择 -</option>")
-                    var _data = JSON.parse(data);
-                    var _len = _data.content.length;
-                    if (_data.result == "SUCCESS") {
-                        for (var i = 0; i < _len; i++) {
-                            $$("#ProductBoxId").append("<option value=\"" + _data.content[i].Id + "\">" + _data.content[i].Name + "</option>");
-                        }
-                        $("#productboxli").removeClass("hidden");
-                    }
-                }
-            })
-        }
-    })
-    $$("#ProductBoxId").on("change", function () {
-        $addqualitytestsubmit.prop("disabled", true).addClass("color-gray");
-        $$("#list-type-template").html("");
-        $$("#list-type-template").addClass("hidden");
-        $("#productli").addClass("hidden")
-        $("#ProductId").html("<option value=\"\" select>- 请选择 -</option>");
-        $("#ProductId").parent().find(".smart-select-value").html("- 请选择 -")
-        if ($("#ProductBoxId").val() != "") {
             $$.ajax({
                 url: "/QualityControl/RefreshQualityTestProductListAjax",
                 type: "post",
                 data: {
                     factoryId: $$("#FactoryId").val(),
-                    productClassName: $("#ProductClassId").val(),
-                    productClassId: $("#ProductBoxId").val()
+                    productClassId: $("#ProductClassId").val(),
                 },
                 success: function (data) {
                     $$("#ProductId").html("").append("<option value=\"\">- 请选择 -</option>")
@@ -1351,7 +1287,7 @@ function CheckError(SubmitBtn, SubmitForm) {
                         mainView.router.back();
                         myApp.addNotification({
                             title: "通知",
-                            message: "故障修复成功"
+                            message: "表单提交失败"
                         });
                     }   
                     setTimeout(function () {

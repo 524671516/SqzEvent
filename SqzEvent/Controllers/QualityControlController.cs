@@ -61,6 +61,32 @@ namespace SqzEvent.Controllers
             }
         }
 
+        //添加品类测试
+        public ActionResult Test_Add_Class(string ClassName)
+        {
+            if (ClassName != ""&& ClassName!=null)
+            {
+                var classlist = from m in _qcdb.ProductClass
+                                where m.ProductClassName == ClassName.Trim()
+                                select m;
+                if (classlist.Count()==0)
+                {
+                    ProductClass cla = new ProductClass()
+                    {
+                        ProductClassName = ClassName
+                    };
+                    _qcdb.ProductClass.Add(cla);
+                    _qcdb.SaveChanges();
+                    return Content("添加成功");
+
+                }
+                else
+                {
+                    return Content("已存在");
+                }
+            }
+            return Content("fail");           
+        }
         // 质检员入口
         [AllowAnonymous]
         public ActionResult LoginManager()
@@ -775,7 +801,7 @@ namespace SqzEvent.Controllers
                                 _qcdb.Entry(schedule).State = System.Data.Entity.EntityState.Modified;
                             }
                         }
-                        catch
+                        catch(Exception)
                         {
                             return Content("FAIL");
                         }
@@ -907,25 +933,15 @@ namespace SqzEvent.Controllers
 
         // 质检产品列表更新ajax
         [HttpPost]
-        public JsonResult RefreshQualityTestProductListAjax(int factoryId, string productClassName, int productClassId)
+        public JsonResult RefreshQualityTestProductListAjax(int factoryId, int productClassId)
         {
             var _factory = _qcdb.Factory.SingleOrDefault(m => m.Id == factoryId);
             var list = from m in _factory.Product
-                       where m.QCProduct&&m.SimpleName== productClassName && m.ProductClassId== productClassId
+                       where m.QCProduct&&m.ProductClassId== productClassId
                        select new { Id = m.Id, Name = m.SimpleName+"("+m.Specification+")" };
             return Json(new { result = "SUCCESS", content = list });
         }
-
-        //质检产品箱规更新
-        [HttpPost]
-        public JsonResult RefreshQualityBoxClassListAjax(int factoryId,string productClassName)
-        {
-            var _factory = _qcdb.Factory.SingleOrDefault(m => m.Id == factoryId);
-            var productBoxList = (from m in _factory.Product
-                                    where m.QCProduct&&m.SimpleName==productClassName
-                                    select new { Id=m.ProductClassId,Name=m.ProductClass.ProductClassName}).Distinct().ToList();
-            return Json(new { result = "SUCCESS", content = productBoxList });
-        }
+        
         //质检产品品类更新
         [HttpPost]
         public JsonResult RefreshQualityProductClassListAjax(int factoryId)
@@ -933,7 +949,7 @@ namespace SqzEvent.Controllers
             var _factory = _qcdb.Factory.SingleOrDefault(m => m.Id == factoryId);
             var productClassList = (from m in _factory.Product
                                    where m.QCProduct
-                                   select new { Name = m.SimpleName }).Distinct().ToList();
+                                   select new { Id = m.ProductClassId, Name = m.ProductClass.ProductClassName }).Distinct().ToList();
             return Json(new { result = "SUCCESS", content = productClassList });
         }
         public PartialViewResult AddQualityTestPartial(int pid)
