@@ -904,24 +904,36 @@ namespace SqzEvent.Controllers
             return PartialView(model);
         }
 
+
         // 质检产品列表更新ajax
         [HttpPost]
-        public JsonResult RefreshQualityTestProductListAjax(int factoryId,int productclassId)
+        public JsonResult RefreshQualityTestProductListAjax(int factoryId, string productClassName, int productClassId)
         {
             var _factory = _qcdb.Factory.SingleOrDefault(m => m.Id == factoryId);
             var list = from m in _factory.Product
-                       where m.QCProduct&&m.ProductClassId== productclassId
+                       where m.QCProduct&&m.SimpleName== productClassName && m.ProductClassId== productClassId
                        select new { Id = m.Id, Name = m.SimpleName+"("+m.Specification+")" };
             return Json(new { result = "SUCCESS", content = list });
         }
 
+        //质检产品箱规更新
+        [HttpPost]
+        public JsonResult RefreshQualityBoxClassListAjax(int factoryId,string productClassName)
+        {
+            var _factory = _qcdb.Factory.SingleOrDefault(m => m.Id == factoryId);
+            var productBoxList = (from m in _factory.Product
+                                    where m.QCProduct&&m.SimpleName==productClassName
+                                    select new { Id=m.ProductClassId,Name=m.ProductClass.ProductClassName}).Distinct().ToList();
+            return Json(new { result = "SUCCESS", content = productBoxList });
+        }
+        //质检产品品类更新
         [HttpPost]
         public JsonResult RefreshQualityProductClassListAjax(int factoryId)
         {
             var _factory = _qcdb.Factory.SingleOrDefault(m => m.Id == factoryId);
             var productClassList = (from m in _factory.Product
                                    where m.QCProduct
-                                   select new { Id = m.ProductClassId, Name = m.ProductClass.ProductClassName }).Distinct().ToList();
+                                   select new { Name = m.SimpleName }).Distinct().ToList();
             return Json(new { result = "SUCCESS", content = productClassList });
         }
         public PartialViewResult AddQualityTestPartial(int pid)
