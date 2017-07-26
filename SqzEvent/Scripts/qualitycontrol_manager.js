@@ -515,6 +515,11 @@ myApp.onPageInit('Plan', function (page) {
         },
         success: function (data) {
             $$(".list-month").html(data);
+            $(".production-details").each(function () {
+                var date = $$("#calendar-inline-container").val() + "-01";
+                var newurl = $(this).attr("href") + "&date=" + date;
+                $(this).attr("href", newurl);
+            })
         }
     });
     $$("#calendar-inline-container").on("change", function () {
@@ -526,14 +531,14 @@ myApp.onPageInit('Plan', function (page) {
                 },
                 success: function (data) {
                     $$(".list-month").html(data);
+                    $(".production-details").each(function () {
+                        var date = $$("#calendar-inline-container").val() + "-01";
+                        var newurl = $(this).attr("href") + "&date=" + date;
+                        $(this).attr("href", newurl);
+                    })
                 }
             });
         }
-    });
-    $$(document).on("touchstart", ".production-details", function () {
-        var date = $$("#calendar-inline-container").val() + "-01";
-        var url = $$(this).attr("href") + "&date=" + date;
-        $$(this).attr("href", url);
     });
 });
 myApp.onPageInit('Add-schedule', function (page) {
