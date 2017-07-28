@@ -527,9 +527,9 @@ namespace SqzEvent.Controllers
         [HttpPost]
         public JsonResult CheckCheckinAjax(int fid)
         {
-            QCStaff staff = getStaff(User.Identity.Name);
+            //QCStaff staff = getStaff(User.Identity.Name);
             DateTime _subscribe = DateTime.Now.Date;
-            var exist_agenda = _qcdb.QCAgenda.SingleOrDefault(m => m.FactoryId == fid && m.Subscribe == _subscribe && m.Status >= 1 && m.QCStaffId == staff.Id);
+            var exist_agenda = _qcdb.QCAgenda.SingleOrDefault(m => m.FactoryId == fid && m.Subscribe == _subscribe && m.Status >= 1);
             if (exist_agenda != null)
             {
                 return Json(new { result = true, agendaId = exist_agenda.Id });
