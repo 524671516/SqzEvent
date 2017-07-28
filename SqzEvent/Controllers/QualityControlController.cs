@@ -453,70 +453,70 @@ namespace SqzEvent.Controllers
                 {
                     QCStaff staff = getStaff(User.Identity.Name);
                     DateTime _subscribe = DateTime.Now.Date;
-                    var exist_agenda = _qcdb.QCAgenda.SingleOrDefault(m => m.FactoryId == agenda.FactoryId && m.Subscribe == _subscribe && m.Status >= 1 && m.QCStaffId == staff.Id);
-                    // 判断是否存在同一天，同一个工厂的日程
-                    if (exist_agenda==null)
-                    {
-                        // 没有 则添加日程
-                        agenda.CheckinTime = DateTime.Now;
-                        agenda.Subscribe = _subscribe;
-                        agenda.Status = 1; // 已签到
-                        var factory = _qcdb.Factory.SingleOrDefault(m => m.Id == agenda.FactoryId);
-                        List<TestTemplateItem> templatelist = new List<TestTemplateItem>();
-                        foreach (var template in factory.AgendaTemplate)
+                        var exist_agenda = _qcdb.QCAgenda.SingleOrDefault(m => m.FactoryId == agenda.FactoryId && m.Subscribe == _subscribe && m.Status >= 1 && m.QCStaffId == staff.Id);
+                        // 判断是否存在同一天，同一个工厂的日程
+                        if (exist_agenda == null)
                         {
-                            string _value;
-                            if (template.ValueTypeId == 1)
-                                _value = form[template.KeyName] == null ? "0" : "1";
-                            else
-                                _value = form[template.KeyName].ToString();
-                            TestTemplateItem tt_item = new TestTemplateItem()
+                            // 没有 则添加日程
+                            agenda.CheckinTime = DateTime.Now;
+                            agenda.Subscribe = _subscribe;
+                            agenda.Status = 1; // 已签到
+                            var factory = _qcdb.Factory.SingleOrDefault(m => m.Id == agenda.FactoryId);
+                            List<TestTemplateItem> templatelist = new List<TestTemplateItem>();
+                            foreach (var template in factory.AgendaTemplate)
                             {
-                                default_value = template.StandardValue,
-                                type = template.ValueTypeId,
-                                key = template.KeyName,
-                                value = _value,                                                                                                                                                                                                                                                                                                                                                 
-                                title = template.KeyTitle
-                            };
-                            templatelist.Add(tt_item);
+                                string _value;
+                                if (template.ValueTypeId == 1)
+                                    _value = form[template.KeyName] == null ? "0" : "1";
+                                else
+                                    _value = form[template.KeyName].ToString();
+                                TestTemplateItem tt_item = new TestTemplateItem()
+                                {
+                                    default_value = template.StandardValue,
+                                    type = template.ValueTypeId,
+                                    key = template.KeyName,
+                                    value = _value,
+                                    title = template.KeyTitle
+                                };
+                                templatelist.Add(tt_item);
+                            }
+                            agenda.TemplateValues = Newtonsoft.Json.JsonConvert.SerializeObject(templatelist);
+                            _qcdb.QCAgenda.Add(agenda);
+                            await _qcdb.SaveChangesAsync();
+                            return Content("SUCCESS");
                         }
-                        agenda.TemplateValues = Newtonsoft.Json.JsonConvert.SerializeObject(templatelist);
-                        _qcdb.QCAgenda.Add(agenda);
-                        await _qcdb.SaveChangesAsync();
-                        return Content("SUCCESS");
-                    }
-                    else
-                    {
-                        // 如果有的话 修改日程记录
-                        exist_agenda.CheckinTime = DateTime.Now;
-                        exist_agenda.Subscribe = _subscribe;
-                        exist_agenda.Photos = agenda.Photos;
-                        exist_agenda.CheckinRemark = agenda.CheckinRemark;
-                        var factory = _qcdb.Factory.SingleOrDefault(m => m.Id == exist_agenda.FactoryId);
-                        List<TestTemplateItem> templatelist = new List<TestTemplateItem>();
-                        foreach (var template in factory.AgendaTemplate)
+                        else
                         {
-                            string _value;
-                            if (template.ValueTypeId == 1)
-                                _value = form[template.KeyName] == null ? "0" : "1";
-                            else
-                                _value = form[template.KeyName].ToString();
-                            TestTemplateItem tt_item = new TestTemplateItem()
+                            // 如果有的话 修改日程记录
+                            exist_agenda.CheckinTime = DateTime.Now;
+                            exist_agenda.Subscribe = _subscribe;
+                            exist_agenda.Photos = agenda.Photos;
+                            exist_agenda.CheckinRemark = agenda.CheckinRemark;
+                            var factory = _qcdb.Factory.SingleOrDefault(m => m.Id == exist_agenda.FactoryId);
+                            List<TestTemplateItem> templatelist = new List<TestTemplateItem>();
+                            foreach (var template in factory.AgendaTemplate)
                             {
-                                default_value = template.StandardValue,
-                                type = template.ValueTypeId,
-                                key = template.KeyName,
-                                value = _value,
-                                title = template.KeyTitle
-                            };
-                            templatelist.Add(tt_item);
+                                string _value;
+                                if (template.ValueTypeId == 1)
+                                    _value = form[template.KeyName] == null ? "0" : "1";
+                                else
+                                    _value = form[template.KeyName].ToString();
+                                TestTemplateItem tt_item = new TestTemplateItem()
+                                {
+                                    default_value = template.StandardValue,
+                                    type = template.ValueTypeId,
+                                    key = template.KeyName,
+                                    value = _value,
+                                    title = template.KeyTitle
+                                };
+                                templatelist.Add(tt_item);
+                            }
+                            exist_agenda.TemplateValues = Newtonsoft.Json.JsonConvert.SerializeObject(templatelist);
+                            exist_agenda.Status = 1; // 已签到
+                            _qcdb.Entry(exist_agenda).State = System.Data.Entity.EntityState.Modified;
+                            await _qcdb.SaveChangesAsync();
+                            return Content("MODIFIED");
                         }
-                        exist_agenda.TemplateValues = Newtonsoft.Json.JsonConvert.SerializeObject(templatelist);
-                        exist_agenda.Status = 1; // 已签到
-                        _qcdb.Entry(exist_agenda).State = System.Data.Entity.EntityState.Modified;
-                        await _qcdb.SaveChangesAsync();
-                        return Content("MODIFIED");
-                    }
                 }
                 else
                     return Content("FAIL");
@@ -527,9 +527,9 @@ namespace SqzEvent.Controllers
         [HttpPost]
         public JsonResult CheckCheckinAjax(int fid)
         {
-            //QCStaff staff = getStaff(User.Identity.Name);
+            QCStaff staff = getStaff(User.Identity.Name);
             DateTime _subscribe = DateTime.Now.Date;
-            var exist_agenda = _qcdb.QCAgenda.SingleOrDefault(m => m.FactoryId == fid && m.Subscribe == _subscribe && m.Status >= 1);
+            var exist_agenda = _qcdb.QCAgenda.SingleOrDefault(m => m.FactoryId == fid && m.Subscribe == _subscribe && m.Status >= 1 && m.QCStaffId == staff.Id);
             if (exist_agenda != null)
             {
                 return Json(new { result = true, agendaId = exist_agenda.Id });
