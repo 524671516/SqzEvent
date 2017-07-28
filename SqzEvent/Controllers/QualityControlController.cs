@@ -1431,12 +1431,19 @@ namespace SqzEvent.Controllers
 
         public ActionResult Manager_ProductionDetails(int fid, string date)
         {
-            DateTime currentMonth = Convert.ToDateTime(date);
-            DateTime nextMonth = currentMonth.AddMonths(1);
-            var list = from m in _qcdb.QCAgenda
-                       where m.FactoryId == fid && m.Subscribe >= currentMonth && m.Subscribe < nextMonth
-                       select m;
-            return PartialView(list);
+            try
+            {
+                DateTime currentMonth = Convert.ToDateTime(date);
+                DateTime nextMonth = currentMonth.AddMonths(1);
+                var list = from m in _qcdb.QCAgenda
+                           where m.FactoryId == fid && m.Subscribe >= currentMonth && m.Subscribe < nextMonth
+                           select m;
+                return PartialView(list);
+            }
+            catch (Exception e)
+            {
+                return Content(e.Message);
+            }
         }
         //定期检测查询列表
         public ActionResult Manager_QualityRegularTest()
