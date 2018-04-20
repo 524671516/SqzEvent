@@ -457,13 +457,22 @@ myApp.onPageInit("addbreakdown", function (page) {
     });
     //按钮点击事件
     $addbreakdownsubmit.on("click", function () {
-        console.log("6556")
         if (!$addbreakdownsubmit.prop("disabled")) {
             $addbreakdownsubmit.prop("disabled", true).addClass("color-gray");
             setTimeout(function () {
                 $addbreakdownform.submit();
             }, 500);
         }
+        //刷新列表
+        $.ajax({
+            url: "/QualityControl/BreakdownListPartial",
+            data: {
+                date: $("#breakdownlist-date").val()
+            },
+            success: function (data) {
+                $("#breakdownlist-content").html(data);
+            }
+        });
     });
     //图片上传数量计算
     uploadCheckinFile("addbreakdown-form", "addbreakdown-photos", "Photos", "addbreakdown-imgcount", 7);
