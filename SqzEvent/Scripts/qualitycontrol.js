@@ -457,6 +457,7 @@ myApp.onPageInit("addbreakdown", function (page) {
     });
     //按钮点击事件
     $addbreakdownsubmit.on("click", function () {
+        console.log("6556")
         if (!$addbreakdownsubmit.prop("disabled")) {
             $addbreakdownsubmit.prop("disabled", true).addClass("color-gray");
             setTimeout(function () {
