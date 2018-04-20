@@ -1903,7 +1903,7 @@ namespace SqzEvent.Controllers
         }
 
         // 添加日程记录
-        [Authorize(Roles = "Supervisor,Manager,Administrator")]
+        [Authorize(Roles = "Administrator")]
         public ActionResult Manager_CreateEvent()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -1922,7 +1922,7 @@ namespace SqzEvent.Controllers
             model.Off_System_Id = user.DefaultSystemId;
             return PartialView(model);
         }
-        [Authorize(Roles = "Supervisor,Manager,Administrator")]
+        [Authorize(Roles = "Administrator")]
         [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Manager_CreateEvent(FormCollection form)
         {

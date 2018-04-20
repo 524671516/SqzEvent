@@ -489,6 +489,11 @@ myApp.onPageAfterBack("Add-schedule", function (page) {
         },
         success: function (data) {
             $$(".list-month").html(data);
+            $(".production-details").each(function () {
+                var date = $$("#calendar-inline-container").val() + "-01";
+                var newurl = $(this).attr("href") + "&date=" + date;
+                $(this).attr("href", newurl);
+            })
         }
     });
 });

@@ -1,17 +1,17 @@
 ﻿@model IEnumerable<SqzEvent.Models.RegularTest>
 
-    <ul>
-        @foreach (var item in Model)
+<ul>
+    @foreach (var item in Model)
             {
-            <li>
-                <a href="javascript:;" class="item-link qc-photos item-content" data-photos="@item.Photo">
-                    <div class="item-inner">
-                            <div class="item-title">
-                                @Html.Encode(item.Product.SimpleName)
-                            </div>
-                            <div class="item-after">@Html.Encode(item.ApplyDate.ToString("MM-dd"))</div>
-                        </div>
-                </a>
-            </li>
-        }
-    </ul>
+        <li>
+            <a href="javascript:;" class="item-link qc-photos item-content" data-photos="@item.Photo">
+                <div class="item-inner">
+                    <div class="item-title">
+                        @Html.Encode(item.Product.SimpleName + "(" + item.Product.Specification + ")")
+                    </div>
+                    <div class="item-after">@Html.Encode(item.ApplyDate.ToString("MM-dd"))</div>
+                </div>
+            </a>
+        </li>
+    }
+</ul>

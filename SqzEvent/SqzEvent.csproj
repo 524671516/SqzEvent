@@ -685,6 +685,7 @@
     <Content Include="Views\Promotion\LittleGingerVoice_may.cshtml" />
     <Content Include="Views\Promotion\LittleGingerVoice.cshtml" />
     <Content Include="Views\QualityControl\QualityTestNewVersionDetails.cshtml" />
+    <Content Include="Views\WxAccount\Wx_Register.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

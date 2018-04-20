@@ -10,6 +10,7 @@ using System.IO;
 using System.Web.Script.Serialization;
 using System.Threading.Tasks;
 using System.Text;
+using System.Drawing;
 using System.Security.Cryptography;
 
 namespace SqzEvent.Controllers
@@ -568,6 +569,45 @@ namespace SqzEvent.Controllers
             {
                 return Json(new { result = "FAIL", errmsg = "发生错误" });
             }
+        }
+
+
+        public FileResult DrawImage(string words)
+        {
+            AliOSSUtilities util = new AliOSSUtilities();
+            var obj = util.GetObject("WeChatFiles/MiniProgram_Background.jpg");
+            Image bitmap = new Bitmap(obj);
+            Graphics gs = Graphics.FromImage(bitmap);
+            Font font = new Font("宋体", 30);
+            Brush br = new SolidBrush(Color.White);
+            int left = 120;
+            int right = 260;
+            int top = 540;
+            int bottom = 1100;
+            
+            int charlength = words.Length;
+            int charat = 0;
+            for(int x = right; x > left; x = x - 48)
+            {
+                for(int y = top; y < bottom; y = y + 48)
+                {
+                    if (charat < charlength)
+                    {
+                        gs.DrawString(words.ElementAt(charat).ToString(), font, br, x, y);
+                        charat++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+            gs.Dispose();
+            MemoryStream ms = new MemoryStream();
+            bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+            bitmap.Dispose();
+            
+            return File(ms.ToArray(), "image/jpeg", "return.jpg");
         }
 
         #region 通用代码

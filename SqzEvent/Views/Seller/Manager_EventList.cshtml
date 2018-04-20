@@ -8,9 +8,12 @@
             </a>
         </div>
         <div class="center sliding"><strong>活动门店列表</strong></div>
-        <div class="right">
-            <a href="/Seller/Manager_CreateEvent" class="link">添加日程</a>
-        </div>
+        @if (User.IsInRole("Administrator"))
+        {
+            <div class="right">
+                <a href="/Seller/Manager_CreateEvent" class="link">添加日程</a>
+            </div>
+        }
     </div>
 </div>
 <div class="pages">
