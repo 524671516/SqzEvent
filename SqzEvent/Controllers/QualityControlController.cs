@@ -949,6 +949,14 @@ namespace SqzEvent.Controllers
         public PartialViewResult AddQualityTestPartial(int pid)
         {
             Product p = _qcdb.Product.SingleOrDefault(m => m.Id == pid);
+            //礼盒特殊处理
+            if (p.ProductClass.ProductClassName.Contains("礼盒") == true)
+            {
+                ViewBag.checkGiftBox = 1;
+            }
+            else {
+                ViewBag.checkGiftBox = 0;
+            }
             if (p != null)
             {
                 var qctemplate = _qcdb.QCTemplate.SingleOrDefault(m => m.Id == p.TemplateId);

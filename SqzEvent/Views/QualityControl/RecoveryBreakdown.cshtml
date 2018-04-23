@@ -54,44 +54,47 @@
                 </ul>
             </div>
             @using (Html.BeginForm("RecoveryBreakdown", "QualityControl", FormMethod.Post, new { @id = "recoverybreakdown-form", @class = "validate-form" }))
-            {
-                @Html.AntiForgeryToken()
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                    @Html.HiddenFor(model => model.Id)
-                    @Html.HiddenFor(model => model.Status)
-                    @Html.HiddenFor(model => model.QCEquipmentId)
-                    @Html.HiddenFor(model => model.BreakDownTypeId)
-                    @Html.HiddenFor(model => model.QCStaffId)
-                    @Html.HiddenFor(model => model.BreakDownTime)
-                    @Html.HiddenFor(model => model.ReportTime)
-                    @Html.HiddenFor(model => model.ReportContent)
-                <div class="content-block-title">恢复信息</div>
-                <div class="list-block">
-                    <ul>
-                        <li>
-                            <div class="item-content">
-                                <div class="item-inner">
-                                    <div class="item-title label">恢复时间</div>
-                                    <div class="item-input">
-                                        <input type="text" class="item-input-right" id="RecoveryTimeTiny" name="RecoveryTimeTiny" placeholder="恢复时间" />
-                                    </div>
-                                </div>
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.Status)
+        @Html.HiddenFor(model => model.QCEquipmentId)
+        @Html.HiddenFor(model => model.BreakDownTypeId)
+        @Html.HiddenFor(model => model.QCStaffId)
+        @Html.HiddenFor(model => model.BreakDownTime)
+        @Html.HiddenFor(model => model.ReportTime)
+        @Html.HiddenFor(model => model.ReportContent)
+        @Html.HiddenFor(model => model.ReportDetail)
+        @Html.HiddenFor(model => model.ReportResult)
+        @Html.HiddenFor(model => model.Photos)
+        <div class="content-block-title">恢复信息</div>
+        <div class="list-block">
+            <ul>
+                <li>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title label">恢复时间</div>
+                            <div class="item-input">
+                                <input type="text" class="item-input-right" id="RecoveryTimeTiny" name="RecoveryTimeTiny" placeholder="恢复时间" />
                             </div>
-                        </li>
-                        <li>
-                            <div class="item-content middle-content">
-                                @Html.TextAreaFor(m => m.RecoveryRemark, new { placeholder = "请输入签到备注", @class = "input-textarea",required="required",maxlength="200"})
-                            </div>
-                            <div class="item-content">
-                                <div class="item-inner">
-                                    <div class="item-title"></div>
-                                    <div class="item-after"><span id="recoverybreakdown-currentlen">0</span>/<span>200</span></div>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            }
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="item-content middle-content">
+                        @Html.TextAreaFor(m => m.RecoveryRemark, new { placeholder = "请输入签到备注", @class = "input-textarea", required = "required", maxlength = "200" })
+                    </div>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title"></div>
+                            <div class="item-after"><span id="recoverybreakdown-currentlen">0</span>/<span>200</span></div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+}
         </div>
     </div>
 </div>

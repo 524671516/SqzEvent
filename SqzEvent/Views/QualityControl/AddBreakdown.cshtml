@@ -91,7 +91,29 @@
                         </li>
                         <li>
                             <div class="item-content middle-content">
-                                @Html.TextAreaFor(m => m.ReportContent, new { placeholder = "请输入故障备注", required = "required", maxlength = "200"})
+                                @Html.TextAreaFor(m => m.ReportContent, new { placeholder = "请输入故障记录", required = "required", maxlength = "200" })
+                            </div>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title"></div>
+                                    <div class="item-after"><span id="addbreakdown-currentlen">0</span>/<span>200</span></div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content middle-content">
+                                @Html.TextAreaFor(m => m.ReportDetail, new { placeholder = "请输入故障原因及导致结果", required = "required", maxlength = "200" })
+                            </div>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title"></div>
+                                    <div class="item-after"><span id="addbreakdown-currentlen">0</span>/<span>200</span></div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content middle-content">
+                                @Html.TextAreaFor(m => m.ReportResult, new { placeholder = "请输入故障反馈", required = "required", maxlength = "200" })
                             </div>
                             <div class="item-content">
                                 <div class="item-inner">

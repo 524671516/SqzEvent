@@ -22,7 +22,13 @@
                     <div class="item-inner">
                         <div class="item-title">@Html.Encode(list.CategoryName)</div>
                         <div class="item-after">
-                           <span class="cannel_item color-red button button-fill">删除</span>
+                            @if (ViewBag.checkGiftBox == 1)
+                            {
+                                //礼盒质检项目不能删除
+                            }
+                            else {
+                                <span class="cannel_item color-red button button-fill">删除</span>
+                            }
                         </div>
                     </div>
                 </a>
@@ -117,7 +123,13 @@
                                             <div class="item-content">
                                                 <div class="item-inner">
                                                     <div class="item-title">上传照片</div>
-                                                    <div class="item-after"><abbr id="@Html.Encode(item.KeyName+"-imgcount")">0</abbr>/5</div>
+                                                    @if (ViewBag.checkGiftBox == 1)
+                                                    {
+                                                    <div class="item-after"><abbr id="@Html.Encode(item.KeyName + "-imgcount")">0</abbr>/12</div>
+                                                    }
+                                                    else {
+                                                    <div class="item-after"><abbr id="@Html.Encode(item.KeyName + "-imgcount")">0</abbr>/5</div>
+                                                    }
                                                 </div>
                                             </div>
                                             <div class="item-content middle-content">

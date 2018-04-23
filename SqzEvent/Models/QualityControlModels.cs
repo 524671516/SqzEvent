@@ -314,6 +314,12 @@
         public string ReportContent { get; set; }
 
         [StringLength(256)]
+        public string ReportDetail { get; set; }
+
+        [StringLength(256)]
+        public string ReportResult { get; set; }
+
+        [StringLength(256)]
         public string RecoveryRemark { get; set; }
 
         // 对应关系
