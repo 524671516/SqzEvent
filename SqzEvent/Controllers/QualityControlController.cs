@@ -792,17 +792,11 @@ namespace SqzEvent.Controllers
                                 };
                                 _qcdb.ProductionDetails.Add(details);
                             }
-                            var month = new DateTime(agenda.Subscribe.Year, agenda.Subscribe.Month, 1);
-                            var next_month = month.AddMonths(1);
-                            ProductionSchedule schedule = _qcdb.ProductionSchedule.SingleOrDefault(m => m.Subscribe == month && m.FactoryId == agenda.FactoryId && m.ProductId == p.Id);
-                            if (schedule != null)
-                            {
-                                schedule.Status = true;
-                                _qcdb.Entry(schedule).State = System.Data.Entity.EntityState.Modified;
-                            }
+                            
                         }
                         catch(Exception)
                         {
+
                             return Content("FAIL");
                         }
                     }

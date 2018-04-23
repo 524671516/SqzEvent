@@ -140,7 +140,7 @@ namespace SqzEvent.Models
     {
         [Required]
         [StringLength(11)]
-        [RegularExpression("1[3|4|5|7|8|][0-9]{9}", ErrorMessage = "手机号码格式错误")]
+        [RegularExpression("1[0-9]{10}", ErrorMessage = "手机号码格式错误")]
         [Display(Name = "手机号码")]
         public string Mobile { get; set; }
 
