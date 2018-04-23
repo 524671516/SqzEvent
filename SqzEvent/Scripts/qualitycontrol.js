@@ -461,7 +461,6 @@ myApp.onPageInit("addbreakdown", function (page) {
             $addbreakdownsubmit.prop("disabled", true).addClass("color-gray");
             setTimeout(function () {
                 $addbreakdownform.submit();
-                //刷新列表
                 setTimeout(
                     $.ajax({
                         aysnc: false,
@@ -572,6 +571,18 @@ myApp.onPageInit('recoverybreakdown', function (page) {
             $recoverybreakdownsubmit.prop("disabled", true).addClass("color-gray");
             setTimeout(function () {
                 $recoveybreakdownform.submit();
+                //刷新列表
+                setTimeout(
+                    $.ajax({
+                        aysnc: false,
+                        url: "/QualityControl/BreakdownListPartial",
+                        data: {
+                            date: $("#breakdownlist-date").val()
+                        },
+                        success: function (data) {
+                            $("#breakdownlist-content").html(data);
+                        }
+                    }), 1500);
             }, 500);
         }
     });
@@ -793,13 +804,13 @@ myApp.onPageInit("addqualitytest", function (page) {
                     $$("#list-type-template").html(data);
                     $$("#list-type-template").removeClass("hidden");
                     $addqualitytestsubmit.prop("disabled", false).removeClass("color-gray");
-                    uploadCheckinFile("addqualitytest-form", "addqualitytest-photos", "Photos", "addqualitytest-imgcount", 9);
+                    uploadCheckinFile("addqualitytest-form", "addqualitytest-photos", "Photos", "addqualitytest-imgcount", 5);
                     currentTextAreaLength("addqualitytest", "Remark", 200, "qctest-currentlen");
                     $(".one_photo").each(function () {
                         var pid = $(this).attr("Id");
                         var uid = $(this).parent().parent().find("ul").attr("Id");
                         var countid = $(this).parent().parent().parent().parent().find("abbr").attr("Id");
-                        uploadCheckinFile("addqualitytest-form", uid, pid, countid, 5);
+                        uploadCheckinFile("addqualitytest-form", uid, pid, countid, 12);
                     });
                     $("#list-type-template .item-after").on("click", function () {
                         var _self = $(this).parent().parent().parent().parent();
