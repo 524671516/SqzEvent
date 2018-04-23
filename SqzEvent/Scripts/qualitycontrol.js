@@ -461,18 +461,20 @@ myApp.onPageInit("addbreakdown", function (page) {
             $addbreakdownsubmit.prop("disabled", true).addClass("color-gray");
             setTimeout(function () {
                 $addbreakdownform.submit();
+                //刷新列表
+                setTimeout(
+                    $.ajax({
+                        aysnc: false,
+                        url: "/QualityControl/BreakdownListPartial",
+                        data: {
+                            date: $("#breakdownlist-date").val()
+                        },
+                        success: function (data) {
+                            $("#breakdownlist-content").html(data);
+                        }
+                    }), 1500);
             }, 500);
         }
-        //刷新列表
-        $.ajax({
-            url: "/QualityControl/BreakdownListPartial",
-            data: {
-                date: $("#breakdownlist-date").val()
-            },
-            success: function (data) {
-                $("#breakdownlist-content").html(data);
-            }
-        });
     });
     //图片上传数量计算
     uploadCheckinFile("addbreakdown-form", "addbreakdown-photos", "Photos", "addbreakdown-imgcount", 7);
