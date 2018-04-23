@@ -461,7 +461,7 @@ myApp.onPageInit("addbreakdown", function (page) {
             $addbreakdownsubmit.prop("disabled", true).addClass("color-gray");
             setTimeout(function () {
                 $addbreakdownform.submit();
-                setTimeout(
+                setTimeout(function () {
                     $.ajax({
                         aysnc: false,
                         url: "/QualityControl/BreakdownListPartial",
@@ -471,7 +471,7 @@ myApp.onPageInit("addbreakdown", function (page) {
                         success: function (data) {
                             $("#breakdownlist-content").html(data);
                         }
-                    }), 1500);
+                    })}, 1500);
             }, 500);
         }
     });
@@ -571,8 +571,7 @@ myApp.onPageInit('recoverybreakdown', function (page) {
             $recoverybreakdownsubmit.prop("disabled", true).addClass("color-gray");
             setTimeout(function () {
                 $recoveybreakdownform.submit();
-                //刷新列表
-                setTimeout(
+                setTimeout(function () {
                     $.ajax({
                         aysnc: false,
                         url: "/QualityControl/BreakdownListPartial",
@@ -582,7 +581,8 @@ myApp.onPageInit('recoverybreakdown', function (page) {
                         success: function (data) {
                             $("#breakdownlist-content").html(data);
                         }
-                    }), 1500);
+                    })
+                }, 1500);
             }, 500);
         }
     });
@@ -804,13 +804,22 @@ myApp.onPageInit("addqualitytest", function (page) {
                     $$("#list-type-template").html(data);
                     $$("#list-type-template").removeClass("hidden");
                     $addqualitytestsubmit.prop("disabled", false).removeClass("color-gray");
-                    uploadCheckinFile("addqualitytest-form", "addqualitytest-photos", "Photos", "addqualitytest-imgcount", 5);
+                    var max_num = $(".one_photo").parent().parent().parent().parent().text();
+                    if (max_num.substring(max_num.indexOf("/") + 1, max_num.indexOf("/") + 2) == 5) {
+                        uploadCheckinFile("addqualitytest-form", "addqualitytest-photos", "Photos", "addqualitytest-imgcount", 5);
+                    } else {
+                        uploadCheckinFile("addqualitytest-form", "addqualitytest-photos", "Photos", "addqualitytest-imgcount", 12);
+                    }
                     currentTextAreaLength("addqualitytest", "Remark", 200, "qctest-currentlen");
                     $(".one_photo").each(function () {
                         var pid = $(this).attr("Id");
                         var uid = $(this).parent().parent().find("ul").attr("Id");
                         var countid = $(this).parent().parent().parent().parent().find("abbr").attr("Id");
-                        uploadCheckinFile("addqualitytest-form", uid, pid, countid, 12);
+                        if (max_num.substring(max_num.indexOf("/") + 1, max_num.indexOf("/") + 2) == 5) {
+                            uploadCheckinFile("addqualitytest-form", uid, pid, countid, 5);
+                        } else {
+                            uploadCheckinFile("addqualitytest-form", uid, pid, countid, 12);
+                        }
                     });
                     $("#list-type-template .item-after").on("click", function () {
                         var _self = $(this).parent().parent().parent().parent();
