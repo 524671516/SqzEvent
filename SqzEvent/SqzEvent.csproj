@@ -215,6 +215,7 @@
     <Compile Include="Controllers\PromotionController.cs" />
     <Compile Include="Controllers\QualityControlController.cs" />
     <Compile Include="Controllers\SellerController.cs" />
+    <Compile Include="Controllers\VisitManagementController.cs" />
     <Compile Include="Controllers\WeChatMiniController.cs" />
     <Compile Include="Controllers\WeekendBreakController.cs" />
     <Compile Include="Controllers\WxAccountController.cs" />
@@ -686,6 +687,7 @@
     <Content Include="Views\Promotion\LittleGingerVoice.cshtml" />
     <Content Include="Views\QualityControl\QualityTestNewVersionDetails.cshtml" />
     <Content Include="Views\WxAccount\Wx_Register.cshtml" />
+    <Content Include="Views\VisitManagement\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
